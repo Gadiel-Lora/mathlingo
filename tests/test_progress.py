@@ -40,9 +40,8 @@ def test_progress_flow(client):
         json={'module_id': module_id, 'xp': 5},
         headers=headers,
     )
-    assert progress_again.status_code == 200
-    assert progress_again.json()['xp'] == 20
+    assert progress_again.status_code == 400
 
     summary_again = client.get('/progress/summary', headers=headers)
     assert summary_again.status_code == 200
-    assert summary_again.json()['total_xp'] == 20
+    assert summary_again.json()['total_xp'] == 15

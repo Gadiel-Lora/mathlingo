@@ -1,5 +1,6 @@
 ﻿import os
 
+import httpx
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
@@ -44,6 +45,39 @@ def client(tmp_path):
     app.dependency_overrides[deps_module.get_db] = override_get_db
 
     with TestClient(app) as test_client:
+        yield test_client
+
+    app.dependency_overrides.clear()
+    Base.metadata.drop_all(bind=engine)
+
+
+@pytest.fixture()
+async def async_client(tmp_path):
+    db_path = tmp_path / 'test_async.db'
+    engine = create_engine(
+        f'sqlite:///{db_path}',
+        connect_args={'check_same_thread': False},
+    )
+    TestingSessionLocal = sessionmaker(
+        autocommit=False,
+        autoflush=False,
+        bind=engine,
+    )
+
+    Base.metadata.create_all(bind=engine)
+
+    def override_get_db():
+        db = TestingSessionLocal()
+        try:
+            yield db
+        finally:
+            db.close()
+
+    app.dependency_overrides[db_module.get_db] = override_get_db
+    app.dependency_overrides[deps_module.get_db] = override_get_db
+
+    transport = httpx.ASGITransport(app=app)
+    async with httpx.AsyncClient(transport=transport, base_url='http://test') as test_client:
         yield test_client
 
     app.dependency_overrides.clear()
