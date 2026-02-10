@@ -16,14 +16,33 @@ pwd_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
 SECRET_KEY = settings.SECRET_KEY
 ALGORITHM = settings.ALGORITHM
 ACCESS_TOKEN_EXPIRE_MINUTES = settings.ACCESS_TOKEN_EXPIRE_MINUTES
+BCRYPT_MAX_BYTES = 72
+
+
+def _truncate_password(password: str) -> str:
+    encoded = password.encode('utf-8')
+    if len(encoded) <= BCRYPT_MAX_BYTES:
+        return password
+    return encoded[:BCRYPT_MAX_BYTES].decode('utf-8', errors='ignore')
 
 
 def hash_password(password: str) -> str:
-    return pwd_context.hash(password)
+    safe_password = _truncate_password(password)
+    try:
+        return pwd_context.hash(safe_password)
+    except Exception as exc:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail='Invalid password',
+        ) from exc
 
 
 def verify_password(plain: str, hashed: str) -> bool:
-    return pwd_context.verify(plain, hashed)
+    safe_plain = _truncate_password(plain)
+    try:
+        return pwd_context.verify(safe_plain, hashed)
+    except Exception:
+        return False
 
 
 def create_access_token(data: dict) -> str:
