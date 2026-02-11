@@ -40,14 +40,15 @@ Mathlingo is an educational app with a FastAPI backend (REST API with JWT) and a
 2. Project settings:
 `Framework Preset: Vite`
 `Root Directory: frontend`
+`Install Command: npm install`
 `Build Command: npm run build`
 `Output Directory: dist`
-`Install Command: npm install`
 3. Env vars:
 `VITE_API_URL=https://mathlingo-backend.onrender.com`
-4. Deploy. Example public URL:
+4. Redeploy with "Clear cache" enabled.
+5. Example public URL:
 `https://mathlingo.vercel.app`
-5. Keep `frontend/.env` for local dev only; Vercel uses dashboard env vars.
+6. Keep `frontend/.env` for local dev only; Vercel uses dashboard env vars.
 
 **Main endpoints**
 1. `POST /auth/register`
@@ -66,4 +67,5 @@ Mathlingo is an educational app with a FastAPI backend (REST API with JWT) and a
 
 **Why Python only as API**
 The backend focuses on security and data. The frontend evolves independently.
+
 
