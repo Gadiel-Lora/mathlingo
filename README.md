@@ -49,6 +49,7 @@ Mathlingo is an educational app with a FastAPI backend (REST API with JWT) and a
 5. Example public URL:
 `https://mathlingo.vercel.app`
 6. Keep `frontend/.env` for local dev only; Vercel uses dashboard env vars.
+7. Vercel now requires Node 24, so `frontend/package.json` sets `engines.node` to `24.x`.
 
 **Main endpoints**
 1. `POST /auth/register`
@@ -67,5 +68,6 @@ Mathlingo is an educational app with a FastAPI backend (REST API with JWT) and a
 
 **Why Python only as API**
 The backend focuses on security and data. The frontend evolves independently.
+
 
 
