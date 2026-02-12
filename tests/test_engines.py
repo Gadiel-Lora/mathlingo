@@ -79,7 +79,7 @@ def test_select_next_exercise(tmp_path):
 
     next_exercise = select_next_exercise(db, user.id)
     assert next_exercise is not None
-    assert next_exercise.topic_id == topic_b.id
+    assert int(next_exercise.topic_id) == topic_b.id
 
 
 def test_calculate_branch_level(tmp_path):

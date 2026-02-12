@@ -12,11 +12,11 @@ os.environ['SECRET_KEY'] = 'testsecret'
 os.environ['ALGORITHM'] = 'HS256'
 os.environ['ACCESS_TOKEN_EXPIRE_MINUTES'] = '60'
 
-from app.main import app
+from app.main import app as fastapi_app
 from app.core import database as db_module
 from app.core import deps as deps_module
 from app.core.database import Base
-import app.models  # noqa: F401
+from app import models as app_models  # noqa: F401
 
 
 @pytest.fixture()
@@ -41,13 +41,13 @@ def client(tmp_path):
         finally:
             db.close()
 
-    app.dependency_overrides[db_module.get_db] = override_get_db
-    app.dependency_overrides[deps_module.get_db] = override_get_db
+    fastapi_app.dependency_overrides[db_module.get_db] = override_get_db
+    fastapi_app.dependency_overrides[deps_module.get_db] = override_get_db
 
-    with TestClient(app) as test_client:
+    with TestClient(fastapi_app) as test_client:
         yield test_client
 
-    app.dependency_overrides.clear()
+    fastapi_app.dependency_overrides.clear()
     Base.metadata.drop_all(bind=engine)
 
 
@@ -73,12 +73,12 @@ async def async_client(tmp_path):
         finally:
             db.close()
 
-    app.dependency_overrides[db_module.get_db] = override_get_db
-    app.dependency_overrides[deps_module.get_db] = override_get_db
+    fastapi_app.dependency_overrides[db_module.get_db] = override_get_db
+    fastapi_app.dependency_overrides[deps_module.get_db] = override_get_db
 
-    transport = httpx.ASGITransport(app=app)
+    transport = httpx.ASGITransport(app=fastapi_app)
     async with httpx.AsyncClient(transport=transport, base_url='http://test') as test_client:
         yield test_client
 
-    app.dependency_overrides.clear()
+    fastapi_app.dependency_overrides.clear()
     Base.metadata.drop_all(bind=engine)

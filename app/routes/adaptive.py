@@ -15,9 +15,4 @@ def get_next_exercise(user_id: int, db: Session = Depends(get_db)):
     if exercise is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='No exercise available')
 
-    return ExerciseSuggestion(
-        id=exercise.id,
-        question=exercise.question,
-        topic_id=exercise.topic_id,
-        level_id=exercise.level_id,
-    )
+    return ExerciseSuggestion.model_validate(exercise)

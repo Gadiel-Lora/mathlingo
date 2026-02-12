@@ -1,3 +1,5 @@
+from typing import cast
+
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
@@ -37,7 +39,8 @@ def create_attempt(data: AttemptCreate, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(attempt)
 
-    mastery = update_mastery(db, data.user_id, exercise.topic_id, data.is_correct)
+    topic_id = cast(int, exercise.topic_id)
+    mastery = update_mastery(db, data.user_id, topic_id, data.is_correct)
 
     return AttemptOut(
         id=attempt.id,
