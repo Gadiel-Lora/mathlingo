@@ -5,6 +5,8 @@ from sqlalchemy.pool import StaticPool
 
 from app.core.database import Base
 from app.models.exercise import Exercise
+from app.models.level import Level
+from app.models.module import Module
 from app.models.topic import Topic
 from app.models.topic_dependency import TopicDependency
 from app.models.user import User
@@ -26,6 +28,17 @@ def _session(tmp_path):
     return sessionmaker(bind=engine)()
 
 
+def _create_level(db):
+    """Create a module and level to satisfy exercise foreign keys."""
+    module = Module(title='Core', description=None)
+    db.add(module)
+    db.commit()
+    level = Level(name='L1', description=None, module_id=module.id)
+    db.add(level)
+    db.commit()
+    return level
+
+
 def test_mastery_updates_correctly(tmp_path):
     """Ensure mastery increases on correct answers and decreases on incorrect ones."""
     db = _session(tmp_path)
@@ -44,6 +57,7 @@ def test_mastery_updates_correctly(tmp_path):
 def test_select_next_exercise(tmp_path):
     """Pick the lowest-mastery unlocked topic for the next exercise."""
     db = _session(tmp_path)
+    level = _create_level(db)
     user = User(email='user@example.com', hashed_password='hash', role='user')
     topic_a = Topic(name='Basics', description='Root', level=1)
     topic_b = Topic(name='Advanced', description='Depends', level=2)
@@ -54,8 +68,8 @@ def test_select_next_exercise(tmp_path):
     db.add(dependency)
     db.commit()
 
-    exercise_a = Exercise(question='Q1', answer='A1', level_id=1, topic_id=topic_a.id)
-    exercise_b = Exercise(question='Q2', answer='A2', level_id=1, topic_id=topic_b.id)
+    exercise_a = Exercise(question='Q1', answer='A1', level_id=level.id, topic_id=topic_a.id)
+    exercise_b = Exercise(question='Q2', answer='A2', level_id=level.id, topic_id=topic_b.id)
     db.add_all([exercise_a, exercise_b])
     db.commit()
 
