@@ -1,7 +1,7 @@
-﻿from fastapi import FastAPI
+from fastapi import FastAPI
 
 from app.core.database import Base, engine
-from app.routes import auth, module as modules, progress, users
+from app.routes import adaptive, attempts, auth, module as modules, progress, topics, users
 
 Base.metadata.create_all(bind=engine)
 
@@ -11,8 +11,12 @@ app.include_router(auth.router)
 app.include_router(progress.router)
 app.include_router(modules.router)
 app.include_router(users.router)
+app.include_router(topics.router)
+app.include_router(attempts.router)
+app.include_router(adaptive.router)
 
 
 @app.get('/')
 def root():
+    """Simple health check endpoint."""
     return {'status': 'ok'}

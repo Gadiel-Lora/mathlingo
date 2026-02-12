@@ -3,3 +3,7 @@ from app.models.progress import Progress
 from app.models.module import Module
 from app.models.level import Level
 from app.models.exercise import Exercise
+from app.models.topic import Topic
+from app.models.topic_dependency import TopicDependency
+from app.models.user_mastery import UserMastery
+from app.models.attempt import Attempt
