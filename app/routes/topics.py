@@ -24,7 +24,7 @@ def list_topics(db: Session = Depends(get_db)):
             id=topic.id,
             name=topic.name,
             description=topic.description,
-            level=topic.level,
+            level=int(round(float(topic.difficulty_level))),
             prerequisites=dep_map.get(topic.id, []),
         )
         for topic in topics

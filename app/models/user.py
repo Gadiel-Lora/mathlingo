@@ -9,22 +9,23 @@ from app.core.database import Base
 
 if TYPE_CHECKING:
     from app.models.attempt import Attempt
+    from app.models.certificate import Certificate
     from app.models.progress import Progress
     from app.models.user_mastery import UserMastery
 
 
 class User(Base):
-    """Application user with progress, mastery, and attempts."""
+    """Platform user with role, attempts, mastery, and certificates."""
 
     __tablename__ = 'users'
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    email: Mapped[str] = mapped_column(String, unique=True, index=True)
-    hashed_password: Mapped[str] = mapped_column(String, nullable=False)
-    role: Mapped[str] = mapped_column(String, nullable=False, default='user')
+    email: Mapped[str] = mapped_column(String(255), unique=True, index=True, nullable=False)
+    hashed_password: Mapped[str] = mapped_column(String(255), nullable=False)
+    role: Mapped[str] = mapped_column(String(50), nullable=False, default='user')
 
-    progress: Mapped[list[Progress]] = relationship(
-        'Progress',
+    attempts: Mapped[list[Attempt]] = relationship(
+        'Attempt',
         back_populates='user',
         cascade='all, delete-orphan',
     )
@@ -33,8 +34,18 @@ class User(Base):
         back_populates='user',
         cascade='all, delete-orphan',
     )
-    attempts: Mapped[list[Attempt]] = relationship(
-        'Attempt',
+    certificates: Mapped[list[Certificate]] = relationship(
+        'Certificate',
         back_populates='user',
         cascade='all, delete-orphan',
     )
+
+    # Legacy relation kept for compatibility with existing progress endpoints.
+    progress: Mapped[list[Progress]] = relationship(
+        'Progress',
+        back_populates='user',
+        cascade='all, delete-orphan',
+    )
+
+    def __repr__(self) -> str:
+        return f"User(id={self.id}, email={self.email!r}, role={self.role!r})"

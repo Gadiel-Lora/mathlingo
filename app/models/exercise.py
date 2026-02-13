@@ -1,7 +1,9 @@
+from __future__ import annotations
+
 from typing import TYPE_CHECKING
 
-from sqlalchemy import Column, ForeignKey, Integer, String
-from sqlalchemy.orm import relationship
+from sqlalchemy import CheckConstraint, DateTime, Float, ForeignKey, Integer, Text, func
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.database import Base
 
@@ -12,20 +14,36 @@ if TYPE_CHECKING:
 
 
 class Exercise(Base):
-    """Represents an exercise that can be linked to a topic and level."""
+    """Exercise tied to a topic for adaptive practice."""
 
     __tablename__ = 'exercises'
+    __table_args__ = (
+        CheckConstraint('difficulty >= 0.1 AND difficulty <= 2.0', name='ck_exercises_difficulty_range'),
+    )
 
-    id = Column(Integer, primary_key=True, index=True)
-    question = Column(String, nullable=False)
-    answer = Column(String, nullable=False)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    topic_id: Mapped[int] = mapped_column(Integer, ForeignKey('topics.id'), nullable=False, index=True)
+    question: Mapped[str] = mapped_column(Text, nullable=False)
+    answer: Mapped[str] = mapped_column(Text, nullable=False)
+    difficulty: Mapped[float] = mapped_column(Float, nullable=False, default=0.0)
+    created_at: Mapped[DateTime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    updated_at: Mapped[DateTime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=False,
+    )
 
-    level_id = Column(Integer, ForeignKey('levels.id'), nullable=True)
-    topic_id = Column(Integer, ForeignKey('topics.id'), nullable=True)
+    topic: Mapped[Topic] = relationship('Topic', back_populates='exercises')
+    attempts: Mapped[list[Attempt]] = relationship(
+        'Attempt',
+        back_populates='exercise',
+        cascade='all, delete-orphan',
+    )
 
-    # Relationship to the Level that owns this exercise.
-    level = relationship('Level', back_populates='exercises')
-    # Optional relationship to the adaptive Topic.
-    topic = relationship('Topic', back_populates='exercises')
-    # Attempts made by users for this exercise.
-    attempts = relationship('Attempt', back_populates='exercise', cascade='all, delete-orphan')
+    # Legacy field kept for compatibility with existing level model.
+    level_id: Mapped[int | None] = mapped_column(Integer, ForeignKey('levels.id'), nullable=True)
+    level: Mapped[Level | None] = relationship('Level', back_populates='exercises')
+
+    def __repr__(self) -> str:
+        return f"Exercise(id={self.id}, topic_id={self.topic_id}, difficulty={self.difficulty})"

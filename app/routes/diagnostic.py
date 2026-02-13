@@ -21,5 +21,5 @@ def get_branch_level(
     else:
         resolved_topic_ids = topic_ids
 
-    level = calculate_branch_level(db, user_id=user_id, topic_ids=topic_ids)
+    level = calculate_branch_level(db, user_id=user_id, topic_ids=resolved_topic_ids)
     return BranchLevelOut(user_id=user_id, topic_ids=resolved_topic_ids, branch_level=level)

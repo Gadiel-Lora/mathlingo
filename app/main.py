@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 
 from app.core.database import create_tables
-from app.routes import adaptive, attempts, auth, diagnostic, module as modules, progress, topics, users
+from app.routes import adaptive, attempts, auth, certificates, diagnostic, module as modules, progress, topics, users
 
 create_tables()
 
@@ -15,6 +15,7 @@ app.include_router(topics.router)
 app.include_router(attempts.router)
 app.include_router(adaptive.router)
 app.include_router(diagnostic.router)
+app.include_router(certificates.router)
 
 
 @app.get('/')

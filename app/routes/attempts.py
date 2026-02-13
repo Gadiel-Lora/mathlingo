@@ -6,8 +6,10 @@ from sqlalchemy.orm import Session
 from app.core.database import get_db
 from app.models.attempt import Attempt
 from app.models.exercise import Exercise
+from app.models.topic import Topic
 from app.models.user import User
 from app.schemas.attempt import AttemptCreate, AttemptOut
+from app.services.certificate_service import ensure_subject_certificate
 from app.services.mastery_engine import update_mastery
 
 router = APIRouter(prefix='/attempts', tags=['Attempts'])
@@ -40,7 +42,19 @@ def create_attempt(data: AttemptCreate, db: Session = Depends(get_db)):
     db.refresh(attempt)
 
     topic_id = cast(int, exercise.topic_id)
-    mastery = update_mastery(db, data.user_id, topic_id, data.is_correct)
+    topic = db.query(Topic).filter(Topic.id == topic_id).first()
+    if topic is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Topic not found')
+
+    mastery = update_mastery(
+        db=db,
+        user_id=data.user_id,
+        topic_id=topic_id,
+        is_correct=data.is_correct,
+        difficulty=float(exercise.difficulty),
+        criticality_level=int(topic.criticality_level),
+    )
+    ensure_subject_certificate(db, user_id=data.user_id, subject_id=int(topic.subject_id))
 
     return AttemptOut(
         id=attempt.id,
