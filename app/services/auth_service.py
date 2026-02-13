@@ -46,5 +46,22 @@ def login_user_credentials(db: Session, email: str, password: str) -> Token:
     return Token(access_token=token)
 
 
-def login_user(db: Session, data: LoginRequest) -> Token:
-    return login_user_credentials(db, data.email, data.password)
+def login_user(
+    db: Session,
+    data_or_email: LoginRequest | str,
+    password: str | None = None,
+) -> Token:
+    """Login helper with backward-compatible signatures."""
+    if isinstance(data_or_email, LoginRequest):
+        email = data_or_email.email
+        raw_password = data_or_email.password
+    else:
+        if password is None:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail='Password is required',
+            )
+        email = data_or_email
+        raw_password = password
+
+    return login_user_credentials(db, email, raw_password)

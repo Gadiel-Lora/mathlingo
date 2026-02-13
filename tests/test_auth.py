@@ -1,12 +1,15 @@
-﻿
-def test_register_and_login(client):
-    register = client.post(
+import pytest
+
+
+@pytest.mark.anyio
+async def test_register_and_login(async_client):
+    register = await async_client.post(
         '/auth/register',
         json={'email': 'admin@example.com', 'password': 'pass1234'},
     )
     assert register.status_code == 200
 
-    login = client.post(
+    login = await async_client.post(
         '/auth/login',
         json={'email': 'admin@example.com', 'password': 'pass1234'},
     )
@@ -15,7 +18,7 @@ def test_register_and_login(client):
     assert 'access_token' in data
     assert data['token_type'] == 'bearer'
 
-    token_login = client.post(
+    token_login = await async_client.post(
         '/auth/token',
         data={'username': 'admin@example.com', 'password': 'pass1234'},
     )

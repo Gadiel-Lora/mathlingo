@@ -1,9 +1,9 @@
 from fastapi import FastAPI
 
-from app.core.database import Base, engine
+from app.core.database import create_tables
 from app.routes import adaptive, attempts, auth, diagnostic, module as modules, progress, topics, users
 
-Base.metadata.create_all(bind=engine)
+create_tables()
 
 app = FastAPI(title='Mathlingo API')
 

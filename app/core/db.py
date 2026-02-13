@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, inspect, text
 from sqlalchemy.orm import declarative_base, sessionmaker
 
 from app.core.config import settings
@@ -33,6 +33,32 @@ def get_db():
         db.close()
 
 
+def _ensure_sqlite_column(table_name: str, column_name: str, ddl: str) -> None:
+    """Apply a lightweight SQLite migration when a column is missing."""
+    if not DATABASE_URL.startswith('sqlite'):
+        return
+
+    inspector = inspect(engine)
+    if table_name not in inspector.get_table_names():
+        return
+
+    existing_columns = {column['name'] for column in inspector.get_columns(table_name)}
+    if column_name in existing_columns:
+        return
+
+    with engine.begin() as connection:
+        connection.execute(text(ddl))
+
+
+def _run_compat_migrations() -> None:
+    _ensure_sqlite_column(
+        table_name='exercises',
+        column_name='topic_id',
+        ddl='ALTER TABLE exercises ADD COLUMN topic_id INTEGER',
+    )
+
+
 def create_tables() -> None:
     """Create all mapped tables."""
     Base.metadata.create_all(bind=engine)
+    _run_compat_migrations()
