@@ -16,11 +16,12 @@ def calculate_branch_level(db: Session, user_id: int, topic_ids: list[int] | Non
 
     mastery_map = get_mastery_map(db, user_id)
     average = sum(mastery_map.get(topic_id, 0.0) for topic_id in topic_ids) / len(topic_ids)
+    epsilon = 1e-9
 
-    if average >= 0.8:
+    if average >= 0.8 - epsilon:
         return 3
-    if average >= 0.5:
+    if average >= 0.5 - epsilon:
         return 2
-    if average >= 0.2:
+    if average >= 0.2 - epsilon:
         return 1
     return 0

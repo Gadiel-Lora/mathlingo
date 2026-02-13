@@ -20,7 +20,7 @@ class Exercise(Base):
     question = Column(String, nullable=False)
     answer = Column(String, nullable=False)
 
-    level_id = Column(Integer, ForeignKey('levels.id'), nullable=False)
+    level_id = Column(Integer, ForeignKey('levels.id'), nullable=True)
     topic_id = Column(Integer, ForeignKey('topics.id'), nullable=True)
 
     # Relationship to the Level that owns this exercise.

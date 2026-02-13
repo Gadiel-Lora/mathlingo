@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 
 from app.core.database import Base, engine
-from app.routes import adaptive, attempts, auth, module as modules, progress, topics, users
+from app.routes import adaptive, attempts, auth, diagnostic, module as modules, progress, topics, users
 
 Base.metadata.create_all(bind=engine)
 
@@ -14,6 +14,7 @@ app.include_router(users.router)
 app.include_router(topics.router)
 app.include_router(attempts.router)
 app.include_router(adaptive.router)
+app.include_router(diagnostic.router)
 
 
 @app.get('/')
