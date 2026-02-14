@@ -65,6 +65,8 @@ def create_tables() -> None:
     """Create all mapped tables after importing the model registry."""
     import app.models  # noqa: F401
 
+    # Log the runtime database URL so we can verify where create_all() is applied.
+    logger.info('SQLAlchemy engine URL before create_all: %s', engine.url)
     table_names = sorted(Base.metadata.tables.keys())
     logger.info('Preparing to create tables: %s', ', '.join(table_names))
     Base.metadata.create_all(bind=engine)

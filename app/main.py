@@ -4,9 +4,13 @@ import app.models  # noqa: F401
 from app.core.database import create_tables
 from app.routes import adaptive, attempts, auth, certificates, diagnostic, module as modules, progress, topics, users
 
-create_tables()
-
 app = FastAPI(title='Mathlingo API')
+
+
+@app.on_event('startup')
+def on_startup() -> None:
+    """Initialize database tables on application startup."""
+    create_tables()
 
 app.include_router(auth.router)
 app.include_router(progress.router)
