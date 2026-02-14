@@ -1,3 +1,5 @@
+"""Central SQLAlchemy model registry for metadata initialization."""
+
 from app.models.attempt import Attempt
 from app.models.certificate import Certificate
 from app.models.exercise import Exercise

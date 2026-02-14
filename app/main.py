@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 
+import app.models  # noqa: F401
 from app.core.database import create_tables
 from app.routes import adaptive, attempts, auth, certificates, diagnostic, module as modules, progress, topics, users
 

@@ -1,3 +1,5 @@
+import logging
+
 from sqlalchemy import create_engine, inspect, text
 from sqlalchemy.orm import declarative_base, sessionmaker
 
@@ -22,6 +24,7 @@ SessionLocal = sessionmaker(
 )
 
 Base = declarative_base()
+logger = logging.getLogger(__name__)
 
 
 def get_db():
@@ -59,6 +62,10 @@ def _run_compat_migrations() -> None:
 
 
 def create_tables() -> None:
-    """Create all mapped tables."""
+    """Create all mapped tables after importing the model registry."""
+    import app.models  # noqa: F401
+
+    table_names = sorted(Base.metadata.tables.keys())
+    logger.info('Preparing to create tables: %s', ', '.join(table_names))
     Base.metadata.create_all(bind=engine)
     _run_compat_migrations()
