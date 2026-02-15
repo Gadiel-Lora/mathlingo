@@ -66,8 +66,8 @@ def create_tables() -> None:
     import app.models  # noqa: F401
 
     # Log the runtime database URL so we can verify where create_all() is applied.
-    logger.info('SQLAlchemy engine URL before create_all: %s', engine.url)
+    print(f'SQLAlchemy engine URL before create_all: {engine.url}')
     table_names = sorted(Base.metadata.tables.keys())
-    logger.info('Preparing to create tables: %s', ', '.join(table_names))
+    print(f"Preparing to create tables: {', '.join(table_names)}")
     Base.metadata.create_all(bind=engine)
     _run_compat_migrations()
