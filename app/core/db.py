@@ -1,20 +1,29 @@
-import logging
+import os
 
-from sqlalchemy import create_engine, inspect, text
+from sqlalchemy import create_engine
+from sqlalchemy.engine import make_url
 from sqlalchemy.orm import declarative_base, sessionmaker
 
 from app.core.config import settings
 
-DATABASE_URL = settings.DATABASE_URL
+# Load .env values in local environments when python-dotenv is available.
+try:
+    from dotenv import load_dotenv
+except ModuleNotFoundError:  # pragma: no cover - optional dependency
+    load_dotenv = None
 
-# SQLite needs check_same_thread=False, PostgreSQL does not.
-connect_args = {}
-if DATABASE_URL.startswith('sqlite'):
-    connect_args = {'check_same_thread': False}
+if load_dotenv is not None:
+    load_dotenv()
+
+# PostgreSQL URL is resolved from environment first, then settings fallback.
+DATABASE_URL = os.getenv('DATABASE_URL', settings.DATABASE_URL)
+if not DATABASE_URL:
+    raise RuntimeError('DATABASE_URL is required to initialize the database engine')
 
 engine = create_engine(
     DATABASE_URL,
-    connect_args=connect_args,
+    # Keep connections healthy in long-running API workers.
+    pool_pre_ping=True,
 )
 
 SessionLocal = sessionmaker(
@@ -24,7 +33,6 @@ SessionLocal = sessionmaker(
 )
 
 Base = declarative_base()
-logger = logging.getLogger(__name__)
 
 
 def get_db():
@@ -36,38 +44,17 @@ def get_db():
         db.close()
 
 
-def _ensure_sqlite_column(table_name: str, column_name: str, ddl: str) -> None:
-    """Apply a lightweight SQLite migration when a column is missing."""
-    if not DATABASE_URL.startswith('sqlite'):
-        return
-
-    inspector = inspect(engine)
-    if table_name not in inspector.get_table_names():
-        return
-
-    existing_columns = {column['name'] for column in inspector.get_columns(table_name)}
-    if column_name in existing_columns:
-        return
-
-    with engine.begin() as connection:
-        connection.execute(text(ddl))
-
-
-def _run_compat_migrations() -> None:
-    _ensure_sqlite_column(
-        table_name='exercises',
-        column_name='topic_id',
-        ddl='ALTER TABLE exercises ADD COLUMN topic_id INTEGER',
-    )
+def _safe_db_url(raw_url: str) -> str:
+    """Return a DSN with hidden password for startup logging."""
+    return make_url(raw_url).render_as_string(hide_password=True)
 
 
 def create_tables() -> None:
     """Create all mapped tables after importing the model registry."""
     import app.models  # noqa: F401
 
-    # Log the runtime database URL so we can verify where create_all() is applied.
-    print(f'SQLAlchemy engine URL before create_all: {engine.url}')
+    # Startup trace to verify create_all targets the expected PostgreSQL database.
+    print(f'Database URL: {_safe_db_url(DATABASE_URL)}')
     table_names = sorted(Base.metadata.tables.keys())
     print(f"Preparing to create tables: {', '.join(table_names)}")
     Base.metadata.create_all(bind=engine)
-    _run_compat_migrations()

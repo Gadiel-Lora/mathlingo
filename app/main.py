@@ -9,7 +9,7 @@ app = FastAPI(title='Mathlingo API')
 
 @app.on_event('startup')
 def on_startup() -> None:
-    """Initialize database tables on application startup."""
+    """Initialize database tables in the configured DATABASE_URL on startup."""
     create_tables()
 
 app.include_router(auth.router)
