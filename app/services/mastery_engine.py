@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from datetime import datetime, timedelta
-from math import log1p
 
 from sqlalchemy.orm import Session
 
@@ -11,16 +10,17 @@ from app.models.subject import Subject
 from app.models.topic import Topic
 from app.models.user_mastery import UserMastery
 
-ALPHA_DEFAULT = 0.2
-BETA_DEFAULT = 0.1
+BASE_LEARNING_RATE_DEFAULT = 0.2
 MIN_DIFFICULTY = 0.1
 MAX_DIFFICULTY = 2.0
 MIN_CRITICALITY = 1
 MAX_CRITICALITY = 3
 IN_DEVELOPMENT_MIN = 0.5
+TOPIC_COMPLETION_THRESHOLD = 0.8
 INACTIVITY_DAYS = 90
 REVALIDATION_CORRECT_REQUIRED = 3
 REVALIDATION_WINDOW_DAYS = 30
+REVIEW_DECAY_WINDOW_DAYS = 30.0
 
 
 def _clamp(value: float, min_value: float, max_value: float) -> float:
@@ -28,36 +28,42 @@ def _clamp(value: float, min_value: float, max_value: float) -> float:
     return max(min_value, min(max_value, value))
 
 
-def _calculate_effective_rates_with_base(
-    topic_mastery: float,
+def _utcnow() -> datetime:
+    """Single clock source to keep time behavior consistent."""
+    return datetime.utcnow()
+
+
+def _normalized_last_seen(mastery: UserMastery) -> datetime | None:
+    """Read last seen datetime with backward compatibility."""
+    last_seen = getattr(mastery, 'last_seen_at', None)
+    if last_seen is None:
+        last_seen = mastery.last_updated
+    if last_seen is None:
+        return None
+    return last_seen.replace(tzinfo=None)
+
+
+def calculate_learning_rate(
+    base_learning_rate: float,
     difficulty: float,
     criticality: int,
-    base_alpha: float,
-    base_beta: float,
-) -> tuple[float, float]:
-    """Compute difficulty/criticality-adjusted rates from base alpha/beta."""
-    mastery = _clamp(float(topic_mastery), 0.0, 1.0)
+) -> float:
+    """Dynamic learning rate weighted by difficulty and criticality."""
     normalized_difficulty = _clamp(float(difficulty), MIN_DIFFICULTY, MAX_DIFFICULTY)
     normalized_criticality = int(_clamp(float(criticality), MIN_CRITICALITY, MAX_CRITICALITY))
-
-    # Keep mastery normalized for predictable numeric behavior.
-    _ = mastery
-    criticality_factor = log1p(normalized_criticality)
-
-    effective_alpha = _clamp(base_alpha * normalized_difficulty * criticality_factor, 0.0, 1.0)
-    effective_beta = _clamp(base_beta * (2.0 - normalized_difficulty) * criticality_factor, 0.0, 1.0)
-    return effective_alpha, effective_beta
+    rate = base_learning_rate * normalized_difficulty * (1.0 + normalized_criticality * 0.1)
+    return _clamp(rate, 0.001, 1.0)
 
 
 def calculate_effective_rates(topic_mastery: float, difficulty: float, criticality: int) -> tuple[float, float]:
-    """Public helper using default base alpha/beta."""
-    return _calculate_effective_rates_with_base(
-        topic_mastery=topic_mastery,
+    """Backward-compatible helper returning the dynamic learning rate tuple."""
+    _ = _clamp(float(topic_mastery), 0.0, 1.0)
+    learning_rate = calculate_learning_rate(
+        base_learning_rate=BASE_LEARNING_RATE_DEFAULT,
         difficulty=difficulty,
         criticality=criticality,
-        base_alpha=ALPHA_DEFAULT,
-        base_beta=BETA_DEFAULT,
     )
+    return learning_rate, learning_rate
 
 
 def get_threshold(subject: Subject, criticality: int) -> float:
@@ -81,11 +87,40 @@ def is_topic_in_development(subject: Subject, criticality: int, mastery_score: f
     return IN_DEVELOPMENT_MIN <= score < threshold
 
 
+def is_topic_completed(mastery_score: float, completion_threshold: float = TOPIC_COMPLETION_THRESHOLD) -> bool:
+    """Check if topic mastery reached completion threshold."""
+    return float(mastery_score) >= float(completion_threshold)
+
+
 def is_inactive(mastery: UserMastery, now: datetime | None = None) -> bool:
     """Return True when no updates in the inactivity window."""
-    reference = now or datetime.utcnow()
-    delta_days = (reference - mastery.last_updated.replace(tzinfo=None)).days
+    last_seen = _normalized_last_seen(mastery)
+    if last_seen is None:
+        return True
+    reference = (now or _utcnow()).replace(tzinfo=None)
+    delta_days = (reference - last_seen).days
     return delta_days > INACTIVITY_DAYS
+
+
+def calculate_decay_factor(last_seen_at: datetime | None, now: datetime | None = None) -> float:
+    """Increase decay as elapsed days grow since last exposure."""
+    if last_seen_at is None:
+        return 1.0
+    reference = (now or _utcnow()).replace(tzinfo=None)
+    last_seen = last_seen_at.replace(tzinfo=None)
+    elapsed_days = max(0.0, (reference - last_seen).total_seconds() / 86400.0)
+    return _clamp(elapsed_days / REVIEW_DECAY_WINDOW_DAYS, 0.0, 1.0)
+
+
+def calculate_review_priority(
+    mastery_score: float,
+    last_seen_at: datetime | None,
+    now: datetime | None = None,
+) -> float:
+    """Spaced repetition priority: lower mastery and older topics rise first."""
+    score = _clamp(float(mastery_score), 0.0, 1.0)
+    decay_factor = calculate_decay_factor(last_seen_at, now=now)
+    return (1.0 - score) + decay_factor
 
 
 def has_passed_revalidation(
@@ -95,7 +130,7 @@ def has_passed_revalidation(
     required_correct: int = REVALIDATION_CORRECT_REQUIRED,
 ) -> bool:
     """Require a minimum number of recent correct attempts to revalidate a stale topic."""
-    cutoff = datetime.utcnow() - timedelta(days=REVALIDATION_WINDOW_DAYS)
+    cutoff = _utcnow() - timedelta(days=REVALIDATION_WINDOW_DAYS)
     rows = (
         db.query(Attempt)
         .join(Exercise, Exercise.id == Attempt.exercise_id)
@@ -111,10 +146,38 @@ def has_passed_revalidation(
 
 
 def calculate_mastery_score(old_score: float, is_correct: bool, alpha: float, beta: float) -> float:
-    """Calculate the new mastery score from the previous score and result."""
+    """Logistic-style mastery update with directional delta."""
+    _ = beta  # kept for backward compatibility in function signature
+    score = _clamp(float(old_score), 0.0, 1.0)
+    learning_rate = _clamp(float(alpha), 0.0, 1.0)
     if is_correct:
-        return old_score + alpha * (1.0 - old_score)
-    return old_score - beta * old_score
+        delta = learning_rate * (1.0 - score)
+    else:
+        delta = -learning_rate * score
+    return _clamp(score + delta, 0.0, 1.0)
+
+
+def _set_repetition_metadata(mastery: UserMastery, now: datetime) -> None:
+    """Update spaced-repetition tracking fields if available on the model."""
+    # Backward compatibility: legacy schema always has last_updated.
+    mastery.last_updated = now
+
+    # Optional schema fields: only set when present in the mapped model.
+    if hasattr(mastery, 'last_seen_at'):
+        setattr(mastery, 'last_seen_at', now)
+
+    review_priority = calculate_review_priority(
+        mastery_score=float(mastery.mastery_score),
+        last_seen_at=now,
+        now=now,
+    )
+    if hasattr(mastery, 'review_priority'):
+        setattr(mastery, 'review_priority', review_priority)
+    else:
+        # Useful runtime attribute even before DB migration.
+        setattr(mastery, '_runtime_review_priority', review_priority)
+
+    setattr(mastery, 'is_completed', is_topic_completed(float(mastery.mastery_score)))
 
 
 def update_mastery(
@@ -124,8 +187,8 @@ def update_mastery(
     is_correct: bool,
     difficulty: float = 1.0,
     criticality_level: int = 1,
-    alpha: float = ALPHA_DEFAULT,
-    beta: float = BETA_DEFAULT,
+    alpha: float = BASE_LEARNING_RATE_DEFAULT,
+    beta: float = BASE_LEARNING_RATE_DEFAULT,
 ) -> UserMastery:
     """Create or update a mastery record for a user and topic."""
     mastery = (
@@ -139,21 +202,19 @@ def update_mastery(
         db.add(mastery)
         db.flush()
 
-    effective_alpha, effective_beta = _calculate_effective_rates_with_base(
-        topic_mastery=mastery.mastery_score,
+    learning_rate = calculate_learning_rate(
+        base_learning_rate=alpha,
         difficulty=difficulty,
         criticality=criticality_level,
-        base_alpha=alpha,
-        base_beta=beta,
     )
     new_score = calculate_mastery_score(
         mastery.mastery_score,
         is_correct,
-        effective_alpha,
-        effective_beta,
+        learning_rate,
+        beta,
     )
-    mastery.mastery_score = max(0.0, min(1.0, new_score))
-    mastery.last_updated = datetime.utcnow()
+    mastery.mastery_score = _clamp(new_score, 0.0, 1.0)
+    _set_repetition_metadata(mastery, now=_utcnow())
 
     db.commit()
     db.refresh(mastery)
@@ -176,6 +237,27 @@ def get_mastery_row(db: Session, user_id: int, topic_id: int) -> UserMastery | N
         db.query(UserMastery)
         .filter(UserMastery.user_id == user_id, UserMastery.topic_id == topic_id)
         .first()
+    )
+
+
+def get_topic_review_priority(db: Session, user_id: int, topic_id: int) -> float:
+    """Read review priority for a topic, with fallback if schema is not migrated yet."""
+    mastery = get_mastery_row(db, user_id=user_id, topic_id=topic_id)
+    if mastery is None:
+        return calculate_review_priority(mastery_score=0.0, last_seen_at=None, now=_utcnow())
+
+    persisted_priority = getattr(mastery, 'review_priority', None)
+    if persisted_priority is not None:
+        return float(persisted_priority)
+
+    runtime_priority = getattr(mastery, '_runtime_review_priority', None)
+    if runtime_priority is not None:
+        return float(runtime_priority)
+
+    return calculate_review_priority(
+        mastery_score=float(mastery.mastery_score),
+        last_seen_at=_normalized_last_seen(mastery),
+        now=_utcnow(),
     )
 
 
