@@ -6,6 +6,8 @@ import json
 import random
 import statistics
 from dataclasses import dataclass, field
+from datetime import datetime, timezone
+from pathlib import Path
 from typing import Any
 
 import httpx
@@ -15,8 +17,7 @@ import pandas as pd
 @dataclass
 class ProfileConfig:
     name: str
-    factor: float
-    initial_domain: float
+    correct_probability: float
 
 
 @dataclass
@@ -25,31 +26,38 @@ class StudentState:
     user_id: int
     email: str
     token: str
-    topic_mastery: dict[int, float] = field(default_factory=dict)
-    fallback_mastery: float = 0.0
     known_answers: dict[int, str] = field(default_factory=dict)
 
-    def current_domain(self) -> float:
-        if self.topic_mastery:
-            return max(0.0, min(1.0, statistics.fmean(self.topic_mastery.values())))
-        return max(0.0, min(1.0, self.fallback_mastery or self.profile.initial_domain))
 
-
-PROFILE_CONFIGS = [
-    ProfileConfig(name='novato', factor=0.5, initial_domain=0.2),
-    ProfileConfig(name='intermedio', factor=0.7, initial_domain=0.5),
-    ProfileConfig(name='experto', factor=0.9, initial_domain=0.8),
+PROFILES = [
+    ProfileConfig(name='novato', correct_probability=0.30),
+    ProfileConfig(name='intermedio', correct_probability=0.60),
+    ProfileConfig(name='experto', correct_probability=0.85),
 ]
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description='Simulacion de aprendizaje adaptativo para Mathlingo.')
+    parser = argparse.ArgumentParser(description='Simulador de aprendizaje adaptativo para Mathlingo.')
     parser.add_argument('--base-url', default='http://127.0.0.1:8000', help='Base URL del backend FastAPI.')
-    parser.add_argument('--iterations', type=int, default=50, help='Iteraciones por usuario.')
-    parser.add_argument('--output', default='simulation_results.csv', help='Archivo CSV de salida.')
-    parser.add_argument('--seed', type=int, default=42, help='Semilla para reproducibilidad.')
+    parser.add_argument('--iterations', type=int, default=50, help='Numero de iteraciones por usuario.')
+    parser.add_argument('--output', default='simulation_results.csv', help='Ruta del CSV de salida.')
+    parser.add_argument('--seed', type=int, default=42, help='Semilla aleatoria para reproducibilidad.')
     parser.add_argument('--timeout', type=float, default=15.0, help='Timeout HTTP en segundos.')
     return parser.parse_args()
+
+
+def _decode_user_id_from_jwt(access_token: str) -> int:
+    parts = access_token.split('.')
+    if len(parts) < 2:
+        raise ValueError('Invalid JWT token format')
+    payload_part = parts[1]
+    padding = '=' * (-len(payload_part) % 4)
+    decoded = base64.urlsafe_b64decode(payload_part + padding).decode('utf-8')
+    payload: dict[str, Any] = json.loads(decoded)
+    sub = payload.get('sub')
+    if sub is None:
+        raise ValueError('JWT token has no `sub` claim')
+    return int(sub)
 
 
 def _build_alternative_base_urls(base_url: str) -> list[str]:
@@ -62,8 +70,7 @@ def _build_alternative_base_urls(base_url: str) -> list[str]:
 
 
 def _probe_backend(client: httpx.Client, base_url: str) -> bool:
-    endpoints = [f'{base_url}/openapi.json', f'{base_url}/']
-    for endpoint in endpoints:
+    for endpoint in (f'{base_url}/openapi.json', f'{base_url}/'):
         try:
             response = client.get(endpoint)
             if response.status_code < 500:
@@ -80,24 +87,8 @@ def _resolve_reachable_base_url(client: httpx.Client, base_url: str) -> str | No
     return None
 
 
-def _decode_user_id_from_jwt(access_token: str) -> int:
-    """Decode JWT payload without signature verification to extract `sub`."""
-    parts = access_token.split('.')
-    if len(parts) < 2:
-        raise ValueError('Invalid JWT token format')
-    payload_part = parts[1]
-    padding = '=' * (-len(payload_part) % 4)
-    decoded = base64.urlsafe_b64decode(payload_part + padding).decode('utf-8')
-    payload: dict[str, Any] = json.loads(decoded)
-    sub = payload.get('sub')
-    if sub is None:
-        raise ValueError('JWT token has no `sub` claim')
-    return int(sub)
-
-
 def _register_and_login(client: httpx.Client, base_url: str, email: str, password: str) -> tuple[int, str]:
-    register_payload = {'email': email, 'password': password}
-    register_response = client.post(f'{base_url}/auth/register', json=register_payload)
+    register_response = client.post(f'{base_url}/auth/register', json={'email': email, 'password': password})
     if register_response.status_code not in (200, 400):
         raise RuntimeError(
             f'Register failed for {email}: {register_response.status_code} {register_response.text}'
@@ -118,28 +109,54 @@ def _register_and_login(client: httpx.Client, base_url: str, email: str, passwor
     return user_id, token
 
 
-def _load_initial_domain(client: httpx.Client, base_url: str, user_id: int, token: str, fallback: float) -> float:
-    response = client.get(
-        f'{base_url}/users/{user_id}/progress/',
-        headers={'Authorization': f'Bearer {token}'},
+def _get_next_exercise(client: httpx.Client, base_url: str, user_id: int) -> dict[str, Any] | None:
+    response = client.get(f'{base_url}/adaptive/next_exercise', params={'user_id': user_id})
+    if response.status_code == 404:
+        return None
+    if response.status_code != 200:
+        raise RuntimeError(
+            f'/adaptive/next_exercise failed: {response.status_code} {response.text}'
+        )
+    return response.json()
+
+
+def _submit_answer(
+    client: httpx.Client,
+    base_url: str,
+    user_id: int,
+    exercise_id: int,
+    answer: str,
+) -> dict[str, Any]:
+    response = client.post(
+        f'{base_url}/adaptive/submit',
+        json={
+            'user_id': user_id,
+            'exercise_id': exercise_id,
+            'answer': answer,
+        },
     )
     if response.status_code != 200:
-        return fallback
-
-    data = response.json()
-    mastery_rows = data.get('mastery', [])
-    if not mastery_rows:
-        return fallback
-
-    values = [float(row.get('mastery_score', 0.0)) for row in mastery_rows]
-    return max(0.0, min(1.0, statistics.fmean(values)))
+        raise RuntimeError(f'/adaptive/submit failed: {response.status_code} {response.text}')
+    return response.json()
 
 
-def _build_wrong_answer(exercise_id: int, iteration: int) -> str:
-    return f'wrong_{exercise_id}_{iteration}'
+def _build_simulated_answer(
+    *,
+    should_be_correct: bool,
+    exercise_id: int,
+    next_payload: dict[str, Any],
+    known_answers: dict[int, str],
+) -> str:
+    correct_answer = next_payload.get('correct_answer')
+    if should_be_correct:
+        if isinstance(correct_answer, str) and correct_answer.strip():
+            return correct_answer
+        if exercise_id in known_answers:
+            return known_answers[exercise_id]
+    return '9999'
 
 
-def simulate_profile(
+def _simulate_profile(
     client: httpx.Client,
     base_url: str,
     state: StudentState,
@@ -148,97 +165,73 @@ def simulate_profile(
     rows: list[dict[str, Any]] = []
 
     for iteration in range(1, iterations + 1):
-        next_response = client.get(
-            f'{base_url}/adaptive/next_exercise',
-            params={'user_id': state.user_id},
-        )
-        if next_response.status_code != 200:
-            print(
-                f'[{state.profile.name}] Stop: /adaptive/next_exercise -> '
-                f'{next_response.status_code} {next_response.text}'
-            )
+        next_payload = _get_next_exercise(client, base_url, state.user_id)
+        if next_payload is None:
+            print(f'[{state.profile.name}] No more exercises available.')
             break
 
-        exercise = next_response.json()
-        exercise_id = int(exercise['id'])
-        topic_id = exercise.get('topic_id')
+        exercise_id = int(next_payload['id'])
+        _question = str(next_payload.get('question', ''))
 
-        domain_now = state.current_domain()
-        p_correct = max(0.0, min(1.0, domain_now * state.profile.factor))
-        want_correct = random.random() < p_correct
-
-        answer: str
-        if want_correct and exercise_id in state.known_answers:
-            answer = state.known_answers[exercise_id]
-        else:
-            answer = _build_wrong_answer(exercise_id, iteration)
-
-        submit_response = client.post(
-            f'{base_url}/adaptive/submit',
-            json={
-                'user_id': state.user_id,
-                'exercise_id': exercise_id,
-                'answer': answer,
-            },
+        should_be_correct = random.random() < state.profile.correct_probability
+        answer = _build_simulated_answer(
+            should_be_correct=should_be_correct,
+            exercise_id=exercise_id,
+            next_payload=next_payload,
+            known_answers=state.known_answers,
         )
-        if submit_response.status_code != 200:
-            print(
-                f'[{state.profile.name}] Stop: /adaptive/submit -> '
-                f'{submit_response.status_code} {submit_response.text}'
-            )
-            break
 
-        submit_data = submit_response.json()
-        is_correct = bool(submit_data['correct'])
-        mastery_score = float(submit_data['mastery_score'])
-        correct_answer = str(submit_data['correct_answer'])
-        state.known_answers[exercise_id] = correct_answer
+        submit_payload = _submit_answer(
+            client=client,
+            base_url=base_url,
+            user_id=state.user_id,
+            exercise_id=exercise_id,
+            answer=answer,
+        )
 
-        if topic_id is not None:
-            state.topic_mastery[int(topic_id)] = mastery_score
-        state.fallback_mastery = mastery_score
+        is_correct = bool(submit_payload['correct'])
+        mastery_score = float(submit_payload['mastery_score'])
+        if isinstance(submit_payload.get('correct_answer'), str):
+            state.known_answers[exercise_id] = str(submit_payload['correct_answer'])
 
         rows.append(
             {
-                'profile': state.profile.name,
                 'user_id': state.user_id,
                 'exercise_id': exercise_id,
                 'is_correct': is_correct,
                 'mastery_score': mastery_score,
                 'iteration': iteration,
-                'p_correct_target': p_correct,
-                'intended_correct': want_correct,
+                'simulated_profile': state.profile.name,
             }
         )
 
     return rows
 
 
-def print_convergence_metrics(df: pd.DataFrame) -> None:
+def _print_convergence_metrics(df: pd.DataFrame) -> None:
     if df.empty:
         print('No se generaron datos de simulacion.')
         return
 
     print('\n=== Metricas de convergencia por perfil ===')
-    for profile, profile_df in df.groupby('profile', sort=False):
-        profile_df = profile_df.sort_values('iteration')
-        attempts = len(profile_df)
-        accuracy = float(profile_df['is_correct'].mean()) if attempts else 0.0
-
-        first_window = profile_df.head(min(10, attempts))
-        last_window = profile_df.tail(min(10, attempts))
-
-        first_mastery = float(first_window['mastery_score'].mean()) if not first_window.empty else 0.0
-        last_mastery = float(last_window['mastery_score'].mean()) if not last_window.empty else 0.0
-        delta_mastery = last_mastery - first_mastery
-
+    for profile, profile_df in df.groupby('simulated_profile', sort=False):
+        accuracy = float(profile_df['is_correct'].mean())
+        start_window = profile_df.head(min(10, len(profile_df)))
+        end_window = profile_df.tail(min(10, len(profile_df)))
+        start_mastery = float(start_window['mastery_score'].mean()) if not start_window.empty else 0.0
+        end_mastery = float(end_window['mastery_score'].mean()) if not end_window.empty else 0.0
+        delta_mastery = end_mastery - start_mastery
         print(
-            f'- {profile}: attempts={attempts}, '
+            f'- {profile}: attempts={len(profile_df)}, '
             f'accuracy={accuracy:.3f}, '
-            f'mastery_start={first_mastery:.3f}, '
-            f'mastery_end={last_mastery:.3f}, '
+            f'mastery_start={start_mastery:.3f}, '
+            f'mastery_end={end_mastery:.3f}, '
             f'delta={delta_mastery:.3f}'
         )
+
+    global_mean = float(df['mastery_score'].mean())
+    global_std = float(df['mastery_score'].std(ddof=0))
+    print(f'\nGlobal mastery mean={global_mean:.4f}, std={global_std:.4f}')
 
 
 def main() -> None:
@@ -246,66 +239,69 @@ def main() -> None:
     random.seed(args.seed)
 
     all_rows: list[dict[str, Any]] = []
+    timestamp = datetime.now(timezone.utc).strftime('%Y%m%d%H%M%S')
 
     try:
         with httpx.Client(timeout=args.timeout) as client:
-            resolved_base_url = _resolve_reachable_base_url(client, args.base_url.rstrip('/'))
-            if resolved_base_url is None:
+            base_url = _resolve_reachable_base_url(client, args.base_url.rstrip('/'))
+            if base_url is None:
                 print(f'No se pudo conectar al backend en: {args.base_url}')
                 print('Inicia el backend y vuelve a intentar.')
                 print('Ejemplo: python -m uvicorn app.main:app --reload --port 8001')
-                print('O especifica la URL correcta: --base-url http://127.0.0.1:8001')
+                print('O especifica: --base-url http://127.0.0.1:8001')
                 return
 
-            if resolved_base_url != args.base_url.rstrip('/'):
-                print(f'Backend detectado en {resolved_base_url}. Se usara esta URL.')
+            if base_url != args.base_url.rstrip('/'):
+                print(f'Backend detectado en {base_url}. Se usara esta URL.')
 
-            states: list[StudentState] = []
-
-            for cfg in PROFILE_CONFIGS:
-                email = f'sim_{cfg.name}@mathlingo.local'
+            students: list[StudentState] = []
+            for profile in PROFILES:
+                email = f'sim_{profile.name}_{timestamp}@mathlingo.local'
                 password = 'SimPass123!'
-                user_id, token = _register_and_login(client, resolved_base_url, email, password)
-                initial_domain = _load_initial_domain(
-                    client=client,
-                    base_url=resolved_base_url,
-                    user_id=user_id,
-                    token=token,
-                    fallback=cfg.initial_domain,
-                )
-                states.append(
+                user_id, token = _register_and_login(client, base_url, email, password)
+                students.append(
                     StudentState(
-                        profile=cfg,
+                        profile=profile,
                         user_id=user_id,
                         email=email,
                         token=token,
-                        fallback_mastery=initial_domain,
                     )
                 )
-                print(f'Perfil {cfg.name} -> user_id={user_id}, dominio_inicial={initial_domain:.3f}')
+                print(
+                    f'Perfil {profile.name}: user_id={user_id}, '
+                    f'P(correct)={profile.correct_probability:.2f}'
+                )
 
-            for state in states:
-                rows = simulate_profile(
+            for student in students:
+                profile_rows = _simulate_profile(
                     client=client,
-                    base_url=resolved_base_url,
-                    state=state,
+                    base_url=base_url,
+                    state=student,
                     iterations=args.iterations,
                 )
-                all_rows.extend(rows)
+                all_rows.extend(profile_rows)
+
     except httpx.HTTPError as exc:
         print(f'Error de red durante la simulacion: {exc}')
         print('Verifica que el backend este activo y que --base-url sea correcto.')
         return
     except Exception as exc:
-        print(f'Error inesperado durante la simulacion: {exc}')
+        print(f'Error durante la simulacion: {exc}')
         return
 
-    df = pd.DataFrame(all_rows)
-    output_columns = ['user_id', 'exercise_id', 'is_correct', 'mastery_score', 'iteration']
-    df_output = df[output_columns] if not df.empty else pd.DataFrame(columns=output_columns)
-    df_output.to_csv(args.output, index=False)
-    print(f'\nCSV guardado en: {args.output} ({len(df_output)} filas)')
-    print_convergence_metrics(df)
+    output_path = Path(args.output)
+    output_columns = [
+        'user_id',
+        'exercise_id',
+        'is_correct',
+        'mastery_score',
+        'iteration',
+        'simulated_profile',
+    ]
+    result_df = pd.DataFrame(all_rows, columns=output_columns)
+    result_df.to_csv(output_path, index=False)
+    print(f'\nCSV guardado en: {output_path} ({len(result_df)} filas)')
+    _print_convergence_metrics(result_df)
 
 
 if __name__ == '__main__':
