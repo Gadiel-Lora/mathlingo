@@ -115,22 +115,32 @@ def resolve_input_path(input_arg: str) -> Path:
     cwd = Path.cwd()
     csv_files = _list_csv_files(cwd)
 
-    if not csv_files:
-        raise FileNotFoundError(
-            f'No CSV files found in current directory: {cwd}\n'
-            'Run simulate_learning.py first or provide a valid --input path.'
-        )
+    if csv_files:
+        _print_csv_options(csv_files)
 
-    _print_csv_options(csv_files)
+        if len(csv_files) == 1:
+            selected = csv_files[0]
+            print(f'Only one CSV available. Using: {selected.name}')
+            return selected
 
-    if len(csv_files) == 1:
-        selected = csv_files[0]
-        print(f'Only one CSV available. Using: {selected.name}')
+        selected = _prompt_csv_selection(csv_files)
+        print(f'Using CSV: {selected}')
         return selected
 
-    selected = _prompt_csv_selection(csv_files)
-    print(f'Using CSV: {selected}')
-    return selected
+    print(f'No CSV files found in current directory: {cwd}')
+    print('Run simulate_learning.py first, or provide an existing CSV path.')
+
+    while True:
+        manual_path = input('Enter CSV path (or press Enter to cancel): ').strip()
+        if not manual_path:
+            raise SystemExit(1)
+
+        candidate = Path(manual_path).expanduser()
+        if candidate.exists() and candidate.is_file():
+            print(f'Using CSV: {candidate}')
+            return candidate
+
+        print(f'File not found: {candidate}. Try again.')
 
 
 def plot_mastery_by_profile(df: pd.DataFrame, profiles: list[str]) -> None:
@@ -220,10 +230,23 @@ def print_profile_metrics(df: pd.DataFrame, aggregated: pd.DataFrame, profiles: 
 
 def main() -> None:
     args = parse_args()
-    csv_path = resolve_input_path(args.input)
-    print(f'Reading data from: {csv_path}')
-    df = pd.read_csv(csv_path)
-    validate_dataframe(df)
+    try:
+        csv_path = resolve_input_path(args.input)
+        print(f'Reading data from: {csv_path}')
+        df = pd.read_csv(csv_path)
+        validate_dataframe(df)
+    except SystemExit:
+        print('Analysis cancelled.')
+        return
+    except FileNotFoundError as exc:
+        print(f'Error: {exc}')
+        return
+    except pd.errors.ParserError as exc:
+        print(f'Invalid CSV format: {exc}')
+        return
+    except Exception as exc:
+        print(f'Failed to load input file: {exc}')
+        return
 
     df['user_id'] = pd.to_numeric(df['user_id'], errors='raise').astype(int)
     df['iteration'] = pd.to_numeric(df['iteration'], errors='raise').astype(int)
