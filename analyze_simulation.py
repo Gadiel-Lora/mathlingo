@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import math
+from pathlib import Path
 from typing import Iterable
 
 import matplotlib.pyplot as plt
@@ -67,6 +68,69 @@ def validate_dataframe(df: pd.DataFrame) -> None:
     if missing_columns:
         missing = ', '.join(sorted(missing_columns))
         raise ValueError(f'Missing required columns in CSV: {missing}')
+
+
+def _list_csv_files(directory: Path) -> list[Path]:
+    return sorted([path for path in directory.glob('*.csv') if path.is_file()])
+
+
+def _print_csv_options(csv_files: list[Path]) -> None:
+    print('\nCSV files found in current directory:')
+    for idx, csv_path in enumerate(csv_files, start=1):
+        print(f'  {idx}. {csv_path.name}')
+    print('Choose by number (e.g. 1) or by filename (e.g. simulation_results.csv).')
+
+
+def _prompt_csv_selection(csv_files: list[Path]) -> Path:
+    while True:
+        selection = input('CSV to use: ').strip()
+        if not selection:
+            print('Please enter a valid option.')
+            continue
+
+        if selection.isdigit():
+            index = int(selection)
+            if 1 <= index <= len(csv_files):
+                return csv_files[index - 1]
+            print('Invalid number. Try again.')
+            continue
+
+        by_name = [path for path in csv_files if path.name == selection]
+        if by_name:
+            return by_name[0]
+
+        by_path = Path(selection)
+        if by_path.exists() and by_path.is_file():
+            return by_path
+
+        print('Invalid selection. Use a listed number or filename.')
+
+
+def resolve_input_path(input_arg: str) -> Path:
+    input_path = Path(input_arg).expanduser()
+    if input_path.exists() and input_path.is_file():
+        return input_path
+
+    print(f'Input file not found: {input_arg}')
+    cwd = Path.cwd()
+    csv_files = _list_csv_files(cwd)
+
+    if not csv_files:
+        raise FileNotFoundError(
+            f'No CSV files found in current directory: {cwd}\n'
+            'Run simulate_learning.py first or provide a valid --input path.'
+        )
+
+    _print_csv_options(csv_files)
+
+    if len(csv_files) == 1:
+        selected = csv_files[0]
+        print(f'Only one CSV available. Using: {selected.name}')
+        return selected
+
+    selected = _prompt_csv_selection(csv_files)
+    print(f'Using CSV: {selected}')
+    return selected
 
 
 def plot_mastery_by_profile(df: pd.DataFrame, profiles: list[str]) -> None:
@@ -156,7 +220,9 @@ def print_profile_metrics(df: pd.DataFrame, aggregated: pd.DataFrame, profiles: 
 
 def main() -> None:
     args = parse_args()
-    df = pd.read_csv(args.input)
+    csv_path = resolve_input_path(args.input)
+    print(f'Reading data from: {csv_path}')
+    df = pd.read_csv(csv_path)
     validate_dataframe(df)
 
     df['user_id'] = pd.to_numeric(df['user_id'], errors='raise').astype(int)
