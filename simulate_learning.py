@@ -52,6 +52,34 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
+def _build_alternative_base_urls(base_url: str) -> list[str]:
+    candidates = [base_url.rstrip('/')]
+    if ':8000' in base_url:
+        candidates.append(base_url.replace(':8000', ':8001').rstrip('/'))
+    elif ':8001' in base_url:
+        candidates.append(base_url.replace(':8001', ':8000').rstrip('/'))
+    return list(dict.fromkeys(candidates))
+
+
+def _probe_backend(client: httpx.Client, base_url: str) -> bool:
+    endpoints = [f'{base_url}/openapi.json', f'{base_url}/']
+    for endpoint in endpoints:
+        try:
+            response = client.get(endpoint)
+            if response.status_code < 500:
+                return True
+        except httpx.HTTPError:
+            continue
+    return False
+
+
+def _resolve_reachable_base_url(client: httpx.Client, base_url: str) -> str | None:
+    for candidate in _build_alternative_base_urls(base_url):
+        if _probe_backend(client, candidate):
+            return candidate
+    return None
+
+
 def _decode_user_id_from_jwt(access_token: str) -> int:
     """Decode JWT payload without signature verification to extract `sub`."""
     parts = access_token.split('.')
@@ -219,39 +247,58 @@ def main() -> None:
 
     all_rows: list[dict[str, Any]] = []
 
-    with httpx.Client(timeout=args.timeout) as client:
-        states: list[StudentState] = []
+    try:
+        with httpx.Client(timeout=args.timeout) as client:
+            resolved_base_url = _resolve_reachable_base_url(client, args.base_url.rstrip('/'))
+            if resolved_base_url is None:
+                print(f'No se pudo conectar al backend en: {args.base_url}')
+                print('Inicia el backend y vuelve a intentar.')
+                print('Ejemplo: python -m uvicorn app.main:app --reload --port 8001')
+                print('O especifica la URL correcta: --base-url http://127.0.0.1:8001')
+                return
 
-        for cfg in PROFILE_CONFIGS:
-            email = f'sim_{cfg.name}@mathlingo.local'
-            password = 'SimPass123!'
-            user_id, token = _register_and_login(client, args.base_url, email, password)
-            initial_domain = _load_initial_domain(
-                client=client,
-                base_url=args.base_url,
-                user_id=user_id,
-                token=token,
-                fallback=cfg.initial_domain,
-            )
-            states.append(
-                StudentState(
-                    profile=cfg,
+            if resolved_base_url != args.base_url.rstrip('/'):
+                print(f'Backend detectado en {resolved_base_url}. Se usara esta URL.')
+
+            states: list[StudentState] = []
+
+            for cfg in PROFILE_CONFIGS:
+                email = f'sim_{cfg.name}@mathlingo.local'
+                password = 'SimPass123!'
+                user_id, token = _register_and_login(client, resolved_base_url, email, password)
+                initial_domain = _load_initial_domain(
+                    client=client,
+                    base_url=resolved_base_url,
                     user_id=user_id,
-                    email=email,
                     token=token,
-                    fallback_mastery=initial_domain,
+                    fallback=cfg.initial_domain,
                 )
-            )
-            print(f'Perfil {cfg.name} -> user_id={user_id}, dominio_inicial={initial_domain:.3f}')
+                states.append(
+                    StudentState(
+                        profile=cfg,
+                        user_id=user_id,
+                        email=email,
+                        token=token,
+                        fallback_mastery=initial_domain,
+                    )
+                )
+                print(f'Perfil {cfg.name} -> user_id={user_id}, dominio_inicial={initial_domain:.3f}')
 
-        for state in states:
-            rows = simulate_profile(
-                client=client,
-                base_url=args.base_url,
-                state=state,
-                iterations=args.iterations,
-            )
-            all_rows.extend(rows)
+            for state in states:
+                rows = simulate_profile(
+                    client=client,
+                    base_url=resolved_base_url,
+                    state=state,
+                    iterations=args.iterations,
+                )
+                all_rows.extend(rows)
+    except httpx.HTTPError as exc:
+        print(f'Error de red durante la simulacion: {exc}')
+        print('Verifica que el backend este activo y que --base-url sea correcto.')
+        return
+    except Exception as exc:
+        print(f'Error inesperado durante la simulacion: {exc}')
+        return
 
     df = pd.DataFrame(all_rows)
     output_columns = ['user_id', 'exercise_id', 'is_correct', 'mastery_score', 'iteration']
