@@ -1,18 +1,9 @@
-import { Navigate, Route, Routes } from 'react-router-dom'
-import DashboardPage from './pages/Dashboard'
-import LearnPage from './pages/Learn'
-import LoginPage from './pages/Login'
-import ProfilePage from './pages/Profile'
-
-export default function App() {
+function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Navigate to="/login" replace />} />
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/dashboard" element={<DashboardPage />} />
-      <Route path="/learn" element={<LearnPage />} />
-      <Route path="/profile" element={<ProfilePage />} />
-      <Route path="*" element={<Navigate to="/login" replace />} />
-    </Routes>
+    <main className="min-h-screen bg-zinc-950 text-white grid place-items-center">
+      <h1 className="text-5xl font-bold">Mathlingo</h1>
+    </main>
   )
 }
+
+export default App
