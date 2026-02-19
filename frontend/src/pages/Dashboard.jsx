@@ -8,7 +8,7 @@ import { lessons } from '../data/lessons'
 function Dashboard() {
   const navigate = useNavigate()
   const { logout } = useAuth()
-  const { completedLessons, xp, level } = useProgress()
+  const { completedLessons, xp, level, currentStreak } = useProgress()
 
   const totalLessons = lessons.length
   const progress = Math.round((completedLessons.length / totalLessons) * 100)
@@ -77,7 +77,7 @@ function Dashboard() {
 
           <div className="space-y-6">
             <div className="rounded-2xl border border-zinc-800 bg-zinc-900/70 p-6 shadow-lg shadow-black/30 backdrop-blur-sm">
-              <p className="text-lg font-semibold tracking-tight">5 dias seguidos</p>
+              <p className="text-lg font-semibold tracking-tight">{currentStreak} dias seguidos</p>
             </div>
 
             <div className="space-y-6 rounded-2xl border border-zinc-800 bg-zinc-900/70 p-6 shadow-lg shadow-black/30 backdrop-blur-sm">
