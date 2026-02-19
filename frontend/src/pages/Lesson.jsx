@@ -1,36 +1,33 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 
 import brainLogo from '../assets/brain-logo.png'
-
-const lessons = [
-  {
-    id: 1,
-    title: 'Sumas basicas',
-    questions: [
-      {
-        question: 'Cuanto es 2 + 3?',
-        options: ['4', '5', '6', '3'],
-        correctIndex: 1,
-      },
-      {
-        question: 'Cuanto es 7 + 1?',
-        options: ['6', '8', '9', '7'],
-        correctIndex: 1,
-      },
-    ],
-  },
-]
+import { useProgress } from '../context/ProgressContext'
+import { lessons } from '../data/lessons'
 
 function Lesson() {
   const { id } = useParams()
   const lessonId = Number(id)
   const lesson = lessons.find((item) => item.id === lessonId)
+  const { completeLesson } = useProgress()
 
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [selectedOption, setSelectedOption] = useState(null)
   const [showFeedback, setShowFeedback] = useState(false)
   const [completed, setCompleted] = useState(false)
+
+  useEffect(() => {
+    setCurrentQuestionIndex(0)
+    setSelectedOption(null)
+    setShowFeedback(false)
+    setCompleted(false)
+  }, [lessonId])
+
+  useEffect(() => {
+    if (completed && Number.isInteger(lessonId)) {
+      completeLesson(lessonId)
+    }
+  }, [completed, completeLesson, lessonId])
 
   if (!lesson) {
     return (
@@ -106,7 +103,7 @@ function Lesson() {
 
                 return (
                   <button
-                    key={option}
+                    key={`${option}-${index}`}
                     type="button"
                     onClick={() => handleOptionClick(index)}
                     disabled={showFeedback}

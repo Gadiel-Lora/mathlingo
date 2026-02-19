@@ -1,19 +1,26 @@
 import { Link, useNavigate } from 'react-router-dom'
 
 import brainLogo from '../assets/brain-logo.png'
+import { useProgress } from '../context/ProgressContext'
+import { lessons } from '../data/lessons'
 
 function Dashboard() {
   const navigate = useNavigate()
-  const progress = 65
+  const { completedLessons } = useProgress()
 
-  const lessons = [
-    { id: 1, title: 'Leccion 1', locked: false },
-    { id: 2, title: 'Leccion 2', locked: false },
-    { id: 3, title: 'Leccion 3', locked: false },
-    { id: 4, title: 'Leccion 4', locked: true },
-    { id: 5, title: 'Leccion 5', locked: true },
-    { id: 6, title: 'Leccion 6', locked: true },
-  ]
+  const totalLessons = lessons.length
+  const progress = Math.round((completedLessons.length / totalLessons) * 100)
+
+  const lessonCards = lessons.map((lesson, index) => {
+    const previousLessonId = lessons[index - 1]?.id
+    const locked = index !== 0 && !completedLessons.includes(previousLessonId)
+
+    return {
+      ...lesson,
+      locked,
+      completed: completedLessons.includes(lesson.id),
+    }
+  })
 
   const handleLessonClick = (lesson) => {
     if (lesson.locked) return
@@ -64,7 +71,7 @@ function Dashboard() {
         </section>
 
         <section className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-3">
-          {lessons.map((lesson) => (
+          {lessonCards.map((lesson) => (
             <article
               key={lesson.id}
               onClick={() => handleLessonClick(lesson)}
@@ -76,7 +83,7 @@ function Dashboard() {
             >
               <h2 className="text-xl font-semibold">{lesson.title}</h2>
               <p className="mt-2 text-sm text-zinc-400">
-                {lesson.locked ? '🔒 Bloqueada' : 'Lista para continuar'}
+                {lesson.locked ? 'Bloqueada' : lesson.completed ? 'Completada' : 'Lista para continuar'}
               </p>
             </article>
           ))}
