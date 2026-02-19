@@ -42,33 +42,33 @@ function Dashboard() {
         <nav className="mx-auto flex h-16 max-w-5xl items-center justify-between px-6">
           <Link
             to="/"
-            className="text-lg font-semibold tracking-tight transition-all duration-200 hover:opacity-90 sm:text-xl"
+            className="text-lg font-semibold tracking-wide text-indigo-400 transition-all duration-200 hover:opacity-90 sm:text-xl"
           >
             Mathlingo
           </Link>
           <button
             type="button"
             onClick={handleLogout}
-            className="text-sm font-semibold tracking-tight text-zinc-400 transition-all duration-200 hover:text-blue-300"
+            className="text-sm font-semibold tracking-tight text-zinc-400 transition-all duration-200 hover:text-indigo-400"
           >
             Cerrar sesion
           </button>
         </nav>
       </header>
 
-      <main className="mx-auto max-w-5xl px-6 py-16">
-        <section className="mb-12 space-y-6 text-center">
+      <main className="mx-auto max-w-5xl px-6 pt-20 pb-16">
+        <section className="mx-auto mb-12 max-w-2xl space-y-6 text-center">
           <img src={brainLogo} alt="Mathlingo brain logo" className="mx-auto w-full max-w-32 drop-shadow-2xl" />
           <h1 className="text-3xl font-semibold tracking-tight">Hola, Usuario</h1>
           <p className="text-zinc-500">Continua tu progreso en matematicas</p>
         </section>
 
         <section className="mt-12 grid gap-6 lg:grid-cols-[2fr_1fr]">
-          <div className="space-y-6 rounded-2xl border border-zinc-800 bg-zinc-900 p-6 shadow-lg shadow-black/30">
+          <div className="space-y-6 rounded-2xl border border-zinc-800 bg-zinc-900/70 p-6 shadow-lg shadow-black/30 backdrop-blur-sm">
             <p className="text-sm text-zinc-400">Progreso general</p>
             <div className="h-4 w-full rounded-full bg-zinc-800">
               <div
-                className="h-4 rounded-full bg-blue-700 transition-all duration-500"
+                className="h-4 rounded-full bg-indigo-700 transition-all duration-500"
                 style={{ width: `${progress}%` }}
               />
             </div>
@@ -76,16 +76,16 @@ function Dashboard() {
           </div>
 
           <div className="space-y-6">
-            <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6 shadow-lg shadow-black/30">
+            <div className="rounded-2xl border border-zinc-800 bg-zinc-900/70 p-6 shadow-lg shadow-black/30 backdrop-blur-sm">
               <p className="text-lg font-semibold tracking-tight">5 dias seguidos</p>
             </div>
 
-            <div className="space-y-6 rounded-2xl border border-zinc-800 bg-zinc-900 p-6 shadow-lg shadow-black/30">
+            <div className="space-y-6 rounded-2xl border border-zinc-800 bg-zinc-900/70 p-6 shadow-lg shadow-black/30 backdrop-blur-sm">
               <p className="text-lg font-semibold tracking-tight">Nivel {level}</p>
               <p className="text-sm text-zinc-400">XP: {xp} / {nextLevelXp}</p>
               <div className="h-3 w-full rounded-full bg-zinc-800">
                 <div
-                  className="h-3 rounded-full bg-blue-700 transition-all duration-500"
+                  className="h-3 rounded-full bg-indigo-700 transition-all duration-500"
                   style={{ width: `${xpProgress}%` }}
                 />
               </div>
@@ -100,8 +100,8 @@ function Dashboard() {
               onClick={() => handleLessonClick(lesson)}
               className={`rounded-2xl p-6 ${
                 lesson.locked
-                  ? 'cursor-not-allowed border border-zinc-800 bg-zinc-900 opacity-50 shadow-lg shadow-black/30'
-                  : 'cursor-pointer border border-zinc-800 bg-zinc-900 shadow-lg shadow-black/30 transition-all duration-200 hover:bg-zinc-800'
+                  ? 'cursor-not-allowed border border-zinc-800 bg-zinc-900/70 opacity-50 shadow-lg shadow-black/30 backdrop-blur-sm'
+                  : 'cursor-pointer border border-zinc-800 bg-zinc-900/70 shadow-lg shadow-black/30 backdrop-blur-sm transition-all duration-200 hover:bg-zinc-800'
               }`}
             >
               <h2 className="text-xl font-semibold tracking-tight">{lesson.title}</h2>

@@ -33,12 +33,12 @@ function Lesson() {
 
   if (!lesson) {
     return (
-      <div className="min-h-screen bg-zinc-950 px-6 py-16 text-white">
-        <div className="mx-auto max-w-3xl space-y-6 rounded-2xl border border-zinc-800 bg-zinc-900 p-8 text-center shadow-lg shadow-black/30">
-          <h1 className="text-2xl font-semibold tracking-tight">Leccion no encontrada</h1>
+      <div className="min-h-screen bg-zinc-950 px-6 pt-20 pb-16 text-white">
+        <div className="mx-auto max-w-3xl space-y-6 rounded-2xl border border-zinc-800 bg-zinc-900/70 p-8 text-center shadow-lg shadow-black/30 backdrop-blur-sm">
+          <h1 className="mx-auto max-w-2xl text-2xl font-semibold tracking-tight text-white">Leccion no encontrada</h1>
           <Link
             to="/dashboard"
-            className="inline-block rounded-2xl bg-blue-700 px-6 py-3 font-semibold tracking-tight transition-all duration-200 hover:translate-y-[-1px] hover:bg-blue-600"
+            className="inline-block rounded-2xl bg-indigo-700 px-6 py-3 font-semibold tracking-tight transition-all duration-200 hover:translate-y-[-1px] hover:bg-indigo-600"
           >
             Volver al dashboard
           </Link>
@@ -72,13 +72,13 @@ function Lesson() {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-950 px-6 py-16 text-white">
+    <div className="min-h-screen bg-zinc-950 px-6 pt-20 pb-16 text-white">
       <div className="mx-auto max-w-3xl">
         <img src={brainLogo} alt="Mathlingo brain logo" className="mx-auto w-full max-w-24 drop-shadow-2xl" />
 
         {!completed ? (
-          <section className="mt-12 space-y-6 rounded-2xl border border-zinc-800 bg-zinc-900 p-8 shadow-lg shadow-black/30">
-            <h1 className="text-3xl font-semibold tracking-tight">{lesson.title}</h1>
+          <section className="mt-12 space-y-6 rounded-2xl border border-zinc-800 bg-zinc-900/70 p-8 shadow-lg shadow-black/30 backdrop-blur-sm">
+            <h1 className="mx-auto max-w-2xl text-3xl font-semibold tracking-tight text-white">{lesson.title}</h1>
 
             <div className="space-y-6">
               <p className="text-sm text-zinc-400">
@@ -86,7 +86,7 @@ function Lesson() {
               </p>
               <div className="h-4 w-full rounded-full bg-zinc-800">
                 <div
-                  className="h-4 rounded-full bg-blue-700 transition-all duration-500"
+                  className="h-4 rounded-full bg-indigo-700 transition-all duration-500"
                   style={{ width: `${progress}%` }}
                 />
               </div>
@@ -125,16 +125,16 @@ function Lesson() {
               <button
                 type="button"
                 onClick={handleNext}
-                className="rounded-2xl bg-blue-700 px-6 py-3 font-semibold tracking-tight transition-all duration-200 hover:translate-y-[-1px] hover:bg-blue-600"
+                className="rounded-2xl bg-indigo-700 px-6 py-3 font-semibold tracking-tight transition-all duration-200 hover:translate-y-[-1px] hover:bg-indigo-600"
               >
                 Siguiente
               </button>
             )}
           </section>
         ) : (
-          <section className="mt-12 space-y-6 rounded-2xl border border-zinc-800 bg-zinc-900 p-8 text-center shadow-lg shadow-black/30 transition-all duration-500">
-            <h2 className="text-3xl font-semibold tracking-tight">🎉 Leccion completada</h2>
-            <p className="text-2xl font-semibold text-blue-400">🎉 +20 XP</p>
+          <section className="mt-12 space-y-6 rounded-2xl border border-zinc-800 bg-zinc-900/70 p-8 text-center shadow-lg shadow-black/30 backdrop-blur-sm transition-all duration-500">
+            <h2 className="mx-auto max-w-2xl text-3xl font-semibold tracking-tight text-white">🎉 Leccion completada</h2>
+            <p className="text-2xl font-semibold text-indigo-400">🎉 +20 XP</p>
             {leveledUp && (
               <p className="text-3xl font-semibold tracking-tight text-emerald-400 transition-all duration-500">
                 🚀 ¡Subiste a Nivel {level}!
@@ -142,7 +142,7 @@ function Lesson() {
             )}
             <Link
               to="/dashboard"
-              className="inline-block rounded-2xl bg-blue-700 px-6 py-3 font-semibold tracking-tight transition-all duration-200 hover:translate-y-[-1px] hover:bg-blue-600"
+              className="inline-block rounded-2xl bg-indigo-700 px-6 py-3 font-semibold tracking-tight transition-all duration-200 hover:translate-y-[-1px] hover:bg-indigo-600"
             >
               Volver al dashboard
             </Link>
