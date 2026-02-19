@@ -1,35 +1,53 @@
+import { useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
 import brainLogo from '../assets/brain-logo.png'
 import { useAuth } from '../context/AuthContext'
 import { useProgress } from '../context/ProgressContext'
-import { lessons } from '../data/lessons'
+import { getCourses } from '../lib/courses'
 
 function Dashboard() {
   const navigate = useNavigate()
   const { logout } = useAuth()
   const { completedLessons, xp, level, currentStreak } = useProgress()
 
-  const totalLessons = lessons.length
-  const progress = Math.round((completedLessons.length / totalLessons) * 100)
+  const [courses, setCourses] = useState([])
+  const [loadingCourses, setLoadingCourses] = useState(true)
+  const [coursesError, setCoursesError] = useState('')
+
+  useEffect(() => {
+    let isMounted = true
+
+    const loadCourses = async () => {
+      try {
+        setLoadingCourses(true)
+        setCoursesError('')
+        const data = await getCourses()
+        if (!isMounted) return
+        setCourses(data)
+      } catch (error) {
+        if (!isMounted) return
+        setCoursesError(error?.message || 'No se pudieron cargar los cursos.')
+      } finally {
+        if (isMounted) setLoadingCourses(false)
+      }
+    }
+
+    loadCourses()
+
+    return () => {
+      isMounted = false
+    }
+  }, [])
+
+  const totalLessons = useMemo(
+    () => courses.reduce((acc, course) => acc + Number(course.lessonCount || 0), 0),
+    [courses],
+  )
+
+  const progress = totalLessons > 0 ? Math.round((completedLessons.length / totalLessons) * 100) : 0
   const xpProgress = xp % 100
   const nextLevelXp = level * 100
-
-  const lessonCards = lessons.map((lesson, index) => {
-    const previousLessonId = lessons[index - 1]?.id
-    const locked = index !== 0 && !completedLessons.includes(previousLessonId)
-
-    return {
-      ...lesson,
-      locked,
-      completed: completedLessons.includes(lesson.id),
-    }
-  })
-
-  const handleLessonClick = (lesson) => {
-    if (lesson.locked) return
-    navigate(`/lesson/${lesson.id}`)
-  }
 
   const handleLogout = async () => {
     await logout()
@@ -72,7 +90,10 @@ function Dashboard() {
                 style={{ width: `${progress}%` }}
               />
             </div>
-            <p className="text-sm text-zinc-400">{progress}% completado</p>
+            <p className="text-sm text-zinc-400">
+              {progress}% completado
+              {totalLessons > 0 ? ` (${completedLessons.length}/${totalLessons} lecciones)` : ''}
+            </p>
           </div>
 
           <div className="space-y-6">
@@ -93,23 +114,32 @@ function Dashboard() {
           </div>
         </section>
 
-        <section className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3">
-          {lessonCards.map((lesson) => (
-            <article
-              key={lesson.id}
-              onClick={() => handleLessonClick(lesson)}
-              className={`rounded-2xl p-6 ${
-                lesson.locked
-                  ? 'cursor-not-allowed border border-zinc-800 bg-zinc-900/70 opacity-50 shadow-lg shadow-black/30 backdrop-blur-sm'
-                  : 'cursor-pointer border border-zinc-800 bg-zinc-900/70 shadow-lg shadow-black/30 backdrop-blur-sm transition-all duration-200 hover:bg-zinc-800'
-              }`}
-            >
-              <h2 className="text-xl font-semibold tracking-tight">{lesson.title}</h2>
-              <p className="mt-2 text-sm text-zinc-400">
-                {lesson.locked ? 'Bloqueada' : lesson.completed ? 'Completada' : 'Lista para continuar'}
-              </p>
-            </article>
-          ))}
+        <section className="mt-12 space-y-6">
+          {loadingCourses && (
+            <div className="rounded-2xl border border-zinc-800 bg-zinc-900/70 p-6 text-sm text-zinc-400 shadow-lg shadow-black/30 backdrop-blur-sm">
+              Cargando cursos...
+            </div>
+          )}
+
+          {!loadingCourses && coursesError && (
+            <div className="rounded-2xl border border-red-600/40 bg-red-600/10 p-6 text-sm text-red-200 shadow-lg shadow-black/30">
+              {coursesError}
+            </div>
+          )}
+
+          {!loadingCourses &&
+            !coursesError &&
+            courses.map((course) => (
+              <article
+                key={course.id}
+                onClick={() => navigate(`/course/${course.id}`)}
+                className="cursor-pointer rounded-2xl border border-zinc-800 bg-zinc-900/70 p-6 shadow-lg shadow-black/30 backdrop-blur-sm transition-all duration-200 hover:bg-zinc-800"
+              >
+                <h2 className="text-2xl font-semibold tracking-tight">{course.title}</h2>
+                <p className="mt-2 text-zinc-400">{course.description}</p>
+                <p className="mt-4 text-sm font-semibold tracking-tight text-indigo-400">{course.lessonCount} lecciones</p>
+              </article>
+            ))}
         </section>
       </main>
     </div>

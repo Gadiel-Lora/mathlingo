@@ -1,21 +1,69 @@
 import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 
 import brainLogo from '../assets/brain-logo.png'
 import { useProgress } from '../context/ProgressContext'
-import { lessons } from '../data/lessons'
+import { getLessonById, getQuestionsByLessonId } from '../lib/courses'
 
 function Lesson() {
+  const navigate = useNavigate()
   const { id } = useParams()
   const lessonId = Number(id)
-  const lesson = lessons.find((item) => item.id === lessonId)
   const { completeLesson, xp, level } = useProgress()
+
+  const [lesson, setLesson] = useState(null)
+  const [questions, setQuestions] = useState([])
+  const [loadingLesson, setLoadingLesson] = useState(true)
+  const [lessonError, setLessonError] = useState('')
 
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [selectedOption, setSelectedOption] = useState(null)
   const [showFeedback, setShowFeedback] = useState(false)
   const [completed, setCompleted] = useState(false)
   const [xpBeforeCompletion, setXpBeforeCompletion] = useState(null)
+
+  useEffect(() => {
+    let isMounted = true
+
+    const loadLessonData = async () => {
+      if (!Number.isInteger(lessonId) || lessonId <= 0) {
+        if (isMounted) {
+          setLessonError('Leccion no valida.')
+          setLoadingLesson(false)
+        }
+        return
+      }
+
+      try {
+        setLoadingLesson(true)
+        setLessonError('')
+
+        const [lessonData, questionData] = await Promise.all([getLessonById(lessonId), getQuestionsByLessonId(lessonId)])
+        if (!isMounted) return
+
+        if (!lessonData) {
+          setLesson(null)
+          setQuestions([])
+          setLessonError('Leccion no encontrada.')
+          return
+        }
+
+        setLesson(lessonData)
+        setQuestions(questionData)
+      } catch (error) {
+        if (!isMounted) return
+        setLessonError(error?.message || 'No se pudo cargar la leccion.')
+      } finally {
+        if (isMounted) setLoadingLesson(false)
+      }
+    }
+
+    loadLessonData()
+
+    return () => {
+      isMounted = false
+    }
+  }, [lessonId])
 
   useEffect(() => {
     setCurrentQuestionIndex(0)
@@ -28,14 +76,25 @@ function Lesson() {
   useEffect(() => {
     if (!completed || !Number.isInteger(lessonId) || xpBeforeCompletion !== null) return
     setXpBeforeCompletion(xp)
-    completeLesson(lessonId)
+    void completeLesson(lessonId)
   }, [completed, completeLesson, lessonId, xp, xpBeforeCompletion])
 
-  if (!lesson) {
+  if (loadingLesson) {
+    return (
+      <div className="min-h-screen bg-zinc-950 px-6 pt-20 pb-16 text-white">
+        <div className="mx-auto max-w-3xl rounded-2xl border border-zinc-800 bg-zinc-900/70 p-8 text-center shadow-lg shadow-black/30 backdrop-blur-sm">
+          <p className="text-zinc-400">Cargando leccion...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (!lesson || lessonError || questions.length === 0) {
     return (
       <div className="min-h-screen bg-zinc-950 px-6 pt-20 pb-16 text-white">
         <div className="mx-auto max-w-3xl space-y-6 rounded-2xl border border-zinc-800 bg-zinc-900/70 p-8 text-center shadow-lg shadow-black/30 backdrop-blur-sm">
-          <h1 className="mx-auto max-w-2xl text-2xl font-semibold tracking-tight text-white">Leccion no encontrada</h1>
+          <h1 className="mx-auto max-w-2xl text-2xl font-semibold tracking-tight text-white">Leccion no disponible</h1>
+          <p className="text-zinc-400">{lessonError || 'No hay preguntas disponibles para esta leccion.'}</p>
           <Link
             to="/dashboard"
             className="inline-block rounded-2xl bg-indigo-700 px-6 py-3 font-semibold tracking-tight transition-all duration-200 hover:translate-y-[-1px] hover:bg-indigo-600"
@@ -47,8 +106,8 @@ function Lesson() {
     )
   }
 
-  const totalQuestions = lesson.questions.length
-  const currentQuestion = lesson.questions[currentQuestionIndex]
+  const totalQuestions = questions.length
+  const currentQuestion = questions[currentQuestionIndex]
   const progress = Math.round((currentQuestionIndex / totalQuestions) * 100)
   const previousLevel = xpBeforeCompletion === null ? level : Math.floor(xpBeforeCompletion / 100) + 1
   const leveledUp = completed && xpBeforeCompletion !== null && level > previousLevel
@@ -107,7 +166,7 @@ function Lesson() {
 
                 return (
                   <button
-                    key={`${option}-${index}`}
+                    key={`${currentQuestion.id}-${index}`}
                     type="button"
                     onClick={() => handleOptionClick(index)}
                     disabled={showFeedback}
@@ -133,19 +192,28 @@ function Lesson() {
           </section>
         ) : (
           <section className="mt-12 space-y-6 rounded-2xl border border-zinc-800 bg-zinc-900/70 p-8 text-center shadow-lg shadow-black/30 backdrop-blur-sm transition-all duration-500">
-            <h2 className="mx-auto max-w-2xl text-3xl font-semibold tracking-tight text-white">🎉 Leccion completada</h2>
-            <p className="text-2xl font-semibold text-indigo-400">🎉 +20 XP</p>
+            <h2 className="mx-auto max-w-2xl text-3xl font-semibold tracking-tight text-white">Leccion completada</h2>
+            <p className="text-2xl font-semibold text-indigo-400">+20 XP</p>
             {leveledUp && (
               <p className="text-3xl font-semibold tracking-tight text-emerald-400 transition-all duration-500">
-                🚀 ¡Subiste a Nivel {level}!
+                Subiste a Nivel {level}
               </p>
             )}
-            <Link
-              to="/dashboard"
-              className="inline-block rounded-2xl bg-indigo-700 px-6 py-3 font-semibold tracking-tight transition-all duration-200 hover:translate-y-[-1px] hover:bg-indigo-600"
-            >
-              Volver al dashboard
-            </Link>
+            <div className="space-x-3">
+              <button
+                type="button"
+                onClick={() => navigate(`/course/${lesson.courseId}`)}
+                className="inline-block rounded-2xl border border-zinc-700 px-6 py-3 font-semibold tracking-tight text-zinc-200 transition-all duration-200 hover:border-indigo-500/50 hover:text-indigo-400"
+              >
+                Volver al curso
+              </button>
+              <Link
+                to="/dashboard"
+                className="inline-block rounded-2xl bg-indigo-700 px-6 py-3 font-semibold tracking-tight transition-all duration-200 hover:translate-y-[-1px] hover:bg-indigo-600"
+              >
+                Ir al dashboard
+              </Link>
+            </div>
           </section>
         )}
       </div>

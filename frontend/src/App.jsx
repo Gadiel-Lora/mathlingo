@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import ProtectedRoute from './components/ProtectedRoute'
 import { AuthProvider } from './context/AuthContext'
 import { ProgressProvider } from './context/ProgressContext'
+import Course from './pages/Course'
 import Dashboard from './pages/Dashboard'
 import Landing from './pages/Landing'
 import Lesson from './pages/Lesson'
@@ -28,6 +29,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Lesson />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/course/:id"
+              element={
+                <ProtectedRoute>
+                  <Course />
                 </ProtectedRoute>
               }
             />
