@@ -9,25 +9,27 @@ function Lesson() {
   const { id } = useParams()
   const lessonId = Number(id)
   const lesson = lessons.find((item) => item.id === lessonId)
-  const { completeLesson } = useProgress()
+  const { completeLesson, xp, level } = useProgress()
 
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [selectedOption, setSelectedOption] = useState(null)
   const [showFeedback, setShowFeedback] = useState(false)
   const [completed, setCompleted] = useState(false)
+  const [xpBeforeCompletion, setXpBeforeCompletion] = useState(null)
 
   useEffect(() => {
     setCurrentQuestionIndex(0)
     setSelectedOption(null)
     setShowFeedback(false)
     setCompleted(false)
+    setXpBeforeCompletion(null)
   }, [lessonId])
 
   useEffect(() => {
-    if (completed && Number.isInteger(lessonId)) {
-      completeLesson(lessonId)
-    }
-  }, [completed, completeLesson, lessonId])
+    if (!completed || !Number.isInteger(lessonId) || xpBeforeCompletion !== null) return
+    setXpBeforeCompletion(xp)
+    completeLesson(lessonId)
+  }, [completed, completeLesson, lessonId, xp, xpBeforeCompletion])
 
   if (!lesson) {
     return (
@@ -48,6 +50,8 @@ function Lesson() {
   const totalQuestions = lesson.questions.length
   const currentQuestion = lesson.questions[currentQuestionIndex]
   const progress = Math.round((currentQuestionIndex / totalQuestions) * 100)
+  const previousLevel = xpBeforeCompletion === null ? level : Math.floor(xpBeforeCompletion / 100) + 1
+  const leveledUp = completed && xpBeforeCompletion !== null && level > previousLevel
 
   const handleOptionClick = (optionIndex) => {
     if (showFeedback || completed) return
@@ -128,8 +132,14 @@ function Lesson() {
             )}
           </section>
         ) : (
-          <section className="mt-8 rounded-2xl bg-zinc-900 p-8 text-center">
+          <section className="mt-8 scale-100 rounded-2xl bg-zinc-900 p-8 text-center shadow-xl transition-all duration-500">
             <h2 className="text-3xl font-bold">🎉 Leccion completada</h2>
+            <p className="mt-4 text-2xl font-semibold text-blue-400 animate-pulse">🎉 +20 XP</p>
+            {leveledUp && (
+              <p className="mt-4 text-3xl font-extrabold text-emerald-400 animate-pulse transition-all duration-500">
+                🚀 ¡Subiste a Nivel {level}!
+              </p>
+            )}
             <Link
               to="/dashboard"
               className="mt-6 inline-block rounded-xl bg-blue-600 px-6 py-3 font-semibold transition-all duration-200 hover:bg-blue-500"
