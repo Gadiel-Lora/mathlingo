@@ -27,7 +27,7 @@ function Login() {
         await register(email, password)
         setFeedback({
           type: 'success',
-          message: 'Cuenta creada. Si no iniciaste sesion automaticamente, revisa tu correo y luego entra.',
+          message: 'Revisa tu correo para confirmar tu cuenta.',
         })
         setIsRegisterMode(false)
         setPassword('')
@@ -36,9 +36,15 @@ function Login() {
         navigate('/dashboard', { replace: true })
       }
     } catch (error) {
+      const rawErrorMessage = error?.message || ''
+      const loginNeedsEmailConfirmation =
+        !isRegisterMode && rawErrorMessage.toLowerCase().includes('email not confirmed')
+
       setFeedback({
         type: 'error',
-        message: error?.message || 'No se pudo completar la autenticacion.',
+        message: loginNeedsEmailConfirmation
+          ? 'Debes confirmar tu correo antes de iniciar sesion.'
+          : rawErrorMessage || 'No se pudo completar la autenticacion.',
       })
     } finally {
       setSubmitting(false)
