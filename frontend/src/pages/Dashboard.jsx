@@ -1,11 +1,13 @@
 import { Link, useNavigate } from 'react-router-dom'
 
 import brainLogo from '../assets/brain-logo.png'
+import { useAuth } from '../context/AuthContext'
 import { useProgress } from '../context/ProgressContext'
 import { lessons } from '../data/lessons'
 
 function Dashboard() {
   const navigate = useNavigate()
+  const { logout } = useAuth()
   const { completedLessons, xp, level } = useProgress()
 
   const totalLessons = lessons.length
@@ -29,53 +31,59 @@ function Dashboard() {
     navigate(`/lesson/${lesson.id}`)
   }
 
+  const handleLogout = () => {
+    logout()
+    navigate('/login', { replace: true })
+  }
+
   return (
     <div className="min-h-screen bg-zinc-950 text-white">
       <header className="border-b border-zinc-800 bg-zinc-950/90 backdrop-blur">
-        <nav className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
+        <nav className="mx-auto flex h-16 max-w-5xl items-center justify-between px-6">
           <Link
             to="/"
             className="text-lg font-semibold tracking-tight transition-all duration-200 hover:opacity-90 sm:text-xl"
           >
             Mathlingo
           </Link>
-          <Link
-            to="/login"
-            className="rounded-2xl border border-zinc-700 px-4 py-2 text-sm font-semibold tracking-tight text-zinc-200 transition-all duration-200 hover:border-blue-700 hover:text-blue-300"
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="text-sm font-semibold tracking-tight text-zinc-400 transition-all duration-200 hover:text-blue-300"
           >
-            Login
-          </Link>
+            Cerrar sesion
+          </button>
         </nav>
       </header>
 
-      <main className="mx-auto max-w-5xl px-6 py-12">
-        <section className="text-center">
+      <main className="mx-auto max-w-5xl px-6 py-16">
+        <section className="mb-12 space-y-6 text-center">
           <img src={brainLogo} alt="Mathlingo brain logo" className="mx-auto w-full max-w-32 drop-shadow-2xl" />
-          <h1 className="mt-6 text-3xl font-semibold tracking-tight">Hola, Usuario 👋</h1>
-          <p className="mt-2 text-zinc-400">Continua tu progreso en matematicas</p>
+          <h1 className="text-3xl font-semibold tracking-tight">Hola, Usuario</h1>
+          <p className="text-zinc-500">Continua tu progreso en matematicas</p>
         </section>
 
-        <section className="mt-10 grid gap-6 lg:grid-cols-[2fr_1fr]">
-          <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6 shadow-lg shadow-black/30">
-            <p className="mb-3 text-sm text-zinc-400">Progreso general</p>
+        <section className="mt-12 grid gap-6 lg:grid-cols-[2fr_1fr]">
+          <div className="space-y-6 rounded-2xl border border-zinc-800 bg-zinc-900 p-6 shadow-lg shadow-black/30">
+            <p className="text-sm text-zinc-400">Progreso general</p>
             <div className="h-4 w-full rounded-full bg-zinc-800">
               <div
                 className="h-4 rounded-full bg-blue-700 transition-all duration-500"
                 style={{ width: `${progress}%` }}
               />
             </div>
-            <p className="mt-2 text-sm text-zinc-400">{progress}% completado</p>
+            <p className="text-sm text-zinc-400">{progress}% completado</p>
           </div>
 
           <div className="space-y-6">
             <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6 shadow-lg shadow-black/30">
-              <p className="text-lg font-semibold">🔥 5 dias seguidos</p>
+              <p className="text-lg font-semibold tracking-tight">5 dias seguidos</p>
             </div>
 
-            <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6 shadow-lg shadow-black/30">
+            <div className="space-y-6 rounded-2xl border border-zinc-800 bg-zinc-900 p-6 shadow-lg shadow-black/30">
               <p className="text-lg font-semibold tracking-tight">Nivel {level}</p>
-              <p className="mt-1 text-sm text-zinc-400">XP: {xp} / {nextLevelXp}</p>
-              <div className="mt-4 h-3 w-full rounded-full bg-zinc-800">
+              <p className="text-sm text-zinc-400">XP: {xp} / {nextLevelXp}</p>
+              <div className="h-3 w-full rounded-full bg-zinc-800">
                 <div
                   className="h-3 rounded-full bg-blue-700 transition-all duration-500"
                   style={{ width: `${xpProgress}%` }}
@@ -85,7 +93,7 @@ function Dashboard() {
           </div>
         </section>
 
-        <section className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-3">
+        <section className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3">
           {lessonCards.map((lesson) => (
             <article
               key={lesson.id}

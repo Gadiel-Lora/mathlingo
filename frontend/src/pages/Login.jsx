@@ -22,17 +22,19 @@ function Login() {
   return (
     <div className="min-h-screen bg-zinc-950 px-6 py-16 text-white">
       <div className="mx-auto max-w-md rounded-2xl border border-zinc-800 bg-zinc-900 p-8 shadow-lg shadow-black/30">
-        <h1 className="text-3xl font-semibold tracking-tight">Login</h1>
-        <p className="mt-2 text-zinc-400">Ingresa para continuar tu progreso.</p>
+        <div className="space-y-6">
+          <h1 className="text-3xl font-semibold tracking-tight">Login</h1>
+          <p className="text-zinc-500">Ingresa para continuar tu progreso.</p>
+        </div>
 
-        <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
+        <form className="mt-12 space-y-6" onSubmit={handleSubmit}>
           <label className="block">
             <span className="mb-2 block text-sm text-zinc-300">Email</span>
             <input
               type="email"
               value={email}
               onChange={(event) => setEmail(event.target.value)}
-              className="w-full rounded-2xl border border-zinc-800 bg-zinc-950 px-3 py-2 text-white outline-none transition-all duration-200 focus:border-blue-700"
+              className="w-full rounded-2xl border border-zinc-800 bg-zinc-900 px-3 py-2 text-white outline-none transition-all duration-200 focus:border-blue-700 focus:ring-1 focus:ring-blue-700/40"
               placeholder="tu@email.com"
               required
             />
@@ -46,7 +48,7 @@ function Login() {
           </button>
         </form>
 
-        <Link to="/" className="mt-5 inline-block text-sm text-zinc-400 transition-all duration-200 hover:text-blue-300">
+        <Link to="/" className="mt-12 inline-block text-sm text-zinc-400 transition-all duration-200 hover:text-blue-300">
           Volver a inicio
         </Link>
       </div>
