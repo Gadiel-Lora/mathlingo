@@ -1,8 +1,20 @@
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+
+import Dashboard from './pages/Dashboard'
+import Landing from './pages/Landing'
+import Lesson from './pages/Lesson'
+import Login from './pages/Login'
+
 function App() {
   return (
-    <main className="min-h-screen bg-zinc-950 text-white grid place-items-center">
-      <h1 className="text-5xl font-bold">Mathlingo</h1>
-    </main>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Landing />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/lesson/:id" element={<Lesson />} />
+        <Route path="/login" element={<Login />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 
