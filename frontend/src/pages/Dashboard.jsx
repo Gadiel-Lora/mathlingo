@@ -6,10 +6,12 @@ import { lessons } from '../data/lessons'
 
 function Dashboard() {
   const navigate = useNavigate()
-  const { completedLessons } = useProgress()
+  const { completedLessons, xp, level } = useProgress()
 
   const totalLessons = lessons.length
   const progress = Math.round((completedLessons.length / totalLessons) * 100)
+  const xpProgress = xp % 100
+  const nextLevelXp = level * 100
 
   const lessonCards = lessons.map((lesson, index) => {
     const previousLessonId = lessons[index - 1]?.id
@@ -53,8 +55,8 @@ function Dashboard() {
           <p className="mt-2 text-zinc-400">Continua tu progreso en matematicas</p>
         </section>
 
-        <section className="mt-10 grid gap-6 md:grid-cols-[1fr_auto] md:items-end">
-          <div>
+        <section className="mt-10 grid gap-6 lg:grid-cols-[2fr_1fr]">
+          <div className="rounded-2xl bg-zinc-900 p-6">
             <p className="mb-3 text-sm text-zinc-400">Progreso general</p>
             <div className="h-4 w-full rounded-full bg-zinc-800">
               <div
@@ -65,8 +67,21 @@ function Dashboard() {
             <p className="mt-2 text-sm text-zinc-500">{progress}% completado</p>
           </div>
 
-          <div className="rounded-2xl bg-zinc-900 p-6 shadow-lg">
-            <p className="text-lg font-semibold">🔥 5 dias seguidos</p>
+          <div className="space-y-6">
+            <div className="rounded-2xl bg-zinc-900 p-6 shadow-lg">
+              <p className="text-lg font-semibold">🔥 5 dias seguidos</p>
+            </div>
+
+            <div className="rounded-2xl bg-zinc-900 p-6">
+              <p className="text-lg font-semibold">Nivel {level}</p>
+              <p className="mt-1 text-sm text-zinc-400">XP: {xp} / {nextLevelXp}</p>
+              <div className="mt-4 h-3 w-full rounded-full bg-zinc-800">
+                <div
+                  className="h-3 rounded-full bg-blue-600 transition-all duration-500"
+                  style={{ width: `${xpProgress}%` }}
+                />
+              </div>
+            </div>
           </div>
         </section>
 

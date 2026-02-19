@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 
-const STORAGE_KEY = 'mathlingo.completedLessons'
+const COMPLETED_LESSONS_STORAGE_KEY = 'mathlingo.completedLessons'
+const XP_STORAGE_KEY = 'mathlingo.xp'
 
 const ProgressContext = createContext(null)
 
@@ -8,6 +9,7 @@ const parseStoredLessons = (value) => {
   try {
     const parsed = JSON.parse(value ?? '[]')
     if (!Array.isArray(parsed)) return []
+
     return parsed
       .map((item) => Number(item))
       .filter((item) => Number.isInteger(item) && item > 0)
@@ -18,33 +20,55 @@ const parseStoredLessons = (value) => {
   }
 }
 
+const parseStoredXp = (value) => {
+  const parsed = Number(value)
+  if (!Number.isFinite(parsed) || parsed < 0) return 0
+  return Math.floor(parsed)
+}
+
 export function ProgressProvider({ children }) {
-  const [completedLessons, setCompletedLessons] = useState(() => {
-    if (typeof window === 'undefined') return []
-    return parseStoredLessons(window.localStorage.getItem(STORAGE_KEY))
+  const [progressState, setProgressState] = useState(() => {
+    if (typeof window === 'undefined') {
+      return { completedLessons: [], xp: 0 }
+    }
+
+    return {
+      completedLessons: parseStoredLessons(window.localStorage.getItem(COMPLETED_LESSONS_STORAGE_KEY)),
+      xp: parseStoredXp(window.localStorage.getItem(XP_STORAGE_KEY)),
+    }
   })
+
+  const { completedLessons, xp } = progressState
+  const level = Math.floor(xp / 100) + 1
 
   useEffect(() => {
     if (typeof window === 'undefined') return
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(completedLessons))
-  }, [completedLessons])
+    window.localStorage.setItem(COMPLETED_LESSONS_STORAGE_KEY, JSON.stringify(completedLessons))
+    window.localStorage.setItem(XP_STORAGE_KEY, String(xp))
+  }, [completedLessons, xp])
 
   const completeLesson = (id) => {
     const lessonId = Number(id)
     if (!Number.isInteger(lessonId) || lessonId <= 0) return
 
-    setCompletedLessons((prev) => {
-      if (prev.includes(lessonId)) return prev
-      return [...prev, lessonId].sort((a, b) => a - b)
+    setProgressState((prev) => {
+      if (prev.completedLessons.includes(lessonId)) return prev
+
+      return {
+        completedLessons: [...prev.completedLessons, lessonId].sort((a, b) => a - b),
+        xp: prev.xp + 20,
+      }
     })
   }
 
   const value = useMemo(
     () => ({
       completedLessons,
+      xp,
+      level,
       completeLesson,
     }),
-    [completedLessons],
+    [completedLessons, xp, level],
   )
 
   return <ProgressContext.Provider value={value}>{children}</ProgressContext.Provider>
