@@ -34,11 +34,11 @@ function Lesson() {
   if (!lesson) {
     return (
       <div className="min-h-screen bg-zinc-950 px-6 py-12 text-white">
-        <div className="mx-auto max-w-3xl rounded-2xl bg-zinc-900 p-8 text-center">
-          <h1 className="text-2xl font-bold">Leccion no encontrada</h1>
+        <div className="mx-auto max-w-3xl rounded-2xl border border-zinc-800 bg-zinc-900 p-8 text-center shadow-lg shadow-black/30">
+          <h1 className="text-2xl font-semibold tracking-tight">Leccion no encontrada</h1>
           <Link
             to="/dashboard"
-            className="mt-6 inline-block rounded-xl bg-blue-600 px-6 py-3 font-semibold transition-all duration-200 hover:bg-blue-500"
+            className="mt-6 inline-block rounded-2xl bg-blue-700 px-6 py-3 font-semibold tracking-tight transition-all duration-200 hover:translate-y-[-1px] hover:bg-blue-600"
           >
             Volver al dashboard
           </Link>
@@ -77,8 +77,8 @@ function Lesson() {
         <img src={brainLogo} alt="Mathlingo brain logo" className="mx-auto w-full max-w-24 drop-shadow-2xl" />
 
         {!completed ? (
-          <section className="mt-8 rounded-2xl bg-zinc-900 p-8">
-            <h1 className="text-3xl font-bold tracking-tight">{lesson.title}</h1>
+          <section className="mt-8 rounded-2xl border border-zinc-800 bg-zinc-900 p-8 shadow-lg shadow-black/30">
+            <h1 className="text-3xl font-semibold tracking-tight">{lesson.title}</h1>
 
             <div className="mt-6">
               <p className="mb-3 text-sm text-zinc-400">
@@ -86,13 +86,13 @@ function Lesson() {
               </p>
               <div className="h-4 w-full rounded-full bg-zinc-800">
                 <div
-                  className="h-4 rounded-full bg-blue-600 transition-all duration-500"
+                  className="h-4 rounded-full bg-blue-700 transition-all duration-500"
                   style={{ width: `${progress}%` }}
                 />
               </div>
             </div>
 
-            <h2 className="mt-8 text-xl font-semibold">{currentQuestion.question}</h2>
+            <h2 className="mt-8 text-xl font-semibold tracking-tight">{currentQuestion.question}</h2>
 
             <div className="mt-6 space-y-3">
               {currentQuestion.options.map((option, index) => {
@@ -101,9 +101,9 @@ function Lesson() {
                 const selectedWrong = showFeedback && isSelected && !isCorrect
                 const shouldHighlightCorrect = showFeedback && isCorrect
 
-                let stateClass = 'bg-zinc-900 hover:bg-zinc-800'
-                if (selectedWrong) stateClass = 'bg-red-600 hover:bg-red-600'
-                if (shouldHighlightCorrect) stateClass = 'bg-green-600 hover:bg-green-600'
+                let stateClass = 'border border-zinc-800 bg-zinc-900 shadow-lg shadow-black/30 hover:bg-zinc-800'
+                if (selectedWrong) stateClass = 'border border-red-600/40 bg-red-600/10'
+                if (shouldHighlightCorrect) stateClass = 'border border-emerald-600/40 bg-emerald-600/10'
 
                 return (
                   <button
@@ -111,7 +111,7 @@ function Lesson() {
                     type="button"
                     onClick={() => handleOptionClick(index)}
                     disabled={showFeedback}
-                    className={`w-full rounded-xl p-4 text-left transition-all duration-200 ${stateClass} ${
+                    className={`w-full rounded-2xl p-4 text-left transition-all duration-200 ${stateClass} ${
                       showFeedback ? 'cursor-default' : 'cursor-pointer'
                     }`}
                   >
@@ -125,24 +125,24 @@ function Lesson() {
               <button
                 type="button"
                 onClick={handleNext}
-                className="mt-6 rounded-xl bg-blue-600 px-6 py-3 font-semibold transition-all duration-200 hover:bg-blue-500"
+                className="mt-6 rounded-2xl bg-blue-700 px-6 py-3 font-semibold tracking-tight transition-all duration-200 hover:translate-y-[-1px] hover:bg-blue-600"
               >
                 Siguiente
               </button>
             )}
           </section>
         ) : (
-          <section className="mt-8 scale-100 rounded-2xl bg-zinc-900 p-8 text-center shadow-xl transition-all duration-500">
-            <h2 className="text-3xl font-bold">🎉 Leccion completada</h2>
-            <p className="mt-4 text-2xl font-semibold text-blue-400 animate-pulse">🎉 +20 XP</p>
+          <section className="mt-8 rounded-2xl border border-zinc-800 bg-zinc-900 p-8 text-center shadow-lg shadow-black/30 transition-all duration-500">
+            <h2 className="text-3xl font-semibold tracking-tight">🎉 Leccion completada</h2>
+            <p className="mt-4 text-2xl font-semibold text-blue-400">🎉 +20 XP</p>
             {leveledUp && (
-              <p className="mt-4 text-3xl font-extrabold text-emerald-400 animate-pulse transition-all duration-500">
+              <p className="mt-4 text-3xl font-semibold tracking-tight text-emerald-400 transition-all duration-500">
                 🚀 ¡Subiste a Nivel {level}!
               </p>
             )}
             <Link
               to="/dashboard"
-              className="mt-6 inline-block rounded-xl bg-blue-600 px-6 py-3 font-semibold transition-all duration-200 hover:bg-blue-500"
+              className="mt-6 inline-block rounded-2xl bg-blue-700 px-6 py-3 font-semibold tracking-tight transition-all duration-200 hover:translate-y-[-1px] hover:bg-blue-600"
             >
               Volver al dashboard
             </Link>

@@ -21,8 +21,8 @@ function Login() {
 
   return (
     <div className="min-h-screen bg-zinc-950 px-6 py-16 text-white">
-      <div className="mx-auto max-w-md rounded-2xl border border-white/10 bg-zinc-900 p-8">
-        <h1 className="text-3xl font-bold tracking-tight">Login</h1>
+      <div className="mx-auto max-w-md rounded-2xl border border-zinc-800 bg-zinc-900 p-8 shadow-lg shadow-black/30">
+        <h1 className="text-3xl font-semibold tracking-tight">Login</h1>
         <p className="mt-2 text-zinc-400">Ingresa para continuar tu progreso.</p>
 
         <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
@@ -32,7 +32,7 @@ function Login() {
               type="email"
               value={email}
               onChange={(event) => setEmail(event.target.value)}
-              className="w-full rounded-lg border border-white/20 bg-zinc-950 px-3 py-2 text-white outline-none transition-all duration-200 focus:border-blue-400"
+              className="w-full rounded-2xl border border-zinc-800 bg-zinc-950 px-3 py-2 text-white outline-none transition-all duration-200 focus:border-blue-700"
               placeholder="tu@email.com"
               required
             />
@@ -40,13 +40,13 @@ function Login() {
 
           <button
             type="submit"
-            className="w-full rounded-xl bg-blue-600 px-6 py-3 text-sm font-semibold transition-all duration-200 hover:bg-blue-500"
+            className="w-full rounded-2xl bg-blue-700 px-6 py-3 text-sm font-semibold tracking-tight transition-all duration-200 hover:translate-y-[-1px] hover:bg-blue-600"
           >
             Entrar
           </button>
         </form>
 
-        <Link to="/" className="mt-5 inline-block text-sm text-zinc-300 transition-all duration-200 hover:text-blue-300">
+        <Link to="/" className="mt-5 inline-block text-sm text-zinc-400 transition-all duration-200 hover:text-blue-300">
           Volver a inicio
         </Link>
       </div>

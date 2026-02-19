@@ -31,7 +31,7 @@ function Dashboard() {
 
   return (
     <div className="min-h-screen bg-zinc-950 text-white">
-      <header className="border-b border-white/10 bg-zinc-950/80 backdrop-blur">
+      <header className="border-b border-zinc-800 bg-zinc-950/90 backdrop-blur">
         <nav className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
           <Link
             to="/"
@@ -41,7 +41,7 @@ function Dashboard() {
           </Link>
           <Link
             to="/login"
-            className="rounded-lg border border-white/20 px-4 py-2 text-sm font-medium transition-all duration-200 hover:border-blue-400 hover:text-blue-300"
+            className="rounded-2xl border border-zinc-700 px-4 py-2 text-sm font-semibold tracking-tight text-zinc-200 transition-all duration-200 hover:border-blue-700 hover:text-blue-300"
           >
             Login
           </Link>
@@ -51,33 +51,33 @@ function Dashboard() {
       <main className="mx-auto max-w-5xl px-6 py-12">
         <section className="text-center">
           <img src={brainLogo} alt="Mathlingo brain logo" className="mx-auto w-full max-w-32 drop-shadow-2xl" />
-          <h1 className="mt-6 text-3xl font-bold tracking-tight">Hola, Usuario 👋</h1>
+          <h1 className="mt-6 text-3xl font-semibold tracking-tight">Hola, Usuario 👋</h1>
           <p className="mt-2 text-zinc-400">Continua tu progreso en matematicas</p>
         </section>
 
         <section className="mt-10 grid gap-6 lg:grid-cols-[2fr_1fr]">
-          <div className="rounded-2xl bg-zinc-900 p-6">
+          <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6 shadow-lg shadow-black/30">
             <p className="mb-3 text-sm text-zinc-400">Progreso general</p>
             <div className="h-4 w-full rounded-full bg-zinc-800">
               <div
-                className="h-4 rounded-full bg-blue-600 transition-all duration-500"
+                className="h-4 rounded-full bg-blue-700 transition-all duration-500"
                 style={{ width: `${progress}%` }}
               />
             </div>
-            <p className="mt-2 text-sm text-zinc-500">{progress}% completado</p>
+            <p className="mt-2 text-sm text-zinc-400">{progress}% completado</p>
           </div>
 
           <div className="space-y-6">
-            <div className="rounded-2xl bg-zinc-900 p-6 shadow-lg">
+            <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6 shadow-lg shadow-black/30">
               <p className="text-lg font-semibold">🔥 5 dias seguidos</p>
             </div>
 
-            <div className="rounded-2xl bg-zinc-900 p-6">
-              <p className="text-lg font-semibold">Nivel {level}</p>
+            <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6 shadow-lg shadow-black/30">
+              <p className="text-lg font-semibold tracking-tight">Nivel {level}</p>
               <p className="mt-1 text-sm text-zinc-400">XP: {xp} / {nextLevelXp}</p>
               <div className="mt-4 h-3 w-full rounded-full bg-zinc-800">
                 <div
-                  className="h-3 rounded-full bg-blue-600 transition-all duration-500"
+                  className="h-3 rounded-full bg-blue-700 transition-all duration-500"
                   style={{ width: `${xpProgress}%` }}
                 />
               </div>
@@ -92,11 +92,11 @@ function Dashboard() {
               onClick={() => handleLessonClick(lesson)}
               className={`rounded-2xl p-6 ${
                 lesson.locked
-                  ? 'cursor-not-allowed bg-zinc-900 opacity-50'
-                  : 'cursor-pointer bg-zinc-900 transition-all duration-200 hover:bg-zinc-800'
+                  ? 'cursor-not-allowed border border-zinc-800 bg-zinc-900 opacity-50 shadow-lg shadow-black/30'
+                  : 'cursor-pointer border border-zinc-800 bg-zinc-900 shadow-lg shadow-black/30 transition-all duration-200 hover:bg-zinc-800'
               }`}
             >
-              <h2 className="text-xl font-semibold">{lesson.title}</h2>
+              <h2 className="text-xl font-semibold tracking-tight">{lesson.title}</h2>
               <p className="mt-2 text-sm text-zinc-400">
                 {lesson.locked ? 'Bloqueada' : lesson.completed ? 'Completada' : 'Lista para continuar'}
               </p>
