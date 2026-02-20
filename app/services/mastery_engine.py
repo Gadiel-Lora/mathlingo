@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import math
 from datetime import datetime, timedelta
 
 from sqlalchemy.orm import Session
@@ -11,6 +12,7 @@ from app.models.topic import Topic
 from app.models.user_mastery import UserMastery
 
 BASE_LEARNING_RATE_DEFAULT = 0.2
+BASE_DECAY_RATE_DEFAULT = 0.1
 MIN_DIFFICULTY = 0.1
 MAX_DIFFICULTY = 2.0
 MIN_CRITICALITY = 1
@@ -56,14 +58,15 @@ def calculate_learning_rate(
 
 
 def calculate_effective_rates(topic_mastery: float, difficulty: float, criticality: int) -> tuple[float, float]:
-    """Backward-compatible helper returning the dynamic learning rate tuple."""
+    """Compute weighted alpha/beta rates with difficulty and criticality factors."""
     _ = _clamp(float(topic_mastery), 0.0, 1.0)
-    learning_rate = calculate_learning_rate(
-        base_learning_rate=BASE_LEARNING_RATE_DEFAULT,
-        difficulty=difficulty,
-        criticality=criticality,
-    )
-    return learning_rate, learning_rate
+    normalized_difficulty = _clamp(float(difficulty), MIN_DIFFICULTY, MAX_DIFFICULTY)
+    normalized_criticality = int(_clamp(float(criticality), MIN_CRITICALITY, MAX_CRITICALITY))
+    criticality_scale = math.log1p(normalized_criticality)
+
+    effective_alpha = BASE_LEARNING_RATE_DEFAULT * normalized_difficulty * criticality_scale
+    effective_beta = BASE_DECAY_RATE_DEFAULT * (2.0 - normalized_difficulty) * criticality_scale
+    return effective_alpha, effective_beta
 
 
 def get_threshold(subject: Subject, criticality: int) -> float:
@@ -147,13 +150,13 @@ def has_passed_revalidation(
 
 def calculate_mastery_score(old_score: float, is_correct: bool, alpha: float, beta: float) -> float:
     """Logistic-style mastery update with directional delta."""
-    _ = beta  # kept for backward compatibility in function signature
     score = _clamp(float(old_score), 0.0, 1.0)
-    learning_rate = _clamp(float(alpha), 0.0, 1.0)
+    increase_rate = _clamp(float(alpha), 0.0, 1.0)
+    decrease_rate = _clamp(float(beta), 0.0, 1.0)
     if is_correct:
-        delta = learning_rate * (1.0 - score)
+        delta = increase_rate * (1.0 - score)
     else:
-        delta = -learning_rate * score
+        delta = -decrease_rate * score
     return _clamp(score + delta, 0.0, 1.0)
 
 
@@ -188,7 +191,7 @@ def update_mastery(
     difficulty: float = 1.0,
     criticality_level: int = 1,
     alpha: float = BASE_LEARNING_RATE_DEFAULT,
-    beta: float = BASE_LEARNING_RATE_DEFAULT,
+    beta: float = BASE_DECAY_RATE_DEFAULT,
 ) -> UserMastery:
     """Create or update a mastery record for a user and topic."""
     mastery = (
@@ -202,16 +205,21 @@ def update_mastery(
         db.add(mastery)
         db.flush()
 
-    learning_rate = calculate_learning_rate(
-        base_learning_rate=alpha,
+    effective_alpha, effective_beta = calculate_effective_rates(
+        topic_mastery=float(mastery.mastery_score),
         difficulty=difficulty,
         criticality=criticality_level,
     )
+    if alpha != BASE_LEARNING_RATE_DEFAULT:
+        effective_alpha = _clamp(float(alpha), 0.0, 1.0)
+    if beta != BASE_DECAY_RATE_DEFAULT:
+        effective_beta = _clamp(float(beta), 0.0, 1.0)
+
     new_score = calculate_mastery_score(
         mastery.mastery_score,
         is_correct,
-        learning_rate,
-        beta,
+        effective_alpha,
+        effective_beta,
     )
     mastery.mastery_score = _clamp(new_score, 0.0, 1.0)
     _set_repetition_metadata(mastery, now=_utcnow())
