@@ -1,4 +1,4 @@
-import { supabase } from './supabase'
+import { supabase } from '../supabase/client'
 
 const normalizeOptions = (options) => {
   if (Array.isArray(options)) return options.map((item) => String(item))
