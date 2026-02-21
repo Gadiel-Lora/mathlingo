@@ -1,8 +1,8 @@
-/* eslint-disable react-refresh/only-export-components */
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
+
+import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 
 import { useAuth } from './AuthContext'
-import { supabase } from '../supabase/client'
+import { supabase } from '../lib/supabase'
 
 const ProgressContext = createContext(null)
 
@@ -110,7 +110,7 @@ export function ProgressProvider({ children }) {
     }
   }, [user])
 
-  const completeLesson = useCallback(async (id) => {
+  const completeLesson = async (id) => {
     const lessonId = Number(id)
     if (!Number.isInteger(lessonId) || lessonId <= 0 || !user) return
     if (completedLessons.includes(lessonId)) return
@@ -139,7 +139,7 @@ export function ProgressProvider({ children }) {
       xp: newXp,
       currentStreak: newStreak,
     })
-  }, [completedLessons, currentStreak, user, xp])
+  }
 
   const value = useMemo(
     () => ({
@@ -150,7 +150,7 @@ export function ProgressProvider({ children }) {
       loadingProgress,
       completeLesson,
     }),
-    [completedLessons, xp, level, currentStreak, loadingProgress, completeLesson],
+    [completedLessons, xp, level, currentStreak, loadingProgress],
   )
 
   return <ProgressContext.Provider value={value}>{children}</ProgressContext.Provider>
