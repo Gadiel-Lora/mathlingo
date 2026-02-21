@@ -21,6 +21,9 @@ function Lesson() {
   const [showFeedback, setShowFeedback] = useState(false)
   const [completed, setCompleted] = useState(false)
   const [xpBeforeCompletion, setXpBeforeCompletion] = useState(null)
+  const [aiLoading, setAiLoading] = useState(false)
+  const [aiAnswer, setAiAnswer] = useState('')
+  const [aiError, setAiError] = useState('')
 
   useEffect(() => {
     let isMounted = true
@@ -71,6 +74,9 @@ function Lesson() {
     setShowFeedback(false)
     setCompleted(false)
     setXpBeforeCompletion(null)
+    setAiLoading(false)
+    setAiAnswer('')
+    setAiError('')
   }, [lessonId])
 
   useEffect(() => {
@@ -128,6 +134,41 @@ function Lesson() {
     setCurrentQuestionIndex((prev) => prev + 1)
     setSelectedOption(null)
     setShowFeedback(false)
+    setAiAnswer('')
+    setAiError('')
+    setAiLoading(false)
+  }
+
+  const askAI = async () => {
+    setAiLoading(true)
+    setAiError('')
+    setAiAnswer('')
+
+    try {
+      const lessonContext = `Leccion: ${lesson.title}. Pregunta ${currentQuestionIndex + 1} de ${totalQuestions}. Opciones: ${currentQuestion.options.join(', ')}.`
+
+      const response = await fetch('http://localhost:4000/api/ai-help', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          question: currentQuestion.question,
+          lessonContext,
+        }),
+      })
+
+      const payload = await response.json().catch(() => ({}))
+      if (!response.ok) {
+        throw new Error(payload?.error || 'No se pudo obtener ayuda de IA.')
+      }
+
+      setAiAnswer(String(payload?.answer || '').trim())
+    } catch (error) {
+      setAiError(error?.message || 'Error de red al consultar ayuda IA.')
+    } finally {
+      setAiLoading(false)
+    }
   }
 
   return (
@@ -152,6 +193,37 @@ function Lesson() {
             </div>
 
             <h2 className="text-xl font-semibold tracking-tight">{currentQuestion.question}</h2>
+
+            <div className="space-y-3">
+              <button
+                type="button"
+                onClick={askAI}
+                disabled={aiLoading}
+                className="inline-flex items-center rounded-2xl border border-zinc-700 px-4 py-2 text-sm font-semibold tracking-tight text-zinc-200 transition-all duration-200 hover:border-indigo-500/50 hover:text-indigo-400 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {aiLoading ? (
+                  <>
+                    <span className="mr-2 inline-block h-4 w-4 animate-spin rounded-full border-2 border-zinc-500 border-t-indigo-400" />
+                    Procesando...
+                  </>
+                ) : (
+                  'Ayuda IA'
+                )}
+              </button>
+
+              {aiError && (
+                <p className="rounded-2xl border border-red-600/40 bg-red-600/10 px-4 py-3 text-sm text-red-200">
+                  {aiError}
+                </p>
+              )}
+
+              {aiAnswer && (
+                <div className="rounded-2xl border border-zinc-800 bg-zinc-900/70 p-4 shadow-lg shadow-black/30 backdrop-blur-sm">
+                  <p className="text-xs font-semibold tracking-wide text-indigo-400">AYUDA IA</p>
+                  <p className="mt-2 whitespace-pre-wrap text-sm leading-6 text-zinc-200">{aiAnswer}</p>
+                </div>
+              )}
+            </div>
 
             <div className="space-y-3">
               {currentQuestion.options.map((option, index) => {
