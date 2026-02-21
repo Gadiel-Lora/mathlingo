@@ -2,7 +2,7 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 
 import { useAuth } from './AuthContext'
-import { supabase } from '../lib/supabase'
+import { supabase } from '../supabase/client'
 
 const ProgressContext = createContext(null)
 
