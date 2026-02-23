@@ -2,12 +2,15 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 
 import brainLogo from '../assets/brain-logo.png'
+import { useAuth } from '../context/AuthContext'
 import { useProgress } from '../context/ProgressContext'
 import { getCourses, getLessonsByCourseId } from '../lib/courses'
+import { supabase } from '../supabase/client'
 
 function Course() {
   const navigate = useNavigate()
   const { id } = useParams()
+  const { user } = useAuth()
   const { completedLessons } = useProgress()
 
   const [course, setCourse] = useState(null)
@@ -33,6 +36,33 @@ function Course() {
 
         const [courses, lessonsData] = await Promise.all([getCourses(), getLessonsByCourseId(id)])
 
+        const initializeProgress = async (courseLessons) => {
+          if (!user?.id || courseLessons.length === 0) return
+
+          const lessonIds = courseLessons.map((lesson) => lesson.id)
+
+          const { data: existingRows, error: existingError } = await supabase
+            .from('user_lesson_progress')
+            .select('lesson_id')
+            .eq('user_id', user.id)
+            .in('lesson_id', lessonIds)
+
+          if (existingError) throw existingError
+
+          if ((existingRows || []).length > 0) return
+
+          const payload = courseLessons.map((lesson, index) => ({
+            user_id: user.id,
+            lesson_id: lesson.id,
+            status: index === 0 ? 'in_progress' : 'locked',
+          }))
+
+          const { error: insertError } = await supabase.from('user_lesson_progress').insert(payload)
+          if (insertError) throw insertError
+        }
+
+        await initializeProgress(lessonsData)
+
         if (!isMounted) return
 
         const selectedCourse = courses.find((item) => item.id === id) || null
@@ -51,7 +81,7 @@ function Course() {
     return () => {
       isMounted = false
     }
-  }, [id])
+  }, [id, user?.id])
 
   const lessonCards = useMemo(() => {
     return lessons.map((lesson, index) => {
