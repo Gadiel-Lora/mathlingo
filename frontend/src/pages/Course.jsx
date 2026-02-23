@@ -3,7 +3,6 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 
 import brainLogo from '../assets/brain-logo.png'
 import { useAuth } from '../context/AuthContext'
-import { useProgress } from '../context/ProgressContext'
 import { getCourses, getLessonsByCourseId } from '../lib/courses'
 import { supabase } from '../supabase/client'
 
@@ -11,10 +10,10 @@ function Course() {
   const navigate = useNavigate()
   const { id } = useParams()
   const { user } = useAuth()
-  const { completedLessons } = useProgress()
 
   const [course, setCourse] = useState(null)
   const [lessons, setLessons] = useState([])
+  const [lessonStatusMap, setLessonStatusMap] = useState({})
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
@@ -63,14 +62,33 @@ function Course() {
 
         await initializeProgress(lessonsData)
 
+        let statusMap = {}
+        if (user?.id && lessonsData.length > 0) {
+          const lessonIds = lessonsData.map((lesson) => lesson.id)
+          const { data: progressRows, error: progressError } = await supabase
+            .from('user_lesson_progress')
+            .select('lesson_id, status')
+            .eq('user_id', user.id)
+            .in('lesson_id', lessonIds)
+
+          if (progressError) throw progressError
+
+          statusMap = (progressRows || []).reduce((acc, row) => {
+            acc[row.lesson_id] = row.status
+            return acc
+          }, {})
+        }
+
         if (!isMounted) return
 
         const selectedCourse = courses.find((item) => item.id === id) || null
         setCourse(selectedCourse)
         setLessons(lessonsData)
+        setLessonStatusMap(statusMap)
       } catch (loadError) {
         if (!isMounted) return
         setError(loadError?.message || 'No se pudo cargar el curso.')
+        setLessonStatusMap({})
       } finally {
         if (isMounted) setLoading(false)
       }
@@ -84,17 +102,17 @@ function Course() {
   }, [id, user?.id])
 
   const lessonCards = useMemo(() => {
-    return lessons.map((lesson, index) => {
-      const previousLessonId = lessons[index - 1]?.id
-      const locked = index !== 0 && !completedLessons.includes(previousLessonId)
+    return lessons.map((lesson) => {
+      const status = lessonStatusMap[lesson.id] || 'locked'
+      const locked = status === 'locked'
 
       return {
         ...lesson,
         locked,
-        completed: completedLessons.includes(lesson.id),
+        completed: status === 'completed',
       }
     })
-  }, [lessons, completedLessons])
+  }, [lessons, lessonStatusMap])
 
   if (loading) {
     return (
