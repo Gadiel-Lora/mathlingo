@@ -5,6 +5,8 @@ import brainLogo from '../assets/brain-logo.png'
 import { useAuth } from '../context/AuthContext'
 import { supabase } from '../supabase/client'
 
+const AI_API_BASE_URL = (import.meta.env.VITE_AI_API_URL || 'http://localhost:4000').replace(/\/$/, '')
+
 const normalizeOptions = (value) => {
   if (!Array.isArray(value)) return []
   return value.map((item) => String(item))
@@ -302,7 +304,7 @@ function Lesson() {
     try {
       const lessonContext = `Leccion: ${lesson.title}. Pregunta ${currentQuestionIndex + 1} de ${totalQuestions}. Opciones: ${currentQuestion.options.join(', ')}.`
 
-      const response = await fetch('http://localhost:4000/api/ai-help', {
+      const response = await fetch(`${AI_API_BASE_URL}/api/ai-help`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
