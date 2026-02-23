@@ -5,6 +5,14 @@ const normalizeOptions = (options) => {
   return []
 }
 
+const toSafeInt = (value) => {
+  const parsed = Number(value)
+  if (!Number.isFinite(parsed) || parsed < 0) return 0
+  return Math.floor(parsed)
+}
+
+const toIdString = (value) => String(value ?? '')
+
 export async function getCourses() {
   const { data: courses, error: coursesError } = await supabase
     .from('courses')
@@ -42,49 +50,47 @@ export async function getLessonsByCourseId(id) {
   if (error) throw error
 
   return (data || []).map((lesson) => ({
-    id: Number(lesson.id),
-    courseId: String(lesson.course_id),
+    id: toIdString(lesson.id),
+    courseId: toIdString(lesson.course_id),
     title: lesson.title || `Leccion ${lesson.id}`,
-    orderIndex: Number(lesson.order_index) || 0,
+    orderIndex: toSafeInt(lesson.order_index),
   }))
 }
 
 export async function getQuestionsByLessonId(lessonId) {
-  const normalizedLessonId = Number(lessonId)
   const { data, error } = await supabase
     .from('questions')
     .select('id, lesson_id, question, options, correct_index, order_index')
-    .eq('lesson_id', normalizedLessonId)
+    .eq('lesson_id', lessonId)
     .order('order_index', { ascending: true })
     .order('id', { ascending: true })
 
   if (error) throw error
 
   return (data || []).map((question) => ({
-    id: Number(question.id),
-    lessonId: Number(question.lesson_id),
+    id: toIdString(question.id),
+    lessonId: toIdString(question.lesson_id),
     question: question.question || '',
     options: normalizeOptions(question.options),
     correctIndex: Number(question.correct_index),
-    orderIndex: Number(question.order_index) || 0,
+    orderIndex: toSafeInt(question.order_index),
   }))
 }
 
 export async function getLessonById(lessonId) {
-  const normalizedLessonId = Number(lessonId)
   const { data, error } = await supabase
     .from('lessons')
     .select('id, title, course_id, order_index')
-    .eq('id', normalizedLessonId)
+    .eq('id', lessonId)
     .maybeSingle()
 
   if (error) throw error
   if (!data) return null
 
   return {
-    id: Number(data.id),
+    id: toIdString(data.id),
     title: data.title || `Leccion ${data.id}`,
-    courseId: String(data.course_id),
-    orderIndex: Number(data.order_index) || 0,
+    courseId: toIdString(data.course_id),
+    orderIndex: toSafeInt(data.order_index),
   }
 }

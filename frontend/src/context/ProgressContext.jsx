@@ -16,10 +16,9 @@ const normalizeLessons = (value) => {
   if (!Array.isArray(value)) return []
 
   return value
-    .map((item) => Number(item))
-    .filter((item) => Number.isInteger(item) && item > 0)
+    .map((item) => String(item ?? '').trim())
+    .filter(Boolean)
     .filter((item, index, array) => array.indexOf(item) === index)
-    .sort((a, b) => a - b)
 }
 
 const normalizeNumber = (value) => {
@@ -111,11 +110,11 @@ export function ProgressProvider({ children }) {
   }, [user])
 
   const completeLesson = async (id) => {
-    const lessonId = Number(id)
-    if (!Number.isInteger(lessonId) || lessonId <= 0 || !user) return
+    const lessonId = String(id ?? '').trim()
+    if (!lessonId || !user) return
     if (completedLessons.includes(lessonId)) return
 
-    const updatedLessons = [...completedLessons, lessonId].sort((a, b) => a - b)
+    const updatedLessons = [...completedLessons, lessonId].filter((item, index, array) => array.indexOf(item) === index)
     const newXp = xp + 20
     const newStreak = currentStreak + 1
 
