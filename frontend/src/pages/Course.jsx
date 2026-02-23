@@ -8,7 +8,6 @@ import { getCourses, getLessonsByCourseId } from '../lib/courses'
 function Course() {
   const navigate = useNavigate()
   const { id } = useParams()
-  const courseId = Number(id)
   const { completedLessons } = useProgress()
 
   const [course, setCourse] = useState(null)
@@ -20,7 +19,7 @@ function Course() {
     let isMounted = true
 
     const loadCourseData = async () => {
-      if (!Number.isInteger(courseId) || courseId <= 0) {
+      if (!id) {
         if (isMounted) {
           setError('Curso no valido.')
           setLoading(false)
@@ -32,11 +31,11 @@ function Course() {
         setLoading(true)
         setError('')
 
-        const [courses, lessonsData] = await Promise.all([getCourses(), getLessonsByCourseId(courseId)])
+        const [courses, lessonsData] = await Promise.all([getCourses(), getLessonsByCourseId(id)])
 
         if (!isMounted) return
 
-        const selectedCourse = courses.find((item) => item.id === courseId) || null
+        const selectedCourse = courses.find((item) => item.id === id) || null
         setCourse(selectedCourse)
         setLessons(lessonsData)
       } catch (loadError) {
@@ -52,7 +51,7 @@ function Course() {
     return () => {
       isMounted = false
     }
-  }, [courseId])
+  }, [id])
 
   const lessonCards = useMemo(() => {
     return lessons.map((lesson, index) => {

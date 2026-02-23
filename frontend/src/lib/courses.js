@@ -17,26 +17,25 @@ export async function getCourses() {
   if (lessonsError) throw lessonsError
 
   const lessonCountByCourse = lessons.reduce((acc, lesson) => {
-    const courseId = Number(lesson.course_id)
-    if (!Number.isFinite(courseId)) return acc
+    const courseId = String(lesson.course_id ?? '')
+    if (!courseId) return acc
     acc.set(courseId, (acc.get(courseId) || 0) + 1)
     return acc
   }, new Map())
 
   return (courses || []).map((course) => ({
-    id: Number(course.id),
+    id: String(course.id),
     title: course.title || 'Curso',
     description: course.description || '',
-    lessonCount: lessonCountByCourse.get(Number(course.id)) || 0,
+    lessonCount: lessonCountByCourse.get(String(course.id)) || 0,
   }))
 }
 
-export async function getLessonsByCourseId(courseId) {
-  const normalizedCourseId = Number(courseId)
+export async function getLessonsByCourseId(id) {
   const { data, error } = await supabase
     .from('lessons')
     .select('id, title, course_id, order_index')
-    .eq('course_id', normalizedCourseId)
+    .eq('course_id', id)
     .order('order_index', { ascending: true })
     .order('id', { ascending: true })
 
@@ -44,7 +43,7 @@ export async function getLessonsByCourseId(courseId) {
 
   return (data || []).map((lesson) => ({
     id: Number(lesson.id),
-    courseId: Number(lesson.course_id),
+    courseId: String(lesson.course_id),
     title: lesson.title || `Leccion ${lesson.id}`,
     orderIndex: Number(lesson.order_index) || 0,
   }))
@@ -85,7 +84,7 @@ export async function getLessonById(lessonId) {
   return {
     id: Number(data.id),
     title: data.title || `Leccion ${data.id}`,
-    courseId: Number(data.course_id),
+    courseId: String(data.course_id),
     orderIndex: Number(data.order_index) || 0,
   }
 }
