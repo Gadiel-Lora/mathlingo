@@ -2,20 +2,33 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 
 import brainLogo from '../assets/brain-logo.png'
-import { useProgress } from '../context/ProgressContext'
-import { getLessonById, getQuestionsByLessonId } from '../lib/courses'
+import { useAuth } from '../context/AuthContext'
+import { supabase } from '../supabase/client'
+
+const normalizeOptions = (value) => {
+  if (!Array.isArray(value)) return []
+  return value.map((item) => String(item))
+}
+
+const toSafeInt = (value) => {
+  const parsed = Number(value)
+  if (!Number.isFinite(parsed) || parsed < 0) return 0
+  return Math.floor(parsed)
+}
 
 function Lesson() {
   const navigate = useNavigate()
   const { id } = useParams()
-  const lessonId = Number(id)
-  const { completeLesson, xp, level } = useProgress()
+  const lessonId = id
+  const { user } = useAuth()
 
   const [lesson, setLesson] = useState(null)
   const [questions, setQuestions] = useState([])
   const [loadingLesson, setLoadingLesson] = useState(true)
   const [lessonError, setLessonError] = useState('')
+  const [completionSynced, setCompletionSynced] = useState(false)
 
+  const [xp, setXp] = useState(0)
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [selectedOption, setSelectedOption] = useState(null)
   const [showFeedback, setShowFeedback] = useState(false)
@@ -29,7 +42,7 @@ function Lesson() {
     let isMounted = true
 
     const loadLessonData = async () => {
-      if (!Number.isInteger(lessonId) || lessonId <= 0) {
+      if (!lessonId) {
         if (isMounted) {
           setLessonError('Leccion no valida.')
           setLoadingLesson(false)
@@ -41,18 +54,48 @@ function Lesson() {
         setLoadingLesson(true)
         setLessonError('')
 
-        const [lessonData, questionData] = await Promise.all([getLessonById(lessonId), getQuestionsByLessonId(lessonId)])
-        if (!isMounted) return
+        const { data: lessonRow, error: lessonQueryError } = await supabase
+          .from('lessons')
+          .select('id, title, course_id, order_index')
+          .eq('id', lessonId)
+          .maybeSingle()
 
-        if (!lessonData) {
+        if (lessonQueryError) throw lessonQueryError
+        if (!lessonRow) {
+          if (!isMounted) return
           setLesson(null)
           setQuestions([])
           setLessonError('Leccion no encontrada.')
           return
         }
 
-        setLesson(lessonData)
-        setQuestions(questionData)
+        const { data: questionRows, error: questionQueryError } = await supabase
+          .from('questions')
+          .select('id, lesson_id, question, options, correct_index, order_index')
+          .eq('lesson_id', lessonId)
+          .order('order_index', { ascending: true })
+          .order('id', { ascending: true })
+
+        if (questionQueryError) throw questionQueryError
+        if (!isMounted) return
+
+        setLesson({
+          id: String(lessonRow.id),
+          title: lessonRow.title || `Leccion ${lessonRow.id}`,
+          courseId: String(lessonRow.course_id),
+          orderIndex: toSafeInt(lessonRow.order_index),
+        })
+
+        setQuestions(
+          (questionRows || []).map((row) => ({
+            id: String(row.id),
+            lessonId: String(row.lesson_id),
+            question: row.question || '',
+            options: normalizeOptions(row.options),
+            correctIndex: Number(row.correct_index),
+            orderIndex: toSafeInt(row.order_index),
+          })),
+        )
       } catch (error) {
         if (!isMounted) return
         setLessonError(error?.message || 'No se pudo cargar la leccion.')
@@ -69,21 +112,132 @@ function Lesson() {
   }, [lessonId])
 
   useEffect(() => {
+    let isMounted = true
+
+    const loadXp = async () => {
+      if (!user?.id) {
+        if (isMounted) setXp(0)
+        return
+      }
+
+      const { data, error } = await supabase.from('progress').select('xp').eq('user_id', user.id).maybeSingle()
+      if (error) {
+        console.error('Error loading XP:', error.message)
+        if (isMounted) setXp(0)
+        return
+      }
+
+      if (isMounted) {
+        setXp(toSafeInt(data?.xp))
+      }
+    }
+
+    void loadXp()
+
+    return () => {
+      isMounted = false
+    }
+  }, [user?.id])
+
+  useEffect(() => {
     setCurrentQuestionIndex(0)
     setSelectedOption(null)
     setShowFeedback(false)
     setCompleted(false)
     setXpBeforeCompletion(null)
+    setCompletionSynced(false)
     setAiLoading(false)
     setAiAnswer('')
     setAiError('')
   }, [lessonId])
 
   useEffect(() => {
-    if (!completed || !Number.isInteger(lessonId) || xpBeforeCompletion !== null) return
-    setXpBeforeCompletion(xp)
-    void completeLesson(lessonId)
-  }, [completed, completeLesson, lessonId, xp, xpBeforeCompletion])
+    if (!completed || completionSynced || !user?.id || !lessonId || !lesson) return
+
+    let isMounted = true
+
+    const syncCompletion = async () => {
+      try {
+        const now = new Date().toISOString()
+
+        const { error: completeCurrentError } = await supabase
+          .from('user_lesson_progress')
+          .update({ status: 'completed', completed_at: now })
+          .eq('user_id', user.id)
+          .eq('lesson_id', lessonId)
+
+        if (completeCurrentError) throw completeCurrentError
+
+        const { data: courseLessons, error: courseLessonsError } = await supabase
+          .from('lessons')
+          .select('id, order_index')
+          .eq('course_id', lesson.courseId)
+          .order('order_index', { ascending: true })
+          .order('id', { ascending: true })
+
+        if (courseLessonsError) throw courseLessonsError
+
+        const orderedLessonIds = (courseLessons || []).map((row) => String(row.id))
+        const currentIndex = orderedLessonIds.findIndex((value) => value === String(lessonId))
+        const nextLessonId = currentIndex >= 0 ? orderedLessonIds[currentIndex + 1] : null
+
+        if (nextLessonId) {
+          const { error: unlockError } = await supabase
+            .from('user_lesson_progress')
+            .update({ status: 'in_progress' })
+            .eq('user_id', user.id)
+            .eq('lesson_id', nextLessonId)
+            .eq('status', 'locked')
+
+          if (unlockError) throw unlockError
+        }
+
+        const { data: progressRow, error: progressFetchError } = await supabase
+          .from('progress')
+          .select('xp')
+          .eq('user_id', user.id)
+          .maybeSingle()
+
+        if (progressFetchError) throw progressFetchError
+
+        const currentXp = toSafeInt(progressRow?.xp)
+        const nextXp = currentXp + 20
+
+        if (progressRow) {
+          const { error: progressUpdateError } = await supabase
+            .from('progress')
+            .update({ xp: nextXp, updated_at: now })
+            .eq('user_id', user.id)
+
+          if (progressUpdateError) throw progressUpdateError
+        } else {
+          const { error: progressInsertError } = await supabase.from('progress').insert({
+            user_id: user.id,
+            completed_lessons: [],
+            xp: nextXp,
+            current_streak: 0,
+          })
+
+          if (progressInsertError) throw progressInsertError
+        }
+
+        if (isMounted) {
+          setXpBeforeCompletion(currentXp)
+          setXp(nextXp)
+          setCompletionSynced(true)
+        }
+      } catch (error) {
+        console.error('Error syncing lesson completion:', error?.message || error)
+        if (isMounted) setCompletionSynced(true)
+      }
+    }
+
+    void syncCompletion()
+
+    return () => {
+      isMounted = false
+    }
+  }, [completed, completionSynced, lesson, lessonId, user?.id])
 
   if (loadingLesson) {
     return (
@@ -115,6 +269,7 @@ function Lesson() {
   const totalQuestions = questions.length
   const currentQuestion = questions[currentQuestionIndex]
   const progress = Math.round((currentQuestionIndex / totalQuestions) * 100)
+  const level = Math.floor(xp / 100) + 1
   const previousLevel = xpBeforeCompletion === null ? level : Math.floor(xpBeforeCompletion / 100) + 1
   const leveledUp = completed && xpBeforeCompletion !== null && level > previousLevel
 
