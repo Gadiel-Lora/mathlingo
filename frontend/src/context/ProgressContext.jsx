@@ -1,5 +1,6 @@
 
-import { createContext, useContext, useEffect, useMemo, useState } from 'react'
+/* eslint-disable react-refresh/only-export-components */
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 
 import { useAuth } from './AuthContext'
 import { supabase } from '../supabase/client'
@@ -109,36 +110,47 @@ export function ProgressProvider({ children }) {
     }
   }, [user])
 
-  const completeLesson = async (id) => {
-    const lessonId = String(id ?? '').trim()
-    if (!lessonId || !user) return
-    if (completedLessons.includes(lessonId)) return
+  const completeLesson = useCallback(
+    async (payload) => {
+      const isObjectPayload = payload && typeof payload === 'object'
+      const lessonId = String(isObjectPayload ? payload.lessonId : payload ?? '').trim()
+      const requestedXp = isObjectPayload ? payload.xpEarned : 0
+      const incrementStreak = isObjectPayload ? payload.incrementStreak !== false : true
 
-    const updatedLessons = [...completedLessons, lessonId].filter((item, index, array) => array.indexOf(item) === index)
-    const newXp = xp + 20
-    const newStreak = currentStreak + 1
+      if (!lessonId || !user) return
 
-    const { error } = await supabase
-      .from('progress')
-      .update({
-        completed_lessons: updatedLessons,
+      const alreadyCompleted = completedLessons.includes(lessonId)
+      const updatedLessons = alreadyCompleted
+        ? completedLessons
+        : [...completedLessons, lessonId].filter((item, index, array) => array.indexOf(item) === index)
+
+      const earnedXp = normalizeNumber(requestedXp)
+      const newXp = xp + earnedXp
+      const newStreak = alreadyCompleted ? currentStreak : incrementStreak ? currentStreak + 1 : currentStreak
+
+      const { error } = await supabase
+        .from('progress')
+        .update({
+          completed_lessons: updatedLessons,
+          xp: newXp,
+          current_streak: newStreak,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('user_id', user.id)
+
+      if (error) {
+        console.error('Error updating progress:', error.message)
+        return
+      }
+
+      setProgressState({
+        completedLessons: updatedLessons,
         xp: newXp,
-        current_streak: newStreak,
-        updated_at: new Date().toISOString(),
+        currentStreak: newStreak,
       })
-      .eq('user_id', user.id)
-
-    if (error) {
-      console.error('Error updating progress:', error.message)
-      return
-    }
-
-    setProgressState({
-      completedLessons: updatedLessons,
-      xp: newXp,
-      currentStreak: newStreak,
-    })
-  }
+    },
+    [completedLessons, currentStreak, user, xp],
+  )
 
   const value = useMemo(
     () => ({
@@ -149,7 +161,7 @@ export function ProgressProvider({ children }) {
       loadingProgress,
       completeLesson,
     }),
-    [completedLessons, xp, level, currentStreak, loadingProgress],
+    [completedLessons, xp, level, currentStreak, loadingProgress, completeLesson],
   )
 
   return <ProgressContext.Provider value={value}>{children}</ProgressContext.Provider>

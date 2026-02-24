@@ -1,10 +1,8 @@
-function Button({ as: Component = 'button', variant = 'primary', className = '', children, ...props }) {
+import { createElement } from 'react'
+
+function Button({ as = 'button', variant = 'primary', className = '', children, ...props }) {
   const variantClass = variant === 'secondary' ? 'cm-btn-secondary' : 'cm-btn-primary'
-  return (
-    <Component className={`${variantClass} ${className}`.trim()} {...props}>
-      {children}
-    </Component>
-  )
+  return createElement(as, { className: `${variantClass} ${className}`.trim(), ...props }, children)
 }
 
 export default Button

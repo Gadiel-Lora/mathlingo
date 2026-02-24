@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import ProtectedRoute from './components/ProtectedRoute'
 import { AuthProvider } from './context/AuthContext'
 import { ProgressProvider } from './context/ProgressContext'
+import Branch from './pages/Branch'
 import Course from './pages/Course'
 import Dashboard from './pages/Dashboard'
 import Landing from './pages/Landing'
@@ -37,6 +38,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Course />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/branch/:id"
+              element={
+                <ProtectedRoute>
+                  <Branch />
                 </ProtectedRoute>
               }
             />

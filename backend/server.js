@@ -6,6 +6,7 @@ import net from 'node:net'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
+import academicRouter from './controllers/academicController.js'
 import { CURRICULUM, getQuestionTypeByDifficulty } from './curriculum.js'
 
 const serverFilePath = fileURLToPath(import.meta.url)
@@ -62,6 +63,7 @@ app.options('/api/question/state', cors(corsOptions))
 app.options('/api/question/help', cors(corsOptions))
 app.options('/api/question/submit', cors(corsOptions))
 app.use(express.json({ limit: '1mb' }))
+app.use('/api/academic', academicRouter)
 
 const sanitizeInput = (value) => String(value ?? '').trim()
 
