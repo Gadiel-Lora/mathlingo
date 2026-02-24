@@ -64,7 +64,7 @@ const detectArithmeticExpression = (text) => {
   const source = sanitizeInput(text)
   if (!source) return null
 
-  const match = source.match(/(-?\d+(?:[.,]\d+)?)\s*([+\-*/^xX×÷])\s*(-?\d+(?:[.,]\d+)?)/)
+  const match = source.match(/(-?\d+(?:[.,]\d+)?)\s*([+\-*/^xX])\s*(-?\d+(?:[.,]\d+)?)/)
   if (!match) return null
 
   const left = parseNumber(match[1])
@@ -74,8 +74,6 @@ const detectArithmeticExpression = (text) => {
   const symbolMap = {
     x: '*',
     X: '*',
-    '×': '*',
-    '÷': '/',
   }
   const operator = symbolMap[match[2]] || match[2]
 
@@ -139,7 +137,6 @@ const detectRuleOfThree = (text) => {
   const hasHint =
     lowered.includes('regla de tres') ||
     lowered.includes('proporcion') ||
-    lowered.includes('proporción') ||
     lowered.includes('corresponde') ||
     lowered.includes('como')
 
@@ -192,10 +189,10 @@ const detectTopicKeyword = (text) => {
   if (!source) return null
 
   if (source.includes('fraccion')) return 'fracciones'
-  if (source.includes('proporcion') || source.includes('proporción')) return 'proporciones'
-  if (source.includes('ecuacion') || source.includes('ecuación')) return 'ecuacion'
+  if (source.includes('proporcion')) return 'proporciones'
+  if (source.includes('ecuacion')) return 'ecuacion'
   if (source.includes('porcentaje')) return 'porcentaje'
-  if (source.includes('geometria') || source.includes('geometría')) return 'geometria'
+  if (source.includes('geometria')) return 'geometria'
 
   return null
 }
