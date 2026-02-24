@@ -1,10 +1,12 @@
-﻿import cors from 'cors'
+import cors from 'cors'
 import dotenv from 'dotenv'
 import express from 'express'
 import { randomUUID } from 'node:crypto'
 import net from 'node:net'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
+
+import { CURRICULUM, getQuestionTypeByDifficulty } from './curriculum.js'
 
 const serverFilePath = fileURLToPath(import.meta.url)
 const serverDir = dirname(serverFilePath)
@@ -17,11 +19,18 @@ const allowedOrigins = (process.env.FRONTEND_URL || 'http://localhost:5173')
   .split(',')
   .map((origin) => origin.trim())
   .filter(Boolean)
-const ollamaBaseUrl = 'http://localhost:11434'
+
+const MAX_ATTEMPTS = 3
+const XP_PER_CORRECT = Number(process.env.XP_PER_CORRECT || 10)
+const ollamaBaseUrl = String(process.env.OLLAMA_URL || 'http://localhost:11434')
+  .trim()
+  .replace(/\/+$/, '')
 const ollamaGenerateUrl = `${ollamaBaseUrl}/api/generate`
-const ollamaModel = 'llama3'
-const ollamaTimeoutMs = 10000
+const ollamaModel = String(process.env.OLLAMA_MODEL || 'llama3').trim() || 'llama3'
+const ollamaTimeoutMs = Number(process.env.OLLAMA_TIMEOUT_MS || 10000)
 const ollamaTemperature = Number(process.env.OLLAMA_TEMPERATURE || 0.2)
+
+const questionStateStore = new Map()
 
 const corsOptions = {
   origin(origin, callback) {
@@ -32,7 +41,7 @@ const corsOptions = {
 
     callback(new Error(`CORS blocked origin: ${origin}`))
   },
-  methods: ['POST', 'OPTIONS'],
+  methods: ['GET', 'POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type'],
 }
 
@@ -48,6 +57,10 @@ app.use((req, res, next) => {
 
 app.use(cors(corsOptions))
 app.options('/api/ai-help', cors(corsOptions))
+app.options('/api/curriculum', cors(corsOptions))
+app.options('/api/question/state', cors(corsOptions))
+app.options('/api/question/help', cors(corsOptions))
+app.options('/api/question/submit', cors(corsOptions))
 app.use(express.json({ limit: '1mb' }))
 
 const sanitizeInput = (value) => String(value ?? '').trim()
@@ -55,6 +68,7 @@ const sanitizeInput = (value) => String(value ?? '').trim()
 const parseNumber = (value) => {
   const normalized = sanitizeInput(value).replace(',', '.')
   if (!normalized) return null
+
   const parsed = Number(normalized)
   return Number.isFinite(parsed) ? parsed : null
 }
@@ -63,6 +77,13 @@ const formatNumber = (value) => {
   if (!Number.isFinite(value)) return 'NaN'
   if (Number.isInteger(value)) return String(value)
   return String(Number(value.toFixed(6)))
+}
+
+const sanitizeAiAnswer = (value) => {
+  return String(value ?? '')
+    .replace(/contexto disponible\s*:?/gi, '')
+    .replace(/metadata interna\s*:?/gi, '')
+    .trim()
 }
 
 const detectArithmeticExpression = (text) => {
@@ -80,8 +101,8 @@ const detectArithmeticExpression = (text) => {
     x: '*',
     X: '*',
   }
-  const operator = symbolMap[match[2]] || match[2]
 
+  const operator = symbolMap[match[2]] || match[2]
   if (!['+', '-', '*', '/', '^'].includes(operator)) return null
 
   return {
@@ -119,8 +140,6 @@ const solveArithmetic = ({ left, right, operator, rawExpression }) => {
     if (!Number.isFinite(result)) {
       error = 'La potencia produce un resultado demasiado grande.'
     }
-  } else {
-    error = 'Operacion no soportada.'
   }
 
   return {
@@ -155,11 +174,22 @@ const detectRuleOfThree = (text) => {
 
   const [a, b, c] = values
   if (a === 0) {
-    return { a, b, c, result: null, error: 'El primer valor no puede ser 0 para aplicar regla de tres.' }
+    return {
+      a,
+      b,
+      c,
+      result: null,
+      error: 'El primer valor no puede ser 0 para aplicar regla de tres.',
+    }
   }
 
-  const result = (b * c) / a
-  return { a, b, c, result, error: null }
+  return {
+    a,
+    b,
+    c,
+    result: (b * c) / a,
+    error: null,
+  }
 }
 
 const detectPercentage = (text) => {
@@ -167,8 +197,8 @@ const detectPercentage = (text) => {
   if (!source) return null
 
   const patterns = [
-    /(-?\d+(?:[.,]\d+)?)\s*%\s*(?:de|del)\s*(-?\d+(?:[.,]\d+)?)/i,
-    /(-?\d+(?:[.,]\d+)?)\s*por\s*ciento\s*(?:de|del)\s*(-?\d+(?:[.,]\d+)?)/i,
+    /(-?\d+(?:[.,]\d+)?)\s*%\s*(?:de|del|sobre)\s*(-?\d+(?:[.,]\d+)?)/i,
+    /(-?\d+(?:[.,]\d+)?)\s*por\s*ciento\s*(?:de|del|sobre)\s*(-?\d+(?:[.,]\d+)?)/i,
   ]
 
   for (const pattern of patterns) {
@@ -202,239 +232,161 @@ const detectTopicKeyword = (text) => {
   return null
 }
 
-const buildStepByStepExplanation = ({
-  mode,
-  question,
-  lessonContext,
-  arithmetic = null,
-  ruleOfThree = null,
-  percentage = null,
-  topic = null,
-}) => {
-  const safeQuestion = sanitizeInput(question) || 'pregunta no especificada'
+const buildHintFallbackAnswer = ({ question, lessonContext }) => {
+  const safeQuestion = sanitizeInput(question)
   const safeContext = sanitizeInput(lessonContext)
+  const analysisText = `${safeQuestion}\n${safeContext}`
 
-  if (mode === 'arithmetic' && arithmetic) {
-    const symbolMap = {
-      '+': '+',
-      '-': '-',
-      '*': 'x',
-      '/': '/',
-      '^': '^',
-    }
-    const symbol = symbolMap[arithmetic.operator] || arithmetic.operator
-
-    if (arithmetic.error) {
-      return [
-        `Problema detectado: ${arithmetic.rawExpression}.`,
-        `Paso 1: Identifico una ${arithmetic.operation}.`,
-        `Paso 2: Se detecta este problema: ${arithmetic.error}`,
-        'Resultado: no se puede resolver con los valores dados.',
-      ].join('\n')
-    }
-
+  const arithmetic = detectArithmeticExpression(analysisText)
+  if (arithmetic) {
     return [
-      `Problema detectado: ${arithmetic.rawExpression}.`,
-      `Paso 1: Identifico una ${arithmetic.operation}.`,
-      `Paso 2: Sustituyo valores: ${formatNumber(arithmetic.left)} ${symbol} ${formatNumber(arithmetic.right)}.`,
-      `Paso 3: Calculo el resultado: ${formatNumber(arithmetic.result)}.`,
-      `Resultado final: ${formatNumber(arithmetic.result)}.`,
+      'Pista: identifica primero la operacion y reescribe los valores con claridad antes de calcular.',
+      'Pregunta guiada: que operacion debes hacer primero y por que?',
     ].join('\n')
   }
-
-  if (mode === 'rule_of_three' && ruleOfThree) {
-    if (ruleOfThree.error) {
-      return [
-        `Pregunta: ${safeQuestion}.`,
-        'Paso 1: Intento aplicar regla de tres.',
-        `Paso 2: ${ruleOfThree.error}`,
-        'Resultado: no se puede resolver hasta corregir los datos.',
-      ].join('\n')
-    }
-
-    return [
-      `Pregunta: ${safeQuestion}.`,
-      `Paso 1: Identifico proporcion: ${formatNumber(ruleOfThree.a)} -> ${formatNumber(ruleOfThree.b)} y ${formatNumber(ruleOfThree.c)} -> x.`,
-      `Paso 2: Aplico formula: x = (${formatNumber(ruleOfThree.b)} x ${formatNumber(ruleOfThree.c)}) / ${formatNumber(ruleOfThree.a)}.`,
-      `Paso 3: Calculo x = ${formatNumber(ruleOfThree.result)}.`,
-      `Resultado final: x = ${formatNumber(ruleOfThree.result)}.`,
-    ].join('\n')
-  }
-
-  if (mode === 'percentage' && percentage) {
-    const decimal = percentage.percent / 100
-    return [
-      `Pregunta: ${safeQuestion}.`,
-      `Paso 1: Convierto porcentaje a decimal: ${formatNumber(percentage.percent)}% = ${formatNumber(decimal)}.`,
-      `Paso 2: Multiplico por la base: ${formatNumber(decimal)} x ${formatNumber(percentage.base)}.`,
-      `Paso 3: Resultado: ${formatNumber(percentage.result)}.`,
-      `Resultado final: ${formatNumber(percentage.percent)}% de ${formatNumber(percentage.base)} es ${formatNumber(percentage.result)}.`,
-    ].join('\n')
-  }
-
-  if (mode === 'topic' && topic) {
-    const topicMap = {
-      fracciones: [
-        'Tema detectado: fracciones.',
-        'Paso 1: Verifica que los denominadores sean distintos de 0.',
-        'Paso 2: Usa denominador comun para sumar o restar.',
-        'Paso 3: Simplifica el resultado final.',
-      ],
-      proporciones: [
-        'Tema detectado: proporciones.',
-        'Paso 1: Escribe la relacion entre magnitudes.',
-        'Paso 2: Define si la proporcion es directa o inversa.',
-        'Paso 3: Despeja la variable faltante.',
-      ],
-      ecuacion: [
-        'Tema detectado: ecuacion.',
-        'Paso 1: Agrupa terminos semejantes.',
-        'Paso 2: Aplica operaciones inversas en ambos lados.',
-        'Paso 3: Despeja la variable y verifica.',
-      ],
-      porcentaje: [
-        'Tema detectado: porcentaje.',
-        'Paso 1: Convierte porcentaje a decimal (divide entre 100).',
-        'Paso 2: Multiplica por la cantidad base.',
-        'Paso 3: Interpreta el resultado en contexto.',
-      ],
-      geometria: [
-        'Tema detectado: geometria.',
-        'Paso 1: Identifica la figura y los datos dados.',
-        'Paso 2: Elige la formula adecuada.',
-        'Paso 3: Sustituye unidades correctas y calcula.',
-      ],
-    }
-
-    const lines = topicMap[topic] || [
-      'Tema matematico detectado.',
-      'Paso 1: Organiza los datos.',
-      'Paso 2: Identifica la operacion o formula.',
-      'Paso 3: Resuelve y verifica.',
-    ]
-
-    return [
-      `Pregunta: ${safeQuestion}.`,
-      ...lines,
-      ...(safeContext ? [`Contexto de leccion: ${safeContext}.`] : []),
-    ].join('\n')
-  }
-
-  return [
-    `Pregunta: ${safeQuestion}.`,
-    'No detecte una operacion exacta para resolver automaticamente.',
-    'Guia sugerida:',
-    '1) Escribe la operacion con numeros y simbolos claros.',
-    '2) Indica si es suma, resta, multiplicacion, division, porcentaje o regla de tres.',
-    '3) Agrega datos concretos para poder resolver paso a paso.',
-    ...(safeContext ? [`Contexto recibido: ${safeContext}.`] : []),
-  ].join('\n')
-}
-
-const buildMathFallbackAnswer = ({ question, lessonContext }) => {
-  const safeQuestion = sanitizeInput(question) || 'pregunta no especificada'
-  const safeContext = sanitizeInput(lessonContext)
-  const analysisText = `${safeQuestion}\n${safeContext}`.trim()
 
   const percentage = detectPercentage(analysisText)
   if (percentage) {
-    return buildStepByStepExplanation({
-      mode: 'percentage',
-      question: safeQuestion,
-      lessonContext: safeContext,
-      percentage,
-    })
+    return [
+      'Pista: convierte el porcentaje a decimal antes de operar.',
+      'Pregunta guiada: cual es el decimal equivalente al porcentaje del enunciado?',
+    ].join('\n')
   }
 
   const ruleOfThree = detectRuleOfThree(analysisText)
   if (ruleOfThree) {
-    return buildStepByStepExplanation({
-      mode: 'rule_of_three',
-      question: safeQuestion,
-      lessonContext: safeContext,
-      ruleOfThree,
-    })
-  }
-
-  const arithmeticExpression = detectArithmeticExpression(analysisText)
-  if (arithmeticExpression) {
-    const arithmetic = solveArithmetic(arithmeticExpression)
-    return buildStepByStepExplanation({
-      mode: 'arithmetic',
-      question: safeQuestion,
-      lessonContext: safeContext,
-      arithmetic,
-    })
+    return [
+      'Pista: organiza los datos como proporcion antes de despejar x.',
+      'Pregunta guiada: que valores forman la primera razon y cual es la razon con incognita?',
+    ].join('\n')
   }
 
   const topic = detectTopicKeyword(analysisText)
-  if (topic) {
-    return buildStepByStepExplanation({
-      mode: 'topic',
-      question: safeQuestion,
-      lessonContext: safeContext,
-      topic,
-    })
+  if (topic === 'fracciones') {
+    return [
+      'Pista: si hay suma o resta de fracciones, busca un denominador comun.',
+      'Pregunta guiada: cual es el minimo comun denominador de las fracciones del problema?',
+    ].join('\n')
   }
 
-  return buildStepByStepExplanation({
-    mode: 'general',
-    question: safeQuestion,
-    lessonContext: safeContext,
-  })
-}
-
-const buildFallbackPayload = ({ answer, requestId, fallbackReason }) => ({
-  answer,
-  source: 'fallback',
-  requestId,
-  fallbackReason,
-})
-
-const sendFallbackResponse = ({ res, answer, requestId, reason, status = 200, details = null }) => {
-  const safeAnswer = sanitizeInput(answer) || 'No fue posible generar una explicacion.'
-  const safeReason = sanitizeInput(reason) || 'fallback_default'
-
-  if (details) {
-    console.warn(`[ai-help][${requestId}] Fallback reason=${safeReason}`, details)
-  } else {
-    console.warn(`[ai-help][${requestId}] Fallback reason=${safeReason}`)
+  if (topic === 'ecuacion') {
+    return [
+      'Pista: despeja la variable aplicando la misma operacion en ambos lados.',
+      'Pregunta guiada: que operacion inversa te acerca a dejar sola la variable?',
+    ].join('\n')
   }
 
-  return res.status(status).json(
-    buildFallbackPayload({
-      answer: safeAnswer,
-      requestId,
-      fallbackReason: safeReason,
-    }),
-  )
+  return [
+    'Pista: separa datos, objetivo y operacion principal antes de resolver.',
+    'Pregunta guiada: que dato necesitas transformar primero para avanzar?',
+  ].join('\n')
 }
 
-const buildTutorPrompt = (question, lessonContext) => {
+const buildFullFallbackAnswer = ({ question, lessonContext, correctAnswer }) => {
+  const safeQuestion = sanitizeInput(question) || 'pregunta no especificada'
+  const safeContext = sanitizeInput(lessonContext)
+  const safeCorrectAnswer = sanitizeInput(correctAnswer)
+  const analysisText = `${safeQuestion}\n${safeContext}`
+
+  const arithmetic = detectArithmeticExpression(analysisText)
+  if (arithmetic) {
+    const solved = solveArithmetic(arithmetic)
+    const computed = solved.error ? 'No se puede resolver con los valores dados.' : formatNumber(solved.result)
+    const result = safeCorrectAnswer || computed
+
+    return [
+      `Paso 1: identifico una ${solved.operation} en la expresion ${solved.rawExpression}.`,
+      `Paso 2: aplico la operacion respetando el orden correcto.${solved.error ? ` ${solved.error}` : ''}`,
+      `Resultado: ${result}.`,
+      'Resumen: primero identifica la operacion, luego calcula con cuidado y verifica el resultado.',
+    ].join('\n')
+  }
+
+  const percentage = detectPercentage(analysisText)
+  if (percentage) {
+    const decimal = percentage.percent / 100
+    const computed = formatNumber(percentage.result)
+    const result = safeCorrectAnswer || computed
+
+    return [
+      `Paso 1: convierto ${formatNumber(percentage.percent)}% a decimal (${formatNumber(decimal)}).`,
+      `Paso 2: multiplico ${formatNumber(decimal)} por ${formatNumber(percentage.base)}.`,
+      `Resultado: ${result}.`,
+      'Resumen: en porcentajes, convertir a decimal simplifica el calculo.',
+    ].join('\n')
+  }
+
+  const ruleOfThree = detectRuleOfThree(analysisText)
+  if (ruleOfThree) {
+    const computed = ruleOfThree.error ? 'No se puede resolver con los datos actuales.' : formatNumber(ruleOfThree.result)
+    const result = safeCorrectAnswer || computed
+
+    return [
+      `Paso 1: organizo la proporcion ${formatNumber(ruleOfThree.a)} : ${formatNumber(ruleOfThree.b)} = ${formatNumber(ruleOfThree.c)} : x.`,
+      `Paso 2: despejo con regla de tres directa.${ruleOfThree.error ? ` ${ruleOfThree.error}` : ''}`,
+      `Resultado: ${result}.`,
+      'Resumen: al ordenar bien la proporcion, despejar la incognita es directo.',
+    ].join('\n')
+  }
+
+  const topic = detectTopicKeyword(analysisText)
+  if (topic === 'ecuacion') {
+    return [
+      'Paso 1: agrupo terminos semejantes y paso constantes al otro lado.',
+      'Paso 2: aplico operaciones inversas para despejar la variable.',
+      `Resultado: ${safeCorrectAnswer || 'variable despejada y verificada'}.`,
+      'Resumen: despejar consiste en mantener el equilibrio en ambos lados de la igualdad.',
+    ].join('\n')
+  }
+
+  return [
+    `Paso 1: extraigo los datos clave del enunciado (${safeQuestion}).`,
+    'Paso 2: elijo la operacion o formula mas adecuada y sustituyo datos.',
+    `Resultado: ${safeCorrectAnswer || 'resultado obtenido al completar los pasos con los datos del problema'}.`,
+    'Resumen: identificar datos y objetivo reduce errores y mejora la precision.',
+  ].join('\n')
+}
+
+const buildTutorPrompt = (question, lessonContext, mode = 'full') => {
   const safeQuestion = sanitizeInput(question) || 'pregunta no especificada'
   const safeContext = sanitizeInput(lessonContext)
 
+  if (mode === 'hint') {
+    return [
+      'Eres un tutor experto en matematicas para educacion basica y secundaria.',
+      'Estilo: claro, estructurado, pedagogico y breve.',
+      'Modo de ayuda: hint.',
+      'Reglas obligatorias:',
+      '1) Da solo una pista estrategica.',
+      '2) Incluye una pregunta guiada.',
+      '3) No des el resultado final.',
+      '4) No des solucion completa.',
+      '5) No incluyas metadata interna ni detalles tecnicos.',
+      'Formato exacto:',
+      'Pista: ...',
+      'Pregunta guiada: ...',
+      safeContext ? `Contexto de leccion: ${safeContext}` : 'Contexto de leccion: no disponible.',
+      `Pregunta: ${safeQuestion}`,
+    ].join('\n')
+  }
+
   return [
-    'Eres un tutor experto en matematicas.',
-    'Nivel: educacion basica y secundaria.',
-    'Estilo: claro, estructurado, pedagogico y directo.',
-    '',
+    'Eres un tutor experto en matematicas para educacion basica y secundaria.',
+    'Estilo: claro, estructurado, pedagogico y concreto.',
+    'Modo de ayuda: full.',
     'Reglas obligatorias:',
-    '1) Explica siempre paso a paso con lista numerada.',
-    '2) Nunca des solo el resultado final.',
-    '3) Usa lenguaje sencillo.',
-    '4) Si la pregunta es una operacion simple, igual explica los pasos.',
-    '5) Si la pregunta es conceptual, explica el concepto y agrega un ejemplo corto.',
-    '6) Evita respuestas largas, texto redundante o explicaciones abstractas sin ejemplo.',
-    '',
-    'Formato obligatorio de salida:',
+    '1) Explica paso a paso con lenguaje sencillo.',
+    '2) No des solo el resultado; justifica brevemente.',
+    '3) Incluye un ejemplo corto si es conceptual.',
+    '4) Evita texto redundante o excesivamente largo.',
+    '5) No incluyas metadata interna ni detalles tecnicos.',
+    'Formato exacto:',
     'Paso 1: ...',
     'Paso 2: ...',
     'Resultado: ...',
     'Resumen: ...',
-    '',
     safeContext ? `Contexto de leccion: ${safeContext}` : 'Contexto de leccion: no disponible.',
-    `Pregunta del estudiante: ${safeQuestion}`,
+    `Pregunta: ${safeQuestion}`,
   ].join('\n')
 }
 
@@ -472,7 +424,7 @@ const normalizeOllamaError = (error) => {
   })
 }
 
-const callOllama = async (question, lessonContext) => {
+const callOllama = async (question, lessonContext, mode = 'full') => {
   const controller = new AbortController()
   const timeoutId = setTimeout(() => controller.abort(), ollamaTimeoutMs)
 
@@ -484,7 +436,7 @@ const callOllama = async (question, lessonContext) => {
       },
       body: JSON.stringify({
         model: ollamaModel,
-        prompt: buildTutorPrompt(question, lessonContext),
+        prompt: buildTutorPrompt(question, lessonContext, mode),
         stream: false,
         options: {
           temperature: ollamaTemperature,
@@ -535,12 +487,13 @@ const callOllama = async (question, lessonContext) => {
           ollamaError: payload.error,
         })
       }
+
       throw createOllamaError('ollama_error', payload.error, {
         ollamaError: payload.error,
       })
     }
 
-    const answer = typeof payload?.response === 'string' ? payload.response.trim() : ''
+    const answer = sanitizeAiAnswer(payload?.response)
     if (!answer) {
       throw createOllamaError('empty_response', 'Ollama devolvio respuesta vacia.', {
         payloadKeys: payload ? Object.keys(payload) : [],
@@ -555,36 +508,19 @@ const callOllama = async (question, lessonContext) => {
   }
 }
 
-app.post('/api/ai-help', async (req, res) => {
-  const requestId = randomUUID()
-  const question = sanitizeInput(req.body?.question)
-  const lessonContext = sanitizeInput(req.body?.lessonContext)
-
+const resolveAiHelp = async ({ question, lessonContext, mode, requestId, correctAnswer }) => {
   console.log(
-    `[ai-help][${requestId}] Request received origin=${req.headers.origin || 'unknown'} questionLength=${question.length} contextLength=${lessonContext.length}`,
-  )
-
-  if (!question) {
-    return sendFallbackResponse({
-      res,
-      answer: 'Necesito una pregunta para ayudarte. Escribe una operacion matematica concreta.',
-      requestId,
-      reason: 'missing_question',
-    })
-  }
-
-  console.log(
-    `[ai-help][${requestId}] Intentando Ollama model=${ollamaModel} url=${ollamaGenerateUrl} timeoutMs=${ollamaTimeoutMs}`,
+    `[ai-help][${requestId}] Intentando Ollama model=${ollamaModel} mode=${mode} url=${ollamaGenerateUrl} timeoutMs=${ollamaTimeoutMs}`,
   )
 
   try {
-    const answer = await callOllama(question, lessonContext)
+    const answer = await callOllama(question, lessonContext, mode)
     console.log(`[ai-help][${requestId}] Ollama OK`)
-    return res.status(200).json({
+    return {
       answer,
       source: 'ollama',
-      requestId,
-    })
+      fallbackReason: null,
+    }
   } catch (error) {
     console.warn(`[ai-help][${requestId}] Ollama fallo -> fallback`, {
       type: error?.type || 'unknown',
@@ -592,17 +528,270 @@ app.post('/api/ai-help', async (req, res) => {
       details: error?.details || null,
     })
 
-    return sendFallbackResponse({
-      res,
-      answer: buildMathFallbackAnswer({ question, lessonContext }),
-      requestId,
-      reason: 'ollama_unavailable',
-      details: {
-        ollamaErrorType: error?.type || 'unknown',
-        ollamaMessage: error?.message || 'unknown',
-      },
-    })
+    const answer =
+      mode === 'hint'
+        ? buildHintFallbackAnswer({ question, lessonContext })
+        : buildFullFallbackAnswer({ question, lessonContext, correctAnswer })
+
+    return {
+      answer,
+      source: 'fallback',
+      fallbackReason: 'ollama_unavailable',
+    }
   }
+}
+
+const buildQuestionState = (difficulty) => ({
+  attempts: 0,
+  assisted: false,
+  locked: false,
+  hintCount: 0,
+  completed: false,
+  questionType: getQuestionTypeByDifficulty(difficulty),
+})
+
+const toPublicQuestionState = (state) => ({
+  attempts: Number(state?.attempts || 0),
+  assisted: Boolean(state?.assisted),
+  locked: Boolean(state?.locked),
+})
+
+const getQuestionStateKey = (userId, questionId) => `${userId}::${questionId}`
+
+const getOrCreateQuestionState = (userId, questionId, difficulty) => {
+  const key = getQuestionStateKey(userId, questionId)
+
+  if (!questionStateStore.has(key)) {
+    questionStateStore.set(key, buildQuestionState(difficulty))
+  }
+
+  const state = questionStateStore.get(key)
+  state.questionType = getQuestionTypeByDifficulty(difficulty)
+  return { state, key }
+}
+
+const requireQuestionState = (req, res, next) => {
+  const userId = sanitizeInput(req.body?.userId)
+  const questionId = sanitizeInput(req.body?.questionId)
+  const difficulty = Number(req.body?.difficulty || 1)
+
+  if (!userId || !questionId) {
+    res.status(400).json({
+      error: 'userId y questionId son obligatorios.',
+    })
+    return
+  }
+
+  if (req.body?.reset === true) {
+    const resetKey = getQuestionStateKey(userId, questionId)
+    questionStateStore.delete(resetKey)
+  }
+
+  const { state, key } = getOrCreateQuestionState(userId, questionId, difficulty)
+
+  req.questionState = state
+  req.questionStateKey = key
+  req.questionDifficulty = difficulty
+  req.userId = userId
+  req.questionId = questionId
+  req.questionType = getQuestionTypeByDifficulty(difficulty)
+  next()
+}
+
+const ensureQuestionUnlocked = (req, res, next) => {
+  if (!req.questionState?.locked) {
+    next()
+    return
+  }
+
+  res.status(423).json({
+    message: 'Pregunta bloqueada.',
+    state: toPublicQuestionState(req.questionState),
+    questionType: req.questionState.questionType,
+  })
+}
+
+app.get('/api/curriculum', (req, res) => {
+  res.status(200).json({
+    levels: CURRICULUM,
+  })
+})
+
+app.post('/api/question/state', requireQuestionState, (req, res) => {
+  res.status(200).json({
+    state: toPublicQuestionState(req.questionState),
+    questionType: req.questionState.questionType,
+    maxAttempts: MAX_ATTEMPTS,
+  })
+})
+
+app.post('/api/question/help', requireQuestionState, ensureQuestionUnlocked, async (req, res) => {
+  const requestId = randomUUID()
+  const question = sanitizeInput(req.body?.question)
+  const lessonContext = sanitizeInput(req.body?.lessonContext)
+  const correctAnswer = sanitizeInput(req.body?.correctAnswer)
+
+  if (!question) {
+    res.status(400).json({
+      error: 'question es obligatoria para solicitar ayuda.',
+      requestId,
+    })
+    return
+  }
+
+  const modeRaw = sanitizeInput(req.body?.mode).toLowerCase()
+  let mode = modeRaw === 'full' ? 'full' : 'hint'
+
+  if (mode === 'hint' && req.questionState.hintCount >= 1) {
+    mode = 'full'
+  }
+
+  if (mode === 'hint') {
+    req.questionState.hintCount += 1
+  } else {
+    req.questionState.assisted = true
+    req.questionState.locked = true
+    req.questionState.completed = true
+  }
+
+  const aiResult = await resolveAiHelp({
+    question,
+    lessonContext,
+    mode,
+    requestId,
+    correctAnswer,
+  })
+
+  res.status(200).json({
+    answer: aiResult.answer,
+    source: aiResult.source,
+    requestId,
+    mode,
+    state: toPublicQuestionState(req.questionState),
+    questionType: req.questionState.questionType,
+    xpAwarded: 0,
+    ...(mode === 'full' && correctAnswer ? { correctAnswer } : {}),
+    ...(aiResult.fallbackReason ? { fallbackReason: aiResult.fallbackReason } : {}),
+  })
+})
+
+const submitQuestionController = async (req, res) => {
+  const requestId = randomUUID()
+  const question = sanitizeInput(req.body?.question)
+  const lessonContext = sanitizeInput(req.body?.lessonContext)
+  const correctAnswer = sanitizeInput(req.body?.correctAnswer)
+
+  if (typeof req.body?.isCorrect !== 'boolean') {
+    res.status(400).json({
+      error: 'isCorrect debe ser boolean.',
+      requestId,
+    })
+    return
+  }
+
+  req.questionState.attempts += 1
+
+  if (req.body.isCorrect) {
+    req.questionState.completed = true
+    req.questionState.locked = true
+
+    const xpAwarded =
+      req.questionState.assisted || req.questionState.attempts > 2
+        ? 0
+        : Number.isFinite(XP_PER_CORRECT)
+          ? XP_PER_CORRECT
+          : 0
+
+    res.status(200).json({
+      correct: true,
+      message: 'Correcto.',
+      xpAwarded,
+      requestId,
+      state: toPublicQuestionState(req.questionState),
+      questionType: req.questionState.questionType,
+    })
+    return
+  }
+
+  if (req.questionState.attempts < MAX_ATTEMPTS) {
+    res.status(200).json({
+      correct: false,
+      message: 'Incorrecto, intenta nuevamente.',
+      xpAwarded: 0,
+      requestId,
+      state: toPublicQuestionState(req.questionState),
+      questionType: req.questionState.questionType,
+    })
+    return
+  }
+
+  req.questionState.assisted = true
+  req.questionState.locked = true
+  req.questionState.completed = true
+
+  const aiResult = await resolveAiHelp({
+    question,
+    lessonContext,
+    mode: 'full',
+    requestId,
+    correctAnswer,
+  })
+
+  res.status(200).json({
+    correct: false,
+    maxAttemptsReached: true,
+    message: 'Incorrecto, intenta nuevamente.',
+    xpAwarded: 0,
+    requestId,
+    state: toPublicQuestionState(req.questionState),
+    questionType: req.questionState.questionType,
+    answer: aiResult.answer,
+    source: aiResult.source,
+    ...(correctAnswer ? { correctAnswer } : {}),
+    ...(aiResult.fallbackReason ? { fallbackReason: aiResult.fallbackReason } : {}),
+  })
+}
+
+app.post('/api/question/submit', requireQuestionState, ensureQuestionUnlocked, submitQuestionController)
+
+app.post('/api/ai-help', async (req, res) => {
+  const requestId = randomUUID()
+  const question = sanitizeInput(req.body?.question)
+  const lessonContext = sanitizeInput(req.body?.lessonContext)
+  const mode = sanitizeInput(req.body?.mode).toLowerCase() === 'hint' ? 'hint' : 'full'
+  const correctAnswer = sanitizeInput(req.body?.correctAnswer)
+
+  if (!question) {
+    const fallbackAnswer =
+      mode === 'hint'
+        ? buildHintFallbackAnswer({ question, lessonContext })
+        : buildFullFallbackAnswer({ question, lessonContext, correctAnswer })
+
+    res.status(200).json({
+      answer: fallbackAnswer,
+      source: 'fallback',
+      requestId,
+      mode,
+      fallbackReason: 'missing_question',
+    })
+    return
+  }
+
+  const aiResult = await resolveAiHelp({
+    question,
+    lessonContext,
+    mode,
+    requestId,
+    correctAnswer,
+  })
+
+  res.status(200).json({
+    answer: aiResult.answer,
+    source: aiResult.source,
+    requestId,
+    mode,
+    ...(aiResult.fallbackReason ? { fallbackReason: aiResult.fallbackReason } : {}),
+  })
 })
 
 app.use((error, req, res, next) => {
@@ -613,69 +802,40 @@ app.use((error, req, res, next) => {
 
   if (error?.type === 'entity.parse.failed') {
     console.error('[backend] Invalid JSON body:', error.message)
-    if (req.path === '/api/ai-help') {
-      return sendFallbackResponse({
-        res,
-        answer:
-          'No pude leer el JSON enviado. Usa el formato { "question": "...", "lessonContext": "..." }.',
-        requestId: randomUUID(),
-        reason: 'invalid_json',
-      })
-    }
     res.status(400).json({ error: 'El body debe ser JSON valido.' })
     return
   }
 
   if (String(error?.message || '').startsWith('CORS blocked origin:')) {
     console.error('[backend] CORS error:', error.message)
-    if (req.path === '/api/ai-help') {
-      return sendFallbackResponse({
-        res,
-        answer: 'Solicitud bloqueada por CORS para este origen.',
-        requestId: randomUUID(),
-        reason: 'cors_blocked',
-        status: 403,
-      })
-    }
     res.status(403).json({ error: error.message })
     return
   }
 
   console.error('[backend] Unhandled error:', error)
-  if (req.path === '/api/ai-help') {
-    return sendFallbackResponse({
-      res,
-      answer: 'No fue posible completar la solicitud en este momento.',
-      requestId: randomUUID(),
-      reason: 'unhandled_backend_error',
-      details: { message: error?.message || 'Unknown error' },
-      status: 500,
-    })
-  }
-
   res.status(500).json({ error: 'Error interno del backend.' })
 })
 
 const ensurePortAvailable = (targetPort) => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolvePromise, rejectPromise) => {
     const tester = net.createServer()
 
     tester.once('error', (error) => {
       tester.close()
       if (error?.code === 'EADDRINUSE') {
-        reject(new Error(`Port ${targetPort} is already in use by another process.`))
+        rejectPromise(new Error(`Port ${targetPort} is already in use by another process.`))
         return
       }
-      reject(error)
+      rejectPromise(error)
     })
 
     tester.once('listening', () => {
       tester.close((closeError) => {
         if (closeError) {
-          reject(closeError)
+          rejectPromise(closeError)
           return
         }
-        resolve()
+        resolvePromise()
       })
     })
 
@@ -691,10 +851,14 @@ const startServer = async () => {
   if (dotenvResult.error) {
     console.error(`[backend] dotenv error: ${dotenvResult.error.message}`)
   }
+
   console.log(`[backend] AI mode: ollama (${ollamaModel}) -> fallback matematico local`)
   console.log(`[backend] Ollama endpoint: ${ollamaGenerateUrl}`)
   console.log(`[backend] Ollama timeout: ${ollamaTimeoutMs} ms`)
   console.log(`[backend] Ollama temperature: ${ollamaTemperature}`)
+  console.log(`[backend] Max attempts per question: ${MAX_ATTEMPTS}`)
+  console.log(`[backend] XP per valid correct answer: ${XP_PER_CORRECT}`)
+  console.log(`[backend] Curriculum levels loaded: ${CURRICULUM.length}`)
   console.log(`[backend] Target port: ${port}`)
   console.log(`[backend] Allowed frontend origins: ${allowedOrigins.join(', ')}`)
 
