@@ -18,13 +18,6 @@ const allowedOrigins = (process.env.FRONTEND_URL || 'http://localhost:5173')
   .map((origin) => origin.trim())
   .filter(Boolean)
 
-const ollamaBaseUrl = String(process.env.OLLAMA_URL || 'http://localhost:11434')
-  .trim()
-  .replace(/\/+$/, '')
-const ollamaModel = String(process.env.OLLAMA_MODEL || 'llama3').trim() || 'llama3'
-const ollamaTimeoutMs = Number(process.env.OLLAMA_TIMEOUT_MS || 10000)
-const ollamaGenerateUrl = `${ollamaBaseUrl}/api/generate`
-
 const corsOptions = {
   origin(origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
@@ -56,122 +49,37 @@ const sanitizeInput = (value) => String(value ?? '').trim()
 
 const parseNumber = (value) => {
   const normalized = sanitizeInput(value).replace(',', '.')
-  if (!normalized) {
-    return null
-  }
+  if (!normalized) return null
   const parsed = Number(normalized)
   return Number.isFinite(parsed) ? parsed : null
 }
 
 const formatNumber = (value) => {
-  if (!Number.isFinite(value)) {
-    return 'NaN'
-  }
-  if (Number.isInteger(value)) {
-    return String(value)
-  }
+  if (!Number.isFinite(value)) return 'NaN'
+  if (Number.isInteger(value)) return String(value)
   return String(Number(value.toFixed(6)))
-}
-
-const detectPercentage = (text) => {
-  const source = sanitizeInput(text)
-  if (!source) {
-    return null
-  }
-
-  const patterns = [
-    /(-?\d+(?:[.,]\d+)?)\s*%\s*(?:de|del|sobre)\s*(-?\d+(?:[.,]\d+)?)/i,
-    /(-?\d+(?:[.,]\d+)?)\s*por\s*ciento\s*(?:de|del|sobre)\s*(-?\d+(?:[.,]\d+)?)/i,
-  ]
-
-  for (const pattern of patterns) {
-    const match = source.match(pattern)
-    if (!match) {
-      continue
-    }
-
-    const percent = parseNumber(match[1])
-    const base = parseNumber(match[2])
-    if (percent === null || base === null) {
-      continue
-    }
-
-    return {
-      percent,
-      base,
-      result: (percent / 100) * base,
-    }
-  }
-
-  return null
-}
-
-const detectRuleOfThree = (text) => {
-  const source = sanitizeInput(text)
-  if (!source) {
-    return null
-  }
-
-  const lowered = source.toLowerCase()
-  const hasRuleHint =
-    lowered.includes('regla de tres') ||
-    lowered.includes('proporcion') ||
-    lowered.includes('corresponde') ||
-    lowered.includes('si ') ||
-    lowered.includes('como')
-
-  if (!hasRuleHint) {
-    return null
-  }
-
-  const values = [...source.matchAll(/-?\d+(?:[.,]\d+)?/g)]
-    .map((match) => parseNumber(match[0]))
-    .filter((value) => value !== null)
-
-  if (values.length < 3) {
-    return null
-  }
-
-  const [a, b, c] = values
-  if (a === 0) {
-    return { a, b, c, result: null, error: 'El primer valor no puede ser 0 en regla de tres.' }
-  }
-
-  return {
-    a,
-    b,
-    c,
-    result: (b * c) / a,
-    error: null,
-  }
 }
 
 const detectArithmeticExpression = (text) => {
   const source = sanitizeInput(text)
-  if (!source) {
-    return null
-  }
+  if (!source) return null
 
-  const match = source.match(/(-?\d+(?:[.,]\d+)?)\s*([+\-*/^xX])\s*(-?\d+(?:[.,]\d+)?)/)
-  if (!match) {
-    return null
-  }
+  const match = source.match(/(-?\d+(?:[.,]\d+)?)\s*([+\-*/^xX×÷])\s*(-?\d+(?:[.,]\d+)?)/)
+  if (!match) return null
 
   const left = parseNumber(match[1])
   const right = parseNumber(match[3])
-  if (left === null || right === null) {
-    return null
-  }
+  if (left === null || right === null) return null
 
   const symbolMap = {
     x: '*',
     X: '*',
+    '×': '*',
+    '÷': '/',
   }
-
   const operator = symbolMap[match[2]] || match[2]
-  if (!['+', '-', '*', '/', '^'].includes(operator)) {
-    return null
-  }
+
+  if (!['+', '-', '*', '/', '^'].includes(operator)) return null
 
   return {
     left,
@@ -206,8 +114,10 @@ const solveArithmetic = ({ left, right, operator, rawExpression }) => {
     operation = 'potencia'
     result = Math.pow(left, right)
     if (!Number.isFinite(result)) {
-      error = 'La potencia produce un resultado no finito.'
+      error = 'La potencia produce un resultado demasiado grande.'
     }
+  } else {
+    error = 'Operacion no soportada.'
   }
 
   return {
@@ -221,184 +131,210 @@ const solveArithmetic = ({ left, right, operator, rawExpression }) => {
   }
 }
 
-const detectLinearEquation = (text) => {
-  const compact = sanitizeInput(text).toLowerCase().replace(/\s+/g, '').replace(/,/g, '.')
-  if (!compact) {
-    return null
+const detectRuleOfThree = (text) => {
+  const source = sanitizeInput(text)
+  if (!source) return null
+
+  const lowered = source.toLowerCase()
+  const hasHint =
+    lowered.includes('regla de tres') ||
+    lowered.includes('proporcion') ||
+    lowered.includes('proporción') ||
+    lowered.includes('corresponde') ||
+    lowered.includes('como')
+
+  if (!hasHint) return null
+
+  const values = [...source.matchAll(/-?\d+(?:[.,]\d+)?/g)]
+    .map((match) => parseNumber(match[0]))
+    .filter((value) => value !== null)
+
+  if (values.length < 3) return null
+
+  const [a, b, c] = values
+  if (a === 0) {
+    return { a, b, c, result: null, error: 'El primer valor no puede ser 0 para aplicar regla de tres.' }
   }
 
-  const match = compact.match(/^([+-]?\d*(?:\.\d+)?)x([+-]\d+(?:\.\d+)?)?=([+-]?\d+(?:\.\d+)?)$/)
-  if (!match) {
-    return null
-  }
-
-  let coefficientText = match[1]
-  if (coefficientText === '' || coefficientText === '+') {
-    coefficientText = '1'
-  } else if (coefficientText === '-') {
-    coefficientText = '-1'
-  }
-
-  const coefficient = Number(coefficientText)
-  const offset = match[2] ? Number(match[2]) : 0
-  const target = Number(match[3])
-
-  if (!Number.isFinite(coefficient) || !Number.isFinite(offset) || !Number.isFinite(target) || coefficient === 0) {
-    return null
-  }
-
-  const isolated = target - offset
-  const x = isolated / coefficient
-
-  return {
-    coefficient,
-    offset,
-    target,
-    isolated,
-    x,
-  }
+  const result = (b * c) / a
+  return { a, b, c, result, error: null }
 }
 
-const detectTopicKeyword = (text) => {
-  const source = sanitizeInput(text).toLowerCase()
-  if (!source) {
-    return null
-  }
+const detectPercentage = (text) => {
+  const source = sanitizeInput(text)
+  if (!source) return null
 
-  if (source.includes('fraccion')) {
-    return 'fracciones'
-  }
-  if (source.includes('proporcion')) {
-    return 'proporciones'
-  }
-  if (source.includes('ecuacion') || source.includes('despeja')) {
-    return 'ecuaciones'
-  }
-  if (source.includes('porcentaje')) {
-    return 'porcentajes'
-  }
-  if (source.includes('area') || source.includes('perimetro') || source.includes('geometria')) {
-    return 'geometria'
+  const patterns = [
+    /(-?\d+(?:[.,]\d+)?)\s*%\s*(?:de|del)\s*(-?\d+(?:[.,]\d+)?)/i,
+    /(-?\d+(?:[.,]\d+)?)\s*por\s*ciento\s*(?:de|del)\s*(-?\d+(?:[.,]\d+)?)/i,
+  ]
+
+  for (const pattern of patterns) {
+    const match = source.match(pattern)
+    if (!match) continue
+
+    const percent = parseNumber(match[1])
+    const base = parseNumber(match[2])
+    if (percent === null || base === null) continue
+
+    return {
+      percent,
+      base,
+      result: (percent / 100) * base,
+    }
   }
 
   return null
 }
 
-const buildTopicHint = (topic) => {
-  if (topic === 'fracciones') {
-    return 'Pista: busca denominador comun antes de sumar o restar fracciones.'
-  }
-  if (topic === 'proporciones') {
-    return 'Pista: confirma si la proporcion es directa o inversa antes de despejar.'
-  }
-  if (topic === 'ecuaciones') {
-    return 'Pista: aplica la misma operacion en ambos lados para despejar la variable.'
-  }
-  if (topic === 'porcentajes') {
-    return 'Pista: convertir porcentaje a decimal suele simplificar el calculo.'
-  }
-  if (topic === 'geometria') {
-    return 'Pista: identifica formula y unidades antes de sustituir valores.'
-  }
-  return 'Pista: identifica datos, operacion y objetivo antes de calcular.'
+const detectTopicKeyword = (text) => {
+  const source = sanitizeInput(text).toLowerCase()
+  if (!source) return null
+
+  if (source.includes('fraccion')) return 'fracciones'
+  if (source.includes('proporcion') || source.includes('proporción')) return 'proporciones'
+  if (source.includes('ecuacion') || source.includes('ecuación')) return 'ecuacion'
+  if (source.includes('porcentaje')) return 'porcentaje'
+  if (source.includes('geometria') || source.includes('geometría')) return 'geometria'
+
+  return null
 }
 
-const buildMathFallbackAnswer = ({ question, lessonContext }) => {
+const buildStepByStepExplanation = ({
+  mode,
+  question,
+  lessonContext,
+  arithmetic = null,
+  ruleOfThree = null,
+  percentage = null,
+  topic = null,
+}) => {
   const safeQuestion = sanitizeInput(question) || 'pregunta no especificada'
   const safeContext = sanitizeInput(lessonContext)
-  const combinedText = `${safeQuestion}\n${safeContext}`.trim()
 
-  const percentage = detectPercentage(combinedText)
-  if (percentage) {
-    const decimal = percentage.percent / 100
+  if (mode === 'arithmetic' && arithmetic) {
+    const symbolMap = {
+      '+': '+',
+      '-': '-',
+      '*': 'x',
+      '/': '/',
+      '^': '^',
+    }
+    const symbol = symbolMap[arithmetic.operator] || arithmetic.operator
+
+    if (arithmetic.error) {
+      return [
+        `Problema detectado: ${arithmetic.rawExpression}.`,
+        `Paso 1: Identifico una ${arithmetic.operation}.`,
+        `Paso 2: Se detecta este problema: ${arithmetic.error}`,
+        'Resultado: no se puede resolver con los valores dados.',
+      ].join('\n')
+    }
+
     return [
-      `Pregunta: ${safeQuestion}.`,
-      `Paso 1: ${formatNumber(percentage.percent)}% = ${formatNumber(decimal)} en decimal.`,
-      `Paso 2: multiplica ${formatNumber(decimal)} x ${formatNumber(percentage.base)}.`,
-      `Paso 3: resultado = ${formatNumber(percentage.result)}.`,
-      ...(safeContext ? [`Contexto: ${safeContext}.`] : []),
+      `Problema detectado: ${arithmetic.rawExpression}.`,
+      `Paso 1: Identifico una ${arithmetic.operation}.`,
+      `Paso 2: Sustituyo valores: ${formatNumber(arithmetic.left)} ${symbol} ${formatNumber(arithmetic.right)}.`,
+      `Paso 3: Calculo el resultado: ${formatNumber(arithmetic.result)}.`,
+      `Resultado final: ${formatNumber(arithmetic.result)}.`,
     ].join('\n')
   }
 
-  const ruleOfThree = detectRuleOfThree(combinedText)
-  if (ruleOfThree) {
+  if (mode === 'rule_of_three' && ruleOfThree) {
     if (ruleOfThree.error) {
       return [
         `Pregunta: ${safeQuestion}.`,
-        'Detecte regla de tres.',
-        `Error: ${ruleOfThree.error}`,
-        ...(safeContext ? [`Contexto: ${safeContext}.`] : []),
+        'Paso 1: Intento aplicar regla de tres.',
+        `Paso 2: ${ruleOfThree.error}`,
+        'Resultado: no se puede resolver hasta corregir los datos.',
       ].join('\n')
     }
 
     return [
       `Pregunta: ${safeQuestion}.`,
-      'Detecte regla de tres.',
-      `Paso 1: plantea ${formatNumber(ruleOfThree.a)} -> ${formatNumber(ruleOfThree.b)} y ${formatNumber(ruleOfThree.c)} -> x.`,
-      `Paso 2: x = (${formatNumber(ruleOfThree.b)} x ${formatNumber(ruleOfThree.c)}) / ${formatNumber(ruleOfThree.a)}.`,
-      `Paso 3: x = ${formatNumber(ruleOfThree.result)}.`,
-      ...(safeContext ? [`Contexto: ${safeContext}.`] : []),
+      `Paso 1: Identifico proporcion: ${formatNumber(ruleOfThree.a)} -> ${formatNumber(ruleOfThree.b)} y ${formatNumber(ruleOfThree.c)} -> x.`,
+      `Paso 2: Aplico formula: x = (${formatNumber(ruleOfThree.b)} x ${formatNumber(ruleOfThree.c)}) / ${formatNumber(ruleOfThree.a)}.`,
+      `Paso 3: Calculo x = ${formatNumber(ruleOfThree.result)}.`,
+      `Resultado final: x = ${formatNumber(ruleOfThree.result)}.`,
     ].join('\n')
   }
 
-  const arithmeticExpression = detectArithmeticExpression(combinedText)
-  if (arithmeticExpression) {
-    const solved = solveArithmetic(arithmeticExpression)
-    if (solved.error) {
-      return [
-        `Problema detectado: ${solved.rawExpression}.`,
-        `Operacion: ${solved.operation}.`,
-        `Error: ${solved.error}`,
-        ...(safeContext ? [`Contexto: ${safeContext}.`] : []),
-      ].join('\n')
-    }
-
-    const symbolMap = { '+': '+', '-': '-', '*': 'x', '/': '/', '^': '^' }
-    const symbol = symbolMap[solved.operator] || solved.operator
-
-    return [
-      `Problema detectado: ${solved.rawExpression}.`,
-      `Paso 1: identifica la ${solved.operation}.`,
-      `Paso 2: sustituye ${formatNumber(solved.left)} ${symbol} ${formatNumber(solved.right)}.`,
-      `Paso 3: resultado = ${formatNumber(solved.result)}.`,
-      ...(safeContext ? [`Contexto: ${safeContext}.`] : []),
-    ].join('\n')
-  }
-
-  const linearEquation = detectLinearEquation(combinedText)
-  if (linearEquation) {
-    const offsetSymbol = linearEquation.offset >= 0 ? '-' : '+'
+  if (mode === 'percentage' && percentage) {
+    const decimal = percentage.percent / 100
     return [
       `Pregunta: ${safeQuestion}.`,
-      'Detecte ecuacion lineal.',
-      `Paso 1: pasa termino independiente: ${formatNumber(linearEquation.target)} ${offsetSymbol} ${formatNumber(Math.abs(linearEquation.offset))} = ${formatNumber(linearEquation.isolated)}.`,
-      `Paso 2: divide por ${formatNumber(linearEquation.coefficient)}.`,
-      `Paso 3: x = ${formatNumber(linearEquation.x)}.`,
-      ...(safeContext ? [`Contexto: ${safeContext}.`] : []),
+      `Paso 1: Convierto porcentaje a decimal: ${formatNumber(percentage.percent)}% = ${formatNumber(decimal)}.`,
+      `Paso 2: Multiplico por la base: ${formatNumber(decimal)} x ${formatNumber(percentage.base)}.`,
+      `Paso 3: Resultado: ${formatNumber(percentage.result)}.`,
+      `Resultado final: ${formatNumber(percentage.percent)}% de ${formatNumber(percentage.base)} es ${formatNumber(percentage.result)}.`,
     ].join('\n')
   }
 
-  const topic = detectTopicKeyword(combinedText)
-  const hint = buildTopicHint(topic)
+  if (mode === 'topic' && topic) {
+    const topicMap = {
+      fracciones: [
+        'Tema detectado: fracciones.',
+        'Paso 1: Verifica que los denominadores sean distintos de 0.',
+        'Paso 2: Usa denominador comun para sumar o restar.',
+        'Paso 3: Simplifica el resultado final.',
+      ],
+      proporciones: [
+        'Tema detectado: proporciones.',
+        'Paso 1: Escribe la relacion entre magnitudes.',
+        'Paso 2: Define si la proporcion es directa o inversa.',
+        'Paso 3: Despeja la variable faltante.',
+      ],
+      ecuacion: [
+        'Tema detectado: ecuacion.',
+        'Paso 1: Agrupa terminos semejantes.',
+        'Paso 2: Aplica operaciones inversas en ambos lados.',
+        'Paso 3: Despeja la variable y verifica.',
+      ],
+      porcentaje: [
+        'Tema detectado: porcentaje.',
+        'Paso 1: Convierte porcentaje a decimal (divide entre 100).',
+        'Paso 2: Multiplica por la cantidad base.',
+        'Paso 3: Interpreta el resultado en contexto.',
+      ],
+      geometria: [
+        'Tema detectado: geometria.',
+        'Paso 1: Identifica la figura y los datos dados.',
+        'Paso 2: Elige la formula adecuada.',
+        'Paso 3: Sustituye unidades correctas y calcula.',
+      ],
+    }
+
+    const lines = topicMap[topic] || [
+      'Tema matematico detectado.',
+      'Paso 1: Organiza los datos.',
+      'Paso 2: Identifica la operacion o formula.',
+      'Paso 3: Resuelve y verifica.',
+    ]
+
+    return [
+      `Pregunta: ${safeQuestion}.`,
+      ...lines,
+      ...(safeContext ? [`Contexto de leccion: ${safeContext}.`] : []),
+    ].join('\n')
+  }
 
   return [
     `Pregunta: ${safeQuestion}.`,
-    hint,
-    'Paso 1: separa los datos conocidos.',
-    'Paso 2: traduce el enunciado a una expresion matematica.',
-    'Paso 3: resuelve y verifica reemplazando el resultado.',
-    ...(safeContext ? [`Contexto: ${safeContext}.`] : []),
+    'No detecte una operacion exacta para resolver automaticamente.',
+    'Guia sugerida:',
+    '1) Escribe la operacion con numeros y simbolos claros.',
+    '2) Indica si es suma, resta, multiplicacion, division, porcentaje o regla de tres.',
+    '3) Agrega datos concretos para poder resolver paso a paso.',
+    ...(safeContext ? [`Contexto recibido: ${safeContext}.`] : []),
   ].join('\n')
 }
 
-const buildFallbackPayload = ({ answer, requestId, fallbackReason }) => {
-  return {
-    answer,
-    source: 'fallback',
-    requestId,
-    fallbackReason,
-  }
-}
+const buildFallbackPayload = ({ answer, requestId, fallbackReason }) => ({
+  answer,
+  source: 'fallback',
+  requestId,
+  fallbackReason,
+})
 
 const sendFallbackResponse = ({ res, answer, requestId, reason, status = 200, details = null }) => {
   const safeAnswer = sanitizeInput(answer) || 'No fue posible generar una explicacion.'
@@ -419,143 +355,11 @@ const sendFallbackResponse = ({ res, answer, requestId, reason, status = 200, de
   )
 }
 
-const buildOllamaPrompt = (question, lessonContext) => {
-  const safeQuestion = sanitizeInput(question)
-  const safeContext = sanitizeInput(lessonContext)
-
-  return [
-    'Eres un tutor de matematicas para estudiantes de habla hispana.',
-    'Responde en espanol claro con pasos numerados.',
-    safeContext ? `Contexto de la leccion: ${safeContext}` : 'Contexto de la leccion: no disponible.',
-    `Pregunta del estudiante: ${safeQuestion}`,
-    'Si faltan datos, dilo de forma breve y pide la informacion minima necesaria.',
-  ].join('\n')
-}
-
-const createOllamaError = (type, message, details = {}) => {
-  const error = new Error(message)
-  error.type = type
-  error.details = details
-  return error
-}
-
-const normalizeOllamaError = (error) => {
-  if (error?.type) {
-    return error
-  }
-
-  if (error?.name === 'AbortError') {
-    return createOllamaError('timeout', `Ollama timeout after ${ollamaTimeoutMs} ms`)
-  }
-
-  const code = error?.cause?.code || error?.code || null
-  if (['ECONNREFUSED', 'ENOTFOUND', 'EHOSTUNREACH', 'ECONNRESET'].includes(code)) {
-    return createOllamaError('ollama_not_running', 'Could not connect to Ollama.', {
-      code,
-      message: error?.message || 'fetch failed',
-    })
-  }
-
-  const message = String(error?.message || 'Unknown Ollama error')
-  if (message.toLowerCase().includes('fetch failed')) {
-    return createOllamaError('ollama_not_running', 'Could not connect to Ollama.', {
-      code,
-      message,
-    })
-  }
-
-  return createOllamaError('request_failed', message, {
-    code,
-    cause: error?.cause ? String(error.cause) : null,
-  })
-}
-
-const callOllama = async (question, lessonContext) => {
-  const controller = new AbortController()
-  const timeoutId = setTimeout(() => {
-    controller.abort()
-  }, ollamaTimeoutMs)
-
-  try {
-    const response = await fetch(ollamaGenerateUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: ollamaModel,
-        prompt: buildOllamaPrompt(question, lessonContext),
-        stream: false,
-      }),
-      signal: controller.signal,
-    })
-
-    const rawBody = await response.text()
-    let payload = null
-
-    if (rawBody) {
-      try {
-        payload = JSON.parse(rawBody)
-      } catch (parseError) {
-        throw createOllamaError('invalid_json', 'Ollama returned invalid JSON.', {
-          status: response.status,
-          rawBody,
-          parseError: parseError.message,
-        })
-      }
-    }
-
-    if (!response.ok) {
-      const ollamaErrorText = String(payload?.error || rawBody || '').toLowerCase()
-      if (
-        /model/.test(ollamaErrorText) &&
-        (/not found/.test(ollamaErrorText) || /pull/.test(ollamaErrorText) || /missing/.test(ollamaErrorText))
-      ) {
-        throw createOllamaError('model_not_installed', `Model "${ollamaModel}" is not installed in Ollama.`, {
-          status: response.status,
-          ollamaError: payload?.error || rawBody || null,
-        })
-      }
-
-      throw createOllamaError('http_error', `Ollama HTTP ${response.status}`, {
-        status: response.status,
-        ollamaError: payload?.error || rawBody || null,
-      })
-    }
-
-    if (typeof payload?.error === 'string' && payload.error.trim()) {
-      const normalizedError = payload.error.toLowerCase()
-      if (
-        /model/.test(normalizedError) &&
-        (/not found/.test(normalizedError) || /pull/.test(normalizedError) || /missing/.test(normalizedError))
-      ) {
-        throw createOllamaError('model_not_installed', `Model "${ollamaModel}" is not installed in Ollama.`, {
-          ollamaError: payload.error,
-        })
-      }
-
-      throw createOllamaError('ollama_error', payload.error, { ollamaError: payload.error })
-    }
-
-    const answer = typeof payload?.response === 'string' ? payload.response.trim() : ''
-    if (!answer) {
-      throw createOllamaError('empty_response', 'Ollama returned an empty response.', {
-        payloadKeys: payload ? Object.keys(payload) : [],
-      })
-    }
-
-    return answer
-  } catch (error) {
-    throw normalizeOllamaError(error)
-  } finally {
-    clearTimeout(timeoutId)
-  }
-}
-
-app.post('/api/ai-help', async (req, res) => {
+app.post('/api/ai-help', (req, res) => {
   const requestId = randomUUID()
   const question = sanitizeInput(req.body?.question)
   const lessonContext = sanitizeInput(req.body?.lessonContext)
+  const analysisText = `${question}\n${lessonContext}`.trim()
 
   console.log(
     `[ai-help][${requestId}] Request received origin=${req.headers.origin || 'unknown'} questionLength=${question.length} contextLength=${lessonContext.length}`,
@@ -564,43 +368,93 @@ app.post('/api/ai-help', async (req, res) => {
   if (!question) {
     return sendFallbackResponse({
       res,
-      answer: 'Necesito una pregunta para ayudarte. Escribe una consulta matematica concreta.',
+      answer: 'Necesito una pregunta para ayudarte. Escribe una operacion matematica concreta.',
       requestId,
       reason: 'missing_question',
     })
   }
 
-  console.log(
-    `[ai-help][${requestId}] Intentando Ollama model=${ollamaModel} url=${ollamaGenerateUrl} timeoutMs=${ollamaTimeoutMs}`,
-  )
-
   try {
-    const ollamaAnswer = await callOllama(question, lessonContext)
-    console.log(`[ai-help][${requestId}] Ollama OK`)
+    const percentage = detectPercentage(analysisText)
+    if (percentage) {
+      return sendFallbackResponse({
+        res,
+        answer: buildStepByStepExplanation({
+          mode: 'percentage',
+          question,
+          lessonContext,
+          percentage,
+        }),
+        requestId,
+        reason: 'percentage_detected',
+      })
+    }
 
-    return res.status(200).json({
-      answer: ollamaAnswer,
-      source: 'ollama',
-      requestId,
-    })
-  } catch (error) {
-    console.warn(`[ai-help][${requestId}] Ollama fallo -> fallback`, {
-      type: error?.type || 'unknown',
-      message: error?.message || 'unknown',
-      details: error?.details || null,
-    })
+    const ruleOfThree = detectRuleOfThree(analysisText)
+    if (ruleOfThree) {
+      return sendFallbackResponse({
+        res,
+        answer: buildStepByStepExplanation({
+          mode: 'rule_of_three',
+          question,
+          lessonContext,
+          ruleOfThree,
+        }),
+        requestId,
+        reason: ruleOfThree.error ? 'rule_of_three_invalid' : 'rule_of_three_detected',
+      })
+    }
 
-    const fallbackAnswer = buildMathFallbackAnswer({ question, lessonContext })
+    const arithmeticExpression = detectArithmeticExpression(analysisText)
+    if (arithmeticExpression) {
+      const solved = solveArithmetic(arithmeticExpression)
+      return sendFallbackResponse({
+        res,
+        answer: buildStepByStepExplanation({
+          mode: 'arithmetic',
+          question,
+          lessonContext,
+          arithmetic: solved,
+        }),
+        requestId,
+        reason: solved.error ? 'arithmetic_invalid' : 'arithmetic_detected',
+      })
+    }
+
+    const topic = detectTopicKeyword(analysisText)
+    if (topic) {
+      return sendFallbackResponse({
+        res,
+        answer: buildStepByStepExplanation({
+          mode: 'topic',
+          question,
+          lessonContext,
+          topic,
+        }),
+        requestId,
+        reason: `topic_${topic}`,
+      })
+    }
 
     return sendFallbackResponse({
       res,
-      answer: fallbackAnswer,
+      answer: buildStepByStepExplanation({
+        mode: 'general',
+        question,
+        lessonContext,
+      }),
       requestId,
-      reason: 'ollama_unavailable',
-      details: {
-        ollamaErrorType: error?.type || 'unknown',
-        ollamaMessage: error?.message || 'unknown',
-      },
+      reason: 'general_guidance',
+    })
+  } catch (error) {
+    console.error(`[ai-help][${requestId}] Processing error:`, error)
+    return sendFallbackResponse({
+      res,
+      answer: 'Ocurrio un error interno procesando la pregunta.',
+      requestId,
+      reason: 'processing_error',
+      details: { message: error?.message || 'Unknown error' },
+      status: 500,
     })
   }
 })
@@ -617,12 +471,11 @@ app.use((error, req, res, next) => {
       return sendFallbackResponse({
         res,
         answer:
-          'No pude leer el JSON enviado. Verifica el formato y vuelve a intentar con { "question": "...", "lessonContext": "..." }.',
+          'No pude leer el JSON enviado. Usa el formato { "question": "...", "lessonContext": "..." }.',
         requestId: randomUUID(),
         reason: 'invalid_json',
       })
     }
-
     res.status(400).json({ error: 'El body debe ser JSON valido.' })
     return
   }
@@ -638,7 +491,6 @@ app.use((error, req, res, next) => {
         status: 403,
       })
     }
-
     res.status(403).json({ error: error.message })
     return
   }
@@ -651,6 +503,7 @@ app.use((error, req, res, next) => {
       requestId: randomUUID(),
       reason: 'unhandled_backend_error',
       details: { message: error?.message || 'Unknown error' },
+      status: 500,
     })
   }
 
@@ -689,14 +542,10 @@ const startServer = async () => {
   console.log(`[backend] Env file: ${envPath}`)
   console.log(`[backend] Boot cwd: ${process.cwd()}`)
   console.log(`[backend] dotenv loaded: ${!dotenvResult.error}`)
-
   if (dotenvResult.error) {
     console.error(`[backend] dotenv error: ${dotenvResult.error.message}`)
   }
-
-  console.log(`[backend] AI mode: ollama (${ollamaModel}) -> fallback local (sin OpenAI)`)
-  console.log(`[backend] Ollama URL: ${ollamaGenerateUrl}`)
-  console.log(`[backend] Ollama timeout: ${ollamaTimeoutMs} ms`)
+  console.log('[backend] AI mode: fallback matematico local (sin IA externa)')
   console.log(`[backend] Target port: ${port}`)
   console.log(`[backend] Allowed frontend origins: ${allowedOrigins.join(', ')}`)
 
