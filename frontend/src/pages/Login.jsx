@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
 
 import { useAuth } from '../context/AuthContext'
@@ -52,25 +52,25 @@ function Login() {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-950 px-6 pt-20 pb-16 text-white">
-      <div className="mx-auto max-w-md rounded-2xl border border-zinc-800 bg-zinc-900/70 p-8 shadow-lg shadow-black/30 backdrop-blur-sm">
+    <div className="cm-shell px-6 pt-20 pb-16">
+      <div className="cm-card mx-auto max-w-md p-8">
         <div className="space-y-6">
-          <h1 className="max-w-2xl text-3xl font-semibold tracking-tight text-white">
+          <h1 className="max-w-2xl text-3xl font-semibold tracking-tight text-coastal-mist">
             {isRegisterMode ? 'Crear cuenta' : 'Login'}
           </h1>
-          <p className="text-zinc-500">
+          <p className="text-coastal-mist/55">
             {isRegisterMode ? 'Crea tu cuenta para comenzar.' : 'Ingresa para continuar tu progreso.'}
           </p>
         </div>
 
         <form className="mt-12 space-y-6" onSubmit={handleSubmit}>
           <label className="block">
-            <span className="mb-2 block text-sm text-zinc-300">Email</span>
+            <span className="mb-2 block text-sm text-coastal-mist/85">Email</span>
             <input
               type="email"
               value={email}
               onChange={(event) => setEmail(event.target.value)}
-              className="w-full rounded-2xl border border-zinc-800 bg-zinc-900 px-3 py-2 text-white outline-none transition-all duration-200 focus:border-indigo-700 focus:ring-1 focus:ring-indigo-500/30"
+              className="cm-input"
               placeholder="tu@email.com"
               autoComplete="email"
               required
@@ -78,12 +78,12 @@ function Login() {
           </label>
 
           <label className="block">
-            <span className="mb-2 block text-sm text-zinc-300">Contrasena</span>
+            <span className="mb-2 block text-sm text-coastal-mist/85">Contrasena</span>
             <input
               type="password"
               value={password}
               onChange={(event) => setPassword(event.target.value)}
-              className="w-full rounded-2xl border border-zinc-800 bg-zinc-900 px-3 py-2 text-white outline-none transition-all duration-200 focus:border-indigo-700 focus:ring-1 focus:ring-indigo-500/30"
+              className="cm-input"
               placeholder="********"
               autoComplete={isRegisterMode ? 'new-password' : 'current-password'}
               minLength={6}
@@ -94,7 +94,7 @@ function Login() {
           <button
             type="submit"
             disabled={submitting}
-            className="w-full rounded-2xl bg-indigo-700 px-6 py-3 text-sm font-semibold tracking-tight transition-all duration-200 hover:translate-y-[-1px] hover:bg-indigo-600 disabled:cursor-not-allowed disabled:opacity-60"
+            className="cm-btn-primary w-full text-sm"
           >
             {submitting ? 'Procesando...' : isRegisterMode ? 'Registrarme' : 'Entrar'}
           </button>
@@ -106,7 +106,7 @@ function Login() {
               setFeedback({ type: '', message: '' })
             }}
             disabled={submitting}
-            className="w-full rounded-2xl border border-zinc-700 px-6 py-3 text-sm font-semibold tracking-tight text-zinc-300 transition-all duration-200 hover:border-indigo-500/50 hover:text-indigo-400 disabled:cursor-not-allowed disabled:opacity-60"
+            className="cm-btn-secondary w-full text-sm"
           >
             {isRegisterMode ? 'Ya tengo cuenta' : 'Crear cuenta'}
           </button>
@@ -116,7 +116,7 @@ function Login() {
               className={`rounded-2xl border px-4 py-3 text-sm ${
                 feedback.type === 'error'
                   ? 'border-red-600/40 bg-red-600/10 text-red-200'
-                  : 'border-emerald-600/40 bg-emerald-600/10 text-emerald-200'
+                  : 'border-verdant-accent/50 bg-verdant-luxe/20 text-verdant-accent'
               }`}
             >
               {feedback.message}
@@ -124,7 +124,7 @@ function Login() {
           )}
         </form>
 
-        <Link to="/" className="mt-12 inline-block text-sm text-zinc-400 transition-all duration-200 hover:text-indigo-400">
+        <Link to="/" className="mt-12 inline-block text-sm text-coastal-mist/75 transition-all duration-200 hover:text-coastal-neon">
           Volver a inicio
         </Link>
       </div>
@@ -133,3 +133,4 @@ function Login() {
 }
 
 export default Login
+

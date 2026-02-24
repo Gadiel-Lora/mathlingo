@@ -1,3 +1,76 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --coastal-midnight: #0b1c2d;
+  --coastal-ocean: #112b3c;
+  --coastal-steel: #1b3a4b;
+  --coastal-wave: #274c77;
+  --coastal-mist: #eaf4f4;
+  --coastal-neon: #3da9fc;
+
+  --verdant-emerald: #0b3d2e;
+  --verdant-jade: #14532d;
+  --verdant-luxe: #1f7a4c;
+  --verdant-accent: #3fa34d;
+  --verdant-olive: #233b2f;
+  --verdant-gold: #c6a75e;
+
+  --coastal-backdrop:
+    radial-gradient(circle at 14% 8%, rgba(61, 169, 252, 0.14), transparent 38%),
+    radial-gradient(circle at 86% 4%, rgba(198, 167, 94, 0.08), transparent 34%),
+    linear-gradient(145deg, #0b1c2d 0%, #112b3c 56%, #1b3a4b 100%);
+}
+
+@layer base {
+  html,
+  body,
+  #root {
+    min-height: 100%;
+  }
+
+  body {
+    margin: 0;
+    @apply bg-coastal-midnight text-coastal-mist antialiased;
+    background-image: var(--coastal-backdrop);
+    background-attachment: fixed;
+    font-family: "Sora", "Manrope", "Segoe UI", sans-serif;
+  }
+}
+
+@layer components {
+  .cm-shell {
+    @apply min-h-screen text-coastal-mist;
+    background-image: var(--coastal-backdrop);
+  }
+
+  .cm-navbar {
+    @apply border-b border-coastal-steel/80 bg-coastal-midnight/85 backdrop-blur-xl;
+    box-shadow: 0 12px 36px rgba(5, 17, 30, 0.42);
+  }
+
+  .cm-card {
+    @apply rounded-2xl border border-coastal-steel bg-coastal-ocean/70 shadow-coastal backdrop-blur-sm;
+  }
+
+  .cm-btn-primary {
+    @apply inline-block rounded-2xl bg-coastal-wave px-6 py-3 font-semibold tracking-tight text-coastal-mist transition-all duration-200 hover:-translate-y-0.5 hover:bg-coastal-neon hover:text-coastal-midnight focus:outline-none focus:ring-2 focus:ring-coastal-neon/45 disabled:cursor-not-allowed disabled:opacity-60;
+  }
+
+  .cm-btn-secondary {
+    @apply inline-block rounded-2xl border border-verdant-jade/70 bg-verdant-emerald/25 px-6 py-3 font-semibold tracking-tight text-coastal-mist transition-all duration-200 hover:-translate-y-0.5 hover:border-verdant-accent/70 hover:bg-verdant-luxe/30 hover:text-verdant-accent focus:outline-none focus:ring-2 focus:ring-verdant-accent/35 disabled:cursor-not-allowed disabled:opacity-60;
+  }
+
+  .cm-input {
+    @apply w-full rounded-2xl border border-coastal-steel bg-coastal-ocean px-3 py-2 text-coastal-mist outline-none transition-all duration-200 focus:border-coastal-neon focus:ring-2 focus:ring-coastal-neon/25;
+  }
+
+  .cm-loader {
+    @apply inline-block h-4 w-4 animate-spin rounded-full border-2 border-coastal-wave border-t-verdant-accent;
+  }
+
+  .cm-gold-detail {
+    color: var(--verdant-gold);
+  }
+}

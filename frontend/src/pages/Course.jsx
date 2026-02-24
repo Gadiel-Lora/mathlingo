@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+﻿import { useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 
 import brainLogo from '../assets/brain-logo.png'
@@ -116,9 +116,9 @@ function Course() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-zinc-950 px-6 pt-20 pb-16 text-white">
-        <div className="mx-auto max-w-5xl rounded-2xl border border-zinc-800 bg-zinc-900/70 p-8 text-center shadow-lg shadow-black/30 backdrop-blur-sm">
-          <p className="text-zinc-400">Cargando curso...</p>
+      <div className="cm-shell px-6 pt-20 pb-16">
+        <div className="cm-card mx-auto max-w-5xl p-8 text-center">
+          <p className="text-coastal-mist/75">Cargando curso...</p>
         </div>
       </div>
     )
@@ -126,14 +126,11 @@ function Course() {
 
   if (error || !course) {
     return (
-      <div className="min-h-screen bg-zinc-950 px-6 pt-20 pb-16 text-white">
-        <div className="mx-auto max-w-5xl space-y-6 rounded-2xl border border-zinc-800 bg-zinc-900/70 p-8 text-center shadow-lg shadow-black/30 backdrop-blur-sm">
-          <h1 className="text-2xl font-semibold tracking-tight text-white">No se pudo abrir el curso</h1>
-          <p className="text-zinc-400">{error || 'Curso no encontrado.'}</p>
-          <Link
-            to="/dashboard"
-            className="inline-block rounded-2xl bg-indigo-700 px-6 py-3 font-semibold tracking-tight text-white transition-all duration-200 hover:translate-y-[-1px] hover:bg-indigo-600"
-          >
+      <div className="cm-shell px-6 pt-20 pb-16">
+        <div className="cm-card mx-auto max-w-5xl space-y-6 p-8 text-center">
+          <h1 className="text-2xl font-semibold tracking-tight text-coastal-mist">No se pudo abrir el curso</h1>
+          <p className="text-coastal-mist/75">{error || 'Curso no encontrado.'}</p>
+          <Link to="/dashboard" className="cm-btn-primary">
             Volver al dashboard
           </Link>
         </div>
@@ -142,16 +139,16 @@ function Course() {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-white">
-      <header className="border-b border-zinc-800 bg-zinc-950/90 backdrop-blur">
+    <div className="cm-shell">
+      <header className="cm-navbar">
         <nav className="mx-auto flex h-16 max-w-5xl items-center justify-between px-6">
           <Link
             to="/dashboard"
-            className="text-lg font-semibold tracking-wide text-indigo-400 transition-all duration-200 hover:opacity-90 sm:text-xl"
+            className="text-lg font-semibold tracking-wide text-coastal-neon transition-all duration-200 hover:opacity-90 sm:text-xl"
           >
             Mathlingo
           </Link>
-          <Link to="/dashboard" className="text-sm font-semibold tracking-tight text-zinc-400 transition-all duration-200 hover:text-indigo-400">
+          <Link to="/dashboard" className="cm-btn-secondary bg-transparent px-4 py-2 text-sm">
             Dashboard
           </Link>
         </nav>
@@ -160,8 +157,8 @@ function Course() {
       <main className="mx-auto max-w-5xl px-6 pt-20 pb-16">
         <section className="mx-auto mb-12 max-w-2xl space-y-6 text-center">
           <img src={brainLogo} alt="Mathlingo brain logo" className="mx-auto w-full max-w-24 drop-shadow-2xl" />
-          <h1 className="text-3xl font-semibold tracking-tight text-white">{course.title}</h1>
-          <p className="text-zinc-400">{course.description}</p>
+          <h1 className="text-3xl font-semibold tracking-tight text-coastal-mist">{course.title}</h1>
+          <p className="text-coastal-mist/75">{course.description}</p>
         </section>
 
         <section className="mt-12 space-y-6">
@@ -172,15 +169,15 @@ function Course() {
                 if (lesson.locked) return
                 navigate(`/lesson/${lesson.id}`)
               }}
-              className={`rounded-2xl border border-zinc-800 p-6 shadow-lg shadow-black/30 backdrop-blur-sm ${
+              className={`cm-card p-6 ${
                 lesson.locked
-                  ? 'cursor-not-allowed bg-zinc-900/70 opacity-50'
-                  : 'cursor-pointer bg-zinc-900/70 transition-all duration-200 hover:bg-zinc-800'
+                  ? 'cursor-not-allowed bg-coastal-ocean/70 opacity-50'
+                  : 'cursor-pointer bg-coastal-ocean/70 transition-all duration-200 hover:-translate-y-0.5 hover:bg-coastal-steel/80'
               }`}
             >
-              <p className="text-xs font-semibold tracking-wide text-zinc-500">LECCION {index + 1}</p>
+              <p className="text-xs font-semibold tracking-wide text-coastal-mist/55">LECCION {index + 1}</p>
               <h2 className="mt-2 text-xl font-semibold tracking-tight">{lesson.title}</h2>
-              <p className="mt-2 text-sm text-zinc-400">
+              <p className="mt-2 text-sm text-coastal-mist/75">
                 {lesson.locked ? 'Bloqueada' : lesson.completed ? 'Completada' : 'Lista para continuar'}
               </p>
             </article>
@@ -192,3 +189,4 @@ function Course() {
 }
 
 export default Course
+

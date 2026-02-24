@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+﻿import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 
 import brainLogo from '../assets/brain-logo.png'
@@ -255,9 +255,9 @@ function Lesson() {
 
   if (loadingLesson) {
     return (
-      <div className="min-h-screen bg-zinc-950 px-6 pt-20 pb-16 text-white">
-        <div className="mx-auto max-w-3xl rounded-2xl border border-zinc-800 bg-zinc-900/70 p-8 text-center shadow-lg shadow-black/30 backdrop-blur-sm">
-          <p className="text-zinc-400">Cargando leccion...</p>
+      <div className="cm-shell px-6 pt-20 pb-16">
+        <div className="cm-card mx-auto max-w-3xl p-8 text-center">
+          <p className="text-coastal-mist/75">Cargando leccion...</p>
         </div>
       </div>
     )
@@ -265,14 +265,11 @@ function Lesson() {
 
   if (!lesson || lessonError || questions.length === 0) {
     return (
-      <div className="min-h-screen bg-zinc-950 px-6 pt-20 pb-16 text-white">
-        <div className="mx-auto max-w-3xl space-y-6 rounded-2xl border border-zinc-800 bg-zinc-900/70 p-8 text-center shadow-lg shadow-black/30 backdrop-blur-sm">
-          <h1 className="mx-auto max-w-2xl text-2xl font-semibold tracking-tight text-white">Leccion no disponible</h1>
-          <p className="text-zinc-400">{lessonError || 'No hay preguntas disponibles para esta leccion.'}</p>
-          <Link
-            to="/dashboard"
-            className="inline-block rounded-2xl bg-indigo-700 px-6 py-3 font-semibold tracking-tight transition-all duration-200 hover:translate-y-[-1px] hover:bg-indigo-600"
-          >
+      <div className="cm-shell px-6 pt-20 pb-16">
+        <div className="cm-card mx-auto max-w-3xl space-y-6 p-8 text-center">
+          <h1 className="mx-auto max-w-2xl text-2xl font-semibold tracking-tight text-coastal-mist">Leccion no disponible</h1>
+          <p className="text-coastal-mist/75">{lessonError || 'No hay preguntas disponibles para esta leccion.'}</p>
+          <Link to="/dashboard" className="cm-btn-primary">
             Volver al dashboard
           </Link>
         </div>
@@ -360,21 +357,21 @@ function Lesson() {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-950 px-6 pt-20 pb-16 text-white">
+    <div className="cm-shell px-6 pt-20 pb-16">
       <div className="mx-auto max-w-3xl">
         <img src={brainLogo} alt="Mathlingo brain logo" className="mx-auto w-full max-w-24 drop-shadow-2xl" />
 
         {!completed ? (
-          <section className="mt-12 space-y-6 rounded-2xl border border-zinc-800 bg-zinc-900/70 p-8 shadow-lg shadow-black/30 backdrop-blur-sm">
-            <h1 className="mx-auto max-w-2xl text-3xl font-semibold tracking-tight text-white">{lesson.title}</h1>
+          <section className="cm-card mt-12 space-y-6 p-8">
+            <h1 className="mx-auto max-w-2xl text-3xl font-semibold tracking-tight text-coastal-mist">{lesson.title}</h1>
 
             <div className="space-y-6">
-              <p className="text-sm text-zinc-400">
+              <p className="text-sm text-coastal-mist/75">
                 Progreso: {currentQuestionIndex}/{totalQuestions}
               </p>
-              <div className="h-4 w-full rounded-full bg-zinc-800">
+              <div className="h-4 w-full rounded-full bg-coastal-steel">
                 <div
-                  className="h-4 rounded-full bg-indigo-700 transition-all duration-500"
+                  className="h-4 rounded-full bg-coastal-wave transition-all duration-500"
                   style={{ width: `${progress}%` }}
                 />
               </div>
@@ -387,11 +384,11 @@ function Lesson() {
                 type="button"
                 onClick={askAI}
                 disabled={aiLoading}
-                className="inline-flex items-center rounded-2xl border border-zinc-700 px-4 py-2 text-sm font-semibold tracking-tight text-zinc-200 transition-all duration-200 hover:border-indigo-500/50 hover:text-indigo-400 disabled:cursor-not-allowed disabled:opacity-60"
+                className="cm-btn-secondary inline-flex items-center px-4 py-2 text-sm"
               >
                 {aiLoading ? (
                   <>
-                    <span className="mr-2 inline-block h-4 w-4 animate-spin rounded-full border-2 border-zinc-500 border-t-indigo-400" />
+                    <span className="cm-loader mr-2" />
                     Procesando...
                   </>
                 ) : (
@@ -406,9 +403,9 @@ function Lesson() {
               )}
 
               {aiAnswer && (
-                <div className="rounded-2xl border border-zinc-800 bg-zinc-900/70 p-4 shadow-lg shadow-black/30 backdrop-blur-sm">
-                  <p className="text-xs font-semibold tracking-wide text-indigo-400">AYUDA IA</p>
-                  <p className="mt-2 whitespace-pre-wrap text-sm leading-6 text-zinc-200">{aiAnswer}</p>
+                <div className="cm-card p-4">
+                  <p className="text-xs font-semibold tracking-wide text-verdant-accent">AYUDA IA</p>
+                  <p className="mt-2 whitespace-pre-wrap text-sm leading-6 text-coastal-mist">{aiAnswer}</p>
                 </div>
               )}
             </div>
@@ -420,9 +417,9 @@ function Lesson() {
                 const selectedWrong = showFeedback && isSelected && !isCorrect
                 const shouldHighlightCorrect = showFeedback && isCorrect
 
-                let stateClass = 'border border-zinc-800 bg-zinc-900 shadow-lg shadow-black/30 hover:bg-zinc-800'
+                let stateClass = 'border border-coastal-steel bg-coastal-ocean shadow-coastal hover:bg-coastal-steel/80'
                 if (selectedWrong) stateClass = 'border border-red-600/40 bg-red-600/10'
-                if (shouldHighlightCorrect) stateClass = 'border border-emerald-600/40 bg-emerald-600/10'
+                if (shouldHighlightCorrect) stateClass = 'border border-verdant-accent/50 bg-verdant-luxe/25'
 
                 return (
                   <button
@@ -441,21 +438,17 @@ function Lesson() {
             </div>
 
             {showFeedback && (
-              <button
-                type="button"
-                onClick={handleNext}
-                className="rounded-2xl bg-indigo-700 px-6 py-3 font-semibold tracking-tight transition-all duration-200 hover:translate-y-[-1px] hover:bg-indigo-600"
-              >
+              <button type="button" onClick={handleNext} className="cm-btn-primary">
                 Siguiente
               </button>
             )}
           </section>
         ) : (
-          <section className="mt-12 space-y-6 rounded-2xl border border-zinc-800 bg-zinc-900/70 p-8 text-center shadow-lg shadow-black/30 backdrop-blur-sm transition-all duration-500">
-            <h2 className="mx-auto max-w-2xl text-3xl font-semibold tracking-tight text-white">Leccion completada</h2>
-            <p className="text-2xl font-semibold text-indigo-400">+20 XP</p>
+          <section className="cm-card mt-12 space-y-6 p-8 text-center transition-all duration-500">
+            <h2 className="mx-auto max-w-2xl text-3xl font-semibold tracking-tight text-coastal-mist">Leccion completada</h2>
+            <p className="text-2xl font-semibold text-coastal-neon">+20 XP</p>
             {leveledUp && (
-              <p className="text-3xl font-semibold tracking-tight text-emerald-400 transition-all duration-500">
+              <p className="text-3xl font-semibold tracking-tight text-verdant-accent transition-all duration-500">
                 Subiste a Nivel {level}
               </p>
             )}
@@ -463,14 +456,11 @@ function Lesson() {
               <button
                 type="button"
                 onClick={() => navigate(`/course/${lesson.courseId}`)}
-                className="inline-block rounded-2xl border border-zinc-700 px-6 py-3 font-semibold tracking-tight text-zinc-200 transition-all duration-200 hover:border-indigo-500/50 hover:text-indigo-400"
+                className="cm-btn-secondary"
               >
                 Volver al curso
               </button>
-              <Link
-                to="/dashboard"
-                className="inline-block rounded-2xl bg-indigo-700 px-6 py-3 font-semibold tracking-tight transition-all duration-200 hover:translate-y-[-1px] hover:bg-indigo-600"
-              >
+              <Link to="/dashboard" className="cm-btn-primary">
                 Ir al dashboard
               </Link>
             </div>
@@ -482,3 +472,4 @@ function Lesson() {
 }
 
 export default Lesson
+
