@@ -334,7 +334,7 @@ function Lesson() {
           .map((value) => String(value).trim())
           .join(' | ')
         const message = backendError || `Error HTTP ${response.status}`
-        const providerStatus = payload?.providerStatus ? ` (OpenAI ${payload.providerStatus})` : ''
+        const providerStatus = payload?.providerStatus ? ` (status proveedor ${payload.providerStatus})` : ''
         const requestId = payload?.requestId ? ` [requestId: ${payload.requestId}]` : ''
         throw new Error(`${message}${providerStatus}${requestId}`)
       }

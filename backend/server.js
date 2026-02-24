@@ -5,7 +5,6 @@ import { randomUUID } from 'node:crypto'
 import net from 'node:net'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import OpenAI from 'openai'
 
 const serverFilePath = fileURLToPath(import.meta.url)
 const serverDir = dirname(serverFilePath)
@@ -14,19 +13,10 @@ const dotenvResult = dotenv.config({ path: envPath })
 
 const app = express()
 const port = Number(process.env.PORT || 4000)
-const openAIModel = process.env.OPENAI_MODEL || 'gpt-4o-mini'
-const openAIKey = String(process.env.OPENAI_API_KEY || '').trim()
-const openAIKeyLoaded = Boolean(openAIKey)
 const allowedOrigins = (process.env.FRONTEND_URL || 'http://localhost:5173')
   .split(',')
   .map((origin) => origin.trim())
   .filter(Boolean)
-
-const client = openAIKeyLoaded
-  ? new OpenAI({
-      apiKey: openAIKey,
-    })
-  : null
 
 const corsOptions = {
   origin(origin, callback) {
@@ -57,28 +47,6 @@ app.use(
 app.options('/api/ai-help', cors(corsOptions))
 app.use(express.json({ limit: '1mb' }))
 
-const getOpenAIErrorDetails = (error) => {
-  return {
-    status: Number(error?.status) || null,
-    code: error?.code || error?.error?.code || null,
-    type: error?.type || error?.error?.type || null,
-    message: String(error?.error?.message || error?.message || 'Unknown OpenAI error.'),
-    requestId: error?.requestID || null,
-  }
-}
-
-const getFallbackReasonFromOpenAIError = (details) => {
-  if (details.status === 429 || details.code === 'insufficient_quota') {
-    return 'openai_quota_or_rate_limit'
-  }
-
-  if (details.status && details.status >= 500) {
-    return 'openai_provider_error'
-  }
-
-  return 'openai_request_failed'
-}
-
 const buildFallbackAnswer = ({ question, lessonContext }) => {
   const safeQuestion = String(question || '').trim() || 'pregunta no especificada'
   const safeContext = String(lessonContext || '').trim()
@@ -92,71 +60,52 @@ const buildFallbackPayload = ({ question, lessonContext, requestId, reason }) =>
     answer: buildFallbackAnswer({ question, lessonContext }),
     requestId,
     source: 'fallback',
-    fallbackReason: reason,
+    ...(reason ? { fallbackReason: reason } : {}),
   }
 }
 
-app.post('/api/ai-help', async (req, res) => {
+const sendFallbackResponse = ({ res, question, lessonContext, requestId, reason, status = 200, details = null }) => {
+  if (details) {
+    console.warn(`[ai-help][${requestId}] Fallback reason=${reason}`, details)
+  } else {
+    console.warn(`[ai-help][${requestId}] Fallback reason=${reason}`)
+  }
+  return res.status(status).json(
+    buildFallbackPayload({
+      question,
+      lessonContext,
+      requestId,
+      reason,
+    }),
+  )
+}
+
+app.post('/api/ai-help', (req, res) => {
   const requestId = randomUUID()
   const question = String(req.body?.question ?? '').trim()
   const lessonContext = String(req.body?.lessonContext ?? '').trim()
-
-  const sendFallback = ({ reason, details }) => {
-    const payload = buildFallbackPayload({ question, lessonContext, requestId, reason })
-    if (details) {
-      console.warn(`[ai-help][${requestId}] Fallback enabled reason=${reason}`, details)
-    } else {
-      console.warn(`[ai-help][${requestId}] Fallback enabled reason=${reason}`)
-    }
-    return res.status(200).json(payload)
-  }
 
   console.log(
     `[ai-help][${requestId}] Request received origin=${req.headers.origin || 'unknown'} questionLength=${question.length} contextLength=${lessonContext.length}`,
   )
 
   if (!question) {
-    return sendFallback({ reason: 'missing_question' })
-  }
-
-  if (!client) {
-    return sendFallback({ reason: 'missing_openai_api_key' })
-  }
-
-  try {
-    console.log(`[ai-help][${requestId}] Sending request to OpenAI model=${openAIModel}`)
-    const completion = await client.chat.completions.create({
-      model: openAIModel,
-      temperature: 0.4,
-      messages: [
-        {
-          role: 'system',
-          content: 'Eres un tutor experto en matematicas que explica paso a paso.',
-        },
-        {
-          role: 'user',
-          content: `Contexto de leccion:\n${lessonContext || 'Sin contexto'}\n\nPregunta:\n${question}`,
-        },
-      ],
-    })
-
-    const answer = completion.choices?.[0]?.message?.content?.trim()
-    if (!answer) {
-      return sendFallback({ reason: 'empty_openai_answer' })
-    }
-
-    console.log(`[ai-help][${requestId}] OpenAI response ok answerLength=${answer.length} model=${openAIModel}`)
-    return res.status(200).json({
-      answer,
+    return sendFallbackResponse({
+      res,
+      question,
+      lessonContext,
       requestId,
-      source: 'openai',
+      reason: 'missing_question',
     })
-  } catch (error) {
-    const details = getOpenAIErrorDetails(error)
-    const reason = getFallbackReasonFromOpenAIError(details)
-    console.error(`[ai-help][${requestId}] OpenAI request failed`, details)
-    return sendFallback({ reason, details })
   }
+
+  return sendFallbackResponse({
+    res,
+    question,
+    lessonContext,
+    requestId,
+    reason: 'free_fallback_mode',
+  })
 })
 
 app.use((error, req, res, next) => {
@@ -168,17 +117,13 @@ app.use((error, req, res, next) => {
   if (error?.type === 'entity.parse.failed') {
     console.error('[backend] Invalid JSON body:', error.message)
     if (req.path === '/api/ai-help') {
-      const requestId = randomUUID()
-      console.warn(`[ai-help][${requestId}] Fallback enabled reason=invalid_json`)
-      res.status(200).json(
-        buildFallbackPayload({
-          question: 'JSON invalido',
-          lessonContext: '',
-          requestId,
-          reason: 'invalid_json',
-        }),
-      )
-      return
+      return sendFallbackResponse({
+        res,
+        question: 'JSON invalido',
+        lessonContext: '',
+        requestId: randomUUID(),
+        reason: 'invalid_json',
+      })
     }
     res.status(400).json({ error: 'El body debe ser JSON valido.' })
     return
@@ -187,17 +132,14 @@ app.use((error, req, res, next) => {
   if (String(error?.message || '').startsWith('CORS blocked origin:')) {
     console.error('[backend] CORS error:', error.message)
     if (req.path === '/api/ai-help') {
-      const requestId = randomUUID()
-      console.warn(`[ai-help][${requestId}] Fallback enabled reason=cors_blocked`)
-      res.status(403).json(
-        buildFallbackPayload({
-          question: 'No fue posible completar la solicitud por CORS.',
-          lessonContext: '',
-          requestId,
-          reason: 'cors_blocked',
-        }),
-      )
-      return
+      return sendFallbackResponse({
+        res,
+        question: 'No fue posible completar la solicitud por CORS.',
+        lessonContext: '',
+        requestId: randomUUID(),
+        reason: 'cors_blocked',
+        status: 403,
+      })
     }
     res.status(403).json({ error: error.message })
     return
@@ -205,17 +147,14 @@ app.use((error, req, res, next) => {
 
   console.error('[backend] Unhandled error:', error)
   if (req.path === '/api/ai-help') {
-    const requestId = randomUUID()
-    console.warn(`[ai-help][${requestId}] Fallback enabled reason=unhandled_backend_error`)
-    res.status(200).json(
-      buildFallbackPayload({
-        question: 'No fue posible completar la solicitud.',
-        lessonContext: '',
-        requestId,
-        reason: 'unhandled_backend_error',
-      }),
-    )
-    return
+    return sendFallbackResponse({
+      res,
+      question: 'No fue posible completar la solicitud.',
+      lessonContext: '',
+      requestId: randomUUID(),
+      reason: 'unhandled_backend_error',
+      details: { message: error?.message || 'Unknown error' },
+    })
   }
 
   res.status(500).json({ error: 'Error interno del backend.' })
@@ -256,8 +195,7 @@ const startServer = async () => {
   if (dotenvResult.error) {
     console.error(`[backend] dotenv error: ${dotenvResult.error.message}`)
   }
-  console.log(`[backend] OPENAI_API_KEY loaded: ${openAIKeyLoaded}`)
-  console.log(`[backend] OpenAI model: ${openAIModel}`)
+  console.log('[backend] AI mode: gratuito fallback (sin OpenAI)')
   console.log(`[backend] Target port: ${port}`)
   console.log(`[backend] Allowed frontend origins: ${allowedOrigins.join(', ')}`)
 
