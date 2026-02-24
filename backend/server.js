@@ -17,6 +17,11 @@ const allowedOrigins = (process.env.FRONTEND_URL || 'http://localhost:5173')
   .split(',')
   .map((origin) => origin.trim())
   .filter(Boolean)
+const ollamaBaseUrl = 'http://localhost:11434'
+const ollamaGenerateUrl = `${ollamaBaseUrl}/api/generate`
+const ollamaModel = 'llama3'
+const ollamaTimeoutMs = 10000
+const ollamaTemperature = Number(process.env.OLLAMA_TEMPERATURE || 0.2)
 
 const corsOptions = {
   origin(origin, callback) {
@@ -326,6 +331,59 @@ const buildStepByStepExplanation = ({
   ].join('\n')
 }
 
+const buildMathFallbackAnswer = ({ question, lessonContext }) => {
+  const safeQuestion = sanitizeInput(question) || 'pregunta no especificada'
+  const safeContext = sanitizeInput(lessonContext)
+  const analysisText = `${safeQuestion}\n${safeContext}`.trim()
+
+  const percentage = detectPercentage(analysisText)
+  if (percentage) {
+    return buildStepByStepExplanation({
+      mode: 'percentage',
+      question: safeQuestion,
+      lessonContext: safeContext,
+      percentage,
+    })
+  }
+
+  const ruleOfThree = detectRuleOfThree(analysisText)
+  if (ruleOfThree) {
+    return buildStepByStepExplanation({
+      mode: 'rule_of_three',
+      question: safeQuestion,
+      lessonContext: safeContext,
+      ruleOfThree,
+    })
+  }
+
+  const arithmeticExpression = detectArithmeticExpression(analysisText)
+  if (arithmeticExpression) {
+    const arithmetic = solveArithmetic(arithmeticExpression)
+    return buildStepByStepExplanation({
+      mode: 'arithmetic',
+      question: safeQuestion,
+      lessonContext: safeContext,
+      arithmetic,
+    })
+  }
+
+  const topic = detectTopicKeyword(analysisText)
+  if (topic) {
+    return buildStepByStepExplanation({
+      mode: 'topic',
+      question: safeQuestion,
+      lessonContext: safeContext,
+      topic,
+    })
+  }
+
+  return buildStepByStepExplanation({
+    mode: 'general',
+    question: safeQuestion,
+    lessonContext: safeContext,
+  })
+}
+
 const buildFallbackPayload = ({ answer, requestId, fallbackReason }) => ({
   answer,
   source: 'fallback',
@@ -352,11 +410,155 @@ const sendFallbackResponse = ({ res, answer, requestId, reason, status = 200, de
   )
 }
 
-app.post('/api/ai-help', (req, res) => {
+const buildTutorPrompt = (question, lessonContext) => {
+  const safeQuestion = sanitizeInput(question) || 'pregunta no especificada'
+  const safeContext = sanitizeInput(lessonContext)
+
+  return [
+    'Eres un tutor experto en matematicas.',
+    'Nivel: educacion basica y secundaria.',
+    'Estilo: claro, estructurado, pedagogico y directo.',
+    '',
+    'Reglas obligatorias:',
+    '1) Explica siempre paso a paso con lista numerada.',
+    '2) Nunca des solo el resultado final.',
+    '3) Usa lenguaje sencillo.',
+    '4) Si la pregunta es una operacion simple, igual explica los pasos.',
+    '5) Si la pregunta es conceptual, explica el concepto y agrega un ejemplo corto.',
+    '6) Evita respuestas largas, texto redundante o explicaciones abstractas sin ejemplo.',
+    '',
+    'Formato obligatorio de salida:',
+    'Paso 1: ...',
+    'Paso 2: ...',
+    'Resultado: ...',
+    'Resumen: ...',
+    '',
+    safeContext ? `Contexto de leccion: ${safeContext}` : 'Contexto de leccion: no disponible.',
+    `Pregunta del estudiante: ${safeQuestion}`,
+  ].join('\n')
+}
+
+const createOllamaError = (type, message, details = null) => {
+  const error = new Error(message)
+  error.type = type
+  error.details = details
+  return error
+}
+
+const normalizeOllamaError = (error) => {
+  if (error?.type) {
+    return error
+  }
+
+  if (error?.name === 'AbortError') {
+    return createOllamaError('timeout', `Ollama timeout after ${ollamaTimeoutMs} ms`)
+  }
+
+  const message = String(error?.message || '').toLowerCase()
+  const code = error?.cause?.code || error?.code || null
+  if (
+    ['ECONNREFUSED', 'ENOTFOUND', 'EHOSTUNREACH', 'ECONNRESET'].includes(code) ||
+    message.includes('fetch failed')
+  ) {
+    return createOllamaError('ollama_not_running', 'Ollama no esta disponible.', {
+      code,
+      message: error?.message || 'fetch failed',
+    })
+  }
+
+  return createOllamaError('request_failed', error?.message || 'Ollama request failed.', {
+    code,
+    cause: error?.cause ? String(error.cause) : null,
+  })
+}
+
+const callOllama = async (question, lessonContext) => {
+  const controller = new AbortController()
+  const timeoutId = setTimeout(() => controller.abort(), ollamaTimeoutMs)
+
+  try {
+    const response = await fetch(ollamaGenerateUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: ollamaModel,
+        prompt: buildTutorPrompt(question, lessonContext),
+        stream: false,
+        options: {
+          temperature: ollamaTemperature,
+        },
+      }),
+      signal: controller.signal,
+    })
+
+    const rawBody = await response.text()
+    let payload = null
+
+    if (rawBody) {
+      try {
+        payload = JSON.parse(rawBody)
+      } catch (parseError) {
+        throw createOllamaError('invalid_json', 'Ollama devolvio JSON invalido.', {
+          status: response.status,
+          parseError: parseError.message,
+        })
+      }
+    }
+
+    if (!response.ok) {
+      const errorText = String(payload?.error || rawBody || '').toLowerCase()
+      if (
+        /model/.test(errorText) &&
+        (/not found/.test(errorText) || /missing/.test(errorText) || /pull/.test(errorText))
+      ) {
+        throw createOllamaError('model_not_installed', `Modelo ${ollamaModel} no instalado en Ollama.`, {
+          status: response.status,
+          ollamaError: payload?.error || rawBody || null,
+        })
+      }
+
+      throw createOllamaError('http_error', `Ollama HTTP ${response.status}.`, {
+        status: response.status,
+        ollamaError: payload?.error || rawBody || null,
+      })
+    }
+
+    if (typeof payload?.error === 'string' && payload.error.trim()) {
+      const errorText = payload.error.toLowerCase()
+      if (
+        /model/.test(errorText) &&
+        (/not found/.test(errorText) || /missing/.test(errorText) || /pull/.test(errorText))
+      ) {
+        throw createOllamaError('model_not_installed', `Modelo ${ollamaModel} no instalado en Ollama.`, {
+          ollamaError: payload.error,
+        })
+      }
+      throw createOllamaError('ollama_error', payload.error, {
+        ollamaError: payload.error,
+      })
+    }
+
+    const answer = typeof payload?.response === 'string' ? payload.response.trim() : ''
+    if (!answer) {
+      throw createOllamaError('empty_response', 'Ollama devolvio respuesta vacia.', {
+        payloadKeys: payload ? Object.keys(payload) : [],
+      })
+    }
+
+    return answer
+  } catch (error) {
+    throw normalizeOllamaError(error)
+  } finally {
+    clearTimeout(timeoutId)
+  }
+}
+
+app.post('/api/ai-help', async (req, res) => {
   const requestId = randomUUID()
   const question = sanitizeInput(req.body?.question)
   const lessonContext = sanitizeInput(req.body?.lessonContext)
-  const analysisText = `${question}\n${lessonContext}`.trim()
 
   console.log(
     `[ai-help][${requestId}] Request received origin=${req.headers.origin || 'unknown'} questionLength=${question.length} contextLength=${lessonContext.length}`,
@@ -371,87 +573,34 @@ app.post('/api/ai-help', (req, res) => {
     })
   }
 
+  console.log(
+    `[ai-help][${requestId}] Intentando Ollama model=${ollamaModel} url=${ollamaGenerateUrl} timeoutMs=${ollamaTimeoutMs}`,
+  )
+
   try {
-    const percentage = detectPercentage(analysisText)
-    if (percentage) {
-      return sendFallbackResponse({
-        res,
-        answer: buildStepByStepExplanation({
-          mode: 'percentage',
-          question,
-          lessonContext,
-          percentage,
-        }),
-        requestId,
-        reason: 'percentage_detected',
-      })
-    }
-
-    const ruleOfThree = detectRuleOfThree(analysisText)
-    if (ruleOfThree) {
-      return sendFallbackResponse({
-        res,
-        answer: buildStepByStepExplanation({
-          mode: 'rule_of_three',
-          question,
-          lessonContext,
-          ruleOfThree,
-        }),
-        requestId,
-        reason: ruleOfThree.error ? 'rule_of_three_invalid' : 'rule_of_three_detected',
-      })
-    }
-
-    const arithmeticExpression = detectArithmeticExpression(analysisText)
-    if (arithmeticExpression) {
-      const solved = solveArithmetic(arithmeticExpression)
-      return sendFallbackResponse({
-        res,
-        answer: buildStepByStepExplanation({
-          mode: 'arithmetic',
-          question,
-          lessonContext,
-          arithmetic: solved,
-        }),
-        requestId,
-        reason: solved.error ? 'arithmetic_invalid' : 'arithmetic_detected',
-      })
-    }
-
-    const topic = detectTopicKeyword(analysisText)
-    if (topic) {
-      return sendFallbackResponse({
-        res,
-        answer: buildStepByStepExplanation({
-          mode: 'topic',
-          question,
-          lessonContext,
-          topic,
-        }),
-        requestId,
-        reason: `topic_${topic}`,
-      })
-    }
-
-    return sendFallbackResponse({
-      res,
-      answer: buildStepByStepExplanation({
-        mode: 'general',
-        question,
-        lessonContext,
-      }),
+    const answer = await callOllama(question, lessonContext)
+    console.log(`[ai-help][${requestId}] Ollama OK`)
+    return res.status(200).json({
+      answer,
+      source: 'ollama',
       requestId,
-      reason: 'general_guidance',
     })
   } catch (error) {
-    console.error(`[ai-help][${requestId}] Processing error:`, error)
+    console.warn(`[ai-help][${requestId}] Ollama fallo -> fallback`, {
+      type: error?.type || 'unknown',
+      message: error?.message || 'unknown',
+      details: error?.details || null,
+    })
+
     return sendFallbackResponse({
       res,
-      answer: 'Ocurrio un error interno procesando la pregunta.',
+      answer: buildMathFallbackAnswer({ question, lessonContext }),
       requestId,
-      reason: 'processing_error',
-      details: { message: error?.message || 'Unknown error' },
-      status: 500,
+      reason: 'ollama_unavailable',
+      details: {
+        ollamaErrorType: error?.type || 'unknown',
+        ollamaMessage: error?.message || 'unknown',
+      },
     })
   }
 })
@@ -542,7 +691,10 @@ const startServer = async () => {
   if (dotenvResult.error) {
     console.error(`[backend] dotenv error: ${dotenvResult.error.message}`)
   }
-  console.log('[backend] AI mode: fallback matematico local (sin IA externa)')
+  console.log(`[backend] AI mode: ollama (${ollamaModel}) -> fallback matematico local`)
+  console.log(`[backend] Ollama endpoint: ${ollamaGenerateUrl}`)
+  console.log(`[backend] Ollama timeout: ${ollamaTimeoutMs} ms`)
+  console.log(`[backend] Ollama temperature: ${ollamaTemperature}`)
   console.log(`[backend] Target port: ${port}`)
   console.log(`[backend] Allowed frontend origins: ${allowedOrigins.join(', ')}`)
 
