@@ -2,21 +2,31 @@ import cors from 'cors'
 import dotenv from 'dotenv'
 import express from 'express'
 import { randomUUID } from 'node:crypto'
+import net from 'node:net'
+import { dirname, resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import OpenAI from 'openai'
 
-dotenv.config()
+const serverFilePath = fileURLToPath(import.meta.url)
+const serverDir = dirname(serverFilePath)
+const envPath = resolve(serverDir, '.env')
+const dotenvResult = dotenv.config({ path: envPath })
 
 const app = express()
 const port = Number(process.env.PORT || 4000)
 const openAIModel = process.env.OPENAI_MODEL || 'gpt-4o-mini'
+const openAIKey = String(process.env.OPENAI_API_KEY || '').trim()
+const openAIKeyLoaded = Boolean(openAIKey)
 const allowedOrigins = (process.env.FRONTEND_URL || 'http://localhost:5173')
   .split(',')
   .map((origin) => origin.trim())
   .filter(Boolean)
 
-const client = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-})
+const client = openAIKeyLoaded
+  ? new OpenAI({
+      apiKey: openAIKey,
+    })
+  : null
 
 const corsOptions = {
   origin(origin, callback) {
@@ -109,7 +119,7 @@ app.post('/api/ai-help', async (req, res) => {
     return sendFallback({ reason: 'missing_question' })
   }
 
-  if (!process.env.OPENAI_API_KEY) {
+  if (!client) {
     return sendFallback({ reason: 'missing_openai_api_key' })
   }
 
@@ -211,7 +221,65 @@ app.use((error, req, res, next) => {
   res.status(500).json({ error: 'Error interno del backend.' })
 })
 
-app.listen(port, () => {
-  console.log(`[backend] AI server running on port ${port}`)
+const ensurePortAvailable = (targetPort) => {
+  return new Promise((resolve, reject) => {
+    const tester = net.createServer()
+
+    tester.once('error', (error) => {
+      tester.close()
+      if (error?.code === 'EADDRINUSE') {
+        reject(new Error(`Port ${targetPort} is already in use by another process.`))
+        return
+      }
+      reject(error)
+    })
+
+    tester.once('listening', () => {
+      tester.close((closeError) => {
+        if (closeError) {
+          reject(closeError)
+          return
+        }
+        resolve()
+      })
+    })
+
+    tester.listen(targetPort, '0.0.0.0')
+  })
+}
+
+const startServer = async () => {
+  console.log(`[backend] Boot file: ${serverFilePath}`)
+  console.log(`[backend] Env file: ${envPath}`)
+  console.log(`[backend] Boot cwd: ${process.cwd()}`)
+  console.log(`[backend] dotenv loaded: ${!dotenvResult.error}`)
+  if (dotenvResult.error) {
+    console.error(`[backend] dotenv error: ${dotenvResult.error.message}`)
+  }
+  console.log(`[backend] OPENAI_API_KEY loaded: ${openAIKeyLoaded}`)
+  console.log(`[backend] OpenAI model: ${openAIModel}`)
+  console.log(`[backend] Target port: ${port}`)
   console.log(`[backend] Allowed frontend origins: ${allowedOrigins.join(', ')}`)
-})
+
+  try {
+    await ensurePortAvailable(port)
+  } catch (error) {
+    console.error(`[backend] Startup blocked: ${error.message}`)
+    process.exit(1)
+  }
+
+  const server = app.listen(port, () => {
+    console.log(`[backend] AI server running on port ${port}`)
+  })
+
+  server.on('error', (error) => {
+    if (error?.code === 'EADDRINUSE') {
+      console.error(`[backend] Startup failed: port ${port} already in use.`)
+    } else {
+      console.error('[backend] Startup failed with server error:', error)
+    }
+    process.exit(1)
+  })
+}
+
+void startServer()

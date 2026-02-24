@@ -6,6 +6,18 @@ import { useAuth } from '../context/AuthContext'
 import { supabase } from '../supabase/client'
 
 const AI_API_BASE_URL = (import.meta.env.VITE_AI_API_URL || 'http://localhost:4000').replace(/\/$/, '')
+const AI_HELP_ENDPOINT = `${AI_API_BASE_URL}/api/ai-help`
+
+const parseJsonResponse = async (response) => {
+  const rawBody = await response.text()
+  if (!rawBody) return {}
+
+  try {
+    return JSON.parse(rawBody)
+  } catch {
+    return { error: rawBody }
+  }
+}
 
 const normalizeOptions = (value) => {
   if (!Array.isArray(value)) return []
@@ -304,7 +316,7 @@ function Lesson() {
     try {
       const lessonContext = `Leccion: ${lesson.title}. Pregunta ${currentQuestionIndex + 1} de ${totalQuestions}. Opciones: ${currentQuestion.options.join(', ')}.`
 
-      const response = await fetch(`${AI_API_BASE_URL}/api/ai-help`, {
+      const response = await fetch(AI_HELP_ENDPOINT, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -315,14 +327,33 @@ function Lesson() {
         }),
       })
 
-      const payload = await response.json().catch(() => ({}))
+      const payload = await parseJsonResponse(response)
       if (!response.ok) {
-        throw new Error(payload?.error || 'No se pudo obtener ayuda de IA.')
+        const backendError = [payload?.error, payload?.details]
+          .filter((value) => Boolean(String(value || '').trim()))
+          .map((value) => String(value).trim())
+          .join(' | ')
+        const message = backendError || `Error HTTP ${response.status}`
+        const providerStatus = payload?.providerStatus ? ` (OpenAI ${payload.providerStatus})` : ''
+        const requestId = payload?.requestId ? ` [requestId: ${payload.requestId}]` : ''
+        throw new Error(`${message}${providerStatus}${requestId}`)
       }
 
-      setAiAnswer(String(payload?.answer || '').trim())
+      const answer = String(payload?.answer || '').trim()
+      if (!answer) {
+        throw new Error('El backend respondio sin contenido de ayuda.')
+      }
+
+      setAiAnswer(answer)
     } catch (error) {
-      setAiError(error?.message || 'Error de red al consultar ayuda IA.')
+      const frontendOrigin = typeof window !== 'undefined' ? window.location.origin : 'frontend'
+      const networkError = `No se pudo conectar con ${AI_HELP_ENDPOINT} desde ${frontendOrigin}. Verifica backend y CORS.`
+      if (error instanceof TypeError) {
+        setAiError(networkError)
+      } else {
+        setAiError(error?.message || networkError)
+      }
+      console.error('AI help request failed:', error)
     } finally {
       setAiLoading(false)
     }
