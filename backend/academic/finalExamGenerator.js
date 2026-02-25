@@ -68,6 +68,7 @@ export const generateFinalExam = (grade, options = {}) => {
 
   const generatedFingerprints = new Set()
   const generatedQuestions = []
+  let generatedCount = 0
 
   for (const block of distribution) {
     const count = Math.max(0, Number(block.count) || 0)
@@ -83,6 +84,13 @@ export const generateFinalExam = (grade, options = {}) => {
           grade: gradeData.gradeNumber,
           topic: topicId,
           difficulty,
+          lessonContext: {
+            lessonId: 'final-exam',
+            lessonTitle: blueprint.name || `Examen Final ${gradeData.name}`,
+            lessonSkills: ['evaluacion-final', 'razonamiento'],
+            questionNumber: generatedCount + 1,
+            totalQuestions: targetCount,
+          },
           excludedFingerprints: generatedFingerprints,
         })
         if (generatedFingerprints.has(candidate.fingerprint)) continue
@@ -100,6 +108,7 @@ export const generateFinalExam = (grade, options = {}) => {
         examMode: true,
         allowTutorHelp: false,
       })
+      generatedCount += 1
     }
   }
 
