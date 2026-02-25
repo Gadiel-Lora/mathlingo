@@ -2,6 +2,8 @@
 
 Mathlingo is an educational app with a FastAPI backend (REST API with JWT) and a React + Vite frontend. The backend stays API-only and the frontend consumes it over HTTP.
 
+Project note (2026-02-25): architecture has evolved and now includes a Node academic backend plus shared curriculum package and Supabase-backed frontend progress. See `PROJECT_CONTEXT.md` for the current system map and startup order.
+
 **Architecture**
 1. Backend: FastAPI (REST, JWT, SQLite).
 2. Frontend: React + Vite (API client).
