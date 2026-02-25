@@ -5,11 +5,25 @@ import brainLogo from '../assets/brain-logo.png'
 import QuestionCard from '../components/questions/QuestionCard'
 import { useAuth } from '../context/AuthContext'
 import { useProgress } from '../context/ProgressContext'
-import { decodeLessonRouteId, findLessonContext } from '../lib/academicCurriculum'
+import {
+  decodeLessonRouteId,
+  findLessonContext,
+  getUnlockedGradeIds,
+  isFinalExamUnlockedInGrade,
+  isLessonUnlockedInGrade,
+} from '../lib/academicCurriculum'
 import { academicApi } from '../services/academicApi'
 
 const PRACTICE_QUESTION_COUNT = Number(import.meta.env.VITE_PRACTICE_QUESTION_COUNT || 6)
 const EXAM_QUESTION_COUNT = Number(import.meta.env.VITE_EXAM_QUESTION_COUNT || 10)
+const PRACTICE_PASS_RATE = Number(import.meta.env.VITE_PRACTICE_PASS_RATE || 0.7)
+const EXAM_PASS_RATE = Number(import.meta.env.VITE_EXAM_PASS_RATE || 0.75)
+
+const clampPassRate = (value, fallback) => {
+  const parsed = Number(value)
+  if (!Number.isFinite(parsed)) return fallback
+  return Math.max(0.5, Math.min(1, parsed))
+}
 
 const getQuestionTypeByDifficulty = (difficulty) => {
   return Number(difficulty) >= 3 ? 'input' : 'multiple-choice'
@@ -33,7 +47,7 @@ function Lesson() {
   const navigate = useNavigate()
   const { id } = useParams()
   const { user } = useAuth()
-  const { completeLesson, xp, level } = useProgress()
+  const { completeLesson, completedLessons, loadingProgress, xp, level } = useProgress()
 
   const learnerId = useMemo(() => {
     if (user?.id) return String(user.id)
@@ -72,6 +86,7 @@ function Lesson() {
   const [finalExamQuestions, setFinalExamQuestions] = useState([])
   const [finalExamRules, setFinalExamRules] = useState(null)
   const [finalExamOutcome, setFinalExamOutcome] = useState(null)
+  const [lessonOutcome, setLessonOutcome] = useState(null)
 
   const questionStartedAtRef = useRef(Date.now())
   const lessonStatsRef = useRef({
@@ -81,8 +96,13 @@ function Lesson() {
     streak: 0,
   })
   const resolvedQuestionsRef = useRef(new Set())
+  const completedLessonsRef = useRef(completedLessons)
 
   const isExamLesson = lessonContext?.lessonType === 'exam'
+
+  useEffect(() => {
+    completedLessonsRef.current = completedLessons
+  }, [completedLessons])
 
   const resetQuestionUi = useCallback(() => {
     setSelectedOption(null)
@@ -132,6 +152,45 @@ function Lesson() {
     }
   }
 
+  const resolveProgressiveDifficultyFloor = useCallback(
+    (questionNumber, total) => {
+      const safeTotal = Math.max(1, Number(total || totalQuestions || 1))
+      const safeNumber = Math.max(1, Number(questionNumber || currentQuestionNumber || 1))
+      const progressRatio = safeNumber / safeTotal
+      const baseDifficulty = Math.max(2, Number(lessonContext?.difficulty || 1))
+
+      if (progressRatio <= 0.34) return Math.max(2, baseDifficulty)
+      if (progressRatio <= 0.67) return Math.max(3, baseDifficulty)
+      return Math.max(4, baseDifficulty)
+    },
+    [currentQuestionNumber, lessonContext?.difficulty, totalQuestions],
+  )
+
+  const resolveLessonPassThreshold = useCallback(() => {
+    if (lessonContext?.isFinalGradeExam) {
+      return clampPassRate(finalExamRules?.passingScore, 0.7)
+    }
+    if (isExamLesson) {
+      return clampPassRate(EXAM_PASS_RATE, 0.75)
+    }
+    return clampPassRate(PRACTICE_PASS_RATE, 0.7)
+  }, [finalExamRules?.passingScore, isExamLesson, lessonContext?.isFinalGradeExam])
+
+  const buildLessonOutcome = useCallback(() => {
+    const answered = Math.max(1, Number(lessonStatsRef.current.answered || totalQuestions || 1))
+    const correct = Math.max(0, Number(lessonStatsRef.current.correct || 0))
+    const score = correct / answered
+    const requiredScore = resolveLessonPassThreshold()
+
+    return {
+      answered,
+      correct,
+      score,
+      requiredScore,
+      passed: score >= requiredScore,
+    }
+  }, [resolveLessonPassThreshold, totalQuestions])
+
   const loadExistingQuestionState = useCallback(
     async (questionHash, fallbackDifficulty = 1) => {
       if (!questionHash) {
@@ -158,15 +217,26 @@ function Lesson() {
   )
 
   const generateNewQuestion = useCallback(
-    async (difficultyOverride = null) => {
+    async (difficultyOverride = null, questionNumberOverride = null) => {
       if (!lessonContext) return false
 
       setLoadingNextQuestion(true)
       setAiError('')
 
+      const targetQuestionNumber = Math.max(
+        1,
+        Number(questionNumberOverride || currentQuestionNumber || 1),
+      )
+      const progressiveFloor = resolveProgressiveDifficultyFloor(targetQuestionNumber, totalQuestions)
       const targetDifficulty = Math.max(
         1,
-        Math.min(5, Number(difficultyOverride || recommendedDifficulty || lessonContext.difficulty || 1)),
+        Math.min(
+          5,
+          Math.max(
+            progressiveFloor,
+            Number(difficultyOverride || recommendedDifficulty || lessonContext.difficulty || 1),
+          ),
+        ),
       )
 
       try {
@@ -178,6 +248,8 @@ function Lesson() {
           lessonTitle: lessonContext.lessonTitle,
           lessonSkills: Array.isArray(lessonContext.skills) ? lessonContext.skills : [],
           difficulty: targetDifficulty,
+          questionNumber: targetQuestionNumber,
+          totalQuestions,
           examMode: isExamLesson,
         })
 
@@ -200,13 +272,24 @@ function Lesson() {
         setLoadingNextQuestion(false)
       }
     },
-    [isExamLesson, learnerId, lessonContext, recommendedDifficulty, resetQuestionUi],
+    [
+      currentQuestionNumber,
+      isExamLesson,
+      learnerId,
+      lessonContext,
+      recommendedDifficulty,
+      resetQuestionUi,
+      resolveProgressiveDifficultyFloor,
+      totalQuestions,
+    ],
   )
 
   useEffect(() => {
     let isMounted = true
 
     const loadLessonContext = async () => {
+      if (loadingProgress) return
+
       const decoded = decodeLessonRouteId(id)
       if (!decoded.gradeId || !decoded.topicId || !decoded.lessonId) {
         if (!isMounted) return
@@ -222,6 +305,7 @@ function Lesson() {
         setCompletionSynced(false)
         setSessionEarnedXp(0)
         setCompletionAwardXp(0)
+        setLessonOutcome(null)
         setCurrentQuestionNumber(1)
         setLevelBeforeLesson(level)
         setQuestion(null)
@@ -237,17 +321,43 @@ function Lesson() {
           streak: 0,
         }
 
-        const payload = await academicApi.getCurriculum(decoded.gradeId)
+        const payload = await academicApi.getCurriculum()
         if (!isMounted) return
 
-        const grade = payload?.grade || null
+        const allGrades = (payload?.grades || []).slice().sort((left, right) => {
+          return Number(left?.gradeNumber || 0) - Number(right?.gradeNumber || 0)
+        })
+        const grade = allGrades.find((gradeItem) => String(gradeItem.id) === String(decoded.gradeId)) || null
+        const unlockedGradeIds = new Set(
+          getUnlockedGradeIds({
+            grades: allGrades,
+            completedLessons: completedLessonsRef.current,
+          }),
+        )
+
         if (!grade) {
           setLessonContext(null)
           setLessonError('No se encontro el grado para la leccion.')
           return
         }
+        if (!unlockedGradeIds.has(String(grade.id))) {
+          setLessonContext(null)
+          setLessonError('Este grado esta bloqueado. Completa academicamente el grado anterior.')
+          return
+        }
 
         if (decoded.topicId === 'final-exam' && decoded.lessonId === 'final-exam') {
+          if (
+            !isFinalExamUnlockedInGrade({
+              grade,
+              completedLessons: completedLessonsRef.current,
+            })
+          ) {
+            setLessonContext(null)
+            setLessonError('Examen final bloqueado. Debes completar todas las lecciones del grado.')
+            return
+          }
+
           const examPayload = await academicApi.generateFinalExam({
             grade: decoded.gradeId,
             userId: learnerId,
@@ -296,15 +406,26 @@ function Lesson() {
           lessonId: decoded.lessonId,
         })
 
-        if (!found) {
-          setLessonContext(null)
-          setLessonError('Leccion no encontrada en el plan academico.')
-          return
-        }
+          if (!found) {
+            setLessonContext(null)
+            setLessonError('Leccion no encontrada en el plan academico.')
+            return
+          }
+          if (
+            !isLessonUnlockedInGrade({
+              grade,
+              lessonProgressId: found.progressId,
+              completedLessons: completedLessonsRef.current,
+            })
+          ) {
+            setLessonContext(null)
+            setLessonError('Leccion bloqueada. Completa las lecciones previas para continuar.')
+            return
+          }
 
-        setLessonContext({
-          ...found,
-          isFinalGradeExam: false,
+          setLessonContext({
+            ...found,
+            isFinalGradeExam: false,
         })
         const questionsToResolve = found.lessonType === 'exam' ? EXAM_QUESTION_COUNT : PRACTICE_QUESTION_COUNT
         setTotalQuestions(Math.max(1, questionsToResolve))
@@ -322,7 +443,7 @@ function Lesson() {
     return () => {
       isMounted = false
     }
-  }, [id, learnerId, level, loadExistingQuestionState, resetQuestionUi])
+  }, [id, learnerId, level, loadExistingQuestionState, loadingProgress, resetQuestionUi])
 
   useEffect(() => {
     if (!lessonContext || loadingLesson || lessonError || completed) return
@@ -333,21 +454,20 @@ function Lesson() {
   }, [completed, generateNewQuestion, lessonContext, lessonError, loadingLesson, question])
 
   useEffect(() => {
-    if (!completed || completionSynced || !lessonContext) return
+    if (!completed || completionSynced || !lessonContext || !lessonOutcome) return
 
     let isMounted = true
 
     const syncLessonCompletion = async () => {
       try {
-        let xpToAward = sessionEarnedXp
+        let xpToAward = lessonOutcome.passed ? sessionEarnedXp : 0
         let examOutcome = null
 
         if (lessonContext.isFinalGradeExam) {
-          const answered = Math.max(1, Number(lessonStatsRef.current.answered || totalQuestions || 1))
-          const score = lessonStatsRef.current.correct / answered
-          const passingScore = Number(finalExamRules?.passingScore || 0.7)
+          const score = lessonOutcome.score
+          const passingScore = lessonOutcome.requiredScore
           const xpMultiplier = Math.max(1, Number(finalExamRules?.xpMultiplier || 2))
-          const passed = score >= passingScore
+          const passed = lessonOutcome.passed
 
           if (passed && xpMultiplier > 1) {
             xpToAward = Math.floor(sessionEarnedXp * xpMultiplier)
@@ -364,11 +484,13 @@ function Lesson() {
           }
         }
 
-        await completeLesson({
-          lessonId: lessonContext.progressId,
-          xpEarned: xpToAward,
-          incrementStreak: lessonContext.isFinalGradeExam ? Boolean(examOutcome?.passed) : true,
-        })
+        if (lessonOutcome.passed) {
+          await completeLesson({
+            lessonId: lessonContext.progressId,
+            xpEarned: xpToAward,
+            incrementStreak: lessonContext.isFinalGradeExam ? Boolean(examOutcome?.passed) : true,
+          })
+        }
 
         if (isMounted) {
           setCompletionAwardXp(xpToAward)
@@ -386,7 +508,7 @@ function Lesson() {
     return () => {
       isMounted = false
     }
-  }, [completeLesson, completed, completionSynced, finalExamRules, lessonContext, sessionEarnedXp, totalQuestions])
+  }, [completeLesson, completed, completionSynced, finalExamRules, lessonContext, lessonOutcome, sessionEarnedXp])
 
   const submitAnswer = async () => {
     if (!question || questionState.locked || loadingSubmit || loadingNextQuestion) return
@@ -501,6 +623,8 @@ function Lesson() {
 
     const isLast = currentQuestionNumber >= totalQuestions
     if (isLast) {
+      const outcome = buildLessonOutcome()
+      setLessonOutcome(outcome)
       setCompleted(true)
       return
     }
@@ -508,6 +632,8 @@ function Lesson() {
     if (lessonContext?.isFinalGradeExam) {
       const nextQuestion = finalExamQuestions[currentQuestionNumber]
       if (!nextQuestion) {
+        const outcome = buildLessonOutcome()
+        setLessonOutcome(outcome)
         setCompleted(true)
         return
       }
@@ -526,10 +652,14 @@ function Lesson() {
     }
 
     const adaptiveDifficulty = await getAdaptiveDifficulty()
-    setRecommendedDifficulty(adaptiveDifficulty)
-    setCurrentQuestionNumber((prev) => prev + 1)
+    const nextQuestionNumber = currentQuestionNumber + 1
+    const progressiveFloor = resolveProgressiveDifficultyFloor(nextQuestionNumber, totalQuestions)
+    const nextDifficulty = Math.max(adaptiveDifficulty, progressiveFloor)
+
+    setRecommendedDifficulty(nextDifficulty)
+    setCurrentQuestionNumber(nextQuestionNumber)
     setQuestion(null)
-    await generateNewQuestion(adaptiveDifficulty)
+    await generateNewQuestion(nextDifficulty, nextQuestionNumber)
   }
 
   if (loadingLesson) {
@@ -564,7 +694,8 @@ function Lesson() {
     type: getQuestionTypeByDifficulty(recommendedDifficulty),
     options: [],
   }
-  const canLevelUpPreview = completed && level > levelBeforeLesson
+  const lessonPassed = Boolean(lessonOutcome?.passed)
+  const canLevelUpPreview = completed && lessonPassed && level > levelBeforeLesson
 
   return (
     <div className="cm-shell px-6 pt-20 pb-16">
@@ -633,8 +764,24 @@ function Lesson() {
           </section>
         ) : (
           <section className="cm-card mt-12 space-y-6 p-8 text-center">
-            <h2 className="mx-auto max-w-2xl text-3xl font-semibold tracking-tight text-coastal-mist">Leccion completada</h2>
-            <p className="text-2xl font-semibold text-coastal-neon">+{completionAwardXp || sessionEarnedXp} XP</p>
+            <h2 className="mx-auto max-w-2xl text-3xl font-semibold tracking-tight text-coastal-mist">
+              {lessonPassed ? 'Leccion completada' : 'Leccion finalizada (no aprobada)'}
+            </h2>
+            <p className="text-2xl font-semibold text-coastal-neon">+{completionAwardXp} XP</p>
+            {lessonOutcome && !finalExamOutcome && (
+              <div
+                className={`rounded-2xl px-4 py-3 text-sm ${
+                  lessonPassed
+                    ? 'border border-emerald-500/40 bg-emerald-500/10 text-emerald-200'
+                    : 'border border-red-600/40 bg-red-600/10 text-red-200'
+                }`}
+              >
+                <p>
+                  Resultado: {(lessonOutcome.score * 100).toFixed(0)}% / objetivo {(lessonOutcome.requiredScore * 100).toFixed(0)}%
+                </p>
+                {!lessonPassed && <p className="mt-1">No se registro esta leccion como completada. Debes reintentarla.</p>}
+              </div>
+            )}
             {finalExamOutcome && (
               <div
                 className={`rounded-2xl px-4 py-3 text-sm ${
@@ -651,6 +798,7 @@ function Lesson() {
                   XP base: {finalExamOutcome.baseXp}
                   {finalExamOutcome.bonusXp > 0 ? ` + bono x${finalExamOutcome.xpMultiplier}: ${finalExamOutcome.bonusXp}` : ''}
                 </p>
+                {!finalExamOutcome.passed && <p className="mt-1">El grado no se desbloquea hasta aprobar este examen final.</p>}
               </div>
             )}
             {canLevelUpPreview && (
@@ -660,6 +808,15 @@ function Lesson() {
             )}
             {!completionSynced && <p className="text-sm text-coastal-mist/75">Sincronizando progreso...</p>}
             <div className="space-x-3">
+              {!lessonPassed && (
+                <button
+                  type="button"
+                  onClick={() => navigate(`/lesson/${id}`, { replace: true })}
+                  className="cm-btn-secondary"
+                >
+                  Reintentar leccion
+                </button>
+              )}
               <button type="button" onClick={() => navigate(`/course/${lessonContext.gradeId}`)} className="cm-btn-secondary">
                 Volver al grado
               </button>

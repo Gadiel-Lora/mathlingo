@@ -3,14 +3,16 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 
 import brainLogo from '../assets/brain-logo.png'
 import { useProgress } from '../context/ProgressContext'
+import { getUnlockedGradeIds, isLessonUnlockedInGrade } from '../lib/academicCurriculum'
 import { academicApi } from '../services/academicApi'
 
 function Branch() {
   const navigate = useNavigate()
   const { id } = useParams()
-  const { completedLessons } = useProgress()
+  const { completedLessons, loadingProgress } = useProgress()
 
   const [branch, setBranch] = useState(null)
+  const [grades, setGrades] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
@@ -29,10 +31,19 @@ function Branch() {
       try {
         setLoading(true)
         setError('')
-        const payload = await academicApi.getBranch(id)
+
+        const [branchPayload, curriculumPayload] = await Promise.all([
+          academicApi.getBranch(id),
+          academicApi.getCurriculum(),
+        ])
         if (!isMounted) return
 
-        setBranch(payload?.branch || null)
+        const allGrades = (curriculumPayload?.grades || []).slice().sort((left, right) => {
+          return Number(left?.gradeNumber || 0) - Number(right?.gradeNumber || 0)
+        })
+
+        setGrades(allGrades)
+        setBranch(branchPayload?.branch || null)
       } catch (loadError) {
         if (!isMounted) return
         setError(loadError?.message || 'No se pudo cargar la rama academica.')
@@ -48,9 +59,20 @@ function Branch() {
     }
   }, [id])
 
-  const completedSet = useMemo(() => new Set(completedLessons), [completedLessons])
+  const unlockedGradeIds = useMemo(() => {
+    return new Set(
+      getUnlockedGradeIds({
+        grades,
+        completedLessons,
+      }),
+    )
+  }, [completedLessons, grades])
 
-  if (loading) {
+  const gradeById = useMemo(() => {
+    return new Map((grades || []).map((grade) => [String(grade.id), grade]))
+  }, [grades])
+
+  if (loading || loadingProgress) {
     return (
       <div className="cm-shell px-6 pt-20 pb-16">
         <div className="cm-card mx-auto max-w-5xl p-8 text-center">
@@ -100,43 +122,75 @@ function Branch() {
         </section>
 
         <section className="space-y-8">
-          {(branch.modules || []).map((module) => (
-            <article key={module.id} className="cm-card space-y-5 p-6">
-              <header>
-                <p className="text-xs font-semibold tracking-wide text-coastal-mist/55">
-                  {module.gradeName} - {module.areaName}
-                </p>
-                <h2 className="mt-2 text-xl font-semibold tracking-tight text-coastal-mist">{module.lessonCount} lecciones</h2>
-              </header>
+          {(branch.modules || []).map((module) => {
+            const moduleGrade = gradeById.get(String(module.gradeId)) || null
+            const moduleGradeUnlocked = moduleGrade ? unlockedGradeIds.has(String(module.gradeId)) : false
 
-              {(module.topics || []).map((topic) => (
-                <div key={`${module.id}:${topic.id}`} className="rounded-2xl border border-coastal-steel/70 bg-coastal-ocean/50 p-4">
-                  <h3 className="text-lg font-semibold tracking-tight">{topic.name}</h3>
-                  <div className="mt-3 grid gap-3 sm:grid-cols-2">
-                    {(topic.lessons || []).map((lesson) => {
-                      const completed = completedSet.has(lesson.progressId)
-                      return (
-                        <button
-                          key={`${module.id}:${topic.id}:${lesson.id}`}
-                          type="button"
-                          onClick={() => navigate(`/lesson/${lesson.routeId}`)}
-                          className="rounded-xl border border-coastal-steel bg-coastal-steel/40 px-3 py-3 text-left transition-all duration-200 hover:bg-coastal-steel"
-                        >
-                          <p className="text-xs text-coastal-mist/65">
-                            {lesson.type === 'exam' ? 'EXAMEN' : 'PRACTICA'} - Dificultad {lesson.difficulty}
-                          </p>
-                          <p className="mt-1 text-sm font-semibold">{lesson.title}</p>
-                          <p className={`mt-1 text-xs ${completed ? 'text-emerald-300' : 'text-coastal-mist/65'}`}>
-                            {completed ? 'Completada' : 'Disponible'}
-                          </p>
-                        </button>
-                      )
-                    })}
+            return (
+              <article key={module.id} className="cm-card space-y-5 p-6">
+                <header>
+                  <p className="text-xs font-semibold tracking-wide text-coastal-mist/55">
+                    {module.gradeName} - {module.areaName}
+                  </p>
+                  <h2 className="mt-2 text-xl font-semibold tracking-tight text-coastal-mist">{module.lessonCount} lecciones</h2>
+                </header>
+
+                {(module.topics || []).map((topic) => (
+                  <div key={`${module.id}:${topic.id}`} className="rounded-2xl border border-coastal-steel/70 bg-coastal-ocean/50 p-4">
+                    <h3 className="text-lg font-semibold tracking-tight">{topic.name}</h3>
+                    <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                      {(topic.lessons || []).map((lesson) => {
+                        const lessonCompleted = completedLessons.includes(lesson.progressId)
+                        const lessonUnlocked =
+                          Boolean(moduleGrade) &&
+                          moduleGradeUnlocked &&
+                          isLessonUnlockedInGrade({
+                            grade: moduleGrade,
+                            lessonProgressId: lesson.progressId,
+                            completedLessons,
+                          })
+
+                        return (
+                          <button
+                            key={`${module.id}:${topic.id}:${lesson.id}`}
+                            type="button"
+                            onClick={() => {
+                              if (!lessonUnlocked) return
+                              navigate(`/lesson/${lesson.routeId}`)
+                            }}
+                            disabled={!lessonUnlocked}
+                            className={`rounded-xl border px-3 py-3 text-left transition-all duration-200 ${
+                              lessonUnlocked
+                                ? 'border-coastal-steel bg-coastal-steel/40 hover:bg-coastal-steel'
+                                : 'cursor-not-allowed border-coastal-steel/50 bg-coastal-ocean/70 opacity-60'
+                            }`}
+                          >
+                            <p className="text-xs text-coastal-mist/65">
+                              {lesson.type === 'exam' ? 'EXAMEN' : 'PRACTICA'} - Dificultad {lesson.difficulty}
+                            </p>
+                            <p className="mt-1 text-sm font-semibold">{lesson.title}</p>
+                            <p
+                              className={`mt-1 text-xs ${
+                                lessonCompleted ? 'text-emerald-300' : lessonUnlocked ? 'text-coastal-mist/65' : 'text-amber-300'
+                              }`}
+                            >
+                              {lessonCompleted
+                                ? 'Completada'
+                                : lessonUnlocked
+                                  ? 'Disponible'
+                                  : moduleGradeUnlocked
+                                    ? 'Bloqueada por secuencia'
+                                    : 'Bloqueada por grado'}
+                            </p>
+                          </button>
+                        )
+                      })}
+                    </div>
                   </div>
-                </div>
-              ))}
-            </article>
-          ))}
+                ))}
+              </article>
+            )
+          })}
         </section>
       </main>
     </div>

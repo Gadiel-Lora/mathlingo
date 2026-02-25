@@ -3,14 +3,23 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 
 import brainLogo from '../assets/brain-logo.png'
 import { useProgress } from '../context/ProgressContext'
-import { encodeLessonRouteId, flattenGradeLessons } from '../lib/academicCurriculum'
+import {
+  buildFinalExamProgressId,
+  encodeLessonRouteId,
+  flattenGradeLessons,
+  getUnlockedGradeIds,
+  isFinalExamUnlockedInGrade,
+  isGradeUnlocked,
+  isLessonUnlockedInGrade,
+} from '../lib/academicCurriculum'
 import { academicApi } from '../services/academicApi'
 
 function Course() {
   const navigate = useNavigate()
   const { id } = useParams()
-  const { completedLessons } = useProgress()
+  const { completedLessons, loadingProgress } = useProgress()
 
+  const [grades, setGrades] = useState([])
   const [grade, setGrade] = useState(null)
   const [lessons, setLessons] = useState([])
   const [loading, setLoading] = useState(true)
@@ -32,10 +41,15 @@ function Course() {
         setLoading(true)
         setError('')
 
-        const payload = await academicApi.getCurriculum(id)
+        const payload = await academicApi.getCurriculum()
         if (!isMounted) return
 
-        const selectedGrade = payload?.grade || null
+        const allGrades = (payload?.grades || []).slice().sort((left, right) => {
+          return Number(left?.gradeNumber || 0) - Number(right?.gradeNumber || 0)
+        })
+        const selectedGrade = allGrades.find((gradeItem) => String(gradeItem.id) === String(id)) || null
+
+        setGrades(allGrades)
         if (!selectedGrade) {
           setGrade(null)
           setLessons([])
@@ -61,12 +75,39 @@ function Course() {
     }
   }, [id])
 
+  const unlockedGradeIds = useMemo(() => {
+    return new Set(
+      getUnlockedGradeIds({
+        grades,
+        completedLessons,
+      }),
+    )
+  }, [completedLessons, grades])
+
+  const gradeUnlocked = useMemo(() => {
+    if (!grade?.id) return false
+    return isGradeUnlocked({
+      grades,
+      gradeId: grade.id,
+      completedLessons,
+    })
+  }, [completedLessons, grade?.id, grades])
+
   const lessonCards = useMemo(() => {
+    if (!grade?.id) return []
+
     const completedSet = new Set(completedLessons)
-    return lessons.map((lesson, index) => {
-      const previous = index > 0 ? lessons[index - 1] : null
+    const isCurrentGradeUnlocked = unlockedGradeIds.has(String(grade.id))
+
+    return lessons.map((lesson) => {
       const completed = completedSet.has(lesson.progressId)
-      const locked = previous ? !completedSet.has(previous.progressId) : false
+      const locked =
+        !isCurrentGradeUnlocked ||
+        !isLessonUnlockedInGrade({
+          grade,
+          lessonProgressId: lesson.progressId,
+          completedLessons,
+        })
 
       return {
         ...lesson,
@@ -79,11 +120,15 @@ function Course() {
         }),
       }
     })
-  }, [completedLessons, lessons])
+  }, [completedLessons, grade, lessons, unlockedGradeIds])
 
   const allRegularLessonsCompleted = useMemo(() => {
-    return lessonCards.length > 0 && lessonCards.every((lesson) => lesson.completed)
-  }, [lessonCards])
+    if (!grade) return false
+    return isFinalExamUnlockedInGrade({
+      grade,
+      completedLessons,
+    })
+  }, [completedLessons, grade])
 
   const finalExamRouteId = useMemo(() => {
     if (!grade?.id) return ''
@@ -93,8 +138,12 @@ function Course() {
       lessonId: 'final-exam',
     })
   }, [grade?.id])
+  const finalExamCompleted = useMemo(() => {
+    if (!grade?.id) return false
+    return completedLessons.includes(buildFinalExamProgressId(grade.id))
+  }, [completedLessons, grade?.id])
 
-  if (loading) {
+  if (loading || loadingProgress) {
     return (
       <div className="cm-shell px-6 pt-20 pb-16">
         <div className="cm-card mx-auto max-w-5xl p-8 text-center">
@@ -110,6 +159,22 @@ function Course() {
         <div className="cm-card mx-auto max-w-5xl space-y-6 p-8 text-center">
           <h1 className="text-2xl font-semibold tracking-tight text-coastal-mist">No se pudo abrir el grado</h1>
           <p className="text-coastal-mist/75">{error || 'Grado no encontrado.'}</p>
+          <Link to="/dashboard" className="cm-btn-primary">
+            Volver al dashboard
+          </Link>
+        </div>
+      </div>
+    )
+  }
+
+  if (!gradeUnlocked) {
+    return (
+      <div className="cm-shell px-6 pt-20 pb-16">
+        <div className="cm-card mx-auto max-w-5xl space-y-6 p-8 text-center">
+          <h1 className="text-2xl font-semibold tracking-tight text-coastal-mist">Grado bloqueado</h1>
+          <p className="text-coastal-mist/75">
+            Este grado se desbloquea cuando completas academicamente el grado anterior.
+          </p>
           <Link to="/dashboard" className="cm-btn-primary">
             Volver al dashboard
           </Link>
@@ -139,7 +204,7 @@ function Course() {
           <img src={brainLogo} alt="Mathlingo brain logo" className="mx-auto w-full max-w-24 drop-shadow-2xl" />
           <h1 className="text-3xl font-semibold tracking-tight text-coastal-mist">{grade.name}</h1>
           <p className="text-coastal-mist/75">
-            {grade.areas?.length || 0} areas · {lessonCards.length} lecciones
+            {grade.areas?.length || 0} areas - {lessonCards.length} lecciones
           </p>
         </section>
 
@@ -159,13 +224,13 @@ function Course() {
             >
               <div className="flex flex-wrap items-center gap-2 text-xs text-coastal-mist/55">
                 <span>LECCION {index + 1}</span>
-                <span>·</span>
+                <span>-</span>
                 <span>{lesson.areaName}</span>
-                <span>·</span>
+                <span>-</span>
                 <span>{lesson.topicName}</span>
                 {lesson.lessonType === 'exam' && (
                   <>
-                    <span>·</span>
+                    <span>-</span>
                     <span className="font-semibold text-amber-300">EXAMEN</span>
                   </>
                 )}
@@ -175,7 +240,7 @@ function Course() {
                 {lesson.locked ? 'Bloqueada' : lesson.completed ? 'Completada' : 'Lista para continuar'}
               </p>
               <p className="mt-2 text-xs text-coastal-mist/65">
-                Dificultad {lesson.difficulty} · XP base {lesson.xpReward}
+                Dificultad {lesson.difficulty} - XP base {lesson.xpReward}
               </p>
             </article>
           ))}
@@ -193,14 +258,18 @@ function Course() {
           >
             <div className="flex flex-wrap items-center gap-2 text-xs text-coastal-mist/55">
               <span>EXAMEN FINAL</span>
-              <span>·</span>
+              <span>-</span>
               <span>Ayuda IA bloqueada</span>
-              <span>·</span>
+              <span>-</span>
               <span>XP x2 si apruebas</span>
             </div>
             <h2 className="mt-2 text-xl font-semibold tracking-tight">Examen Final del Grado</h2>
             <p className="mt-2 text-sm text-coastal-mist/75">
-              {allRegularLessonsCompleted ? 'Listo para rendir' : 'Completa todas las lecciones para desbloquearlo'}
+              {finalExamCompleted
+                ? 'Completado'
+                : allRegularLessonsCompleted
+                  ? 'Listo para rendir'
+                  : 'Completa todas las lecciones para desbloquearlo'}
             </p>
           </article>
         </section>

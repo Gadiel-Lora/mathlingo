@@ -110,6 +110,95 @@ const enforceIncreasingLessonCounts = (sourceGrades = []) => {
   return grades
 }
 
+const clampDifficulty = (value, fallback = 2) => {
+  const parsed = Number(value)
+  if (!Number.isFinite(parsed)) return fallback
+  return Math.max(1, Math.min(5, Math.floor(parsed)))
+}
+
+const resolveCognitiveFocusByPosition = (index, totalLessons, lessonType) => {
+  if (lessonType === 'exam') return 'multi-step-reasoning'
+  if (totalLessons <= 1) return 'direct-application'
+
+  const ratio = (index + 1) / totalLessons
+  if (ratio <= 0.34) return 'direct-application'
+  if (ratio <= 0.67) return 'contextual-analysis'
+  return 'multi-step-reasoning'
+}
+
+const cognitiveDifficultyFloor = {
+  'direct-application': 2,
+  'contextual-analysis': 3,
+  'multi-step-reasoning': 4,
+}
+
+const cognitiveSkillMap = {
+  'direct-application': ['aplicacion-directa'],
+  'contextual-analysis': ['analisis-contextual'],
+  'multi-step-reasoning': ['razonamiento-multi-paso'],
+}
+
+const normalizeLessonAcademicRigor = (lesson, index, totalLessons, gradeNumber, previousDifficulty) => {
+  const lessonType = lesson?.type === 'exam' ? 'exam' : 'practice'
+  const cognitiveFocus = resolveCognitiveFocusByPosition(index, totalLessons, lessonType)
+  const difficultyFloor = cognitiveDifficultyFloor[cognitiveFocus] || 2
+  const baseDifficulty = Math.max(2, clampDifficulty(lesson?.difficulty, difficultyFloor))
+  const progressiveDifficulty = Math.max(baseDifficulty, difficultyFloor, previousDifficulty)
+  const normalizedDifficulty = lessonType === 'exam' ? Math.max(4, progressiveDifficulty) : progressiveDifficulty
+  const baseXp = lessonType === 'exam' ? 48 : 14
+  const computedXp = Math.max(
+    Number(lesson?.xpReward || 0),
+    baseXp + normalizedDifficulty * (lessonType === 'exam' ? 6 : 4) + Math.max(0, Number(gradeNumber || 1)),
+  )
+  const mergedSkills = [...new Set([...(lesson?.skills || []), 'problemas-contextualizados', ...(cognitiveSkillMap[cognitiveFocus] || [])])]
+
+  return {
+    ...lesson,
+    type: lessonType,
+    difficulty: normalizedDifficulty,
+    xpReward: Math.floor(computedXp),
+    skills: mergedSkills,
+    cognitiveFocus,
+    contextualized: true,
+  }
+}
+
+const enforceAcademicRigor = (sourceGrades = []) => {
+  return (sourceGrades || []).map((grade) => {
+    const nextGrade = deepClone(grade)
+
+    nextGrade.areas = (nextGrade.areas || []).map((area) => {
+      const nextArea = { ...area }
+      nextArea.topics = (area?.topics || []).map((topic) => {
+        const topicLessons = topic?.lessons || []
+        let rollingDifficulty = 2
+
+        const normalizedLessons = topicLessons.map((lesson, index) => {
+          const normalized = normalizeLessonAcademicRigor(
+            lesson,
+            index,
+            topicLessons.length,
+            Number(nextGrade?.gradeNumber || 1),
+            rollingDifficulty,
+          )
+          rollingDifficulty = Math.max(rollingDifficulty, normalized.difficulty)
+          return normalized
+        })
+
+        return {
+          ...topic,
+          lessons: normalizedLessons,
+        }
+      })
+
+      return nextArea
+    })
+
+    nextGrade.lessonCount = countLessonsInGrade(nextGrade)
+    return nextGrade
+  })
+}
+
 const resolveBranchId = (area) => {
   const bucket = `${area?.id || ''} ${area?.name || ''}`.toLowerCase()
   if (bucket.includes('algebra')) return 'algebra'
@@ -206,7 +295,9 @@ const buildBranchCollection = (grades = []) => {
     .sort((a, b) => a.name.localeCompare(b.name))
 }
 
-export const CURRICULUM_GRADES = enforceIncreasingLessonCounts([grade1, grade2, grade3, grade4, grade5])
+export const CURRICULUM_GRADES = enforceAcademicRigor(
+  enforceIncreasingLessonCounts([grade1, grade2, grade3, grade4, grade5]),
+)
 
 export const CURRICULUM_BRANCHES = buildBranchCollection(CURRICULUM_GRADES)
 

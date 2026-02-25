@@ -1,6 +1,6 @@
 
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 
 import { useAuth } from './AuthContext'
 import { supabase } from '../supabase/client'
@@ -34,13 +34,38 @@ const parseProgressRow = (row) => ({
   currentStreak: normalizeNumber(row?.current_streak),
 })
 
+const buildCompletedLessonState = ({ previousState, lessonId, requestedXp, incrementStreak }) => {
+  const normalizedLessonId = String(lessonId ?? '').trim()
+  if (!normalizedLessonId) return previousState
+
+  const previousLessons = normalizeLessons(previousState?.completedLessons)
+  if (previousLessons.includes(normalizedLessonId)) {
+    return previousState
+  }
+
+  const earnedXp = normalizeNumber(requestedXp)
+  const previousXp = normalizeNumber(previousState?.xp)
+  const previousStreak = normalizeNumber(previousState?.currentStreak)
+
+  return {
+    completedLessons: [...previousLessons, normalizedLessonId],
+    xp: previousXp + earnedXp,
+    currentStreak: incrementStreak ? previousStreak + 1 : previousStreak,
+  }
+}
+
 export function ProgressProvider({ children }) {
   const { user } = useAuth()
   const [progressState, setProgressState] = useState(INITIAL_PROGRESS_STATE)
   const [loadingProgress, setLoadingProgress] = useState(true)
+  const progressRef = useRef(INITIAL_PROGRESS_STATE)
 
   const { completedLessons, xp, currentStreak } = progressState
   const level = Math.floor(xp / 100) + 1
+
+  useEffect(() => {
+    progressRef.current = progressState
+  }, [progressState])
 
   useEffect(() => {
     let isMounted = true
@@ -49,6 +74,7 @@ export function ProgressProvider({ children }) {
       if (!user) {
         if (isMounted) {
           setProgressState(INITIAL_PROGRESS_STATE)
+          progressRef.current = INITIAL_PROGRESS_STATE
           setLoadingProgress(false)
         }
         return
@@ -62,6 +88,7 @@ export function ProgressProvider({ children }) {
         console.error('Error loading progress:', error.message)
         if (isMounted) {
           setProgressState(INITIAL_PROGRESS_STATE)
+          progressRef.current = INITIAL_PROGRESS_STATE
           setLoadingProgress(false)
         }
         return
@@ -85,20 +112,25 @@ export function ProgressProvider({ children }) {
           console.error('Error creating initial progress:', insertError.message)
           if (isMounted) {
             setProgressState(INITIAL_PROGRESS_STATE)
+            progressRef.current = INITIAL_PROGRESS_STATE
             setLoadingProgress(false)
           }
           return
         }
 
         if (isMounted) {
-          setProgressState(parseProgressRow(inserted))
+          const parsedInserted = parseProgressRow(inserted)
+          setProgressState(parsedInserted)
+          progressRef.current = parsedInserted
           setLoadingProgress(false)
         }
         return
       }
 
       if (isMounted) {
-        setProgressState(parseProgressRow(data))
+        const parsedData = parseProgressRow(data)
+        setProgressState(parsedData)
+        progressRef.current = parsedData
         setLoadingProgress(false)
       }
     }
@@ -119,37 +151,37 @@ export function ProgressProvider({ children }) {
 
       if (!lessonId || !user) return
 
-      const alreadyCompleted = completedLessons.includes(lessonId)
-      const updatedLessons = alreadyCompleted
-        ? completedLessons
-        : [...completedLessons, lessonId].filter((item, index, array) => array.indexOf(item) === index)
+      const previousState = progressRef.current
+      const nextState = buildCompletedLessonState({
+        previousState,
+        lessonId,
+        requestedXp,
+        incrementStreak,
+      })
 
-      const earnedXp = normalizeNumber(requestedXp)
-      const newXp = xp + earnedXp
-      const newStreak = alreadyCompleted ? currentStreak : incrementStreak ? currentStreak + 1 : currentStreak
+      if (nextState === previousState) return
+
+      setProgressState(nextState)
+      progressRef.current = nextState
 
       const { error } = await supabase
         .from('progress')
         .update({
-          completed_lessons: updatedLessons,
-          xp: newXp,
-          current_streak: newStreak,
+          completed_lessons: nextState.completedLessons,
+          xp: nextState.xp,
+          current_streak: nextState.currentStreak,
           updated_at: new Date().toISOString(),
         })
         .eq('user_id', user.id)
 
       if (error) {
         console.error('Error updating progress:', error.message)
+        setProgressState(previousState)
+        progressRef.current = previousState
         return
       }
-
-      setProgressState({
-        completedLessons: updatedLessons,
-        xp: newXp,
-        currentStreak: newStreak,
-      })
     },
-    [completedLessons, currentStreak, user, xp],
+    [user],
   )
 
   const value = useMemo(

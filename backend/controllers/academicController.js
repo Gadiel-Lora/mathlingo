@@ -91,6 +91,8 @@ router.post('/question/generate', (req, res) => {
   const examMode = Boolean(req.body?.examMode)
   const lessonId = sanitizeInput(req.body?.lessonId)
   const lessonTitle = sanitizeInput(req.body?.lessonTitle)
+  const questionNumber = Number(req.body?.questionNumber || 1)
+  const totalQuestions = Number(req.body?.totalQuestions || 1)
   const lessonSkills = Array.isArray(req.body?.lessonSkills)
     ? req.body.lessonSkills.map((skill) => sanitizeInput(skill)).filter(Boolean)
     : []
@@ -112,6 +114,8 @@ router.post('/question/generate', (req, res) => {
         lessonId,
         lessonTitle,
         lessonSkills,
+        questionNumber,
+        totalQuestions,
       },
       excludedFingerprints: blockedFingerprints,
     })

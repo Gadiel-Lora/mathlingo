@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import brainLogo from '../assets/brain-logo.png'
 import { useAuth } from '../context/AuthContext'
 import { useProgress } from '../context/ProgressContext'
-import { summarizeGradeForCard } from '../lib/academicCurriculum'
+import { getUnlockedGradeIds, summarizeGradeForCard } from '../lib/academicCurriculum'
 import { academicApi } from '../services/academicApi'
 
 function Dashboard() {
@@ -13,6 +13,7 @@ function Dashboard() {
   const { completedLessons, xp, level, currentStreak } = useProgress()
 
   const [grades, setGrades] = useState([])
+  const [gradeDetails, setGradeDetails] = useState([])
   const [branches, setBranches] = useState([])
   const [loadingData, setLoadingData] = useState(true)
   const [gradesError, setGradesError] = useState('')
@@ -36,6 +37,9 @@ function Dashboard() {
         const gradeCards = (curriculumPayload?.grades || [])
           .map((grade) => summarizeGradeForCard(grade))
           .sort((a, b) => a.gradeNumber - b.gradeNumber)
+        const fullGradeRows = (curriculumPayload?.grades || []).slice().sort((a, b) => {
+          return Number(a?.gradeNumber || 0) - Number(b?.gradeNumber || 0)
+        })
 
         const branchCards = (branchesPayload?.branches || [])
           .map((branch) => ({
@@ -48,6 +52,7 @@ function Dashboard() {
           .sort((a, b) => b.lessonCount - a.lessonCount || a.name.localeCompare(b.name))
 
         setGrades(gradeCards)
+        setGradeDetails(fullGradeRows)
         setBranches(branchCards)
       } catch (error) {
         if (!isMounted) return
@@ -70,6 +75,14 @@ function Dashboard() {
   const progress = totalLessons > 0 ? Math.round((completedCount / totalLessons) * 100) : 0
   const xpProgress = xp % 100
   const nextLevelXp = level * 100
+  const unlockedGradeIds = useMemo(() => {
+    return new Set(
+      getUnlockedGradeIds({
+        grades: gradeDetails,
+        completedLessons,
+      }),
+    )
+  }, [completedLessons, gradeDetails])
 
   const handleLogout = async () => {
     await logout()
@@ -136,19 +149,32 @@ function Dashboard() {
           )}
           {!loadingData &&
             !gradesError &&
-            grades.map((grade) => (
-              <article
-                key={grade.id}
-                onClick={() => navigate(`/course/${grade.id}`)}
-                className="cm-card cursor-pointer p-6 transition-all duration-200 hover:-translate-y-0.5 hover:bg-coastal-steel/80"
-              >
-                <h2 className="text-2xl font-semibold tracking-tight">{grade.title}</h2>
-                <p className="mt-2 text-coastal-mist/75">{grade.description}</p>
-                <p className="mt-4 text-sm font-semibold tracking-tight text-verdant-accent">
-                  {grade.lessonCount} lecciones - {grade.examCount} examenes
-                </p>
-              </article>
-            ))}
+            grades.map((grade) => {
+              const gradeUnlocked = unlockedGradeIds.has(String(grade.id))
+              return (
+                <article
+                  key={grade.id}
+                  onClick={() => {
+                    if (!gradeUnlocked) return
+                    navigate(`/course/${grade.id}`)
+                  }}
+                  className={`cm-card p-6 ${
+                    gradeUnlocked
+                      ? 'cursor-pointer transition-all duration-200 hover:-translate-y-0.5 hover:bg-coastal-steel/80'
+                      : 'cursor-not-allowed opacity-55'
+                  }`}
+                >
+                  <h2 className="text-2xl font-semibold tracking-tight">{grade.title}</h2>
+                  <p className="mt-2 text-coastal-mist/75">{grade.description}</p>
+                  <p className="mt-4 text-sm font-semibold tracking-tight text-verdant-accent">
+                    {grade.lessonCount} lecciones - {grade.examCount} examenes
+                  </p>
+                  <p className={`mt-2 text-xs ${gradeUnlocked ? 'text-emerald-300' : 'text-amber-300'}`}>
+                    {gradeUnlocked ? 'Desbloqueado' : 'Bloqueado: completa academicamente el grado anterior'}
+                  </p>
+                </article>
+              )
+            })}
         </section>
 
         <section className="mt-12 space-y-4">

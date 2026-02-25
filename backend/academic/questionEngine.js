@@ -130,7 +130,189 @@ const evaluateThreeTermExpression = (a, op1, b, op2, c) => {
   return applyOperator(left, op2, c)
 }
 
-const resolveLessonIntent = ({ lessonId, lessonTitle, lessonSkills = [] } = {}) => {
+const formatNumericAnswer = (value) => {
+  if (!Number.isFinite(value)) return '0'
+  if (Number.isInteger(value)) return String(value)
+  return String(Number(value.toFixed(3)))
+}
+
+const parseStrictNumericAnswer = (value) => {
+  const normalized = String(value ?? '')
+    .trim()
+    .replace(',', '.')
+  if (!/^-?\d+(\.\d+)?$/.test(normalized)) return null
+  const parsed = Number(normalized)
+  return Number.isFinite(parsed) ? parsed : null
+}
+
+const TOPIC_CONTEXT_LIBRARY = {
+  'numeros-naturales': [
+    'En una feria escolar se registran ventas por hora.',
+    'Durante una jornada deportiva del colegio se cuentan puntos por equipo.',
+  ],
+  fracciones: [
+    'En un taller de cocina se reparten porciones entre grupos.',
+    'En una actividad de laboratorio se mezclan cantidades fraccionarias.',
+  ],
+  divisibilidad: [
+    'Un docente organiza estudiantes en filas exactas.',
+    'Una biblioteca agrupa libros en lotes del mismo tamano.',
+  ],
+  'figuras-planas': [
+    'Un equipo de arquitectura escolar disena un espacio rectangular.',
+    'En una clase de arte tecnico se calcula area y perimetro de paneles.',
+  ],
+  angulos: [
+    'En robotica se ajustan giros y posiciones de un brazo mecanico.',
+    'En dibujo tecnico se analizan angulos de una estructura.',
+  ],
+  'expresiones-algebraicas': [
+    'Un club de ciencias modela una relacion entre variables.',
+    'En economia escolar se representa una regla con expresiones algebraicas.',
+  ],
+  'ecuaciones-basicas': [
+    'Una situacion financiera escolar requiere encontrar un valor desconocido.',
+    'En un problema de inventario se plantea una ecuacion para hallar la cantidad faltante.',
+  ],
+  estadistica: [
+    'Se analizan resultados de una encuesta institucional.',
+    'Un equipo academico resume datos de rendimiento semanal.',
+  ],
+  probabilidad: [
+    'Un experimento de laboratorio evalua eventos aleatorios.',
+    'En un juego de aula se estima la probabilidad de un resultado.',
+  ],
+  'unidades-de-medida': [
+    'Un proyecto tecnico exige conversiones precisas de unidades.',
+    'En una actividad de campo se convierten medidas para comparar resultados.',
+  ],
+}
+
+const DEFAULT_CONTEXT_LIBRARY = [
+  'Se presenta una situacion real que requiere modelado matematico.',
+  'Un escenario aplicado demanda interpretar datos antes de calcular.',
+]
+
+const resolveContextSentence = (topic) => {
+  const key = String(topic || '').trim()
+  const bucket = TOPIC_CONTEXT_LIBRARY[key] || DEFAULT_CONTEXT_LIBRARY
+  return pick(bucket)
+}
+
+const resolveCognitiveStage = ({ difficulty, questionNumber, totalQuestions }) => {
+  const safeDifficulty = clampDifficulty(difficulty)
+  const safeQuestion = Math.max(1, Math.floor(Number(questionNumber || 1)))
+  const safeTotal = Math.max(1, Math.floor(Number(totalQuestions || 1)))
+  const progressRatio = safeQuestion / safeTotal
+
+  let stage = 'direct-application'
+  if (progressRatio > 0.34) stage = 'contextual-analysis'
+  if (progressRatio > 0.67) stage = 'multi-step-reasoning'
+
+  if (safeDifficulty >= 4 && stage === 'direct-application') {
+    stage = 'contextual-analysis'
+  }
+  if (safeDifficulty >= 5) {
+    stage = 'multi-step-reasoning'
+  }
+
+  return stage
+}
+
+const buildMultiStepInstruction = ({ baseAnswer, difficulty }) => {
+  const safeDifficulty = clampDifficulty(difficulty)
+  const adjustment = randomInt(2, 4 + safeDifficulty)
+  const mode = pick(['add', 'subtract', 'double'])
+
+  if (mode === 'double') {
+    const finalAnswer = baseAnswer * 2
+    return {
+      instruction: `Despues, multiplica ese resultado por 2 para obtener el valor final.`,
+      answer: finalAnswer,
+    }
+  }
+
+  if (mode === 'subtract') {
+    const finalAnswer = baseAnswer - adjustment
+    return {
+      instruction: `Despues, resta ${adjustment} unidades al resultado obtenido para hallar el valor final.`,
+      answer: finalAnswer,
+    }
+  }
+
+  const finalAnswer = baseAnswer + adjustment
+  return {
+    instruction: `Despues, suma ${adjustment} unidades al resultado obtenido para hallar el valor final.`,
+    answer: finalAnswer,
+  }
+}
+
+const applyAcademicRigor = ({ candidate, topic, difficulty, intent }) => {
+  const stage = intent?.cognitiveStage || 'direct-application'
+  const contextSentence = resolveContextSentence(topic)
+  const basePrompt = String(candidate?.prompt || '').trim()
+  const nextCandidate = {
+    ...candidate,
+    prompt: basePrompt,
+    distractors: Array.isArray(candidate?.distractors) ? [...candidate.distractors] : [],
+  }
+
+  if (stage === 'multi-step-reasoning') {
+    const numericAnswer = parseStrictNumericAnswer(candidate?.correctAnswer)
+    if (numericAnswer !== null) {
+      const multiStep = buildMultiStepInstruction({
+        baseAnswer: numericAnswer,
+        difficulty,
+      })
+
+      nextCandidate.correctAnswer = formatNumericAnswer(multiStep.answer)
+      nextCandidate.distractors = [
+        formatNumericAnswer(multiStep.answer + 1),
+        formatNumericAnswer(multiStep.answer - 1),
+        formatNumericAnswer(multiStep.answer + 2),
+      ]
+      nextCandidate.options = []
+      nextCandidate.templateId = `${candidate.templateId}-multistep`
+      nextCandidate.fingerprintSeed = {
+        ...candidate.fingerprintSeed,
+        stage,
+        finalAnswer: nextCandidate.correctAnswer,
+      }
+      nextCandidate.prompt = [
+        contextSentence,
+        'Problema de razonamiento multi-paso:',
+        basePrompt,
+        multiStep.instruction,
+        'Entrega solo el resultado final.',
+      ].join(' ')
+      nextCandidate.explanationTemplate =
+        'Paso 1: modela la situacion y resuelve el calculo base. Paso 2: aplica el segundo ajuste solicitado. Resultado: {answer}.'
+      return nextCandidate
+    }
+  }
+
+  if (stage === 'contextual-analysis') {
+    nextCandidate.prompt = [
+      contextSentence,
+      'Analiza el contexto, identifica los datos utiles y resuelve:',
+      basePrompt,
+    ].join(' ')
+    nextCandidate.explanationTemplate =
+      'Paso 1: identifica datos relevantes del contexto. Paso 2: selecciona y aplica la operacion correcta. Resultado: {answer}.'
+    return nextCandidate
+  }
+
+  nextCandidate.prompt = [
+    contextSentence,
+    'Aplicacion directa:',
+    basePrompt,
+  ].join(' ')
+  nextCandidate.explanationTemplate =
+    'Paso 1: identifica la operacion principal en el problema. Paso 2: calcula y valida el resultado. Resultado: {answer}.'
+  return nextCandidate
+}
+
+const resolveLessonIntent = ({ lessonId, lessonTitle, lessonSkills = [], questionNumber = 1, totalQuestions = 1, difficulty = 1 } = {}) => {
   const normalizedTitle = String(lessonTitle || '').trim().toLowerCase()
   const normalizedId = String(lessonId || '').trim().toLowerCase()
   const normalizedSkills = Array.isArray(lessonSkills)
@@ -143,6 +325,11 @@ const resolveLessonIntent = ({ lessonId, lessonTitle, lessonSkills = [] } = {}) 
   const intent = {
     forcedOperation: null,
     combinedOperations: false,
+    cognitiveStage: resolveCognitiveStage({
+      difficulty,
+      questionNumber,
+      totalQuestions,
+    }),
   }
 
   if (
@@ -585,13 +772,16 @@ export const generateQuestion = ({
   lessonContext = {},
   excludedFingerprints = new Set(),
 }) => {
-  const safeDifficulty = clampDifficulty(difficulty)
+  const safeDifficulty = Math.max(2, clampDifficulty(difficulty))
   const normalizedTopic = String(topic || '').trim()
   const normalizedGrade = Number(grade) || 1
   const blockedFingerprints =
     excludedFingerprints instanceof Set ? excludedFingerprints : new Set(excludedFingerprints || [])
   const safeLessonContext = lessonContext && typeof lessonContext === 'object' ? lessonContext : {}
-  const lessonIntent = resolveLessonIntent(safeLessonContext)
+  const lessonIntent = resolveLessonIntent({
+    ...safeLessonContext,
+    difficulty: safeDifficulty,
+  })
 
   if (!normalizedTopic) {
     throw new Error('topic es obligatorio para generar una pregunta.')
@@ -609,13 +799,19 @@ export const generateQuestion = ({
       lessonContext: safeLessonContext,
       intent: lessonIntent,
     })
+    const rigorousCandidate = applyAcademicRigor({
+      candidate,
+      topic: normalizedTopic,
+      difficulty: safeDifficulty,
+      intent: lessonIntent,
+    })
 
     const question = finalizeQuestion({
       grade: normalizedGrade,
       topic: normalizedTopic,
       difficulty: safeDifficulty,
       type,
-      candidate,
+      candidate: rigorousCandidate,
     })
 
     if (blockedFingerprints.has(question.fingerprint)) {
