@@ -1,7 +1,7 @@
 const clampDifficulty = (value) => {
   const parsed = Number(value)
   if (!Number.isFinite(parsed)) return 1
-  return Math.max(1, Math.min(5, Math.floor(parsed)))
+  return Math.max(1, Math.min(9, Math.floor(parsed)))
 }
 
 const clampRange = (value, min, max) => {
@@ -53,7 +53,7 @@ export const updateUserLevel = ({
   return {
     currentDifficulty: safeDifficulty,
     nextDifficulty,
-    questionType: nextDifficulty >= 3 ? 'input' : 'multiple-choice',
+    questionType: nextDifficulty >= 4 ? 'input' : 'multiple-choice',
     shouldPromote: nextDifficulty > safeDifficulty,
     shouldDemote: nextDifficulty < safeDifficulty,
     metrics: {

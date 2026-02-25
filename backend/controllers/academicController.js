@@ -96,6 +96,11 @@ router.post('/question/generate', (req, res) => {
   const lessonSkills = Array.isArray(req.body?.lessonSkills)
     ? req.body.lessonSkills.map((skill) => sanitizeInput(skill)).filter(Boolean)
     : []
+  const lessonSubtopics = Array.isArray(req.body?.lessonSubtopics)
+    ? req.body.lessonSubtopics.map((subtopic) => sanitizeInput(subtopic)).filter(Boolean)
+    : []
+  const problemMix = sanitizeInput(req.body?.problemMix)
+  const questionCount = Number(req.body?.questionCount || 0)
 
   if (!userId || !grade || !topic) {
     res.status(400).json({
@@ -114,6 +119,9 @@ router.post('/question/generate', (req, res) => {
         lessonId,
         lessonTitle,
         lessonSkills,
+        lessonSubtopics,
+        problemMix,
+        questionCount: Number.isFinite(questionCount) && questionCount > 0 ? Math.floor(questionCount) : undefined,
         questionNumber,
         totalQuestions,
       },

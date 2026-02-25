@@ -132,7 +132,9 @@ function Branch() {
                   <p className="text-xs font-semibold tracking-wide text-coastal-mist/55">
                     {module.gradeName} - {module.areaName}
                   </p>
-                  <h2 className="mt-2 text-xl font-semibold tracking-tight text-coastal-mist">{module.lessonCount} lecciones</h2>
+                  <h2 className="mt-2 text-xl font-semibold tracking-tight text-coastal-mist">
+                    {module.lessonCount} lecciones
+                  </h2>
                 </header>
 
                 {(module.topics || []).map((topic) => (
@@ -169,6 +171,14 @@ function Branch() {
                               {lesson.type === 'exam' ? 'EXAMEN' : 'PRACTICA'} - Dificultad {lesson.difficulty}
                             </p>
                             <p className="mt-1 text-sm font-semibold">{lesson.title}</p>
+                            <p className="mt-1 text-xs text-coastal-mist/60">
+                              {lesson.questionCount || 4} problemas -{' '}
+                              {lesson.problemMix === 'contextualized'
+                                ? 'Contextualizados'
+                                : lesson.problemMix === 'mechanical'
+                                  ? 'Mecanicos'
+                                  : 'Mixtos'}
+                            </p>
                             <p
                               className={`mt-1 text-xs ${
                                 lessonCompleted ? 'text-emerald-300' : lessonUnlocked ? 'text-coastal-mist/65' : 'text-amber-300'

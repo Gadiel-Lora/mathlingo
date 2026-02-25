@@ -142,6 +142,14 @@ function Course() {
     if (!grade?.id) return false
     return completedLessons.includes(buildFinalExamProgressId(grade.id))
   }, [completedLessons, grade?.id])
+  const finalExamQuestionText = useMemo(() => {
+    const range = grade?.finalExam?.questionRange
+    if (!Array.isArray(range) || range.length < 2) return 'Cantidad variable'
+    const [min, max] = range.map((value) => Number(value))
+    if (!Number.isFinite(min) || !Number.isFinite(max)) return 'Cantidad variable'
+    if (min === max) return `${Math.floor(min)} preguntas`
+    return `${Math.floor(min)}-${Math.floor(max)} preguntas`
+  }, [grade?.finalExam?.questionRange])
 
   if (loading || loadingProgress) {
     return (
@@ -204,7 +212,7 @@ function Course() {
           <img src={brainLogo} alt="Mathlingo brain logo" className="mx-auto w-full max-w-24 drop-shadow-2xl" />
           <h1 className="text-3xl font-semibold tracking-tight text-coastal-mist">{grade.name}</h1>
           <p className="text-coastal-mist/75">
-            {grade.areas?.length || 0} areas - {lessonCards.length} lecciones
+            {grade.areas?.length || 0} modulos - {lessonCards.length} lecciones
           </p>
         </section>
 
@@ -240,7 +248,15 @@ function Course() {
                 {lesson.locked ? 'Bloqueada' : lesson.completed ? 'Completada' : 'Lista para continuar'}
               </p>
               <p className="mt-2 text-xs text-coastal-mist/65">
-                Dificultad {lesson.difficulty} - XP base {lesson.xpReward}
+                Dificultad {lesson.difficulty} - {lesson.questionCount || 4} problemas -{' '}
+                {lesson.problemMix === 'contextualized'
+                  ? 'Contextualizados'
+                  : lesson.problemMix === 'mechanical'
+                    ? 'Mecanicos'
+                    : 'Mixtos'}
+              </p>
+              <p className="mt-1 text-xs text-coastal-mist/65">
+                XP base {lesson.xpReward}
               </p>
             </article>
           ))}
@@ -271,6 +287,7 @@ function Course() {
                   ? 'Listo para rendir'
                   : 'Completa todas las lecciones para desbloquearlo'}
             </p>
+            <p className="mt-2 text-xs text-coastal-mist/65">{finalExamQuestionText}</p>
           </article>
         </section>
       </main>

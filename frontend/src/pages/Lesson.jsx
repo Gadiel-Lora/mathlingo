@@ -26,7 +26,7 @@ const clampPassRate = (value, fallback) => {
 }
 
 const getQuestionTypeByDifficulty = (difficulty) => {
-  return Number(difficulty) >= 3 ? 'input' : 'multiple-choice'
+  return Number(difficulty) >= 4 ? 'input' : 'multiple-choice'
 }
 
 const createFallbackQuestionState = (difficulty) => ({
@@ -145,7 +145,7 @@ function Lesson() {
         streak: stats.streak,
       })
       const nextDifficulty = toSafeInt(levelPayload?.nextDifficulty || recommendedDifficulty) || recommendedDifficulty
-      return Math.max(1, Math.min(5, nextDifficulty))
+      return Math.max(1, Math.min(9, nextDifficulty))
     } catch (error) {
       console.error('Error updating adaptive difficulty:', error?.message || error)
       return recommendedDifficulty
@@ -279,11 +279,11 @@ function Lesson() {
       const progressiveFloor = resolveProgressiveDifficultyFloor(targetQuestionNumber, totalQuestions)
       const targetDifficulty = Math.max(
         1,
-        Math.min(
-          5,
-          Math.max(
-            progressiveFloor,
-            Number(difficultyOverride || recommendedDifficulty || lessonContext.difficulty || 1),
+          Math.min(
+            9,
+            Math.max(
+              progressiveFloor,
+              Number(difficultyOverride || recommendedDifficulty || lessonContext.difficulty || 1),
           ),
         ),
       )
@@ -296,6 +296,13 @@ function Lesson() {
           lessonId: lessonContext.lessonId,
           lessonTitle: lessonContext.lessonTitle,
           lessonSkills: Array.isArray(lessonContext.skills) ? lessonContext.skills : [],
+          lessonSubtopics: Array.isArray(lessonContext.lessonSubtopics)
+            ? lessonContext.lessonSubtopics
+            : Array.isArray(lessonContext.topicSubtopics)
+              ? lessonContext.topicSubtopics
+              : [],
+          problemMix: lessonContext.problemMix || 'mixed',
+          questionCount: Number(lessonContext.questionCount || totalQuestions || 0),
           difficulty: targetDifficulty,
           questionNumber: targetQuestionNumber,
           totalQuestions,
@@ -442,7 +449,7 @@ function Lesson() {
           setFinalExamQuestions(examQuestions)
           setFinalExamRules(exam?.rules || null)
           setTotalQuestions(Math.max(1, Number(exam?.questionCount || examQuestions.length)))
-          setRecommendedDifficulty(Math.max(1, Math.min(5, Number(examQuestions[0]?.difficulty || 4))))
+          setRecommendedDifficulty(Math.max(1, Math.min(9, Number(examQuestions[0]?.difficulty || 4))))
           setQuestion(examQuestions[0])
           resetQuestionUi()
           await loadExistingQuestionState(examQuestions[0]?.hash, Number(examQuestions[0]?.difficulty || 4))
@@ -475,10 +482,15 @@ function Lesson() {
           setLessonContext({
             ...found,
             isFinalGradeExam: false,
-        })
-        const questionsToResolve = found.lessonType === 'exam' ? EXAM_QUESTION_COUNT : PRACTICE_QUESTION_COUNT
+          })
+        const configuredQuestionCount = Number(found.questionCount || 0)
+        const fallbackQuestionCount = found.lessonType === 'exam' ? EXAM_QUESTION_COUNT : PRACTICE_QUESTION_COUNT
+        const questionsToResolve =
+          Number.isFinite(configuredQuestionCount) && configuredQuestionCount > 0
+            ? Math.floor(configuredQuestionCount)
+            : fallbackQuestionCount
         setTotalQuestions(Math.max(1, questionsToResolve))
-        setRecommendedDifficulty(Math.max(1, Math.min(5, Number(found.difficulty || 1))))
+        setRecommendedDifficulty(Math.max(1, Math.min(9, Number(found.difficulty || 1))))
       } catch (error) {
         if (!isMounted) return
         setLessonError(error?.message || 'No se pudo cargar la leccion.')

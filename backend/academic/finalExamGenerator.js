@@ -6,7 +6,16 @@ import { generateQuestion } from './questionEngine.js'
 const clampDifficulty = (value) => {
   const parsed = Number(value)
   if (!Number.isFinite(parsed)) return 3
-  return Math.max(1, Math.min(5, Math.floor(parsed)))
+  return Math.max(1, Math.min(9, Math.floor(parsed)))
+}
+
+const shuffle = (items) => {
+  const next = [...items]
+  for (let index = next.length - 1; index > 0; index -= 1) {
+    const randomIndex = Math.floor(Math.random() * (index + 1))
+    ;[next[index], next[randomIndex]] = [next[randomIndex], next[index]]
+  }
+  return next
 }
 
 const sumCounts = (distribution = []) => {
@@ -50,6 +59,97 @@ const pickDifficulty = (range) => {
   return Math.floor(Math.random() * (high - low + 1)) + low
 }
 
+const normalizeMixLabel = (value) => {
+  const key = String(value ?? '').trim().toLowerCase()
+  if (['contextualized', 'mechanical', 'advanced-modeling', 'mixed'].includes(key)) return key
+  if (
+    [
+      'advanced_modeling',
+      'advanced modeling',
+      'modelacion-avanzada',
+      'modelacion avanzada',
+      'modelacion-compleja',
+      'modelacion compleja',
+    ].includes(key)
+  ) {
+    return 'advanced-modeling'
+  }
+  return 'mixed'
+}
+
+const buildMixSequence = (targetCount, mixDistribution = []) => {
+  const safeTarget = Math.max(0, Math.floor(Number(targetCount) || 0))
+  if (safeTarget === 0) return []
+  if (!Array.isArray(mixDistribution) || mixDistribution.length === 0) {
+    return Array.from({ length: safeTarget }, () => 'mixed')
+  }
+
+  const entries = mixDistribution.map((entry) => ({
+    mix: normalizeMixLabel(entry?.mix ?? entry?.type),
+    count: Number(entry?.count),
+    ratio: Number(entry?.ratio),
+  }))
+
+  const hasExplicitCounts = entries.some((entry) => Number.isFinite(entry.count) && entry.count > 0)
+  const resolvedCounts = entries.map((entry) => ({
+    mix: entry.mix,
+    count: 0,
+    remainder: 0,
+  }))
+
+  if (hasExplicitCounts) {
+    const totalCounts = entries.reduce((total, entry) => {
+      const count = Number.isFinite(entry.count) && entry.count > 0 ? entry.count : 0
+      return total + count
+    }, 0)
+
+    if (totalCounts <= 0) {
+      return Array.from({ length: safeTarget }, () => 'mixed')
+    }
+
+    for (let index = 0; index < entries.length; index += 1) {
+      const count = Number.isFinite(entries[index].count) && entries[index].count > 0 ? entries[index].count : 0
+      const scaled = (count / totalCounts) * safeTarget
+      resolvedCounts[index].count = Math.floor(scaled)
+      resolvedCounts[index].remainder = scaled - Math.floor(scaled)
+    }
+  } else {
+    const ratioSum = entries.reduce((total, entry) => {
+      const ratio = Number.isFinite(entry.ratio) && entry.ratio > 0 ? entry.ratio : 0
+      return total + ratio
+    }, 0)
+
+    if (ratioSum <= 0) {
+      return Array.from({ length: safeTarget }, () => 'mixed')
+    }
+
+    for (let index = 0; index < entries.length; index += 1) {
+      const ratio = Number.isFinite(entries[index].ratio) && entries[index].ratio > 0 ? entries[index].ratio : 0
+      const scaled = (ratio / ratioSum) * safeTarget
+      resolvedCounts[index].count = Math.floor(scaled)
+      resolvedCounts[index].remainder = scaled - Math.floor(scaled)
+    }
+  }
+
+  let currentTotal = resolvedCounts.reduce((total, entry) => total + entry.count, 0)
+  while (currentTotal < safeTarget) {
+    resolvedCounts.sort((left, right) => right.remainder - left.remainder)
+    resolvedCounts[0].count += 1
+    resolvedCounts[0].remainder = 0
+    currentTotal += 1
+  }
+
+  let sequence = resolvedCounts.flatMap((entry) => Array.from({ length: entry.count }, () => entry.mix))
+  if (sequence.length > safeTarget) {
+    sequence = sequence.slice(0, safeTarget)
+  }
+  if (sequence.length < safeTarget) {
+    sequence = sequence.concat(Array.from({ length: safeTarget - sequence.length }, () => 'mixed'))
+  }
+
+  return shuffle(sequence)
+}
+
 export const generateFinalExam = (grade, options = {}) => {
   const gradeData = getGradeCurriculum(grade)
   if (!gradeData) {
@@ -65,6 +165,8 @@ export const generateFinalExam = (grade, options = {}) => {
   const requestedCount = Number(options.questionCount)
   const targetCount = Number.isFinite(requestedCount) && requestedCount > 0 ? Math.floor(requestedCount) : defaultTarget
   const distribution = scaleDistribution(blueprint.distribution, targetCount)
+  const hasMixDistribution = Array.isArray(blueprint.mixDistribution) && blueprint.mixDistribution.length > 0
+  const mixSequence = buildMixSequence(targetCount, blueprint.mixDistribution)
 
   const generatedFingerprints = new Set()
   const generatedQuestions = []
@@ -76,7 +178,15 @@ export const generateFinalExam = (grade, options = {}) => {
     if (!topicId || count === 0) continue
 
     for (let index = 0; index < count; index += 1) {
-      const difficulty = pickDifficulty(block.difficultyRange || [3, 4])
+      const requestedMix = normalizeMixLabel(mixSequence[generatedCount] || 'mixed')
+      const baseDifficulty = pickDifficulty(block.difficultyRange || [3, 4])
+      const difficulty = requestedMix === 'advanced-modeling' ? Math.max(7, baseDifficulty) : baseDifficulty
+      const problemMix =
+        requestedMix === 'mechanical'
+          ? 'mechanical'
+          : requestedMix === 'contextualized' || requestedMix === 'advanced-modeling'
+            ? 'contextualized'
+            : 'mixed'
 
       let nextQuestion = null
       for (let retries = 0; retries < 20; retries += 1) {
@@ -87,7 +197,9 @@ export const generateFinalExam = (grade, options = {}) => {
           lessonContext: {
             lessonId: 'final-exam',
             lessonTitle: blueprint.name || `Examen Final ${gradeData.name}`,
-            lessonSkills: ['evaluacion-final', 'razonamiento'],
+            lessonSkills: ['evaluacion-final', 'razonamiento', requestedMix, ...(hasMixDistribution ? ['mix-control'] : [])],
+            lessonSubtopics: requestedMix === 'advanced-modeling' ? ['modelacion avanzada'] : [requestedMix],
+            problemMix,
             questionNumber: generatedCount + 1,
             totalQuestions: targetCount,
           },
@@ -107,6 +219,7 @@ export const generateFinalExam = (grade, options = {}) => {
         ...nextQuestion,
         examMode: true,
         allowTutorHelp: false,
+        mixTag: requestedMix,
       })
       generatedCount += 1
     }

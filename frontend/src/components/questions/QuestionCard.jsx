@@ -11,7 +11,7 @@ const toneClassMap = {
 
 const resolveType = (question, state) => {
   if (state?.questionType) return state.questionType
-  return Number(question?.difficulty) >= 3 ? 'input' : 'multiple-choice'
+  return Number(question?.difficulty) >= 4 ? 'input' : 'multiple-choice'
 }
 
 function QuestionCard({

@@ -53,6 +53,10 @@ export const flattenGradeLessons = (grade) => {
           lessonType: lesson.type || 'practice',
           difficulty: Number(lesson.difficulty || 1),
           xpReward: Number(lesson.xpReward || 0),
+          questionCount: Math.max(1, Number(lesson.questionCount || (lesson.type === 'exam' ? 10 : 4))),
+          problemMix: String(lesson.problemMix || topic.problemMix || 'mixed'),
+          lessonSubtopics: Array.isArray(lesson.subtopics) ? lesson.subtopics : [],
+          topicSubtopics: Array.isArray(topic.subtopics) ? topic.subtopics : [],
           skills: Array.isArray(lesson.skills) ? lesson.skills : [],
         })
 
@@ -72,7 +76,7 @@ export const summarizeGradeForCard = (grade) => {
     id: grade.id,
     gradeNumber: Number(grade.gradeNumber || 0),
     title: grade.name || grade.id,
-    description: `${grade.areas?.length || 0} areas academicas`,
+    description: `${grade.areas?.length || 0} modulos curriculares`,
     lessonCount: lessonRows.length,
     examCount,
   }
@@ -157,6 +161,10 @@ export const findLessonContext = ({ grade, topicId, lessonId }) => {
           lessonType: lesson.type || 'practice',
           difficulty: Number(lesson.difficulty || 1),
           xpReward: Number(lesson.xpReward || 0),
+          questionCount: Math.max(1, Number(lesson.questionCount || (lesson.type === 'exam' ? 10 : 4))),
+          problemMix: String(lesson.problemMix || topic.problemMix || 'mixed'),
+          lessonSubtopics: Array.isArray(lesson.subtopics) ? lesson.subtopics : [],
+          topicSubtopics: Array.isArray(topic.subtopics) ? topic.subtopics : [],
           skills: Array.isArray(lesson.skills) ? lesson.skills : [],
           progressId: buildLessonProgressId({
             gradeId: grade.id,
