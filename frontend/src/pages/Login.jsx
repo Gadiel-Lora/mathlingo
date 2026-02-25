@@ -27,24 +27,17 @@ function Login() {
         await register(email, password)
         setFeedback({
           type: 'success',
-          message: 'Revisa tu correo para confirmar tu cuenta.',
+          message: 'Cuenta local creada. Sesion iniciada.',
         })
-        setIsRegisterMode(false)
-        setPassword('')
+        navigate('/dashboard', { replace: true })
       } else {
         await login(email, password)
         navigate('/dashboard', { replace: true })
       }
     } catch (error) {
-      const rawErrorMessage = error?.message || ''
-      const loginNeedsEmailConfirmation =
-        !isRegisterMode && rawErrorMessage.toLowerCase().includes('email not confirmed')
-
       setFeedback({
         type: 'error',
-        message: loginNeedsEmailConfirmation
-          ? 'Debes confirmar tu correo antes de iniciar sesion.'
-          : rawErrorMessage || 'No se pudo completar la autenticacion.',
+        message: error?.message || 'No se pudo completar la autenticacion local.',
       })
     } finally {
       setSubmitting(false)

@@ -1,67 +1,108 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 
-import { supabase } from '../supabase/client'
-
 const AuthContext = createContext(null)
+const AUTH_STORAGE_KEY = 'mathlingo-auth-session'
+
+const canUseLocalStorage = () => {
+  return typeof window !== 'undefined' && Boolean(window.localStorage)
+}
+
+const normalizeEmail = (value) => String(value ?? '').trim().toLowerCase()
+
+const buildUserFromEmail = (email) => {
+  const normalizedEmail = normalizeEmail(email)
+  const localId = `local-${normalizedEmail.replace(/[^a-z0-9._-]+/g, '-')}`
+  const emailName = normalizedEmail.split('@')[0] || 'usuario'
+
+  return {
+    id: localId,
+    email: normalizedEmail,
+    name: emailName,
+    authProvider: 'local',
+  }
+}
+
+const readStoredUser = () => {
+  if (!canUseLocalStorage()) return null
+  try {
+    const raw = window.localStorage.getItem(AUTH_STORAGE_KEY)
+    if (!raw) return null
+    const parsed = JSON.parse(raw)
+    const normalizedEmail = normalizeEmail(parsed?.email)
+    if (!normalizedEmail) return null
+    return buildUserFromEmail(normalizedEmail)
+  } catch {
+    return null
+  }
+}
+
+const writeStoredUser = (user) => {
+  if (!canUseLocalStorage()) return
+  if (!user?.email) return
+
+  try {
+    window.localStorage.setItem(
+      AUTH_STORAGE_KEY,
+      JSON.stringify({
+        email: normalizeEmail(user.email),
+      }),
+    )
+  } catch {
+    // noop
+  }
+}
+
+const clearStoredUser = () => {
+  if (!canUseLocalStorage()) return
+  try {
+    window.localStorage.removeItem(AUTH_STORAGE_KEY)
+  } catch {
+    // noop
+  }
+}
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    let isMounted = true
-
-    const loadSession = async () => {
-      try {
-        const {
-          data: { session },
-        } = await supabase.auth.getSession()
-
-        if (!isMounted) return
-        setUser(session?.user ?? null)
-      } finally {
-        if (isMounted) setLoading(false)
-      }
-    }
-
-    loadSession()
-
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (!isMounted) return
-      setUser(session?.user ?? null)
-      setLoading(false)
-    })
-
-    return () => {
-      isMounted = false
-      subscription.unsubscribe()
-    }
+    const storedUser = readStoredUser()
+    setUser(storedUser)
+    setLoading(false)
   }, [])
 
   const login = async (email, password) => {
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    })
+    const normalizedEmail = normalizeEmail(email)
+    if (!normalizedEmail) {
+      throw new Error('Email obligatorio.')
+    }
+    if (String(password ?? '').length < 6) {
+      throw new Error('La contrasena debe tener al menos 6 caracteres.')
+    }
 
-    if (error) throw error
+    const nextUser = buildUserFromEmail(normalizedEmail)
+    setUser(nextUser)
+    writeStoredUser(nextUser)
   }
 
   const register = async (email, password) => {
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-    })
+    const normalizedEmail = normalizeEmail(email)
+    if (!normalizedEmail) {
+      throw new Error('Email obligatorio.')
+    }
+    if (String(password ?? '').length < 6) {
+      throw new Error('La contrasena debe tener al menos 6 caracteres.')
+    }
 
-    if (error) throw error
+    const nextUser = buildUserFromEmail(normalizedEmail)
+    setUser(nextUser)
+    writeStoredUser(nextUser)
   }
 
   const logout = async () => {
-    const { error } = await supabase.auth.signOut()
-    if (error) throw error
+    setUser(null)
+    clearStoredUser()
   }
 
   const value = useMemo(

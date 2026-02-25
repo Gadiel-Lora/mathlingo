@@ -191,6 +191,55 @@ function Lesson() {
     }
   }, [resolveLessonPassThreshold, totalQuestions])
 
+  const finalizeLessonCompletion = useCallback(async () => {
+    if (!lessonContext) return
+
+    const outcome = buildLessonOutcome()
+    setLessonOutcome(outcome)
+    setCompleted(true)
+    setCompletionSynced(false)
+
+    let xpToAward = outcome.passed ? sessionEarnedXp : 0
+    let examOutcome = null
+
+    if (lessonContext.isFinalGradeExam) {
+      const score = outcome.score
+      const passingScore = outcome.requiredScore
+      const xpMultiplier = Math.max(1, Number(finalExamRules?.xpMultiplier || 2))
+      const passed = outcome.passed
+
+      if (passed && xpMultiplier > 1) {
+        xpToAward = Math.floor(sessionEarnedXp * xpMultiplier)
+      }
+
+      examOutcome = {
+        passed,
+        score,
+        passingScore,
+        xpMultiplier,
+        baseXp: sessionEarnedXp,
+        awardedXp: xpToAward,
+        bonusXp: Math.max(0, xpToAward - sessionEarnedXp),
+      }
+    }
+
+    try {
+      if (outcome.passed) {
+        await completeLesson({
+          lessonId: lessonContext.progressId,
+          xpEarned: xpToAward,
+          incrementStreak: lessonContext.isFinalGradeExam ? Boolean(examOutcome?.passed) : true,
+        })
+      }
+    } catch (error) {
+      console.error('Error syncing dynamic lesson completion:', error?.message || error)
+    } finally {
+      setCompletionAwardXp(xpToAward)
+      setFinalExamOutcome(examOutcome)
+      setCompletionSynced(true)
+    }
+  }, [buildLessonOutcome, completeLesson, finalExamRules?.xpMultiplier, lessonContext, sessionEarnedXp])
+
   const loadExistingQuestionState = useCallback(
     async (questionHash, fallbackDifficulty = 1) => {
       if (!questionHash) {
@@ -443,7 +492,7 @@ function Lesson() {
     return () => {
       isMounted = false
     }
-  }, [id, learnerId, level, loadExistingQuestionState, loadingProgress, resetQuestionUi])
+  }, [id, learnerId, loadExistingQuestionState, loadingProgress, resetQuestionUi])
 
   useEffect(() => {
     if (!lessonContext || loadingLesson || lessonError || completed) return
@@ -452,63 +501,6 @@ function Lesson() {
 
     void generateNewQuestion(lessonContext.difficulty)
   }, [completed, generateNewQuestion, lessonContext, lessonError, loadingLesson, question])
-
-  useEffect(() => {
-    if (!completed || completionSynced || !lessonContext || !lessonOutcome) return
-
-    let isMounted = true
-
-    const syncLessonCompletion = async () => {
-      try {
-        let xpToAward = lessonOutcome.passed ? sessionEarnedXp : 0
-        let examOutcome = null
-
-        if (lessonContext.isFinalGradeExam) {
-          const score = lessonOutcome.score
-          const passingScore = lessonOutcome.requiredScore
-          const xpMultiplier = Math.max(1, Number(finalExamRules?.xpMultiplier || 2))
-          const passed = lessonOutcome.passed
-
-          if (passed && xpMultiplier > 1) {
-            xpToAward = Math.floor(sessionEarnedXp * xpMultiplier)
-          }
-
-          examOutcome = {
-            passed,
-            score,
-            passingScore,
-            xpMultiplier,
-            baseXp: sessionEarnedXp,
-            awardedXp: xpToAward,
-            bonusXp: Math.max(0, xpToAward - sessionEarnedXp),
-          }
-        }
-
-        if (lessonOutcome.passed) {
-          await completeLesson({
-            lessonId: lessonContext.progressId,
-            xpEarned: xpToAward,
-            incrementStreak: lessonContext.isFinalGradeExam ? Boolean(examOutcome?.passed) : true,
-          })
-        }
-
-        if (isMounted) {
-          setCompletionAwardXp(xpToAward)
-          setFinalExamOutcome(examOutcome)
-        }
-      } catch (error) {
-        console.error('Error syncing dynamic lesson completion:', error?.message || error)
-      } finally {
-        if (isMounted) setCompletionSynced(true)
-      }
-    }
-
-    void syncLessonCompletion()
-
-    return () => {
-      isMounted = false
-    }
-  }, [completeLesson, completed, completionSynced, finalExamRules, lessonContext, lessonOutcome, sessionEarnedXp])
 
   const submitAnswer = async () => {
     if (!question || questionState.locked || loadingSubmit || loadingNextQuestion) return
@@ -623,18 +615,14 @@ function Lesson() {
 
     const isLast = currentQuestionNumber >= totalQuestions
     if (isLast) {
-      const outcome = buildLessonOutcome()
-      setLessonOutcome(outcome)
-      setCompleted(true)
+      await finalizeLessonCompletion()
       return
     }
 
     if (lessonContext?.isFinalGradeExam) {
       const nextQuestion = finalExamQuestions[currentQuestionNumber]
       if (!nextQuestion) {
-        const outcome = buildLessonOutcome()
-        setLessonOutcome(outcome)
-        setCompleted(true)
+        await finalizeLessonCompletion()
         return
       }
 
@@ -813,14 +801,24 @@ function Lesson() {
                   type="button"
                   onClick={() => navigate(`/lesson/${id}`, { replace: true })}
                   className="cm-btn-secondary"
+                  disabled={!completionSynced}
                 >
                   Reintentar leccion
                 </button>
               )}
-              <button type="button" onClick={() => navigate(`/course/${lessonContext.gradeId}`)} className="cm-btn-secondary">
+              <button
+                type="button"
+                onClick={() => navigate(`/course/${lessonContext.gradeId}`)}
+                className="cm-btn-secondary"
+                disabled={!completionSynced}
+              >
                 Volver al grado
               </button>
-              <Link to="/dashboard" className="cm-btn-primary">
+              <Link
+                to="/dashboard"
+                className={`cm-btn-primary ${!completionSynced ? 'pointer-events-none opacity-60' : ''}`}
+                aria-disabled={!completionSynced}
+              >
                 Ir al dashboard
               </Link>
             </div>
