@@ -8,6 +8,16 @@ Project note (2026-02-25): architecture has evolved and now includes a Node acad
 1. Backend: FastAPI (REST, JWT, SQLite).
 2. Frontend: React + Vite (API client).
 
+**Project structure (clean layout)**
+1. `app/`: FastAPI backend.
+2. `backend/`: Node academic backend (curriculum/question engine/final exam).
+3. `curriculum/`: shared academic model.
+`curriculum/grades/` contains grade definitions.
+`curriculum/core/` contains shared curriculum helpers.
+4. `frontend/`: React app.
+5. `scripts/`: operational scripts grouped by purpose:
+`scripts/db/`, `scripts/seed/`, `scripts/simulation/`, `scripts/debug/`, `scripts/prototypes/`.
+
 **Technologies**
 1. Python 3.12, FastAPI, SQLAlchemy, SQLite, JWT.
 2. React 18, Vite, Axios.

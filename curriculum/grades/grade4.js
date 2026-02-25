@@ -1,4 +1,4 @@
-import { buildLessonsFromOutline } from './shared.js'
+import { buildLessonsFromOutline } from '../core/shared.js'
 
 const topic = (id, name, outline) => ({
   id,

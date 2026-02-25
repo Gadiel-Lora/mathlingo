@@ -57,9 +57,9 @@ The product direction shown by recent commits is focused on:
 - Aggregation and indexes:
   - `curriculum/index.js`
 - Grade definitions:
-  - `curriculum/grade1.js` ... `curriculum/grade5.js`
+  - `curriculum/grades/grade1.js` ... `curriculum/grades/grade5.js`
 - Shared helpers:
-  - `curriculum/shared.js`
+  - `curriculum/core/shared.js`
 
 ### FastAPI backend (`app/`)
 

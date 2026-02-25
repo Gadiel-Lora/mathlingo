@@ -1,7 +1,8 @@
 ﻿import sqlite3
 from pathlib import Path
 
-DB_PATH = Path('mathlingo.db')
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+DB_PATH = PROJECT_ROOT / 'mathlingo.db'
 
 if not DB_PATH.exists():
     raise SystemExit('mathlingo.db not found. Start app or create tables first.')

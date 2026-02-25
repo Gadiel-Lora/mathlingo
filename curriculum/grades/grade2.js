@@ -1,4 +1,4 @@
-import { createLesson } from './shared.js'
+import { createLesson } from '../core/shared.js'
 
 const buildTopic = ({
   id,

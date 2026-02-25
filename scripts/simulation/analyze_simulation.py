@@ -128,7 +128,7 @@ def resolve_input_path(input_arg: str) -> Path:
         return selected
 
     print(f'No CSV files found in current directory: {cwd}')
-    print('Run simulate_learning.py first, or provide an existing CSV path.')
+    print('Run scripts/simulation/simulate_learning.py first, or provide an existing CSV path.')
 
     while True:
         manual_path = input('Enter CSV path (or press Enter to cancel): ').strip()

@@ -1,7 +1,5 @@
-import grade1 from './grade1.js'
-import grade2 from './grade2.js'
-import grade3 from './grade3.js'
-import { findTopicInGrade } from './shared.js'
+import { grade1, grade2, grade3 } from './grades/index.js'
+import { findTopicInGrade } from './core/shared.js'
 
 const BRANCH_NAME_MAP = {
   'numeros-naturales': 'Numeros Naturales',
