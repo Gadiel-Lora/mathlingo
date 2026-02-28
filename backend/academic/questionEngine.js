@@ -5,7 +5,7 @@ import { getQuestionTypeByDifficulty } from '../../curriculum/index.js'
 const clampDifficulty = (value) => {
   const parsed = Number(value)
   if (!Number.isFinite(parsed)) return 1
-  return Math.max(1, Math.min(9, Math.floor(parsed)))
+  return Math.max(1, Math.min(10, Math.floor(parsed)))
 }
 
 const normalizeTopicKey = (value) => {
@@ -21,6 +21,42 @@ const normalizeTopicKey = (value) => {
 const TOPIC_ALIASES = {
   'numeros-naturales': 'operaciones-basicas',
   numerosnaturales: 'operaciones-basicas',
+  'sistema-decimal': 'sistema-numeros-naturales-decimal',
+  'unidad-1-sistema-decimal': 'sistema-numeros-naturales-decimal',
+  'operaciones-combinadas': 'operaciones-fundamentales-modelacion-numerica',
+  'unidad-2-operaciones': 'operaciones-fundamentales-modelacion-numerica',
+  enteros: 'introduccion-sistema-numeros-enteros',
+  'numeros-enteros': 'introduccion-sistema-numeros-enteros',
+  'geometria-plana-inicial': 'fundamentos-geometria-plana-inicial',
+  'unidad-4-geometria': 'fundamentos-geometria-plana-inicial',
+  'lenguaje-algebraico': 'lenguaje-algebraico-expresiones',
+  'lenguaje-algebraico-y-expresiones': 'lenguaje-algebraico-expresiones',
+  'unidad-1-lenguaje-algebraico': 'lenguaje-algebraico-expresiones',
+  'ecuaciones-lineales-primer-grado': 'ecuaciones-lineales-primer-grado',
+  'unidad-2-ecuaciones-lineales': 'ecuaciones-lineales-primer-grado',
+  'razones-proporciones': 'razones-proporciones-proporcionalidad',
+  'proporcionalidad-bimestre-2': 'razones-proporciones-proporcionalidad',
+  'unidad-3-proporcionalidad': 'razones-proporciones-proporcionalidad',
+  'proporcionalidad-geometrica': 'proporcionalidad-geometrica-escalas-semejanza',
+  'escalas-y-semejanza': 'proporcionalidad-geometrica-escalas-semejanza',
+  'unidad-4-integracion-geometrica': 'proporcionalidad-geometrica-escalas-semejanza',
+  'funciones-lineales-iniciales': 'relaciones-funciones-lineales-iniciales',
+  'relaciones-funciones-lineales': 'relaciones-funciones-lineales-iniciales',
+  'unidad-1-funciones-lineales': 'relaciones-funciones-lineales-iniciales',
+  'sistemas-ecuaciones-lineales': 'sistemas-ecuaciones-lineales-introduccion',
+  'unidad-2-sistemas': 'sistemas-ecuaciones-lineales-introduccion',
+  'funciones-cuadraticas-introduccion': 'introduccion-funciones-cuadraticas',
+  'unidad-3-funciones-cuadraticas': 'introduccion-funciones-cuadraticas',
+  'estadistica-analisis': 'estadistica-analisis-datos',
+  'unidad-4-estadistica-analisis': 'estadistica-analisis-datos',
+  'inecuaciones-lineales-restricciones': 'inecuaciones-modelacion-restricciones',
+  'unidad-1-inecuaciones': 'inecuaciones-modelacion-restricciones',
+  'geometria-analitica': 'geometria-analitica-inicial',
+  'unidad-2-geometria-analitica': 'geometria-analitica-inicial',
+  'probabilidad-conteo': 'probabilidad-conteo-inicial',
+  'unidad-3-probabilidad-conteo': 'probabilidad-conteo-inicial',
+  'proyecto-integrador': 'proyecto-integrador-matematico',
+  'unidad-4-proyecto-integrador': 'proyecto-integrador-matematico',
   'potencias-y-raices': 'potencias-propiedades',
   proporcionalidad: 'proporcionalidad-compuesta',
   'expresiones-algebraicas-avanzadas': 'polinomios',
@@ -360,6 +396,70 @@ const TOPIC_CONTEXT_LIBRARY = {
     'Un proceso por etapas exige analizar eventos dependientes y condicionados.',
     'Un diagrama de arbol formal organiza probabilidades compuestas.',
   ],
+  'sistema-numeros-naturales-decimal': [
+    'En un registro escolar se analizan cantidades grandes usando notacion decimal.',
+    'Una actividad academica requiere interpretar cifras por valor posicional.',
+  ],
+  'operaciones-fundamentales-modelacion-numerica': [
+    'Una situacion real se modela con varias operaciones y orden de prioridad.',
+    'Un problema multietapa exige elegir y encadenar operaciones con precision.',
+  ],
+  'introduccion-sistema-numeros-enteros': [
+    'Una variacion de temperatura y saldo financiero requiere usar enteros con signo.',
+    'Un cambio de niveles positivos y negativos se representa en la recta numerica.',
+  ],
+  'fundamentos-geometria-plana-inicial': [
+    'Un diseno escolar requiere lenguaje geometrico formal y calculo de perimetros.',
+    'Una maqueta integra segmentos, angulos y triangulos para resolver medidas.',
+  ],
+  'lenguaje-algebraico-expresiones': [
+    'Una situacion requiere traducir lenguaje verbal a lenguaje algebraico con precision.',
+    'Un problema simbolico exige simplificar y evaluar expresiones usando variables.',
+  ],
+  'ecuaciones-lineales-primer-grado': [
+    'Una igualdad algebraica debe resolverse manteniendo el equilibrio en ambos miembros.',
+    'Un contexto real se modela con una ecuacion lineal de primer grado.',
+  ],
+  'razones-proporciones-proporcionalidad': [
+    'Un escenario compara magnitudes mediante razones, proporciones y porcentajes.',
+    'Una situacion aplicada requiere decidir si la relacion es directa o inversa.',
+  ],
+  'proporcionalidad-geometrica-escalas-semejanza': [
+    'Una representacion a escala conecta medidas reales con medidas del plano.',
+    'Figuras semejantes requieren proporcionalidad para hallar lados, perimetros y areas.',
+  ],
+  'relaciones-funciones-lineales-iniciales': [
+    'Una situacion de variacion entre magnitudes se modela con tablas, graficas y expresiones lineales.',
+    'El analisis funcional requiere interpretar dependencia entre variables y tasa de cambio.',
+  ],
+  'sistemas-ecuaciones-lineales-introduccion': [
+    'Dos condiciones simultaneas se representan con ecuaciones lineales en dos variables.',
+    'El punto de interseccion de rectas permite interpretar la solucion de un sistema.',
+  ],
+  'introduccion-funciones-cuadraticas': [
+    'Una relacion no lineal muestra crecimiento cuadratico y comportamiento parabolico.',
+    'El modelado cuadratico conecta tablas, expresiones y graficas de area variable.',
+  ],
+  'estadistica-analisis-datos': [
+    'Un conjunto de datos reales requiere organizacion, representacion e interpretacion critica.',
+    'El analisis estadistico usa medidas de tendencia central y variabilidad para decidir.',
+  ],
+  'inecuaciones-modelacion-restricciones': [
+    'Un problema real impone limites minimos y maximos que se modelan con desigualdades.',
+    'Una decision requiere analizar rangos validos y representar conjuntos solucion en la recta.',
+  ],
+  'geometria-analitica-inicial': [
+    'Un escenario espacial combina pendientes, puntos medios y ecuaciones de rectas.',
+    'Una situacion de trayectorias requiere interpretar algebraicamente el plano cartesiano.',
+  ],
+  'probabilidad-conteo-inicial': [
+    'Un experimento aleatorio exige construir el espacio muestral y contar resultados posibles.',
+    'Una decision bajo incertidumbre requiere comparar probabilidades en contexto real.',
+  ],
+  'proyecto-integrador-matematico': [
+    'Un caso integrador exige combinar algebra, funciones, geometria y probabilidad en una sola solucion.',
+    'Una situacion compleja requiere modelacion multietapa con argumentacion matematica formal.',
+  ],
   'modelacion-integrada': [
     'Un problema integrador combina algebra, funciones y geometria para modelar una decision.',
     'Una situacion compleja requiere traducir contexto real a varias representaciones matematicas.',
@@ -431,6 +531,63 @@ const normalizeProblemMix = (value, fallback = 'mixed') => {
   return fallback
 }
 
+const GEOMETRY_TOPICS = new Set([
+  'fundamentos-geometria-plana-inicial',
+  'proporcionalidad-geometrica-escalas-semejanza',
+  'geometria-analitica-inicial',
+  'figuras-planas',
+  'angulos',
+  'teorema-de-pitagoras',
+  'areas-compuestas',
+  'semejanza-de-triangulos',
+  'semejanza-triangulos-formal',
+  'pitagoras-ampliado',
+  'geometria-analitica-basica',
+])
+
+const GEOMETRY_FIGURE_PROBABILITY = 0.3
+
+const extractPromptMeasures = (prompt) => {
+  return [...String(prompt || '').matchAll(/-?\d+(?:[.,]\d+)?/g)].map((match) =>
+    String(match[0]).replace(',', '.'),
+  )
+}
+
+const buildGeometryFigureSnippet = ({ topic, prompt }) => {
+  const key = canonicalizeTopic(topic)
+  const measures = extractPromptMeasures(prompt)
+  const m1 = measures[0] ?? String(randomInt(4, 18))
+  const m2 = measures[1] ?? String(randomInt(3, 16))
+  const m3 = measures[2] ?? String(randomInt(5, 20))
+  const m4 = measures[3] ?? String(randomInt(6, 24))
+
+  if (key === 'angulos') {
+    return `[Figura sugerida: dos semirrectas con apertura de ${m1} grados; marca el angulo y su tipo.]`
+  }
+
+  if (key === 'teorema-de-pitagoras' || key === 'pitagoras-ampliado') {
+    return `[Figura sugerida: triangulo rectangulo con catetos ${m1} y ${m2}; identifica la hipotenusa.]`
+  }
+
+  if (key === 'geometria-analitica-inicial' || key === 'geometria-analitica-basica') {
+    return `[Figura sugerida: plano cartesiano con A(${m1}, ${m2}) y B(${m3}, ${m4}); grafica ambos puntos.]`
+  }
+
+  if (key === 'semejanza-de-triangulos' || key === 'semejanza-triangulos-formal' || key === 'proporcionalidad-geometrica-escalas-semejanza') {
+    return `[Figura sugerida: dos triangulos semejantes con lados correspondientes ${m1}, ${m2} y ${m3}; señala la razon de semejanza.]`
+  }
+
+  if (key === 'areas-compuestas') {
+    return `[Figura sugerida: figura compuesta formada por rectangulo y triangulo con medidas ${m1}, ${m2} y ${m3}.]`
+  }
+
+  if (key === 'figuras-planas' || key === 'fundamentos-geometria-plana-inicial') {
+    return `[Figura sugerida: figura plana con lados ${m1}, ${m2} y ${m3}; etiqueta cada medida.]`
+  }
+
+  return `[Figura sugerida: esquema geometrico con medidas ${m1}, ${m2} y ${m3}.]`
+}
+
 const applyAcademicRigor = ({ candidate, topic, difficulty, intent }) => {
   const stage = intent?.cognitiveStage || 'direct-application'
   const problemMix = normalizeProblemMix(intent?.problemMix, 'mixed')
@@ -438,6 +595,12 @@ const applyAcademicRigor = ({ candidate, topic, difficulty, intent }) => {
     problemMix === 'contextualized' || (problemMix === 'mixed' && (stage !== 'direct-application' || Math.random() < 0.5))
   const contextSentence = resolveContextSentence(topic)
   const basePrompt = String(candidate?.prompt || '').trim()
+  const canonicalTopic = canonicalizeTopic(topic)
+  const includeGeometryFigure =
+    GEOMETRY_TOPICS.has(canonicalTopic) &&
+    !/figura sugerida/i.test(basePrompt) &&
+    Math.random() < GEOMETRY_FIGURE_PROBABILITY
+  const geometryFigureSnippet = includeGeometryFigure ? buildGeometryFigureSnippet({ topic: canonicalTopic, prompt: basePrompt }) : ''
   const nextCandidate = {
     ...candidate,
     prompt: basePrompt,
@@ -467,6 +630,7 @@ const applyAcademicRigor = ({ candidate, topic, difficulty, intent }) => {
       }
       nextCandidate.prompt = [
         shouldContextualize ? contextSentence : '',
+        geometryFigureSnippet,
         'Problema de razonamiento multi-paso:',
         basePrompt,
         multiStep.instruction,
@@ -481,20 +645,22 @@ const applyAcademicRigor = ({ candidate, topic, difficulty, intent }) => {
   }
 
   if (stage === 'contextual-analysis' && shouldContextualize) {
-    nextCandidate.prompt = [contextSentence, 'Analiza el contexto, identifica datos utiles y resuelve:', basePrompt].join(' ')
+    nextCandidate.prompt = [contextSentence, geometryFigureSnippet, 'Analiza el contexto, identifica datos utiles y resuelve:', basePrompt]
+      .filter(Boolean)
+      .join(' ')
     nextCandidate.explanationTemplate =
       'Paso 1: identifica datos relevantes del contexto. Paso 2: selecciona y aplica la operacion correcta. Resultado: {answer}.'
     return nextCandidate
   }
 
   if (shouldContextualize) {
-    nextCandidate.prompt = [contextSentence, basePrompt].join(' ')
+    nextCandidate.prompt = [contextSentence, geometryFigureSnippet, basePrompt].filter(Boolean).join(' ')
     nextCandidate.explanationTemplate =
       'Paso 1: identifica la operacion principal en el problema. Paso 2: calcula y valida el resultado. Resultado: {answer}.'
     return nextCandidate
   }
 
-  nextCandidate.prompt = basePrompt
+  nextCandidate.prompt = [geometryFigureSnippet, basePrompt].filter(Boolean).join(' ')
   nextCandidate.explanationTemplate =
     'Paso 1: identifica la operacion o regla principal. Paso 2: resuelve con precision y verifica. Resultado: {answer}.'
   return nextCandidate
@@ -522,12 +688,14 @@ const resolveLessonIntent = ({
     : ''
 
   const text = `${normalizedTitle} ${normalizedId} ${normalizedSkills} ${normalizedSubtopics}`.trim()
+  const isFinalExamContext = normalizedId.includes('final-exam')
+  const hasMixControl = /mix-control/.test(text)
+  const contextualOnlyTopics = new Set(['operaciones-basicas'])
   const intent = {
     forcedOperation: null,
     combinedOperations: false,
     focus: null,
-    problemMix:
-      normalizedTopic === 'operaciones-basicas' ? 'contextualized' : normalizeProblemMix(problemMix, 'mixed'),
+    problemMix: contextualOnlyTopics.has(normalizedTopic) ? 'contextualized' : normalizeProblemMix(problemMix, 'mixed'),
     cognitiveStage: resolveCognitiveStage({
       difficulty,
       questionNumber,
@@ -543,6 +711,184 @@ const resolveLessonIntent = ({
   if (/resta/.test(text)) intent.forcedOperation = '-'
   if (/multiplicacion|agrupar|grupos/.test(text)) intent.forcedOperation = '*'
   if (/division|repartir/.test(text)) intent.forcedOperation = '/'
+
+  if (normalizedTopic === 'sistema-numeros-naturales-decimal') {
+    if (/lectura|escritura|verbal|numerica/.test(text)) intent.focus = 'reading-writing'
+    else if (/valor posicional|descompos|base 10|base10|potencias de 10/.test(text)) intent.focus = 'place-value'
+    else if (/comparacion|orden|desigualdad|mayor|menor/.test(text)) intent.focus = 'comparison-order'
+    else if (/propiedades.*suma|conmutativa|asociativa|neutro/.test(text)) intent.focus = 'addition-properties'
+    else intent.focus = isFinalExamContext ? null : 'multiplication-properties'
+  }
+
+  if (normalizedTopic === 'operaciones-fundamentales-modelacion-numerica') {
+    if (/suma y resta|suma|resta/.test(text) && !/multiplic|division/.test(text)) intent.focus = 'add-sub-combined'
+    else if (/multiplic|division/.test(text) && !/jerarquia/.test(text)) intent.focus = 'mul-div-combined'
+    else if (/jerarquia|orden operativo|prioridad/.test(text)) intent.focus = 'hierarchy'
+    else if (/modelacion|multietapa|traduccion verbal/.test(text)) intent.focus = 'modeling'
+    else intent.focus = isFinalExamContext ? null : 'integrator'
+  }
+
+  if (normalizedTopic === 'introduccion-sistema-numeros-enteros') {
+    if (/concepto|representacion|positiv|negativ|direccion/.test(text)) intent.focus = 'integer-concept'
+    else if (/recta numerica|orden|ubica|compar/.test(text)) intent.focus = 'number-line'
+    else if (/suma/.test(text) && !/resta/.test(text)) intent.focus = 'integer-addition'
+    else if (/resta|opuesto|equivalencia aditiva|inverso aditivo/.test(text)) intent.focus = 'integer-subtraction'
+    else intent.focus = isFinalExamContext ? null : 'integer-context'
+  }
+
+  if (normalizedTopic === 'fundamentos-geometria-plana-inicial') {
+    if (/punto|recta|plano|euclidian/.test(text)) intent.focus = 'point-line-plane'
+    else if (/segment|angulo|medicion|clasificacion/.test(text) && !/triang/.test(text)) intent.focus = 'segments-angles'
+    else if (/triang/.test(text)) intent.focus = 'triangles-classification'
+    else if (/perimetro/.test(text)) intent.focus = 'perimeter'
+    else intent.focus = isFinalExamContext ? null : 'geometric-integrator'
+  }
+
+  if (normalizedTopic === 'lenguaje-algebraico-expresiones') {
+    if (/uso de letras|representar cantidades|variable|cantidad desconocida/.test(text)) intent.focus = 'variables'
+    else if (/traduccion|enunciad|verbal/.test(text)) intent.focus = 'translation'
+    else if (/terminos|clasificacion|coeficiente|parte literal|grado/.test(text)) intent.focus = 'term-classification'
+    else if (/reduccion|semejantes|simplific/.test(text)) intent.focus = 'like-terms-reduction'
+    else if (/evaluacion|sustitucion/.test(text)) intent.focus = 'expression-evaluation'
+    else if (/propiedades|conmutativa|asociativa|distributiva/.test(text)) intent.focus = 'properties'
+    else if (/modelacion/.test(text)) intent.focus = 'modeling-basic'
+    else intent.focus = isFinalExamContext ? null : 'structural-integration'
+  }
+
+  if (normalizedTopic === 'ecuaciones-lineales-primer-grado') {
+    if (/principio de igualdad|concepto de ecuacion|equilibrio/.test(text)) intent.focus = 'equality-principle'
+    else if (/x \+ a|simples|una sola operacion/.test(text)) intent.focus = 'simple-inverse'
+    else if (/multiplicacion|division|ax = b|x\/a/.test(text)) intent.focus = 'mul-div'
+    else if (/ambos miembros|transposicion|aislar/.test(text)) intent.focus = 'both-sides'
+    else if (/parentesis|distributiva/.test(text)) intent.focus = 'parentheses-distributive'
+    else if (/verbales|incognita|context/.test(text)) intent.focus = 'word-problems'
+    else if (/enteros|fracciones/.test(text)) intent.focus = 'integers-fractions'
+    else intent.focus = isFinalExamContext ? null : 'advanced-integration'
+  }
+
+  if (normalizedTopic === 'razones-proporciones-proporcionalidad') {
+    if (/concepto de razon|a:b|relacion multiplicativa/.test(text)) intent.focus = 'ratio-concept'
+    else if (/proporciones|producto de extremos|producto de medios|propiedad fundamental/.test(text)) {
+      intent.focus = 'proportion-property'
+    } else if (/directamente proporcional|proporcionalidad directa/.test(text)) intent.focus = 'direct-prop'
+    else if (/inversamente proporcional|proporcionalidad inversa/.test(text)) intent.focus = 'inverse-prop'
+    else if (/regla de tres simple directa/.test(text)) intent.focus = 'rule-three-direct'
+    else if (/regla de tres simple inversa/.test(text)) intent.focus = 'rule-three-inverse'
+    else if (/porcentajes|descuentos|aumentos|variaciones porcentuales/.test(text)) intent.focus = 'percentages'
+    else intent.focus = isFinalExamContext ? null : 'prop-integration'
+  }
+
+  if (normalizedTopic === 'proporcionalidad-geometrica-escalas-semejanza') {
+    if (/escalas|ampliacion|reduccion/.test(text)) intent.focus = 'scales'
+    else if (/figuras semejantes|razon de semejanza/.test(text)) intent.focus = 'similarity-ratio'
+    else if (/lados faltantes|medidas desconocidas/.test(text)) intent.focus = 'missing-sides'
+    else if (/perimetros?/.test(text)) intent.focus = 'perimeter-similarity'
+    else if (/areas?|razon cuadratica/.test(text)) intent.focus = 'area-similarity'
+    else if (/contextos reales|mapas|planos arquitectonicos|tecnicas/.test(text)) intent.focus = 'real-scale-context'
+    else if (/integracion algebra|ecuaciones/.test(text)) intent.focus = 'algebra-similarity'
+    else intent.focus = isFinalExamContext ? null : 'advanced-geo-integration'
+  }
+
+  if (normalizedTopic === 'relaciones-funciones-lineales-iniciales') {
+    if (/relaciones entre magnitudes|dependiente|independiente/.test(text)) intent.focus = 'magnitude-relations'
+    else if (/tablas de valores|patrones|regularidades/.test(text)) intent.focus = 'value-tables'
+    else if (/plano cartesiano|pares ordenados|coordenadas/.test(text)) intent.focus = 'cartesian-pairs'
+    else if (/representacion grafica|crecimiento|decrecimiento/.test(text)) intent.focus = 'graph-representation'
+    else if (/concepto formal de funcion|es funcion|unic/.test(text)) intent.focus = 'function-concept'
+    else if (/y = mx|funciones lineales/.test(text)) intent.focus = 'y-equals-mx'
+    else if (/pendiente|tasa de cambio/.test(text)) intent.focus = 'slope-rate'
+    else intent.focus = isFinalExamContext ? null : 'functional-integration'
+  }
+
+  if (normalizedTopic === 'sistemas-ecuaciones-lineales-introduccion') {
+    if (/dos variables|ax \+ by = c|pares ordenados/.test(text)) intent.focus = 'two-variable-solutions'
+    else if (/representacion grafica|grafica de ecuaciones/.test(text)) intent.focus = 'graph-linear-equation'
+    else if (/concepto de sistema|punto comun|interseccion/.test(text)) intent.focus = 'system-concept'
+    else if (/metodo grafico/.test(text)) intent.focus = 'graph-method'
+    else if (/sustitucion/.test(text)) intent.focus = 'substitution-intro'
+    else if (/igualacion/.test(text)) intent.focus = 'equalization-intro'
+    else if (/problemas verbales|mezclas|edades|precios|costos/.test(text)) intent.focus = 'word-problems-systems'
+    else intent.focus = isFinalExamContext ? null : 'integration-graph-algebra'
+  }
+
+  if (normalizedTopic === 'introduccion-funciones-cuadraticas') {
+    if (/patrones cuadraticos|segundo nivel/.test(text)) intent.focus = 'quadratic-patterns'
+    else if (/x\^2|expresiones cuadraticas/.test(text)) intent.focus = 'x-square-expressions'
+    else if (/y = x\^2|parabola basica|simetria/.test(text)) intent.focus = 'y-equals-x2'
+    else if (/y = ax\^2|coeficiente|apertura|orientacion/.test(text)) intent.focus = 'y-equals-ax2'
+    else if (/lineal y cuadratica|lineal vs cuadratica/.test(text)) intent.focus = 'linear-vs-quadratic'
+    else if (/area variable|geometricos/.test(text)) intent.focus = 'geometric-area-variable'
+    else if (/interpretacion grafica avanzada|vertice|creciente|decreciente/.test(text)) intent.focus = 'graph-advanced'
+    else intent.focus = isFinalExamContext ? null : 'quadratic-integration'
+  }
+
+  if (normalizedTopic === 'estadistica-analisis-datos') {
+    if (/recoleccion|organizacion|cualitativos|cuantitativos/.test(text)) intent.focus = 'data-collection-organization'
+    else if (/tablas de frecuencia|frecuencia absoluta|frecuencia relativa/.test(text)) intent.focus = 'frequency-tables'
+    else if (/graficos estadisticos|barras|circular|lineales/.test(text)) intent.focus = 'statistical-graphs'
+    else if (/media aritmetica|promedio/.test(text)) intent.focus = 'mean'
+    else if (/mediana|moda/.test(text)) intent.focus = 'median-mode'
+    else if (/rango|variabilidad|dispersion/.test(text)) intent.focus = 'range-variability'
+    else if (/interpretacion critica|escalas enganosas|errores/.test(text)) intent.focus = 'critical-graph-interpretation'
+    else intent.focus = isFinalExamContext ? null : 'integrative-project'
+  }
+
+  if (normalizedTopic === 'inecuaciones-modelacion-restricciones') {
+    if (/concepto|desigualdad|<|>|<=|>=|simbol/.test(text)) intent.focus = 'inequality-concept'
+    else if (/simples|x \+ a|una operacion|operaciones inversas/.test(text)) intent.focus = 'simple-inequality'
+    else if (/cambio de sentido|negativ|multiplicacion|division/.test(text)) intent.focus = 'sign-flip'
+    else if (/recta numerica|interval|abierto|cerrado/.test(text)) intent.focus = 'number-line'
+    else if (/parentesis|distributiva|reduccion/.test(text)) intent.focus = 'distributive-inequality'
+    else if (/verbales|restricciones|presupuesto|maximo|minima|minimo|capacidad/.test(text)) intent.focus = 'verbal-restrictions'
+    else if (/sistemas? simples|interseccion|rango comun/.test(text)) intent.focus = 'system-inequalities'
+    else intent.focus = isFinalExamContext ? null : 'advanced-integration-inequalities'
+  }
+
+  if (normalizedTopic === 'geometria-analitica-inicial') {
+    if (/distancia entre dos puntos|distancia/.test(text)) intent.focus = 'point-distance'
+    else if (/punto medio|segmento/.test(text)) intent.focus = 'midpoint'
+    else if (/pendiente|razon geometrica|tasa de cambio/.test(text)) intent.focus = 'slope-ratio'
+    else if (/ecuacion basica de la recta|y\s*=\s*m\s*x\s*\+\s*b|intercepto/.test(text)) intent.focus = 'line-equation'
+    else if (/paralelas|perpendiculares/.test(text)) intent.focus = 'parallel-perpendicular'
+    else if (/interpretacion geometrica de sistemas|interseccion de rectas|sistema/.test(text)) {
+      intent.focus = 'geometric-system-interpretation'
+    } else if (/aplicaciones espaciales|trayectorias|comparacion de pendientes/.test(text)) {
+      intent.focus = 'spatial-applications'
+    } else {
+      intent.focus = isFinalExamContext ? null : 'advanced-algebra-geometry-integration'
+    }
+  }
+
+  if (normalizedTopic === 'probabilidad-conteo-inicial') {
+    if (/experimentos aleatorios|determinista|aleatorio/.test(text)) intent.focus = 'random-experiments'
+    else if (/espacio muestral/.test(text)) intent.focus = 'sample-space'
+    else if (/probabilidad clasica|casos favorables|casos posibles/.test(text)) intent.focus = 'classical-probability'
+    else if (/eventos simples|eventos compuestos|union|interseccion/.test(text)) intent.focus = 'simple-compound-events'
+    else if (/regla basica de conteo|principio multiplicativo|conteo/.test(text)) intent.focus = 'counting-rule'
+    else if (/diagramas? de arbol/.test(text)) intent.focus = 'tree-diagram'
+    else if (/contextos reales|juegos|riesgo|seleccion al azar/.test(text)) intent.focus = 'real-context-probability'
+    else intent.focus = isFinalExamContext ? null : 'advanced-probability-integration'
+  }
+
+  if (normalizedTopic === 'proyecto-integrador-matematico') {
+    if (/modelacion algebraica multietapa|multietapa/.test(text)) intent.focus = 'algebra-modeling-multistep'
+    else if (/integracion de funciones lineales|pendiente|intercepto/.test(text)) intent.focus = 'linear-functions-integration'
+    else if (/sistemas aplicados|condiciones simultaneas/.test(text)) intent.focus = 'applied-systems'
+    else if (/restricciones con inecuaciones|presupuestos|maximos|minimos/.test(text)) intent.focus = 'inequality-restrictions'
+    else if (/integracion geometrica avanzada|punto medio|ecuacion de recta/.test(text)) {
+      intent.focus = 'advanced-geometry-integration'
+    } else if (/analisis probabilistico aplicado|espacio muestral|conteo/.test(text)) {
+      intent.focus = 'applied-probabilistic-analysis'
+    } else if (/proyecto aplicado integral|optimizacion|decision/.test(text)) {
+      intent.focus = 'full-applied-project'
+    } else {
+      intent.focus = 'annual-final-integration'
+    }
+    intent.cognitiveStage = 'multi-step-reasoning'
+    if (intent.problemMix !== 'mechanical') {
+      intent.problemMix = 'contextualized'
+    }
+  }
 
   if (normalizedTopic === 'divisibilidad') {
     if (/criterio/.test(text)) intent.focus = 'criteria'
@@ -791,8 +1137,41 @@ const resolveLessonIntent = ({
     /modelacion avanzada|modelado avanzado|modelacion compleja|modelado complejo|advanced-modeling|complex-modeling/.test(
       text,
     )
-  const isFinalExamContext = normalizedId.includes('final-exam')
-  const hasMixControl = /mix-control/.test(text)
+
+  if (!hasMixControl) {
+    if (normalizedTopic === 'sistema-numeros-naturales-decimal' && intent.focus !== 'multiplication-properties') {
+      intent.problemMix = 'contextualized'
+    }
+
+    if (normalizedTopic === 'introduccion-sistema-numeros-enteros' && intent.focus === 'integer-concept') {
+      intent.problemMix = 'contextualized'
+    }
+
+    if (normalizedTopic === 'fundamentos-geometria-plana-inicial' && intent.focus === 'point-line-plane') {
+      intent.problemMix = 'contextualized'
+    }
+
+    if (
+      normalizedTopic === 'inecuaciones-modelacion-restricciones' &&
+      ['verbal-restrictions', 'advanced-integration-inequalities'].includes(intent.focus)
+    ) {
+      intent.problemMix = 'contextualized'
+    }
+
+    if (
+      normalizedTopic === 'geometria-analitica-inicial' &&
+      ['spatial-applications', 'advanced-algebra-geometry-integration'].includes(intent.focus)
+    ) {
+      intent.problemMix = 'contextualized'
+    }
+
+    if (
+      normalizedTopic === 'probabilidad-conteo-inicial' &&
+      ['real-context-probability', 'advanced-probability-integration'].includes(intent.focus)
+    ) {
+      intent.problemMix = 'contextualized'
+    }
+  }
 
   if (hasAdvancedModeling) {
     intent.cognitiveStage = 'multi-step-reasoning'
@@ -3098,6 +3477,2004 @@ const generateIntegratedModeling = ({ intent = {} }) => {
   }
 }
 
+const generateDecimalStructureGrade1 = ({ difficulty, intent = {} }) => {
+  const safeDifficulty = clampDifficulty(difficulty)
+  const focus = intent.focus || pick(['reading-writing', 'place-value', 'comparison-order', 'addition-properties', 'multiplication-properties'])
+
+  if (focus === 'reading-writing') {
+    const thousands = randomInt(1, 45 + safeDifficulty)
+    const hundreds = randomInt(1, 9)
+    const tens = randomInt(1, 9)
+    const units = randomInt(1, 9)
+    const value = thousands * 1000 + hundreds * 100 + tens * 10 + units
+    return {
+      templateId: 'decimal-reading-writing',
+      prompt: `En una feria escolar se registran ${thousands} millares, ${hundreds} centenas, ${tens} decenas y ${units} unidades de entradas vendidas. Que numero total representa este registro?`,
+      correctAnswer: String(value),
+      distractors: [String(value + 10), String(value - 10), String(value + 100)],
+      explanationTemplate:
+        'Paso 1: interpreta cada valor posicional. Paso 2: suma los aportes de millares, centenas, decenas y unidades. Resultado: {answer}.',
+      fingerprintSeed: { focus, thousands, hundreds, tens, units, value },
+    }
+  }
+
+  if (focus === 'place-value') {
+    const number = randomInt(12000, 980000)
+    const place = pick([
+      { name: 'decenas', divisor: 10 },
+      { name: 'centenas', divisor: 100 },
+      { name: 'millares', divisor: 1000 },
+    ])
+    const digit = Math.floor(number / place.divisor) % 10
+    return {
+      templateId: 'decimal-place-value',
+      prompt: `En el numero ${number}, cual es la cifra ubicada en la posicion de ${place.name}?`,
+      correctAnswer: String(digit),
+      distractors: [String((digit + 1) % 10), String((digit + 2) % 10), String((digit + 9) % 10)],
+      explanationTemplate:
+        'Paso 1: identifica la posicion solicitada en el numero decimal. Paso 2: extrae la cifra correspondiente. Resultado: {answer}.',
+      fingerprintSeed: { focus, number, place: place.name, digit },
+    }
+  }
+
+  if (focus === 'comparison-order') {
+    const a = randomInt(2500, 95000)
+    const b = a + randomInt(5, 1800)
+    const reverse = Math.random() < 0.5
+    const left = reverse ? b : a
+    const right = reverse ? a : b
+    return {
+      templateId: 'decimal-comparison-order',
+      prompt: `En un reporte de produccion escolar se registran ${left} unidades en la semana 1 y ${right} en la semana 2. Cual es la mayor cantidad?`,
+      correctAnswer: String(Math.max(left, right)),
+      distractors: [String(Math.min(left, right)), String(left + right), String(Math.max(left, right) - 1)],
+      explanationTemplate:
+        'Paso 1: compara magnitudes por valor posicional. Paso 2: selecciona el numero mayor. Resultado: {answer}.',
+      fingerprintSeed: { focus, left, right },
+    }
+  }
+
+  if (focus === 'addition-properties') {
+    const a = randomInt(15, 80)
+    const b = randomInt(10, 70)
+    const c = randomInt(5, 60)
+    const result = a + b + c
+    return {
+      templateId: 'decimal-addition-properties',
+      prompt: `Para organizar paquetes se calcula (${a} + ${b}) + ${c}. Aplicando propiedad asociativa de la suma, cual es el resultado final?`,
+      correctAnswer: String(result),
+      distractors: [String(result + 2), String(result - 2), String(a + b)],
+      explanationTemplate:
+        'Paso 1: usa la asociatividad para reagrupar sin cambiar el valor. Paso 2: realiza la suma total. Resultado: {answer}.',
+      fingerprintSeed: { focus, a, b, c, result },
+    }
+  }
+
+  const factor = randomInt(3, 9)
+  const x = randomInt(8, 24)
+  const y = randomInt(5, 20)
+  const result = factor * (x + y)
+  return {
+    templateId: 'decimal-multiplication-distributive',
+    prompt: `En una compra de materiales se calcula ${factor} x (${x} + ${y}). Usando distributividad, cual es el valor final?`,
+    correctAnswer: String(result),
+    distractors: [String(factor * x + y), String(result + factor), String(result - factor)],
+    explanationTemplate:
+      'Paso 1: aplica distributividad multiplicando por cada termino. Paso 2: suma los productos parciales. Resultado: {answer}.',
+    fingerprintSeed: { focus, factor, x, y, result },
+  }
+}
+
+const generateOperationsModelingGrade1 = ({ difficulty, intent = {} }) => {
+  const safeDifficulty = clampDifficulty(difficulty)
+  const focus = intent.focus || pick(['add-sub-combined', 'mul-div-combined', 'hierarchy', 'modeling', 'integrator'])
+
+  if (focus === 'add-sub-combined') {
+    const a = randomInt(80, 220)
+    const b = randomInt(30, 120)
+    const c = randomInt(20, 90)
+    const result = a + b - c
+    return {
+      templateId: 'operaciones-add-sub-combined',
+      prompt: `Resuelve la expresion numerica combinada: ${a} + ${b} - ${c}.`,
+      correctAnswer: String(result),
+      distractors: [String(result + 3), String(result - 3), String(a + b + c)],
+      explanationTemplate:
+        'Paso 1: ejecuta suma y resta en secuencia coherente. Paso 2: verifica el resultado final. Resultado: {answer}.',
+      fingerprintSeed: { focus, a, b, c, result },
+    }
+  }
+
+  if (focus === 'mul-div-combined') {
+    const base = randomInt(8, 24)
+    const multiplier = randomInt(3, 7)
+    const divisor = randomInt(2, 6)
+    const expressionValue = (base * multiplier) / divisor
+    const result = Number.isInteger(expressionValue) ? expressionValue : Math.round(expressionValue)
+    const adjustedBase = result * divisor
+    return {
+      templateId: 'operaciones-mul-div-combined',
+      prompt: `En un problema de agrupacion calcula (${adjustedBase} x ${multiplier}) / ${divisor}. Cual es el resultado?`,
+      correctAnswer: String((adjustedBase * multiplier) / divisor),
+      distractors: [String(adjustedBase * multiplier), String(Math.floor((adjustedBase * multiplier) / divisor) + 1), String(result)],
+      explanationTemplate:
+        'Paso 1: realiza la multiplicacion. Paso 2: divide el producto segun la estructura solicitada. Resultado: {answer}.',
+      fingerprintSeed: { focus, adjustedBase, multiplier, divisor },
+    }
+  }
+
+  if (focus === 'hierarchy') {
+    return generateJerarquiaOperaciones({ difficulty: Math.max(4, safeDifficulty), intent: { ...intent, combinedOperations: true } })
+  }
+
+  if (focus === 'modeling') {
+    const notebooks = randomInt(3, 8)
+    const priceNotebook = randomInt(7, 14)
+    const pens = randomInt(4, 10)
+    const pricePen = randomInt(2, 5)
+    const discount = randomInt(5, 18)
+    const subtotal = notebooks * priceNotebook + pens * pricePen
+    const total = subtotal - discount
+    return {
+      templateId: 'operaciones-modeling-multistep',
+      prompt: `Una brigada compra ${notebooks} cuadernos a ${priceNotebook} soles y ${pens} lapiceros a ${pricePen} soles. Si recibe un descuento de ${discount} soles, cuanto paga en total?`,
+      correctAnswer: String(total),
+      distractors: [String(subtotal), String(total + discount), String(total - 5)],
+      explanationTemplate:
+        'Paso 1: modela el costo parcial de cada producto. Paso 2: suma subtotales y aplica el descuento final. Resultado: {answer}.',
+      fingerprintSeed: { focus, notebooks, priceNotebook, pens, pricePen, discount, total },
+    }
+  }
+
+  const a = randomInt(20, 60)
+  const b = randomInt(10, 40)
+  const c = randomInt(3, 9)
+  const d = randomInt(2, 7)
+  const result = (a + b) * c - d
+  return {
+    templateId: 'operaciones-integrator-challenge',
+    prompt: `Desafio integrador: resuelve (${a} + ${b}) x ${c} - ${d}.`,
+    correctAnswer: String(result),
+    distractors: [String((a + b) * c + d), String(a + b * c - d), String(result - c)],
+    explanationTemplate:
+      'Paso 1: aplica jerarquia con parentesis y multiplicacion. Paso 2: ejecuta el ajuste final para obtener el valor correcto. Resultado: {answer}.',
+    fingerprintSeed: { focus, a, b, c, d, result },
+  }
+}
+
+const generateIntegerSystemGrade1 = ({ difficulty, intent = {} }) => {
+  const safeDifficulty = clampDifficulty(difficulty)
+  const focus = intent.focus || pick(['integer-concept', 'number-line', 'integer-addition', 'integer-subtraction', 'integer-context'])
+
+  if (focus === 'integer-concept') {
+    const debt = -randomInt(5, 40 + safeDifficulty * 3)
+    return {
+      templateId: 'enteros-concept-representation',
+      prompt: `Una cuenta escolar registra una deuda de ${Math.abs(debt)} soles. Que numero entero representa esa situacion?`,
+      correctAnswer: String(debt),
+      distractors: [String(Math.abs(debt)), String(debt + 1), String(debt - 1)],
+      explanationTemplate:
+        'Paso 1: interpreta la direccion de la magnitud (deuda). Paso 2: representa con signo adecuado en enteros. Resultado: {answer}.',
+      fingerprintSeed: { focus, debt },
+    }
+  }
+
+  if (focus === 'number-line') {
+    const a = randomInt(-30, 20)
+    const b = randomInt(a + 1, 35)
+    const target = Math.random() < 0.5 ? 'derecha' : 'izquierda'
+    const answer = target === 'derecha' ? Math.max(a, b) : Math.min(a, b)
+    return {
+      templateId: 'enteros-number-line-order',
+      prompt: `En la recta numerica se ubican ${a} y ${b}. Cual numero queda mas a la ${target}?`,
+      correctAnswer: String(answer),
+      distractors: [String(target === 'derecha' ? Math.min(a, b) : Math.max(a, b)), String(0), String(answer + (target === 'derecha' ? -1 : 1))],
+      explanationTemplate:
+        'Paso 1: recuerda que en la recta, a la derecha estan los mayores. Paso 2: compara ambos enteros y selecciona el solicitado. Resultado: {answer}.',
+      fingerprintSeed: { focus, a, b, target, answer },
+    }
+  }
+
+  if (focus === 'integer-addition') {
+    const a = randomInt(-35, 35)
+    const b = randomInt(-30, 30)
+    const result = a + b
+    return {
+      templateId: 'enteros-addition',
+      prompt: `Resuelve la suma de enteros: ${a} + (${b}).`,
+      correctAnswer: String(result),
+      distractors: [String(result + 2), String(result - 2), String(a - b)],
+      explanationTemplate:
+        'Paso 1: analiza signos y magnitudes. Paso 2: aplica la regla de suma de enteros. Resultado: {answer}.',
+      fingerprintSeed: { focus, a, b, result },
+    }
+  }
+
+  if (focus === 'integer-subtraction') {
+    const a = randomInt(-25, 25)
+    const b = randomInt(-25, 25)
+    const result = a - b
+    return {
+      templateId: 'enteros-subtraction-equivalence',
+      prompt: `Aplica equivalencia aditiva y resuelve: ${a} - (${b}).`,
+      correctAnswer: String(result),
+      distractors: [String(a + b), String(result + 1), String(result - 1)],
+      explanationTemplate:
+        'Paso 1: transforma resta en suma del opuesto. Paso 2: opera con signos correctamente. Resultado: {answer}.',
+      fingerprintSeed: { focus, a, b, result },
+    }
+  }
+
+  const start = randomInt(-20, 20)
+  const changeA = randomInt(-18, 18)
+  const changeB = randomInt(-18, 18)
+  const result = start + changeA + changeB
+  return {
+    templateId: 'enteros-context-integrated',
+    prompt: `La temperatura inicia en ${start} grados. Luego cambia ${changeA} grados y despues ${changeB} grados. Cual es la temperatura final?`,
+    correctAnswer: String(result),
+    distractors: [String(start + changeA - changeB), String(result + 2), String(result - 2)],
+    explanationTemplate:
+      'Paso 1: representa cada variacion con su signo. Paso 2: suma los cambios al valor inicial. Resultado: {answer}.',
+    fingerprintSeed: { focus, start, changeA, changeB, result },
+  }
+}
+
+const generateGeometryInitialGrade1 = ({ difficulty, intent = {} }) => {
+  const safeDifficulty = clampDifficulty(difficulty)
+  const focus = intent.focus || pick(['point-line-plane', 'segments-angles', 'triangles-classification', 'perimeter', 'geometric-integrator'])
+
+  if (focus === 'point-line-plane') {
+    const points = 2
+    return {
+      templateId: 'geometria-point-line-plane',
+      prompt: `En geometria euclidiana, cuantos puntos minimos se requieren para determinar una recta?`,
+      correctAnswer: String(points),
+      distractors: ['1', '3', '4'],
+      explanationTemplate:
+        'Paso 1: recuerda la definicion formal de recta. Paso 2: identifica el minimo numero de puntos para determinarla. Resultado: {answer}.',
+      fingerprintSeed: { focus, points, safeDifficulty },
+    }
+  }
+
+  if (focus === 'segments-angles') {
+    const angle = pick([35, 40, 55, 70])
+    const complement = 90 - angle
+    return {
+      templateId: 'geometria-segments-angles',
+      prompt: `Un angulo mide ${angle} grados. Cuanto mide su angulo complementario?`,
+      correctAnswer: String(complement),
+      distractors: [String(180 - angle), String(angle), String(complement + 10)],
+      explanationTemplate:
+        'Paso 1: identifica la relacion complementaria (suma 90). Paso 2: resta para hallar la medida faltante. Resultado: {answer}.',
+      fingerprintSeed: { focus, angle, complement },
+    }
+  }
+
+  if (focus === 'triangles-classification') {
+    const a = randomInt(30, 70)
+    const b = randomInt(30, 70)
+    const c = 180 - a - b
+    return {
+      templateId: 'geometria-triangle-classification',
+      prompt: `En un triangulo dos angulos miden ${a} y ${b} grados. Cuanto mide el tercer angulo?`,
+      correctAnswer: String(c),
+      distractors: [String(180 - a), String(180 - b), String(c + 10)],
+      explanationTemplate:
+        'Paso 1: usa que la suma de angulos internos es 180. Paso 2: resta los conocidos para hallar el faltante. Resultado: {answer}.',
+      fingerprintSeed: { focus, a, b, c },
+    }
+  }
+
+  if (focus === 'perimeter') {
+    const width = randomInt(6, 18)
+    const height = randomInt(4, 14)
+    const perimeter = 2 * (width + height)
+    return {
+      templateId: 'geometria-perimeter-figures',
+      prompt: `Calcula el perimetro de un rectangulo de base ${width} cm y altura ${height} cm.`,
+      correctAnswer: String(perimeter),
+      distractors: [String(width * height), String(width + height), String(perimeter + 4)],
+      explanationTemplate:
+        'Paso 1: identifica las longitudes del contorno. Paso 2: suma los cuatro lados o aplica 2(base+altura). Resultado: {answer}.',
+      fingerprintSeed: { focus, width, height, perimeter },
+    }
+  }
+
+  const lengthA = randomInt(10, 30)
+  const lengthB = randomInt(8, 24)
+  const lengthC = randomInt(6, 22)
+  const pathPerimeter = lengthA + lengthB + lengthC
+  const integerAdjustment = randomInt(-5, 5)
+  const finalResult = pathPerimeter + integerAdjustment
+  return {
+    templateId: 'geometria-numeric-integration',
+    prompt: `Una ruta triangular tiene lados ${lengthA}, ${lengthB} y ${lengthC} metros. Si se agrega un ajuste de ${integerAdjustment} metros por redimensionamiento, cual es la medida final?`,
+    correctAnswer: String(finalResult),
+    distractors: [String(pathPerimeter), String(pathPerimeter - integerAdjustment), String(finalResult + 3)],
+    explanationTemplate:
+      'Paso 1: calcula el perimetro base de la figura. Paso 2: integra el ajuste numerico indicado por el contexto. Resultado: {answer}.',
+    fingerprintSeed: { focus, lengthA, lengthB, lengthC, integerAdjustment, finalResult },
+  }
+}
+
+const generateAlgebraLanguageGrade1B2 = ({ difficulty, intent = {} }) => {
+  const safeDifficulty = clampDifficulty(difficulty)
+  const focus =
+    intent.focus ||
+    pick([
+      'variables',
+      'translation',
+      'term-classification',
+      'like-terms-reduction',
+      'expression-evaluation',
+      'properties',
+      'modeling-basic',
+      'structural-integration',
+    ])
+
+  if (focus === 'variables') {
+    const groups = randomInt(4, 12)
+    return {
+      templateId: 'algebra-lenguaje-variables',
+      prompt: `Si x representa el numero de fichas por caja y hay ${groups} cajas, cual es el coeficiente de x en la expresion total?`,
+      correctAnswer: String(groups),
+      distractors: [String(groups + 1), String(Math.max(1, groups - 1)), String(groups + 2)],
+      explanationTemplate:
+        'Paso 1: identifica cuantas veces aparece la variable en la situacion. Paso 2: ese valor es el coeficiente de x. Resultado: {answer}.',
+      fingerprintSeed: { focus, groups },
+    }
+  }
+
+  if (focus === 'translation') {
+    const coefficient = randomInt(2, 8)
+    const constant = randomInt(3, 14)
+    const x = randomInt(2, 9)
+    const value = coefficient * x + constant
+    return {
+      templateId: 'algebra-lenguaje-traduccion',
+      prompt: `El enunciado "el ${coefficient}ple de un numero aumentado en ${constant}" se modela como ${coefficient}x + ${constant}. Si x = ${x}, cual es el valor obtenido?`,
+      correctAnswer: String(value),
+      distractors: [String(coefficient * x), String(value + coefficient), String(value - constant)],
+      explanationTemplate:
+        'Paso 1: traduce el enunciado a expresion algebraica. Paso 2: sustituye el valor de x y calcula. Resultado: {answer}.',
+      fingerprintSeed: { focus, coefficient, constant, x, value },
+    }
+  }
+
+  if (focus === 'term-classification') {
+    const coefficient = randomInt(2, 12)
+    const degree = randomInt(1, Math.min(4, safeDifficulty))
+    const askCoefficient = Math.random() < 0.5
+    return {
+      templateId: 'algebra-lenguaje-clasificacion-terminos',
+      prompt: askCoefficient
+        ? `En el termino ${coefficient}x^${degree}, cual es el coeficiente?`
+        : `En el termino ${coefficient}x^${degree}, cual es el grado?`,
+      correctAnswer: String(askCoefficient ? coefficient : degree),
+      distractors: askCoefficient
+        ? [String(coefficient + 1), String(Math.max(1, coefficient - 1)), String(degree)]
+        : [String(Math.max(0, degree - 1)), String(degree + 1), String(coefficient)],
+      explanationTemplate:
+        'Paso 1: identifica la parte numerica y la parte literal del termino. Paso 2: reporta el elemento solicitado (coeficiente o grado). Resultado: {answer}.',
+      fingerprintSeed: { focus, coefficient, degree, askCoefficient },
+    }
+  }
+
+  if (focus === 'like-terms-reduction') {
+    const a = randomInt(2, 9)
+    const b = randomInt(2, 9)
+    const c = randomInt(1, 7)
+    const finalCoefficient = a + b - c
+    return {
+      templateId: 'algebra-lenguaje-reduccion-semejantes',
+      prompt: `Reduce terminos semejantes: ${a}x + ${b}x - ${c}x. Cual es el coeficiente final de x?`,
+      correctAnswer: String(finalCoefficient),
+      distractors: [String(a + b + c), String(a + b), String(Math.abs(a - b))],
+      explanationTemplate:
+        'Paso 1: verifica que todos los terminos tengan la misma parte literal. Paso 2: opera solo los coeficientes. Resultado: {answer}.',
+      fingerprintSeed: { focus, a, b, c, finalCoefficient },
+    }
+  }
+
+  if (focus === 'expression-evaluation') {
+    const x = randomInt(-3, 10)
+    const a = randomInt(2, 9)
+    const b = randomInt(-12, 12)
+    const c = randomInt(1, 8)
+    const result = a * x + b - c
+    return {
+      templateId: 'algebra-lenguaje-evaluacion',
+      prompt: `Evalua la expresion ${a}x ${b >= 0 ? '+' : '-'} ${Math.abs(b)} - ${c} cuando x = ${x}.`,
+      correctAnswer: String(result),
+      distractors: [String(a * x + b + c), String(a + x + b - c), String(result + a)],
+      explanationTemplate:
+        'Paso 1: sustituye x por el valor indicado. Paso 2: aplica jerarquia operativa para evaluar la expresion. Resultado: {answer}.',
+      fingerprintSeed: { focus, x, a, b, c, result },
+    }
+  }
+
+  if (focus === 'properties') {
+    const factor = randomInt(2, 7)
+    const a = randomInt(3, 10)
+    const b = randomInt(2, 9)
+    const coefficient = factor + factor
+    const constant = factor * (a + b)
+    return {
+      templateId: 'algebra-lenguaje-propiedades',
+      prompt: `Aplica distributiva y simplifica: ${factor}(x + ${a}) + ${factor}(x + ${b}). Cual es el termino independiente final?`,
+      correctAnswer: String(constant),
+      distractors: [String(coefficient), String(constant + factor), String(factor * a + b)],
+      explanationTemplate:
+        'Paso 1: distribuye el factor en cada parentesis. Paso 2: combina terminos y extrae el termino independiente. Resultado: {answer}.',
+      fingerprintSeed: { focus, factor, a, b, coefficient, constant },
+    }
+  }
+
+  if (focus === 'modeling-basic') {
+    const base = randomInt(8, 20)
+    const perItem = randomInt(2, 8)
+    const items = randomInt(4, 12)
+    const total = base + perItem * items
+    return {
+      templateId: 'algebra-lenguaje-modelacion-basica',
+      prompt: `Una actividad tiene costo fijo de ${base} soles y ${perItem} soles por participante. Si asisten ${items} participantes, cual es el costo total?`,
+      correctAnswer: String(total),
+      distractors: [String(base * items), String(base + perItem + items), String(total + perItem)],
+      explanationTemplate:
+        'Paso 1: modela la situacion con una expresion lineal (fijo + variable). Paso 2: sustituye la cantidad y calcula. Resultado: {answer}.',
+      fingerprintSeed: { focus, base, perItem, items, total },
+    }
+  }
+
+  const students = randomInt(10, 24)
+  const notebooksPerStudent = randomInt(2, 5)
+  const backup = randomInt(6, 14)
+  const defect = randomInt(2, 8)
+  const x = students
+  const result = notebooksPerStudent * x + backup - defect
+  return {
+    templateId: 'algebra-lenguaje-integracion-estructural',
+    prompt: `En una campana escolar se usa la expresion ${notebooksPerStudent}x + ${backup} - ${defect}, donde x es la cantidad de estudiantes. Si x = ${x}, cuantas unidades se requieren en total?`,
+    correctAnswer: String(result),
+    distractors: [String(notebooksPerStudent * x + backup), String(result + defect), String(result - notebooksPerStudent)],
+    explanationTemplate:
+      'Paso 1: interpreta la variable en el contexto y sustituye su valor. Paso 2: simplifica toda la expresion para obtener el total final. Resultado: {answer}.',
+    fingerprintSeed: { focus, students, notebooksPerStudent, backup, defect, result },
+  }
+}
+
+const generateLinearEquationsGrade1B2 = ({ difficulty, intent = {} }) => {
+  const safeDifficulty = clampDifficulty(difficulty)
+  const focus =
+    intent.focus ||
+    pick([
+      'equality-principle',
+      'simple-inverse',
+      'mul-div',
+      'both-sides',
+      'parentheses-distributive',
+      'word-problems',
+      'integers-fractions',
+      'advanced-integration',
+    ])
+
+  if (focus === 'equality-principle' || focus === 'simple-inverse') {
+    const x = randomInt(2, 22)
+    const a = randomInt(2, 16)
+    const b = x + a
+    return {
+      templateId: 'ecuaciones-b2-principio-igualdad',
+      prompt: `Resuelve la ecuacion lineal: x + ${a} = ${b}.`,
+      correctAnswer: String(x),
+      distractors: [String(x + 1), String(Math.max(0, x - 1)), String(b - a + 2)],
+      explanationTemplate:
+        'Paso 1: aplica la operacion inversa para mantener la igualdad. Paso 2: despeja x y verifica sustituyendo. Resultado: {answer}.',
+      fingerprintSeed: { focus, x, a, b },
+    }
+  }
+
+  if (focus === 'mul-div') {
+    const useDivision = Math.random() < 0.5
+    const x = randomInt(2, 16)
+    const a = randomInt(2, 10)
+    if (useDivision) {
+      const b = x / a
+      const adjustedX = x * a
+      return {
+        templateId: 'ecuaciones-b2-mul-div-fraccionaria',
+        prompt: `Resuelve la ecuacion: x / ${a} = ${adjustedX / a}.`,
+        correctAnswer: String(adjustedX),
+        distractors: [String(adjustedX / a), String(adjustedX + a), String(Math.max(1, adjustedX - a))],
+        explanationTemplate:
+          'Paso 1: elimina la division multiplicando ambos lados por el mismo factor. Paso 2: verifica el valor obtenido. Resultado: {answer}.',
+        fingerprintSeed: { focus, useDivision, x: adjustedX, a },
+      }
+    }
+
+    const b = a * x
+    return {
+      templateId: 'ecuaciones-b2-mul-div-ax',
+      prompt: `Resuelve la ecuacion: ${a}x = ${b}.`,
+      correctAnswer: String(x),
+      distractors: [String(x + 1), String(Math.max(1, x - 1)), String(a + x)],
+      explanationTemplate:
+        'Paso 1: divide ambos miembros entre el coeficiente de x. Paso 2: valida en la igualdad original. Resultado: {answer}.',
+      fingerprintSeed: { focus, a, x, b },
+    }
+  }
+
+  if (focus === 'both-sides') {
+    const x = randomInt(2, 14)
+    const a = randomInt(2, 7)
+    const c = randomInt(1, a - 1)
+    const b = randomInt(-8, 12)
+    const d = a * x + b - c * x
+    return {
+      templateId: 'ecuaciones-b2-ambos-miembros',
+      prompt: `Resuelve: ${a}x ${b >= 0 ? '+' : '-'} ${Math.abs(b)} = ${c}x ${d >= 0 ? '+' : '-'} ${Math.abs(d)}.`,
+      correctAnswer: String(x),
+      distractors: [String(x + 1), String(Math.max(0, x - 1)), String(a + c)],
+      explanationTemplate:
+        'Paso 1: lleva terminos con x a un solo miembro y constantes al otro. Paso 2: reduce y despeja la variable. Resultado: {answer}.',
+      fingerprintSeed: { focus, x, a, b, c, d },
+    }
+  }
+
+  if (focus === 'parentheses-distributive') {
+    const x = randomInt(1, 12)
+    const k = randomInt(2, 6)
+    const m = randomInt(2, 9)
+    const rhs = k * (x + m)
+    return {
+      templateId: 'ecuaciones-b2-parentesis-distributiva',
+      prompt: `Resuelve la ecuacion con distributiva: ${k}(x + ${m}) = ${rhs}.`,
+      correctAnswer: String(x),
+      distractors: [String(x + m), String(Math.max(0, x - 1)), String(x + 1)],
+      explanationTemplate:
+        'Paso 1: aplica distributiva o divide ambos lados por el factor comun. Paso 2: despeja x de la ecuacion resultante. Resultado: {answer}.',
+      fingerprintSeed: { focus, x, k, m, rhs },
+    }
+  }
+
+  if (focus === 'word-problems') {
+    const fixed = randomInt(6, 18)
+    const perUnit = randomInt(3, 9)
+    const units = randomInt(4, 14)
+    const total = fixed + perUnit * units
+    return {
+      templateId: 'ecuaciones-b2-problema-verbal',
+      prompt: `Un servicio cobra ${fixed} soles fijos y ${perUnit} soles por unidad. Si se pagaron ${total} soles, cuantas unidades se consumieron?`,
+      correctAnswer: String(units),
+      distractors: [String(units + 1), String(Math.max(1, units - 1)), String(units + 2)],
+      explanationTemplate:
+        'Paso 1: plantea la ecuacion lineal del contexto. Paso 2: despeja la incognita con operaciones inversas. Resultado: {answer}.',
+      fingerprintSeed: { focus, fixed, perUnit, units, total },
+    }
+  }
+
+  if (focus === 'integers-fractions') {
+    const x = randomInt(-10, 16)
+    const divisor = pick([2, 3, 4])
+    const offset = randomInt(-8, 8)
+    const rhs = x / divisor + offset
+    const adjustedX = x * divisor
+    const adjustedRhs = adjustedX / divisor + offset
+    return {
+      templateId: 'ecuaciones-b2-enteros-fracciones',
+      prompt: `Resuelve la ecuacion: x/${divisor} ${offset >= 0 ? '+' : '-'} ${Math.abs(offset)} = ${formatNumericAnswer(adjustedRhs)}.`,
+      correctAnswer: String(adjustedX),
+      distractors: [String(adjustedX + divisor), String(Math.max(-20, adjustedX - divisor)), String(Math.round(adjustedRhs))],
+      explanationTemplate:
+        'Paso 1: elimina fracciones multiplicando por el denominador comun. Paso 2: ordena terminos y despeja la variable. Resultado: {answer}.',
+      fingerprintSeed: { focus, x: adjustedX, divisor, offset, adjustedRhs },
+    }
+  }
+
+  const x = randomInt(3, 14)
+  const a = randomInt(2, 6)
+  const b = randomInt(1, 8)
+  const c = randomInt(1, 5)
+  const rhs = a * (x - b) + c
+  return {
+    templateId: 'ecuaciones-b2-integracion-avanzada',
+    prompt: `Integracion avanzada: resuelve ${a}(x - ${b}) + ${c} = ${rhs}.`,
+    correctAnswer: String(x),
+    distractors: [String(x + 1), String(Math.max(0, x - 1)), String(x + b)],
+    explanationTemplate:
+      'Paso 1: aplica distributiva y simplifica ambos miembros. Paso 2: realiza las operaciones necesarias hasta aislar x. Resultado: {answer}.',
+    fingerprintSeed: { focus, x, a, b, c, rhs, safeDifficulty },
+  }
+}
+
+const generateProportionalityGrade1B2 = ({ difficulty, intent = {} }) => {
+  const safeDifficulty = clampDifficulty(difficulty)
+  const focus =
+    intent.focus ||
+    pick([
+      'ratio-concept',
+      'proportion-property',
+      'direct-prop',
+      'inverse-prop',
+      'rule-three-direct',
+      'rule-three-inverse',
+      'percentages',
+      'prop-integration',
+    ])
+
+  if (focus === 'ratio-concept') {
+    const a = randomInt(4, 24)
+    const b = pick([2, 4, 5, 8, 10, 12])
+    const value = a / b
+    return {
+      templateId: 'proporcionalidad-b2-razon-concepto',
+      prompt: `La razon entre ${a} y ${b} es ${a}:${b}. Cual es su valor decimal?`,
+      correctAnswer: formatNumericAnswer(value),
+      distractors: [formatNumericAnswer(b / a), formatNumericAnswer(value + 1), formatNumericAnswer(value - 1)],
+      explanationTemplate:
+        'Paso 1: interpreta la razon como division entre cantidades. Paso 2: calcula el cociente y expresa en decimal. Resultado: {answer}.',
+      fingerprintSeed: { focus, a, b, value },
+    }
+  }
+
+  if (focus === 'proportion-property') {
+    const a = randomInt(2, 9)
+    const b = randomInt(2, 9)
+    const c = randomInt(2, 12)
+    const x = (b * c) / a
+    const adjustedX = Number.isInteger(x) ? x : b * c
+    const adjustedA = Number.isInteger(x) ? a : 1
+    return {
+      templateId: 'proporcionalidad-b2-proporcion-fundamental',
+      prompt: `Resuelve la proporcion ${adjustedA}/${b} = ${c}/x.`,
+      correctAnswer: String(adjustedX),
+      distractors: [String(adjustedA * c), String(b + c), String(Math.max(1, adjustedX - 1))],
+      explanationTemplate:
+        'Paso 1: aplica producto cruzado entre extremos y medios. Paso 2: despeja el valor desconocido. Resultado: {answer}.',
+      fingerprintSeed: { focus, adjustedA, b, c, adjustedX },
+    }
+  }
+
+  if (focus === 'direct-prop' || focus === 'rule-three-direct') {
+    const unitsA = randomInt(2, 8)
+    const valueA = unitsA * randomInt(6, 15)
+    const unitsB = unitsA + randomInt(2, 7)
+    const valueB = (valueA / unitsA) * unitsB
+    return {
+      templateId: 'proporcionalidad-b2-directa',
+      prompt: `Si ${unitsA} unidades cuestan ${valueA} soles, cuanto costaran ${unitsB} unidades al mismo precio unitario?`,
+      correctAnswer: String(valueB),
+      distractors: [String(valueA + unitsB), String(Math.round((valueA * unitsA) / unitsB)), String(valueB + unitsA)],
+      explanationTemplate:
+        'Paso 1: identifica la proporcionalidad directa (mas cantidad, mas valor). Paso 2: aplica regla de tres o valor unitario. Resultado: {answer}.',
+      fingerprintSeed: { focus, unitsA, valueA, unitsB, valueB },
+    }
+  }
+
+  if (focus === 'inverse-prop' || focus === 'rule-three-inverse') {
+    const workersA = randomInt(3, 8)
+    const daysA = randomInt(6, 14)
+    const workersB = workersA + randomInt(2, 6)
+    const totalWork = workersA * daysA
+    const daysB = totalWork / workersB
+    const adjustedDaysB = Number.isInteger(daysB) ? daysB : Math.round(daysB)
+    const adjustedWork = workersB * adjustedDaysB
+    return {
+      templateId: 'proporcionalidad-b2-inversa',
+      prompt: `${workersA} trabajadores terminan una tarea en ${daysA} dias. Si trabajan ${workersB} al mismo ritmo, cuantos dias tomara?`,
+      correctAnswer: String(Math.round((workersA * daysA) / workersB)),
+      distractors: [String(daysA + workersB), String(Math.max(1, daysA - 1)), String(Math.round(adjustedWork / workersA))],
+      explanationTemplate:
+        'Paso 1: reconoce relacion inversa (mas trabajadores, menos tiempo). Paso 2: conserva el trabajo total y despeja el tiempo. Resultado: {answer}.',
+      fingerprintSeed: { focus, workersA, daysA, workersB, totalWork, adjustedDaysB },
+    }
+  }
+
+  if (focus === 'percentages') {
+    const base = pick([120, 150, 200, 240, 300, 400, 500])
+    const percent = pick([10, 12, 15, 20, 25, 30])
+    const isDiscount = Math.random() < 0.5
+    const result = isDiscount ? base * (1 - percent / 100) : base * (1 + percent / 100)
+    return {
+      templateId: 'proporcionalidad-b2-porcentajes',
+      prompt: isDiscount
+        ? `Un articulo cuesta ${base} soles y tiene descuento de ${percent}%. Cual es el precio final?`
+        : `Una tarifa de ${base} soles aumenta ${percent}%. Cual es el nuevo valor?`,
+      correctAnswer: formatNumericAnswer(result),
+      distractors: [
+        formatNumericAnswer(base * (percent / 100)),
+        formatNumericAnswer(base + percent),
+        formatNumericAnswer(result + 10),
+      ],
+      explanationTemplate:
+        'Paso 1: interpreta el porcentaje como razon sobre 100. Paso 2: aplica el aumento o descuento al valor base. Resultado: {answer}.',
+      fingerprintSeed: { focus, base, percent, isDiscount, result },
+    }
+  }
+
+  const speedA = randomInt(40, 70)
+  const timeA = randomInt(2, 5)
+  const distance = speedA * timeA
+  const speedB = speedA + randomInt(10, 35)
+  const timeB = distance / speedB
+  const increasePct = pick([10, 15, 20])
+  const finalTime = timeB * (1 - increasePct / 100)
+  return {
+    templateId: 'proporcionalidad-b2-integracion-avanzada',
+    prompt: `Un vehiculo recorre ${distance} km. Si en el primer tramo va a ${speedA} km/h y luego mejora su plan en ${increasePct}% sobre un tiempo base calculado con ${speedB} km/h, cual es el tiempo final estimado (en horas)?`,
+    correctAnswer: formatNumericAnswer(finalTime),
+    distractors: [formatNumericAnswer(timeB), formatNumericAnswer(timeA), formatNumericAnswer(finalTime + 1)],
+    explanationTemplate:
+      'Paso 1: modela la relacion proporcional para hallar el tiempo base. Paso 2: integra el ajuste porcentual final del problema. Resultado: {answer}.',
+    fingerprintSeed: { focus, speedA, timeA, distance, speedB, timeB, increasePct, finalTime, safeDifficulty },
+  }
+}
+
+const generateGeometricProportionalityGrade1B2 = ({ difficulty, intent = {} }) => {
+  const safeDifficulty = clampDifficulty(difficulty)
+  const focus =
+    intent.focus ||
+    pick([
+      'scales',
+      'similarity-ratio',
+      'missing-sides',
+      'perimeter-similarity',
+      'area-similarity',
+      'real-scale-context',
+      'algebra-similarity',
+      'advanced-geo-integration',
+    ])
+
+  if (focus === 'scales' || focus === 'real-scale-context') {
+    const scale = pick([2000, 5000, 10000, 25000, 50000])
+    const mapCm = pick([2, 3, 4, 5, 6, 8])
+    const realMeters = (mapCm * scale) / 100
+    return {
+      templateId: 'geometria-proporcionalidad-escalas',
+      prompt: `En un plano a escala 1:${scale}, una distancia mide ${mapCm} cm. Cuantos metros representa en la realidad?`,
+      correctAnswer: formatNumericAnswer(realMeters),
+      distractors: [
+        formatNumericAnswer((mapCm * scale) / 100000),
+        formatNumericAnswer(realMeters / 10),
+        formatNumericAnswer(realMeters + 10),
+      ],
+      explanationTemplate:
+        'Paso 1: aplica la razon de escala para convertir del plano a la medida real. Paso 2: ajusta la unidad final solicitada. Resultado: {answer}.',
+      fingerprintSeed: { focus, scale, mapCm, realMeters },
+    }
+  }
+
+  if (focus === 'similarity-ratio') {
+    const ratio = randomInt(2, 5)
+    const small = randomInt(4, 15)
+    const large = small * ratio
+    return {
+      templateId: 'geometria-proporcionalidad-razon-semejanza',
+      prompt: `Dos figuras semejantes tienen lados correspondientes ${small} y ${large}. Cual es la razon de semejanza (grande/pequena)?`,
+      correctAnswer: String(ratio),
+      distractors: [String(Math.max(1, ratio - 1)), String(ratio + 1), String(large - small)],
+      explanationTemplate:
+        'Paso 1: compara lados correspondientes de ambas figuras. Paso 2: calcula el factor multiplicativo comun. Resultado: {answer}.',
+      fingerprintSeed: { focus, ratio, small, large },
+    }
+  }
+
+  if (focus === 'missing-sides') {
+    const ratio = randomInt(2, 4)
+    const knownSmall = randomInt(3, 12)
+    const knownLarge = knownSmall * ratio
+    const targetSmall = randomInt(4, 14)
+    const targetLarge = targetSmall * ratio
+    return {
+      templateId: 'geometria-proporcionalidad-lado-faltante',
+      prompt: `Si dos triangulos son semejantes y ${knownSmall} corresponde a ${knownLarge}, cuanto corresponde en la figura grande al lado ${targetSmall}?`,
+      correctAnswer: String(targetLarge),
+      distractors: [String(targetSmall + ratio), String(targetLarge + ratio), String(targetSmall * (ratio - 1))],
+      explanationTemplate:
+        'Paso 1: calcula la razon de semejanza con lados conocidos. Paso 2: aplica la razon al lado solicitado. Resultado: {answer}.',
+      fingerprintSeed: { focus, ratio, knownSmall, knownLarge, targetSmall, targetLarge },
+    }
+  }
+
+  if (focus === 'perimeter-similarity') {
+    const ratio = randomInt(2, 5)
+    const perimeterSmall = randomInt(20, 60)
+    const perimeterLarge = perimeterSmall * ratio
+    return {
+      templateId: 'geometria-proporcionalidad-perimetro',
+      prompt: `Si la razon de semejanza entre dos figuras es ${ratio}, y el perimetro de la menor es ${perimeterSmall} cm, cual es el perimetro de la mayor?`,
+      correctAnswer: String(perimeterLarge),
+      distractors: [String(perimeterSmall + ratio), String(perimeterSmall * ratio * ratio), String(perimeterLarge + ratio)],
+      explanationTemplate:
+        'Paso 1: recuerda que el perimetro varia linealmente con la razon de semejanza. Paso 2: multiplica el perimetro conocido por dicha razon. Resultado: {answer}.',
+      fingerprintSeed: { focus, ratio, perimeterSmall, perimeterLarge },
+    }
+  }
+
+  if (focus === 'area-similarity') {
+    const ratio = randomInt(2, 4)
+    const areaSmall = randomInt(12, 45)
+    const areaLarge = areaSmall * ratio * ratio
+    return {
+      templateId: 'geometria-proporcionalidad-area',
+      prompt: `Dos figuras son semejantes con razon ${ratio}. Si el area de la menor es ${areaSmall} cm2, cual es el area de la mayor?`,
+      correctAnswer: String(areaLarge),
+      distractors: [String(areaSmall * ratio), String(areaLarge + ratio), String(Math.max(1, areaLarge - ratio * ratio))],
+      explanationTemplate:
+        'Paso 1: identifica que las areas escalan con el cuadrado de la razon. Paso 2: multiplica por r^2 para obtener el area buscada. Resultado: {answer}.',
+      fingerprintSeed: { focus, ratio, areaSmall, areaLarge },
+    }
+  }
+
+  if (focus === 'algebra-similarity') {
+    const x = randomInt(2, 14)
+    const ratio = randomInt(2, 4)
+    const small = x + randomInt(3, 8)
+    const large = small * ratio
+    const offset = randomInt(3, 12)
+    const rhs = large + offset
+    return {
+      templateId: 'geometria-proporcionalidad-algebra-semejanza',
+      prompt: `En figuras semejantes, un lado pequeno es (x + ${small - x}) y el correspondiente grande es ${ratio}(x + ${small - x}). Si este lado grande vale ${large}, cual es x?`,
+      correctAnswer: String(x),
+      distractors: [String(x + 1), String(Math.max(0, x - 1)), String((rhs - offset) / ratio)],
+      explanationTemplate:
+        'Paso 1: plantea la ecuacion usando razon de semejanza entre lados correspondientes. Paso 2: resuelve la ecuacion lineal resultante. Resultado: {answer}.',
+      fingerprintSeed: { focus, x, ratio, small, large, offset, rhs },
+    }
+  }
+
+  const scale = pick([1000, 2000, 5000])
+  const mapBase = pick([4, 5, 6, 8])
+  const mapHeight = pick([3, 4, 5, 6])
+  const realBase = (mapBase * scale) / 100
+  const realHeight = (mapHeight * scale) / 100
+  const perimeter = 2 * (realBase + realHeight)
+  const area = realBase * realHeight
+  const result = perimeter + area
+  return {
+    templateId: 'geometria-proporcionalidad-integracion-avanzada',
+    prompt: `Un rectangulo en un plano a escala 1:${scale} tiene base ${mapBase} cm y altura ${mapHeight} cm. En medidas reales (m), calcula perimetro + area.`,
+    correctAnswer: formatNumericAnswer(result),
+    distractors: [formatNumericAnswer(perimeter), formatNumericAnswer(area), formatNumericAnswer(result + 10)],
+    explanationTemplate:
+      'Paso 1: convierte dimensiones por escala y calcula perimetro real. Paso 2: calcula area real e integra ambos resultados en una sola expresion. Resultado: {answer}.',
+    fingerprintSeed: { focus, scale, mapBase, mapHeight, realBase, realHeight, perimeter, area, result, safeDifficulty },
+  }
+}
+
+const generateLinearRelationsGrade1B3 = ({ difficulty, intent = {} }) => {
+  const safeDifficulty = clampDifficulty(difficulty)
+  const focus =
+    intent.focus ||
+    pick([
+      'magnitude-relations',
+      'value-tables',
+      'cartesian-pairs',
+      'graph-representation',
+      'function-concept',
+      'y-equals-mx',
+      'slope-rate',
+      'functional-integration',
+    ])
+
+  if (focus === 'magnitude-relations') {
+    const rate = randomInt(2, 8)
+    const x = randomInt(3, 12)
+    const y = rate * x
+    return {
+      templateId: 'funciones-b3-relaciones-magnitudes',
+      prompt: `En una relacion lineal y = ${rate}x, si x = ${x}, cual es el valor de y?`,
+      correctAnswer: String(y),
+      distractors: [String(y + rate), String(y - rate), String(rate + x)],
+      explanationTemplate:
+        'Paso 1: identifica variable independiente y dependiente. Paso 2: sustituye x y calcula y en la relacion dada. Resultado: {answer}.',
+      fingerprintSeed: { focus, rate, x, y },
+    }
+  }
+
+  if (focus === 'value-tables') {
+    const m = randomInt(2, 6)
+    const b = randomInt(-4, 7)
+    const x = randomInt(2, 10)
+    const y = m * x + b
+    return {
+      templateId: 'funciones-b3-tablas-patrones',
+      prompt: `Una tabla sigue la regla y = ${m}x ${b >= 0 ? '+' : '-'} ${Math.abs(b)}. Cual es y cuando x = ${x}?`,
+      correctAnswer: String(y),
+      distractors: [String(m + b + x), String(y + 1), String(y - 1)],
+      explanationTemplate:
+        'Paso 1: aplica la regla de la tabla al valor de x indicado. Paso 2: calcula y para completar el patron. Resultado: {answer}.',
+      fingerprintSeed: { focus, m, b, x, y },
+    }
+  }
+
+  if (focus === 'cartesian-pairs') {
+    const x = randomInt(-6, 8)
+    const y = randomInt(-8, 10)
+    const ask = Math.random() < 0.5 ? 'x' : 'y'
+    return {
+      templateId: 'funciones-b3-pares-ordenados',
+      prompt: `En el punto (${x}, ${y}), cual es la coordenada ${ask}?`,
+      correctAnswer: String(ask === 'x' ? x : y),
+      distractors: ask === 'x' ? [String(y), String(x + 1), String(x - 1)] : [String(x), String(y + 1), String(y - 1)],
+      explanationTemplate:
+        'Paso 1: recuerda que en (x, y) la primera posicion es x y la segunda es y. Paso 2: reporta la coordenada solicitada. Resultado: {answer}.',
+      fingerprintSeed: { focus, x, y, ask },
+    }
+  }
+
+  if (focus === 'graph-representation') {
+    const x1 = randomInt(0, 2)
+    const stepX = randomInt(1, 3)
+    const x2 = x1 + stepX
+    const m = pick([-3, -2, -1, 1, 2, 3, 4])
+    const b = randomInt(-4, 6)
+    const y1 = m * x1 + b
+    const y2 = m * x2 + b
+    return {
+      templateId: 'funciones-b3-representacion-grafica',
+      prompt: `En una grafica lineal se observan los puntos (${x1}, ${y1}) y (${x2}, ${y2}). Cual es la pendiente?`,
+      correctAnswer: String(m),
+      distractors: [String(y2 - y1), String(m + 1), String(m - 1)],
+      explanationTemplate:
+        'Paso 1: calcula el cambio vertical y horizontal entre dos puntos de la recta. Paso 2: divide delta y entre delta x para obtener la pendiente. Resultado: {answer}.',
+      fingerprintSeed: { focus, x1, y1, x2, y2, m, b },
+    }
+  }
+
+  if (focus === 'function-concept') {
+    const x = randomInt(1, 8)
+    const y1 = randomInt(3, 15)
+    const y2 = y1 + randomInt(1, 6)
+    const isFunction = Math.random() < 0.5
+    const outputCount = isFunction ? 1 : 2
+    return {
+      templateId: 'funciones-b3-concepto-funcion',
+      prompt: isFunction
+        ? `Para x = ${x}, la relacion asigna un unico valor y = ${y1}. Cuantos valores de salida tiene ese x?`
+        : `Para x = ${x}, la relacion asigna y = ${y1} y tambien y = ${y2}. Cuantos valores de salida tiene ese x?`,
+      correctAnswer: String(outputCount),
+      distractors: [String(Math.max(0, outputCount - 1)), String(outputCount + 1), '3'],
+      explanationTemplate:
+        'Paso 1: analiza cuantas salidas estan asociadas al mismo valor de x. Paso 2: usa el criterio de unicidad propio de funcion. Resultado: {answer}.',
+      fingerprintSeed: { focus, x, y1, y2, isFunction, outputCount },
+    }
+  }
+
+  if (focus === 'y-equals-mx') {
+    const m = pick([-4, -3, -2, -1, 1, 2, 3, 4, 5])
+    const x = randomInt(-4, 10)
+    const y = m * x
+    return {
+      templateId: 'funciones-b3-y-equals-mx',
+      prompt: `Para la funcion y = ${m}x, cual es el valor de y cuando x = ${x}?`,
+      correctAnswer: String(y),
+      distractors: [String(y + m), String(y - m), String(x + m)],
+      explanationTemplate:
+        'Paso 1: identifica la proporcionalidad directa de la forma y = mx. Paso 2: multiplica m por x para hallar y. Resultado: {answer}.',
+      fingerprintSeed: { focus, m, x, y },
+    }
+  }
+
+  if (focus === 'slope-rate') {
+    const m = pick([-5, -4, -3, -2, -1, 1, 2, 3, 4, 5])
+    const dx = randomInt(1, 4)
+    const dy = m * dx
+    return {
+      templateId: 'funciones-b3-pendiente-tasa-cambio',
+      prompt: `Si en una relacion lineal al aumentar x en ${dx} unidades, y cambia en ${dy} unidades, cual es la tasa de cambio constante?`,
+      correctAnswer: formatNumericAnswer(dy / dx),
+      distractors: [formatNumericAnswer(dx / (dy === 0 ? 1 : dy)), String(dy), String(dx)],
+      explanationTemplate:
+        'Paso 1: identifica el cambio en y y en x del fenomeno. Paso 2: calcula la razon delta y / delta x para obtener la pendiente. Resultado: {answer}.',
+      fingerprintSeed: { focus, m, dx, dy },
+    }
+  }
+
+  const m = pick([-4, -3, -2, -1, 1, 2, 3, 4, 5])
+  const b = randomInt(-8, 8)
+  const x = randomInt(-2, 10)
+  const y = m * x + b
+  const nextX = x + 1
+  const nextY = m * nextX + b
+  return {
+    templateId: 'funciones-b3-integracion-avanzada',
+    prompt: `Una relacion se modela por y = ${m}x ${b >= 0 ? '+' : '-'} ${Math.abs(b)}. Si para x = ${x} se obtiene y = ${y}, cual es y para x = ${nextX}?`,
+    correctAnswer: String(nextY),
+    distractors: [String(y + 1), String(nextY + m), String(nextY - m)],
+    explanationTemplate:
+      'Paso 1: interpreta expresion, tabla y variacion lineal de forma integrada. Paso 2: evalua la funcion en el nuevo valor de x y argumenta el cambio. Resultado: {answer}.',
+    fingerprintSeed: { focus, m, b, x, y, nextX, nextY, safeDifficulty },
+  }
+}
+
+const generateSystemsIntroGrade1B3 = ({ difficulty, intent = {} }) => {
+  const safeDifficulty = clampDifficulty(difficulty)
+  const focus =
+    intent.focus ||
+    pick([
+      'two-variable-solutions',
+      'graph-linear-equation',
+      'system-concept',
+      'graph-method',
+      'substitution-intro',
+      'equalization-intro',
+      'word-problems-systems',
+      'integration-graph-algebra',
+    ])
+
+  if (focus === 'two-variable-solutions') {
+    const a = randomInt(1, 5)
+    const b = randomInt(1, 5)
+    const x = randomInt(1, 8)
+    const y = randomInt(1, 8)
+    const c = a * x + b * y
+    return {
+      templateId: 'sistemas-b3-ecuacion-dos-variables',
+      prompt: `En la ecuacion ${a}x + ${b}y = ${c}, si x = ${x}, cual debe ser el valor de y para cumplir la igualdad?`,
+      correctAnswer: String(y),
+      distractors: [String(y + 1), String(Math.max(0, y - 1)), String(x)],
+      explanationTemplate:
+        'Paso 1: sustituye el valor conocido en la ecuacion lineal. Paso 2: despeja la variable restante para validar el par ordenado. Resultado: {answer}.',
+      fingerprintSeed: { focus, a, b, c, x, y },
+    }
+  }
+
+  if (focus === 'graph-linear-equation') {
+    const m = pick([-4, -3, -2, -1, 1, 2, 3, 4])
+    const b = randomInt(-6, 9)
+    const x = randomInt(-3, 8)
+    const y = m * x + b
+    return {
+      templateId: 'sistemas-b3-grafica-ecuacion-lineal',
+      prompt: `Para graficar la ecuacion y = ${m}x ${b >= 0 ? '+' : '-'} ${Math.abs(b)}, cual es y cuando x = ${x}?`,
+      correctAnswer: String(y),
+      distractors: [String(y + 1), String(y - 1), String(m + b)],
+      explanationTemplate:
+        'Paso 1: construye un punto de la recta usando la ecuacion. Paso 2: evalua y con el valor de x indicado. Resultado: {answer}.',
+      fingerprintSeed: { focus, m, b, x, y },
+    }
+  }
+
+  if (focus === 'system-concept' || focus === 'graph-method') {
+    const x = randomInt(1, 9)
+    const y = randomInt(1, 9)
+    const a1 = randomInt(1, 4)
+    const b1 = randomInt(1, 4)
+    const a2 = randomInt(1, 4)
+    const b2 = randomInt(1, 4)
+    const c1 = a1 * x + b1 * y
+    const c2 = a2 * x + b2 * y
+    return {
+      templateId: 'sistemas-b3-concepto-metodo-grafico',
+      prompt: `Resuelve el sistema ${a1}x + ${b1}y = ${c1} y ${a2}x + ${b2}y = ${c2}. Cual es el valor de x en el punto de interseccion?`,
+      correctAnswer: String(x),
+      distractors: [String(y), String(x + 1), String(Math.max(0, x - 1))],
+      explanationTemplate:
+        'Paso 1: interpreta que la solucion comun satisface ambas ecuaciones a la vez. Paso 2: determina el valor de x en la interseccion. Resultado: {answer}.',
+      fingerprintSeed: { focus, x, y, a1, b1, c1, a2, b2, c2 },
+    }
+  }
+
+  if (focus === 'substitution-intro') {
+    return generateFormalSystems2x2({ intent: { ...intent, focus: 'substitution' } })
+  }
+
+  if (focus === 'equalization-intro') {
+    return generateFormalSystems2x2({ intent: { ...intent, focus: 'equalization' } })
+  }
+
+  if (focus === 'word-problems-systems') {
+    return generateFormalSystems2x2({ intent: { ...intent, focus: 'economic-model' } })
+  }
+
+  const isParallel = Math.random() < 0.5
+  const m = pick([-4, -3, -2, -1, 1, 2, 3, 4])
+  const b1 = randomInt(-6, 6)
+  const b2 = isParallel ? b1 + randomInt(1, 4) : b1
+  const m2 = isParallel ? m : m + pick([-3, -2, -1, 1, 2, 3])
+  const solutionCount = isParallel ? 0 : 1
+  return {
+    templateId: 'sistemas-b3-integracion-grafica-algebraica',
+    prompt: `Considera las rectas y = ${m}x ${b1 >= 0 ? '+' : '-'} ${Math.abs(b1)} y y = ${m2}x ${b2 >= 0 ? '+' : '-'} ${Math.abs(b2)}. Cuantas soluciones tiene el sistema?`,
+    correctAnswer: String(solutionCount),
+    distractors: [String(solutionCount + 1), String(Math.max(0, solutionCount - 1)), '2'],
+    explanationTemplate:
+      'Paso 1: compara pendientes e interceptos para analizar la posicion relativa de las rectas. Paso 2: determina el numero de intersecciones del sistema. Resultado: {answer}.',
+    fingerprintSeed: { focus, isParallel, m, b1, m2, b2, solutionCount, safeDifficulty },
+  }
+}
+
+const generateQuadraticIntroGrade1B3 = ({ difficulty, intent = {} }) => {
+  const safeDifficulty = clampDifficulty(difficulty)
+  const focus =
+    intent.focus ||
+    pick([
+      'quadratic-patterns',
+      'x-square-expressions',
+      'y-equals-x2',
+      'y-equals-ax2',
+      'linear-vs-quadratic',
+      'geometric-area-variable',
+      'graph-advanced',
+      'quadratic-integration',
+    ])
+
+  if (focus === 'quadratic-patterns') {
+    const n = randomInt(3, 8)
+    const next = (n + 1) * (n + 1)
+    return {
+      templateId: 'cuadraticas-b3-patrones',
+      prompt: `Una secuencia sigue el patron n^2. Si un termino corresponde a n = ${n}, cual es el siguiente valor para n = ${n + 1}?`,
+      correctAnswer: String(next),
+      distractors: [String(n + 1), String(next + 1), String(n * n + (n + 1))],
+      explanationTemplate:
+        'Paso 1: identifica el comportamiento cuadratico de la secuencia. Paso 2: evalua el siguiente indice usando n^2. Resultado: {answer}.',
+      fingerprintSeed: { focus, n, next },
+    }
+  }
+
+  if (focus === 'x-square-expressions') {
+    const x = randomInt(-8, 10)
+    const value = x * x
+    return {
+      templateId: 'cuadraticas-b3-expresion-x-cuadrado',
+      prompt: `Evalua la expresion x^2 cuando x = ${x}.`,
+      correctAnswer: String(value),
+      distractors: [String(Math.abs(x)), String(value + 1), String(value - 1)],
+      explanationTemplate:
+        'Paso 1: sustituye x por el valor dado. Paso 2: eleva al cuadrado con cuidado de signos. Resultado: {answer}.',
+      fingerprintSeed: { focus, x, value },
+    }
+  }
+
+  if (focus === 'y-equals-x2') {
+    const x = randomInt(-6, 8)
+    const y = x * x
+    return {
+      templateId: 'cuadraticas-b3-y-equals-x2',
+      prompt: `Para la funcion y = x^2, cual es y cuando x = ${x}?`,
+      correctAnswer: String(y),
+      distractors: [String(Math.abs(x)), String(y + 2), String(y - 2)],
+      explanationTemplate:
+        'Paso 1: usa la regla funcional y = x^2. Paso 2: calcula la imagen del valor de x indicado. Resultado: {answer}.',
+      fingerprintSeed: { focus, x, y },
+    }
+  }
+
+  if (focus === 'y-equals-ax2') {
+    const a = pick([-3, -2, -1, 1, 2, 3, 4])
+    const x = randomInt(-4, 6)
+    const y = a * x * x
+    return {
+      templateId: 'cuadraticas-b3-y-equals-ax2',
+      prompt: `En la funcion y = ${a}x^2, cual es y cuando x = ${x}?`,
+      correctAnswer: String(y),
+      distractors: [String(a * x), String(y + a), String(y - a)],
+      explanationTemplate:
+        'Paso 1: calcula primero x^2. Paso 2: multiplica por el coeficiente a para obtener el valor de y. Resultado: {answer}.',
+      fingerprintSeed: { focus, a, x, y },
+    }
+  }
+
+  if (focus === 'linear-vs-quadratic') {
+    const x = randomInt(3, 10)
+    const linear = 3 * x + 2
+    const quadratic = x * x
+    const diff = quadratic - linear
+    return {
+      templateId: 'cuadraticas-b3-lineal-vs-cuadratica',
+      prompt: `Compara L(x) = 3x + 2 y Q(x) = x^2 para x = ${x}. Cuanto vale Q(x) - L(x)?`,
+      correctAnswer: String(diff),
+      distractors: [String(linear - quadratic), String(quadratic), String(linear)],
+      explanationTemplate:
+        'Paso 1: evalua ambas funciones en el mismo valor de x. Paso 2: compara restando para analizar diferencia de crecimiento. Resultado: {answer}.',
+      fingerprintSeed: { focus, x, linear, quadratic, diff },
+    }
+  }
+
+  if (focus === 'geometric-area-variable') {
+    const side = randomInt(4, 15)
+    const area = side * side
+    return {
+      templateId: 'cuadraticas-b3-area-variable',
+      prompt: `El area de un cuadrado se modela por A(l) = l^2. Si el lado mide ${side} m, cual es el area?`,
+      correctAnswer: String(area),
+      distractors: [String(side * 2), String(area + side), String(area - side)],
+      explanationTemplate:
+        'Paso 1: identifica la relacion cuadratica entre lado y area. Paso 2: eleva el lado al cuadrado para obtener el area. Resultado: {answer}.',
+      fingerprintSeed: { focus, side, area },
+    }
+  }
+
+  if (focus === 'graph-advanced') {
+    const h = randomInt(-4, 4)
+    const k = randomInt(-3, 6)
+    return {
+      templateId: 'cuadraticas-b3-interpretacion-grafica',
+      prompt: `En la funcion y = (x ${h >= 0 ? '-' : '+'} ${Math.abs(h)})^2 ${k >= 0 ? '+' : '-'} ${Math.abs(k)}, cual es la coordenada y del vertice?`,
+      correctAnswer: String(k),
+      distractors: [String(h), String(k + 1), String(k - 1)],
+      explanationTemplate:
+        'Paso 1: reconoce la forma de vertice y = (x - h)^2 + k. Paso 2: identifica k como coordenada vertical del vertice. Resultado: {answer}.',
+      fingerprintSeed: { focus, h, k },
+    }
+  }
+
+  const a = pick([1, 2, 3])
+  const x = randomInt(2, 8)
+  const quadratic = a * x * x
+  const linear = (a + 1) * x
+  const total = quadratic + linear
+  return {
+    templateId: 'cuadraticas-b3-integracion-avanzada',
+    prompt: `En un modelo combinado, Q(x) = ${a}x^2 y L(x) = ${a + 1}x. Para x = ${x}, cuanto vale Q(x) + L(x)?`,
+    correctAnswer: String(total),
+    distractors: [String(quadratic), String(linear), String(total + a)],
+    explanationTemplate:
+      'Paso 1: evalua por separado la parte cuadratica y la lineal. Paso 2: integra ambas representaciones en un solo resultado numerico. Resultado: {answer}.',
+      fingerprintSeed: { focus, a, x, quadratic, linear, total, safeDifficulty },
+  }
+}
+
+const generateStatisticsAnalysisGrade1B3 = ({ difficulty, intent = {} }) => {
+  const safeDifficulty = clampDifficulty(difficulty)
+  const focus =
+    intent.focus ||
+    pick([
+      'data-collection-organization',
+      'frequency-tables',
+      'statistical-graphs',
+      'mean',
+      'median-mode',
+      'range-variability',
+      'critical-graph-interpretation',
+      'integrative-project',
+    ])
+
+  if (focus === 'data-collection-organization') {
+    const records = Array.from({ length: randomInt(6, 10) }, () => randomInt(1, 5))
+    const count = records.length
+    return {
+      templateId: 'estadistica-b3-recoleccion-organizacion',
+      prompt: `Se registran los datos: ${records.join(', ')}. Cuantos datos hay en total?`,
+      correctAnswer: String(count),
+      distractors: [String(count + 1), String(Math.max(1, count - 1)), String(count + 2)],
+      explanationTemplate:
+        'Paso 1: identifica cada observacion del conjunto. Paso 2: cuenta el total de registros organizados. Resultado: {answer}.',
+      fingerprintSeed: { focus, records, count },
+    }
+  }
+
+  if (focus === 'frequency-tables') {
+    const values = Array.from({ length: 8 }, () => pick([1, 2, 3, 4, 5]))
+    const target = pick([1, 2, 3, 4, 5])
+    const freq = values.filter((value) => value === target).length
+    return {
+      templateId: 'estadistica-b3-tabla-frecuencia',
+      prompt: `En los datos ${values.join(', ')}, cual es la frecuencia absoluta del valor ${target}?`,
+      correctAnswer: String(freq),
+      distractors: [String(freq + 1), String(Math.max(0, freq - 1)), String(values.length - freq)],
+      explanationTemplate:
+        'Paso 1: recorre el conjunto y cuenta repeticiones del valor objetivo. Paso 2: registra ese conteo como frecuencia absoluta. Resultado: {answer}.',
+      fingerprintSeed: { focus, values, target, freq },
+    }
+  }
+
+  if (focus === 'statistical-graphs') {
+    const a = randomInt(8, 18)
+    const b = randomInt(6, 16)
+    const c = randomInt(5, 15)
+    const total = a + b + c
+    return {
+      templateId: 'estadistica-b3-graficos',
+      prompt: `En un grafico de barras: categoria A=${a}, B=${b}, C=${c}. Cual es el total de observaciones?`,
+      correctAnswer: String(total),
+      distractors: [String(Math.max(a, b, c)), String(total + 1), String(total - 1)],
+      explanationTemplate:
+        'Paso 1: interpreta cada barra como frecuencia de su categoria. Paso 2: suma todas las frecuencias para obtener el total. Resultado: {answer}.',
+      fingerprintSeed: { focus, a, b, c, total },
+    }
+  }
+
+  if (focus === 'mean') {
+    return generateCentralTendencyRange({ intent: { ...intent, focus: 'mean' } })
+  }
+
+  if (focus === 'median-mode') {
+    const mode = Math.random() < 0.5 ? 'median' : 'mode'
+    return generateCentralTendencyRange({ intent: { ...intent, focus: mode } })
+  }
+
+  if (focus === 'range-variability') {
+    return generateCentralTendencyRange({ intent: { ...intent, focus: 'range' } })
+  }
+
+  if (focus === 'critical-graph-interpretation') {
+    const base = randomInt(80, 140)
+    const newValue = base + randomInt(8, 28)
+    const realIncrease = newValue - base
+    return {
+      templateId: 'estadistica-b3-lectura-critica',
+      prompt: `Un informe muestra que un valor pasa de ${base} a ${newValue}. Cual es el aumento real en unidades (sin dejarse enganar por la escala grafica)?`,
+      correctAnswer: String(realIncrease),
+      distractors: [String(newValue), String(base), String(realIncrease + 1)],
+      explanationTemplate:
+        'Paso 1: identifica valores reales del eje numerico, no solo la apariencia visual. Paso 2: calcula la diferencia exacta para interpretar correctamente. Resultado: {answer}.',
+      fingerprintSeed: { focus, base, newValue, realIncrease },
+    }
+  }
+
+  const data = Array.from({ length: 6 }, () => randomInt(10, 24))
+  const mean = data.reduce((total, value) => total + value, 0) / data.length
+  const min = Math.min(...data)
+  const max = Math.max(...data)
+  const range = max - min
+  const integrated = mean + range
+  return {
+    templateId: 'estadistica-b3-proyecto-integrador',
+    prompt: `Con los datos ${data.join(', ')}, calcula (media + rango).`,
+    correctAnswer: formatNumericAnswer(integrated),
+    distractors: [formatNumericAnswer(mean), formatNumericAnswer(range), formatNumericAnswer(integrated + 1)],
+    explanationTemplate:
+      'Paso 1: organiza y calcula medidas de tendencia central y dispersion. Paso 2: integra ambas medidas en la expresion solicitada para argumentar el resultado. Resultado: {answer}.',
+      fingerprintSeed: { focus, data, mean, min, max, range, integrated, safeDifficulty },
+  }
+}
+
+const generateInequalitiesModelingGrade1B4 = ({ difficulty, intent = {} }) => {
+  const safeDifficulty = clampDifficulty(difficulty)
+  const focus =
+    intent.focus ||
+    pick([
+      'inequality-concept',
+      'simple-inequality',
+      'sign-flip',
+      'number-line',
+      'distributive-inequality',
+      'verbal-restrictions',
+      'system-inequalities',
+      'advanced-integration-inequalities',
+    ])
+
+  if (focus === 'inequality-concept') {
+    const boundary = randomInt(6, 24 + safeDifficulty)
+    const smallest = boundary + 1
+    return {
+      templateId: 'inecuaciones-b4-concepto',
+      prompt: `Si la desigualdad es x > ${boundary}, cual es el menor entero que la cumple?`,
+      correctAnswer: String(smallest),
+      distractors: [String(boundary), String(smallest + 1), String(boundary - 1)],
+      explanationTemplate:
+        'Paso 1: interpreta el signo de desigualdad y el valor frontera. Paso 2: identifica el primer entero que supera ese limite. Resultado: {answer}.',
+      fingerprintSeed: { focus, boundary, smallest },
+    }
+  }
+
+  if (focus === 'simple-inequality') {
+    const minInteger = randomInt(4, 16 + safeDifficulty)
+    const a = randomInt(3, 10)
+    const b = minInteger + a
+    return {
+      templateId: 'inecuaciones-b4-simple',
+      prompt: `Resuelve x + ${a} > ${b}. Cual es el menor entero solucion?`,
+      correctAnswer: String(minInteger),
+      distractors: [String(minInteger - 1), String(minInteger + 1), String(b)],
+      explanationTemplate:
+        'Paso 1: aplica operacion inversa para aislar x. Paso 2: toma el primer entero que cumple la desigualdad resultante. Resultado: {answer}.',
+      fingerprintSeed: { focus, a, b, minInteger },
+    }
+  }
+
+  if (focus === 'sign-flip') {
+    const k = randomInt(2, 8)
+    const maxInteger = randomInt(5, 18)
+    const c = -k * maxInteger
+    return {
+      templateId: 'inecuaciones-b4-cambio-sentido',
+      prompt: `Resuelve -${k}x >= ${c}. Cual es el mayor entero que cumple la desigualdad?`,
+      correctAnswer: String(maxInteger),
+      distractors: [String(maxInteger - 1), String(maxInteger + 1), String(Math.abs(c))],
+      explanationTemplate:
+        'Paso 1: divide ambos miembros por un numero negativo. Paso 2: cambia el sentido de la desigualdad y determina el entero maximo permitido. Resultado: {answer}.',
+      fingerprintSeed: { focus, k, c, maxInteger },
+    }
+  }
+
+  if (focus === 'number-line') {
+    const endpoint = randomInt(-8, 20)
+    const isClosed = Math.random() < 0.5
+    return {
+      templateId: 'inecuaciones-b4-recta-numerica',
+      prompt: `En la recta numerica se representa x ${isClosed ? '<=' : '<'} ${endpoint}. Cual es el valor del extremo del intervalo?`,
+      correctAnswer: String(endpoint),
+      distractors: [String(endpoint + 1), String(endpoint - 1), String(-endpoint)],
+      explanationTemplate:
+        'Paso 1: identifica la desigualdad y su valor frontera. Paso 2: reconoce el extremo numerico del intervalo solucion. Resultado: {answer}.',
+      fingerprintSeed: { focus, endpoint, isClosed },
+    }
+  }
+
+  if (focus === 'distributive-inequality') {
+    const a = randomInt(2, 7)
+    const b = randomInt(2, 9)
+    const upperBound = randomInt(5, 16)
+    const c = a * (upperBound + b)
+    return {
+      templateId: 'inecuaciones-b4-distributiva',
+      prompt: `Resuelve ${a}(x + ${b}) <= ${c}. Cual es el mayor entero solucion?`,
+      correctAnswer: String(upperBound),
+      distractors: [String(upperBound + 1), String(upperBound - 1), String(c)],
+      explanationTemplate:
+        'Paso 1: aplica distributiva y simplifica la desigualdad. Paso 2: despeja x y determina el mayor entero dentro del rango valido. Resultado: {answer}.',
+      fingerprintSeed: { focus, a, b, c, upperBound },
+    }
+  }
+
+  if (focus === 'verbal-restrictions') {
+    const fixedCost = randomInt(20, 60)
+    const unitCost = randomInt(4, 14)
+    const maxNotebooks = randomInt(6, 18)
+    const slack = randomInt(0, unitCost - 1)
+    const budget = fixedCost + unitCost * maxNotebooks + slack
+    return {
+      templateId: 'inecuaciones-b4-restriccion-verbal',
+      prompt: `Una actividad tiene costo fijo de ${fixedCost} soles y ${unitCost} soles por cuaderno. Si el presupuesto maximo es ${budget}, cual es la cantidad maxima de cuadernos que se puede comprar?`,
+      correctAnswer: String(maxNotebooks),
+      distractors: [String(maxNotebooks - 1), String(maxNotebooks + 1), String(Math.floor((budget - fixedCost) / unitCost) + 1)],
+      explanationTemplate:
+        'Paso 1: modela la restriccion como costo fijo mas costo variable menor o igual al presupuesto. Paso 2: despeja y toma el mayor entero factible. Resultado: {answer}.',
+      fingerprintSeed: { focus, fixedCost, unitCost, maxNotebooks, budget, slack },
+    }
+  }
+
+  if (focus === 'system-inequalities') {
+    const lower = randomInt(-6, 8)
+    const count = randomInt(3, 9)
+    const upper = lower + count
+    return {
+      templateId: 'inecuaciones-b4-sistema-simple',
+      prompt: `Para el sistema x > ${lower} y x <= ${upper}, cuantos valores enteros de x cumplen ambas restricciones?`,
+      correctAnswer: String(count),
+      distractors: [String(count - 1), String(count + 1), String(upper - lower + 1)],
+      explanationTemplate:
+        'Paso 1: interpreta cada desigualdad y determina su interseccion. Paso 2: cuenta los enteros contenidos en el intervalo comun. Resultado: {answer}.',
+      fingerprintSeed: { focus, lower, upper, count },
+    }
+  }
+
+  const minRequired = randomInt(4, 12)
+  const budgetUpper = minRequired + randomInt(5, 16)
+  const capacityUpper = minRequired + randomInt(4, 14)
+  const feasibleUpper = Math.min(budgetUpper, capacityUpper)
+  const unitCost = randomInt(5, 12)
+  const fixedCost = randomInt(30, 90)
+  const budget = fixedCost + unitCost * budgetUpper
+  const feasibleCount = feasibleUpper - minRequired + 1
+  return {
+    templateId: 'inecuaciones-b4-integracion-avanzada',
+    prompt: `Un plan debe cumplir: ${unitCost}x + ${fixedCost} <= ${budget}, x <= ${capacityUpper} y x >= ${minRequired}. Cuantos valores enteros de x son factibles?`,
+    correctAnswer: String(feasibleCount),
+    distractors: [String(Math.max(0, feasibleCount - 1)), String(feasibleCount + 1), String(feasibleUpper)],
+    explanationTemplate:
+      'Paso 1: transforma cada restriccion en un limite para x. Paso 2: intersecta los limites y cuenta los enteros factibles del intervalo final. Resultado: {answer}.',
+    fingerprintSeed: {
+      focus,
+      minRequired,
+      budgetUpper,
+      capacityUpper,
+      feasibleUpper,
+      unitCost,
+      fixedCost,
+      budget,
+      feasibleCount,
+    },
+  }
+}
+
+const generateAnalyticGeometryGrade1B4 = ({ difficulty, intent = {} }) => {
+  const safeDifficulty = clampDifficulty(difficulty)
+  const focus =
+    intent.focus ||
+    pick([
+      'point-distance',
+      'midpoint',
+      'slope-ratio',
+      'line-equation',
+      'parallel-perpendicular',
+      'geometric-system-interpretation',
+      'spatial-applications',
+      'advanced-algebra-geometry-integration',
+    ])
+
+  if (focus === 'point-distance') {
+    const triples = pick([
+      { dx: 3, dy: 4, d: 5 },
+      { dx: 5, dy: 12, d: 13 },
+      { dx: 8, dy: 15, d: 17 },
+    ])
+    const x1 = randomInt(-6, 6)
+    const y1 = randomInt(-6, 6)
+    const x2 = x1 + triples.dx
+    const y2 = y1 + triples.dy
+    return {
+      templateId: 'geometria-analitica-b4-distancia',
+      prompt: `Calcula la distancia entre A(${x1}, ${y1}) y B(${x2}, ${y2}).`,
+      correctAnswer: String(triples.d),
+      distractors: [String(triples.dx + triples.dy), String(Math.abs(triples.dx - triples.dy)), String(triples.d + 1)],
+      explanationTemplate:
+        'Paso 1: calcula variacion horizontal y vertical entre puntos. Paso 2: aplica Pitagoras para obtener la distancia exacta. Resultado: {answer}.',
+      fingerprintSeed: { focus, x1, y1, x2, y2, triples },
+    }
+  }
+
+  if (focus === 'midpoint') {
+    const x1 = randomInt(-10, 8)
+    const y1 = randomInt(-10, 8)
+    const x2 = x1 + pick([2, 4, 6, 8])
+    const y2 = y1 + pick([2, 4, 6, 8])
+    const midpointX = (x1 + x2) / 2
+    const midpointY = (y1 + y2) / 2
+    const sumMidpoint = midpointX + midpointY
+    return {
+      templateId: 'geometria-analitica-b4-punto-medio',
+      prompt: `Para A(${x1}, ${y1}) y B(${x2}, ${y2}), cual es la suma de coordenadas del punto medio M?`,
+      correctAnswer: formatNumericAnswer(sumMidpoint),
+      distractors: [formatNumericAnswer(midpointX), formatNumericAnswer(midpointY), formatNumericAnswer(sumMidpoint + 1)],
+      explanationTemplate:
+        'Paso 1: calcula el punto medio promediando coordenadas x e y. Paso 2: integra ambas componentes para obtener la suma solicitada. Resultado: {answer}.',
+      fingerprintSeed: { focus, x1, y1, x2, y2, midpointX, midpointY, sumMidpoint },
+    }
+  }
+
+  if (focus === 'slope-ratio') {
+    const pair = pick([
+      { n: 1, d: 2 },
+      { n: 2, d: 3 },
+      { n: 3, d: 2 },
+      { n: -1, d: 2 },
+      { n: -3, d: 2 },
+      { n: -2, d: 3 },
+      { n: 2, d: 1 },
+      { n: -2, d: 1 },
+    ])
+    const scale = randomInt(1, 3 + Math.max(0, safeDifficulty - 8))
+    const dx = pair.d * scale
+    const dy = pair.n * scale
+    const x1 = randomInt(-6, 6)
+    const y1 = randomInt(-6, 6)
+    const x2 = x1 + dx
+    const y2 = y1 + dy
+    const slope = simplifyFraction(dy, dx)
+    return {
+      templateId: 'geometria-analitica-b4-pendiente',
+      prompt: `Halla la pendiente entre A(${x1}, ${y1}) y B(${x2}, ${y2}). Responde en fraccion irreducible.`,
+      correctAnswer: formatFraction(slope.num, slope.den),
+      distractors: [
+        formatFraction(slope.den, slope.num),
+        formatFraction(slope.num + 1, slope.den),
+        formatFraction(slope.num - 1, slope.den),
+      ],
+      explanationTemplate:
+        'Paso 1: calcula delta y y delta x entre los dos puntos. Paso 2: divide y simplifica la razon para obtener la pendiente. Resultado: {answer}.',
+      fingerprintSeed: { focus, pair, scale, dx, dy, x1, y1, x2, y2, slope },
+    }
+  }
+
+  if (focus === 'line-equation') {
+    const m = pick([-4, -3, -2, -1, 1, 2, 3, 4])
+    const b = randomInt(-12, 14)
+    const x = randomInt(-5, 9)
+    const y = m * x + b
+    return {
+      templateId: 'geometria-analitica-b4-ecuacion-recta',
+      prompt: `En la recta y = ${m}x ${b >= 0 ? '+' : '-'} ${Math.abs(b)}, cual es y cuando x = ${x}?`,
+      correctAnswer: String(y),
+      distractors: [String(y + 1), String(y - 1), String(m + b)],
+      explanationTemplate:
+        'Paso 1: identifica pendiente e intercepto en la ecuacion de la recta. Paso 2: sustituye x y evalua para hallar y. Resultado: {answer}.',
+      fingerprintSeed: { focus, m, b, x, y },
+    }
+  }
+
+  if (focus === 'parallel-perpendicular') {
+    const slope = pick([-4, -3, -2, -1, 1, 2, 3, 4])
+    const askParallel = Math.random() < 0.5
+    const perpendicular = simplifyFraction(-1, slope)
+    return {
+      templateId: 'geometria-analitica-b4-relacion-rectas',
+      prompt: askParallel
+        ? `Si una recta tiene pendiente ${slope}, cual debe ser la pendiente de una recta paralela?`
+        : `Si una recta tiene pendiente ${slope}, cual es la pendiente de una recta perpendicular?`,
+      correctAnswer: askParallel ? String(slope) : formatFraction(perpendicular.num, perpendicular.den),
+      distractors: askParallel
+        ? [String(-slope), String(slope + 1), String(slope - 1)]
+        : [String(-slope), formatFraction(slope, 1), formatFraction(perpendicular.num + 1, perpendicular.den)],
+      explanationTemplate:
+        'Paso 1: usa la relacion de pendientes segun paralelismo o perpendicularidad. Paso 2: expresa la pendiente requerida en forma simplificada. Resultado: {answer}.',
+      fingerprintSeed: { focus, slope, askParallel, perpendicular },
+    }
+  }
+
+  if (focus === 'geometric-system-interpretation') {
+    const xSolution = randomInt(-5, 8)
+    const ySolution = randomInt(-8, 12)
+    const m1 = pick([-3, -2, -1, 1, 2, 3, 4])
+    const m2Candidates = [-4, -3, -2, -1, 1, 2, 3, 4].filter((value) => value !== m1)
+    const m2 = pick(m2Candidates)
+    const b1 = ySolution - m1 * xSolution
+    const b2 = ySolution - m2 * xSolution
+    return {
+      templateId: 'geometria-analitica-b4-sistemas-interseccion',
+      prompt: `Las rectas y = ${m1}x ${b1 >= 0 ? '+' : '-'} ${Math.abs(b1)} y y = ${m2}x ${b2 >= 0 ? '+' : '-'} ${Math.abs(b2)} se intersectan en un punto. Cual es la coordenada x de esa interseccion?`,
+      correctAnswer: String(xSolution),
+      distractors: [String(ySolution), String(xSolution + 1), String(xSolution - 1)],
+      explanationTemplate:
+        'Paso 1: iguala ambas ecuaciones para encontrar la interseccion algebraica. Paso 2: despeja y verifica la coordenada x comun. Resultado: {answer}.',
+      fingerprintSeed: { focus, xSolution, ySolution, m1, m2, b1, b2 },
+    }
+  }
+
+  if (focus === 'spatial-applications') {
+    const slopeA = randomInt(2, 6)
+    const slopeB = slopeA + randomInt(1, 4)
+    const startA = randomInt(10, 30)
+    const startB = randomInt(0, startA - 2)
+    const hours = randomInt(2, 6)
+    const diff = (slopeB * hours + startB) - (slopeA * hours + startA)
+    return {
+      templateId: 'geometria-analitica-b4-aplicacion-espacial',
+      prompt: `Dos trayectorias lineales se modelan por y1 = ${slopeA}x + ${startA} y y2 = ${slopeB}x + ${startB}. Para x = ${hours}, cuanto vale y2 - y1?`,
+      correctAnswer: String(diff),
+      distractors: [String(-diff), String(diff + 1), String(slopeB - slopeA)],
+      explanationTemplate:
+        'Paso 1: evalua ambas funciones lineales en el mismo instante. Paso 2: compara resultados para obtener la diferencia espacial solicitada. Resultado: {answer}.',
+      fingerprintSeed: { focus, slopeA, slopeB, startA, startB, hours, diff },
+    }
+  }
+
+  const m = pick([-3, -2, -1, 1, 2, 3, 4])
+  const x1 = randomInt(-5, 4)
+  const y1 = randomInt(-9, 9)
+  const dx = randomInt(2, 5)
+  const x2 = x1 + dx
+  const y2 = y1 + m * dx
+  const x3 = x2 + randomInt(1, 4)
+  const y3 = y1 + m * (x3 - x1)
+  return {
+    templateId: 'geometria-analitica-b4-integracion-avanzada',
+    prompt: `La recta pasa por A(${x1}, ${y1}) y B(${x2}, ${y2}). Si se extiende hasta x = ${x3}, cual es el valor de y en ese punto?`,
+    correctAnswer: String(y3),
+    distractors: [String(y3 + 1), String(y3 - 1), String(m)],
+    explanationTemplate:
+      'Paso 1: determina la pendiente con dos puntos y forma la ecuacion lineal. Paso 2: evalua la ecuacion en el nuevo valor de x para hallar y. Resultado: {answer}.',
+    fingerprintSeed: { focus, m, x1, y1, x2, y2, x3, y3 },
+  }
+}
+
+const generateProbabilityCountingGrade1B4 = ({ difficulty, intent = {} }) => {
+  const safeDifficulty = clampDifficulty(difficulty)
+  const focus =
+    intent.focus ||
+    pick([
+      'random-experiments',
+      'sample-space',
+      'classical-probability',
+      'simple-compound-events',
+      'counting-rule',
+      'tree-diagram',
+      'real-context-probability',
+      'advanced-probability-integration',
+    ])
+
+  if (focus === 'random-experiments') {
+    const outcomes = 2 * 6
+    return {
+      templateId: 'probabilidad-b4-experimento-aleatorio',
+      prompt: 'Se lanza una moneda y un dado. Cuantos resultados posibles distintos tiene el experimento?',
+      correctAnswer: String(outcomes),
+      distractors: ['8', '10', '12'],
+      explanationTemplate:
+        'Paso 1: identifica la cantidad de resultados de cada etapa aleatoria. Paso 2: multiplica para obtener el total de resultados posibles. Resultado: {answer}.',
+      fingerprintSeed: { focus, outcomes },
+    }
+  }
+
+  if (focus === 'sample-space') {
+    const facesA = pick([4, 6, 8])
+    const facesB = pick([6, 8, 10])
+    const spaceSize = facesA * facesB
+    return {
+      templateId: 'probabilidad-b4-espacio-muestral',
+      prompt: `Se lanzan dos dados: uno de ${facesA} caras y otro de ${facesB} caras. Cual es el tamano del espacio muestral?`,
+      correctAnswer: String(spaceSize),
+      distractors: [String(facesA + facesB), String(Math.abs(facesA - facesB)), String(spaceSize + facesA)],
+      explanationTemplate:
+        'Paso 1: determina resultados posibles de cada dado. Paso 2: usa conteo multiplicativo para el espacio muestral total. Resultado: {answer}.',
+      fingerprintSeed: { focus, facesA, facesB, spaceSize },
+    }
+  }
+
+  if (focus === 'classical-probability') {
+    const maxFace = pick([8, 10, 12])
+    const divisor = pick([2, 3, 4])
+    const favorable = Math.floor(maxFace / divisor)
+    const probability = simplifyFraction(favorable, maxFace)
+    return {
+      templateId: 'probabilidad-b4-clasica',
+      prompt: `Se lanza un dado de ${maxFace} caras numeradas del 1 al ${maxFace}. Cual es la probabilidad de obtener un multiplo de ${divisor}?`,
+      correctAnswer: formatFraction(probability.num, probability.den),
+      distractors: [formatFraction(favorable + 1, maxFace), formatFraction(favorable, Math.max(1, maxFace - 1)), formatFraction(divisor, maxFace)],
+      explanationTemplate:
+        'Paso 1: cuenta casos favorables en el espacio equiprobable. Paso 2: divide casos favorables entre casos posibles y simplifica. Resultado: {answer}.',
+      fingerprintSeed: { focus, maxFace, divisor, favorable, probability },
+    }
+  }
+
+  if (focus === 'simple-compound-events') {
+    const favorableEven = 3
+    const favorableGreater = 2
+    const overlap = 1
+    const union = favorableEven + favorableGreater - overlap
+    const probability = simplifyFraction(union, 6)
+    return {
+      templateId: 'probabilidad-b4-eventos-compuestos',
+      prompt: 'En un dado justo, sea A="numero par" y B="numero mayor que 4". Cual es P(A union B)?',
+      correctAnswer: formatFraction(probability.num, probability.den),
+      distractors: [formatFraction(favorableEven, 6), formatFraction(favorableGreater, 6), formatFraction(overlap, 6)],
+      explanationTemplate:
+        'Paso 1: calcula casos de cada evento y su interseccion. Paso 2: aplica union de eventos y divide entre el total de casos posibles. Resultado: {answer}.',
+      fingerprintSeed: { focus, favorableEven, favorableGreater, overlap, union, probability },
+    }
+  }
+
+  if (focus === 'counting-rule') {
+    const shirts = randomInt(3, 8)
+    const pants = randomInt(2, 6)
+    const shoes = randomInt(2, 5)
+    const combinations = shirts * pants * shoes
+    return {
+      templateId: 'probabilidad-b4-regla-conteo',
+      prompt: `Hay ${shirts} polos, ${pants} pantalones y ${shoes} pares de zapatillas. Cuantos atuendos distintos se pueden formar eligiendo uno de cada tipo?`,
+      correctAnswer: String(combinations),
+      distractors: [String(shirts + pants + shoes), String(shirts * pants), String(combinations + shirts)],
+      explanationTemplate:
+        'Paso 1: identifica etapas independientes de eleccion. Paso 2: multiplica las opciones de cada etapa para el conteo total. Resultado: {answer}.',
+      fingerprintSeed: { focus, shirts, pants, shoes, combinations },
+    }
+  }
+
+  if (focus === 'tree-diagram') {
+    const pANumerator = pick([1, 2, 3, 4])
+    const pADenominator = 5
+    const pBGivenANumerator = pick([1, 2, 3])
+    const pBGivenADenominator = 4
+    const route = simplifyFraction(pANumerator * pBGivenANumerator, pADenominator * pBGivenADenominator)
+    return {
+      templateId: 'probabilidad-b4-diagrama-arbol',
+      prompt: `En un diagrama de arbol, P(A) = ${pANumerator}/${pADenominator} y P(B|A) = ${pBGivenANumerator}/${pBGivenADenominator}. Cual es la probabilidad de la ruta A y luego B?`,
+      correctAnswer: formatFraction(route.num, route.den),
+      distractors: [
+        formatFraction(pANumerator, pADenominator),
+        formatFraction(pBGivenANumerator, pBGivenADenominator),
+        formatFraction(pANumerator + pBGivenANumerator, pADenominator + pBGivenADenominator),
+      ],
+      explanationTemplate:
+        'Paso 1: identifica la rama completa del diagrama solicitada. Paso 2: multiplica probabilidades de cada etapa de la ruta. Resultado: {answer}.',
+      fingerprintSeed: { focus, pANumerator, pADenominator, pBGivenANumerator, pBGivenADenominator, route },
+    }
+  }
+
+  if (focus === 'real-context-probability') {
+    const safeTotal = randomInt(18, 36)
+    const safeItems = randomInt(4, Math.floor(safeTotal / 2))
+    const probability = simplifyFraction(safeItems, safeTotal)
+    return {
+      templateId: 'probabilidad-b4-contexto-real',
+      prompt: `En un lote hay ${safeTotal} articulos y ${safeItems} son de bajo riesgo. Si se elige uno al azar, cual es la probabilidad de obtener un articulo de bajo riesgo?`,
+      correctAnswer: formatFraction(probability.num, probability.den),
+      distractors: [
+        formatFraction(safeTotal - safeItems, safeTotal),
+        formatFraction(safeItems + 1, safeTotal),
+        formatFraction(safeItems, Math.max(1, safeTotal - 1)),
+      ],
+      explanationTemplate:
+        'Paso 1: identifica casos favorables segun el contexto de seleccion. Paso 2: divide por el total y simplifica la fraccion resultante. Resultado: {answer}.',
+      fingerprintSeed: { focus, safeTotal, safeItems, probability },
+    }
+  }
+
+  const transportOptions = randomInt(4, 8)
+  const scheduleOptions = randomInt(3, 7)
+  const validTransport = randomInt(2, Math.max(2, transportOptions - 1))
+  const validSchedule = randomInt(1, scheduleOptions)
+  const totalRoutes = transportOptions * scheduleOptions
+  const validRoutes = validTransport * validSchedule
+  const probability = simplifyFraction(validRoutes, totalRoutes)
+  return {
+    templateId: 'probabilidad-b4-integracion-avanzada',
+    prompt: `Un plan tiene ${transportOptions} opciones de transporte y ${scheduleOptions} horarios. Son validos ${validTransport} transportes y ${validSchedule} horarios. Si se elige una ruta al azar, cual es la probabilidad de que sea valida?`,
+    correctAnswer: formatFraction(probability.num, probability.den),
+    distractors: [formatFraction(validRoutes + 1, totalRoutes), formatFraction(validTransport, transportOptions), formatFraction(validSchedule, scheduleOptions)],
+    explanationTemplate:
+      'Paso 1: calcula rutas totales y rutas validas usando conteo multiplicativo. Paso 2: forma la probabilidad como razon entre rutas validas y totales. Resultado: {answer}.',
+    fingerprintSeed: {
+      focus,
+      transportOptions,
+      scheduleOptions,
+      validTransport,
+      validSchedule,
+      totalRoutes,
+      validRoutes,
+      probability,
+      safeDifficulty,
+    },
+  }
+}
+
+const generateIntegrativeProjectGrade1B4 = ({ difficulty, intent = {} }) => {
+  const safeDifficulty = Math.max(9, clampDifficulty(difficulty))
+  const focus =
+    intent.focus ||
+    pick([
+      'algebra-modeling-multistep',
+      'linear-functions-integration',
+      'applied-systems',
+      'inequality-restrictions',
+      'advanced-geometry-integration',
+      'applied-probabilistic-analysis',
+      'full-applied-project',
+      'annual-final-integration',
+    ])
+
+  const wrapProjectCandidate = (candidate, projectFocus) => ({
+    ...candidate,
+    templateId: `proyecto-b4-${projectFocus}-${candidate.templateId}`,
+    fingerprintSeed: {
+      ...(candidate.fingerprintSeed || {}),
+      projectFocus,
+      safeDifficulty,
+    },
+  })
+
+  if (focus === 'algebra-modeling-multistep') {
+    return wrapProjectCandidate(
+      generateLinearEquationsGrade1B2({
+        difficulty: safeDifficulty,
+        intent: { ...intent, focus: 'advanced-integration' },
+      }),
+      focus,
+    )
+  }
+
+  if (focus === 'linear-functions-integration') {
+    return wrapProjectCandidate(
+      generateLinearRelationsGrade1B3({
+        difficulty: safeDifficulty,
+        intent: { ...intent, focus: 'functional-integration' },
+      }),
+      focus,
+    )
+  }
+
+  if (focus === 'applied-systems') {
+    return wrapProjectCandidate(
+      generateSystemsIntroGrade1B3({
+        difficulty: safeDifficulty,
+        intent: { ...intent, focus: 'integration-graph-algebra' },
+      }),
+      focus,
+    )
+  }
+
+  if (focus === 'inequality-restrictions') {
+    return wrapProjectCandidate(
+      generateInequalitiesModelingGrade1B4({
+        difficulty: safeDifficulty,
+        intent: { ...intent, focus: 'advanced-integration-inequalities' },
+      }),
+      focus,
+    )
+  }
+
+  if (focus === 'advanced-geometry-integration') {
+    return wrapProjectCandidate(
+      generateAnalyticGeometryGrade1B4({
+        difficulty: safeDifficulty,
+        intent: { ...intent, focus: 'advanced-algebra-geometry-integration' },
+      }),
+      focus,
+    )
+  }
+
+  if (focus === 'applied-probabilistic-analysis') {
+    return wrapProjectCandidate(
+      generateProbabilityCountingGrade1B4({
+        difficulty: safeDifficulty,
+        intent: { ...intent, focus: 'advanced-probability-integration' },
+      }),
+      focus,
+    )
+  }
+
+  if (focus === 'full-applied-project') {
+    const pool = [
+      () =>
+        generateOperationsModelingGrade1({
+          difficulty: safeDifficulty,
+          intent: { ...intent, focus: 'integrator' },
+        }),
+      () =>
+        generateProportionalityGrade1B2({
+          difficulty: safeDifficulty,
+          intent: { ...intent, focus: 'prop-integration' },
+        }),
+      () =>
+        generateStatisticsAnalysisGrade1B3({
+          difficulty: safeDifficulty,
+          intent: { ...intent, focus: 'integrative-project' },
+        }),
+      () =>
+        generateInequalitiesModelingGrade1B4({
+          difficulty: safeDifficulty,
+          intent: { ...intent, focus: 'advanced-integration-inequalities' },
+        }),
+    ]
+    return wrapProjectCandidate(pick(pool)(), focus)
+  }
+
+  const annualPool = [
+    () =>
+      generateIntegerSystemGrade1({
+        difficulty: safeDifficulty,
+        intent: { ...intent, focus: 'integer-context' },
+      }),
+    () =>
+      generateGeometryInitialGrade1({
+        difficulty: safeDifficulty,
+        intent: { ...intent, focus: 'geometric-integrator' },
+      }),
+    () =>
+      generateLinearEquationsGrade1B2({
+        difficulty: safeDifficulty,
+        intent: { ...intent, focus: 'advanced-integration' },
+      }),
+    () =>
+      generateLinearRelationsGrade1B3({
+        difficulty: safeDifficulty,
+        intent: { ...intent, focus: 'functional-integration' },
+      }),
+    () =>
+      generateSystemsIntroGrade1B3({
+        difficulty: safeDifficulty,
+        intent: { ...intent, focus: 'integration-graph-algebra' },
+      }),
+    () =>
+      generateInequalitiesModelingGrade1B4({
+        difficulty: safeDifficulty,
+        intent: { ...intent, focus: 'advanced-integration-inequalities' },
+      }),
+    () =>
+      generateAnalyticGeometryGrade1B4({
+        difficulty: safeDifficulty,
+        intent: { ...intent, focus: 'advanced-algebra-geometry-integration' },
+      }),
+    () =>
+      generateProbabilityCountingGrade1B4({
+        difficulty: safeDifficulty,
+        intent: { ...intent, focus: 'advanced-probability-integration' },
+      }),
+    () =>
+      generateStatisticsAnalysisGrade1B3({
+        difficulty: safeDifficulty,
+        intent: { ...intent, focus: 'integrative-project' },
+      }),
+  ]
+
+  return wrapProjectCandidate(pick(annualPool)(), 'annual-final-integration')
+}
+
 const generateGenericQuestion = ({ topic }) => {
   const a = randomInt(8, 60)
   const b = randomInt(2, 20)
@@ -3114,6 +5491,22 @@ const generateGenericQuestion = ({ topic }) => {
 }
 
 const TOPIC_GENERATORS = {
+  'sistema-numeros-naturales-decimal': generateDecimalStructureGrade1,
+  'operaciones-fundamentales-modelacion-numerica': generateOperationsModelingGrade1,
+  'introduccion-sistema-numeros-enteros': generateIntegerSystemGrade1,
+  'fundamentos-geometria-plana-inicial': generateGeometryInitialGrade1,
+  'lenguaje-algebraico-expresiones': generateAlgebraLanguageGrade1B2,
+  'ecuaciones-lineales-primer-grado': generateLinearEquationsGrade1B2,
+  'razones-proporciones-proporcionalidad': generateProportionalityGrade1B2,
+  'proporcionalidad-geometrica-escalas-semejanza': generateGeometricProportionalityGrade1B2,
+  'relaciones-funciones-lineales-iniciales': generateLinearRelationsGrade1B3,
+  'sistemas-ecuaciones-lineales-introduccion': generateSystemsIntroGrade1B3,
+  'introduccion-funciones-cuadraticas': generateQuadraticIntroGrade1B3,
+  'estadistica-analisis-datos': generateStatisticsAnalysisGrade1B3,
+  'inecuaciones-modelacion-restricciones': generateInequalitiesModelingGrade1B4,
+  'geometria-analitica-inicial': generateAnalyticGeometryGrade1B4,
+  'probabilidad-conteo-inicial': generateProbabilityCountingGrade1B4,
+  'proyecto-integrador-matematico': generateIntegrativeProjectGrade1B4,
   'operaciones-basicas': generateOperacionesBasicas,
   'jerarquia-operaciones': generateJerarquiaOperaciones,
   divisibilidad: generateDivisibilidad,
@@ -3162,6 +5555,50 @@ const resolveGenerator = (topic) => {
 
   const key = canonicalTopic
   if (key.includes('modelacion-integrada')) return generateIntegratedModeling
+  if (key.includes('sistema-numeros-naturales-decimal') || key.includes('sistema-decimal')) return generateDecimalStructureGrade1
+  if (key.includes('operaciones-fundamentales-modelacion-numerica') || key.includes('modelacion-numerica')) {
+    return generateOperationsModelingGrade1
+  }
+  if (key.includes('lenguaje-algebraico-expresiones') || key.includes('lenguaje-algebraico')) {
+    return generateAlgebraLanguageGrade1B2
+  }
+  if (key.includes('ecuaciones-lineales-primer-grado') || key.includes('ecuaciones-lineales-primer')) {
+    return generateLinearEquationsGrade1B2
+  }
+  if (key.includes('razones-proporciones-proporcionalidad') || key.includes('razones-proporciones')) {
+    return generateProportionalityGrade1B2
+  }
+  if (key.includes('proporcionalidad-geometrica-escalas-semejanza') || key.includes('escalas-semejanza')) {
+    return generateGeometricProportionalityGrade1B2
+  }
+  if (key.includes('relaciones-funciones-lineales-iniciales') || key.includes('funciones-lineales-iniciales')) {
+    return generateLinearRelationsGrade1B3
+  }
+  if (key.includes('sistemas-ecuaciones-lineales-introduccion') || key.includes('sistemas-ecuaciones-lineales')) {
+    return generateSystemsIntroGrade1B3
+  }
+  if (key.includes('introduccion-funciones-cuadraticas') || key.includes('funciones-cuadraticas-introduccion')) {
+    return generateQuadraticIntroGrade1B3
+  }
+  if (key.includes('estadistica-analisis-datos') || key.includes('estadistica-analisis')) {
+    return generateStatisticsAnalysisGrade1B3
+  }
+  if (key.includes('inecuaciones-modelacion-restricciones') || key.includes('inecuaciones-lineales-restricciones')) {
+    return generateInequalitiesModelingGrade1B4
+  }
+  if (key.includes('geometria-analitica-inicial')) {
+    return generateAnalyticGeometryGrade1B4
+  }
+  if (key.includes('probabilidad-conteo-inicial') || key.includes('probabilidad-conteo')) {
+    return generateProbabilityCountingGrade1B4
+  }
+  if (key.includes('proyecto-integrador-matematico') || key.includes('proyecto-integrador')) {
+    return generateIntegrativeProjectGrade1B4
+  }
+  if (key.includes('sistema-numeros-enteros') || key.includes('numeros-enteros') || key.includes('enteros')) {
+    return generateIntegerSystemGrade1
+  }
+  if (key.includes('geometria-plana-inicial') || key.includes('fundamentos-geometria')) return generateGeometryInitialGrade1
   if (key.includes('operacion')) return generateOperacionesBasicas
   if (key.includes('potencia')) return generatePowersProperties
   if (key.includes('raic')) return generateRootsSquaresCubes

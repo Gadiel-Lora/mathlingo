@@ -3,6 +3,7 @@ import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 
 const AuthContext = createContext(null)
 const AUTH_STORAGE_KEY = 'mathlingo-auth-session'
+const FORCE_LOCAL_ADMIN = String(import.meta.env.VITE_FORCE_LOCAL_ADMIN || 'true').toLowerCase() !== 'false'
 
 const canUseLocalStorage = () => {
   return typeof window !== 'undefined' && Boolean(window.localStorage)
@@ -19,6 +20,8 @@ const buildUserFromEmail = (email) => {
     id: localId,
     email: normalizedEmail,
     name: emailName,
+    role: FORCE_LOCAL_ADMIN ? 'admin' : 'user',
+    isAdmin: FORCE_LOCAL_ADMIN,
     authProvider: 'local',
   }
 }

@@ -51,7 +51,29 @@ export const academicApi = {
   getQuestionState: (payload) => post('/question/state', payload),
   submitAnswer: (payload) => post('/question/submit', payload),
   requestHelp: (payload) => post('/question/help', payload),
+  requestTutorChat: (payload) => post('/question/chat', payload),
   resetQuestion: (payload) => post('/question/reset', payload),
   generateFinalExam: (payload) => post('/final-exam/generate', payload),
+  generateEvaluation: (payload) => post('/evaluation/generate', payload),
+  getDomainMap: (payload) => post('/domain/map', payload),
+  getAdaptiveRecommendation: (payload) => post('/adaptive/recommendation', payload),
+  getRetentionProfile: (payload) => post('/retention/profile', payload),
+  getRetentionDue: (payload) => post('/retention/due', payload),
+  getStudentAnalytics: (payload) => post('/analytics/student', payload),
+  getTeacherAnalytics: (payload) => post('/analytics/teacher', payload),
+  getPredictiveOutcomes: (payload) => post('/predictive/outcomes', payload),
+  getMasterContext: (payload) => post('/master-context', payload),
+  getAdminAnalytics: async () => {
+    const response = await fetch(`${ACADEMIC_BASE}/analytics/admin`)
+    const data = await parseJsonResponse(response)
+    if (!response.ok) throw new Error(data?.error || `HTTP ${response.status}`)
+    return data
+  },
+  getAbstractionRanking: async (limit = 20) => {
+    const response = await fetch(`${ACADEMIC_BASE}/analytics/ranking?limit=${encodeURIComponent(String(limit))}`)
+    const data = await parseJsonResponse(response)
+    if (!response.ok) throw new Error(data?.error || `HTTP ${response.status}`)
+    return data
+  },
   updateLevel: (payload) => post('/level/update', payload),
 }

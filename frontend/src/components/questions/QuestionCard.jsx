@@ -28,8 +28,7 @@ function QuestionCard({
   onSelectOption,
   onChangeFreeResponse,
   onSubmit,
-  onRequestHint,
-  onRequestSolution,
+  onOpenChat,
   onNext,
 }) {
   if (!question) return null
@@ -112,19 +111,11 @@ function QuestionCard({
       <div className="flex flex-wrap items-center gap-3">
         <button
           type="button"
-          onClick={onRequestHint}
+          onClick={onOpenChat}
           disabled={isLocked || loadingHelp || helpDisabled}
           className="cm-btn-secondary px-4 py-2 text-sm disabled:opacity-60"
         >
-          Pedir pista
-        </button>
-        <button
-          type="button"
-          onClick={onRequestSolution}
-          disabled={isLocked || loadingHelp || helpDisabled}
-          className="cm-btn-secondary px-4 py-2 text-sm disabled:opacity-60"
-        >
-          Ver solucion
+          Abrir chat con profesor virtual
         </button>
         <button
           type="button"
@@ -143,7 +134,7 @@ function QuestionCard({
 
       {aiMessage && (
         <div className="cm-card p-4">
-          <p className="text-xs font-semibold tracking-wide text-verdant-accent">{assisted ? 'EXPLICACION' : 'PISTA'}</p>
+          <p className="text-xs font-semibold tracking-wide text-verdant-accent">PROFESOR VIRTUAL</p>
           <p className="mt-2 whitespace-pre-wrap text-sm leading-6 text-coastal-mist">{aiMessage}</p>
         </div>
       )}

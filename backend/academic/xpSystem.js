@@ -1,7 +1,7 @@
 const clampDifficulty = (value) => {
   const parsed = Number(value)
   if (!Number.isFinite(parsed)) return 1
-  return Math.max(1, Math.min(9, Math.floor(parsed)))
+  return Math.max(1, Math.min(10, Math.floor(parsed)))
 }
 
 const clampRange = (value, min, max) => {
@@ -9,15 +9,17 @@ const clampRange = (value, min, max) => {
   return Math.max(min, Math.min(max, Number(value)))
 }
 
-export const calculateXP = ({ difficulty, attempts, assisted }) => {
+export const calculateXP = ({ difficulty, attempts, assisted, helpPenaltyPct = 0 }) => {
   if (Boolean(assisted)) return 0
   if (Number(attempts) > 2) return 0
 
   const safeDifficulty = clampDifficulty(difficulty)
   const safeAttempts = Number.isFinite(Number(attempts)) ? Math.max(1, Math.floor(Number(attempts))) : 1
+  const safePenalty = clampRange(helpPenaltyPct, 0, 100)
   const baseXp = 10 + safeDifficulty * 6
   const firstTryBonus = safeAttempts === 1 ? 6 : 0
-  return baseXp + firstTryBonus
+  const rawXp = baseXp + firstTryBonus
+  return Math.max(0, Math.floor(rawXp * (1 - safePenalty / 100)))
 }
 
 export const updateUserLevel = ({

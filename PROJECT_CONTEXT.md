@@ -1,151 +1,316 @@
-# Project Context - Mathlingo
+# CONTEXTO MAESTRO EXPANDIDO
+EliteMath App - Sistema Matematico Adaptativo de Alto Rendimiento
 
-Last update: 2026-02-25
+Ultima actualizacion: 2026-02-28
 
-## 1) What this project is today
+## 1) Definicion del producto
 
-Mathlingo is currently a multi-part learning platform:
+Aplicacion digital de matematica con:
+- motor adaptativo por dominio,
+- sistema de maestria probabilistico,
+- evaluacion continua,
+- analitica avanzada,
+- gamificacion estructural,
+- arquitectura API-first.
 
-1. Frontend: React + Vite (`frontend/`) with Supabase auth/progress.
-2. Academic backend: Node + Express (`backend/`) for curriculum, adaptive questions, attempt flow, tutor help, and final exams.
-3. Legacy/core backend: FastAPI (`app/`) with users, modules, progress, mastery engine, adaptive exercise engine, and certificates.
-4. Shared curriculum package: JS curriculum definitions (`curriculum/`) consumed by the Node backend.
+Comparables estructurales:
+- Khan Academy,
+- Photomath,
+- Duolingo.
 
-The product direction shown by recent commits is focused on:
-- grade-based learning paths,
-- adaptive question difficulty,
-- AI tutor help with fallback behavior,
-- final exam mode with stricter rules,
-- Supabase-backed user session/progress in frontend.
+Enfoque diferencial:
+- rigor matematico formal,
+- trazabilidad por habilidad atomica,
+- decisiones adaptativas guiadas por datos.
 
-## 2) Current architecture map
+## 2) Arquitectura global del sistema
 
-### Frontend (`frontend/`)
+El sistema se organiza en 4 modulos troncales.
 
-- Routing and pages:
-  - `src/App.jsx`
-  - `src/pages/Dashboard.jsx`
-  - `src/pages/Course.jsx`
-  - `src/pages/Lesson.jsx`
-  - `src/pages/Branch.jsx`
-- State:
-  - `src/context/AuthContext.jsx` (Supabase auth session)
-  - `src/context/ProgressContext.jsx` (Supabase progress table)
-- Academic API client:
-  - `src/services/academicApi.js`
-  - default base URL uses `VITE_AI_API_URL` or `http://localhost:4010`
-- Curriculum helpers:
-  - `src/lib/academicCurriculum.js`
-- Question UI:
-  - `src/components/questions/QuestionCard.jsx`
+### Modulo A - Motor de Dominio Matematico
 
-### Node academic backend (`backend/`)
+Estructura objetivo:
+- DAG (grafo dirigido aciclico).
+- Nodos = habilidades atomicas.
+- Aristas = prerrequisitos.
+- Pesos = complejidad estructural.
 
-- Entrypoint:
-  - `backend/server.js`
-- Main API controller:
-  - `backend/controllers/academicController.js`
-- Engines:
-  - `backend/academic/questionEngine.js`
-  - `backend/academic/attemptManager.js`
-  - `backend/academic/tutorAI.js`
+Estado actual:
+- Implementado en `backend/academic/domainGraph.js`.
+- Expone mapa de dominio por grado y estado de desbloqueo.
+- Endpoint: `POST /api/academic/domain/map`.
+
+Capacidades:
+- visualizacion tipo mapa (data model listo para frontend),
+- bloqueo por dependencia,
+- base para recomendacion inteligente.
+
+### Modulo B - Motor Adaptativo
+
+Entradas objetivo:
+- historial de respuestas,
+- tiempo de resolucion,
+- tipo de error,
+- estabilidad,
+- frecuencia de practica.
+
+Salidas objetivo:
+- proxima habilidad optima,
+- tipo de ejercicio,
+- dificultad sugerida,
+- modo (practica/desafio/evaluacion).
+
+Estado actual:
+- Recomendacion adaptativa implementada en controller.
+- Endpoint: `POST /api/academic/adaptive/recommendation`.
+- Integra:
+  - disponibilidad por DAG,
+  - skills vencidas por retencion,
+  - señales de rendimiento y estabilidad.
+
+### Modulo C - Sistema de Evaluacion
+
+Tipos objetivo:
+- micro-evaluacion (5-10),
+- evaluacion estandar,
+- simulacro completo,
+- diagnostico adaptativo.
+
+Estado actual:
+- Implementado en `backend/academic/evaluationEngine.js`.
+- Endpoint: `POST /api/academic/evaluation/generate`.
+- Examen final por grado se mantiene en:
   - `backend/academic/finalExamGenerator.js`
-  - `backend/academic/xpSystem.js`
+  - `POST /api/academic/final-exam/generate`.
 
-### Shared curriculum (`curriculum/`)
+Capacidades:
+- blueprint configurable,
+- control por mezcla de problemas,
+- control por tipo de pregunta (indirecto por dificultad),
+- dificultad por rango y por modo.
 
-- Aggregation and indexes:
-  - `curriculum/index.js`
-- Grade definitions:
-  - `curriculum/grades/grade1.js` ... `curriculum/grades/grade5.js`
-- Shared helpers:
-  - `curriculum/core/shared.js`
+### Modulo D - Sistema de Analitica
 
-### FastAPI backend (`app/`)
+Metricas objetivo:
+- dominio global,
+- dominio por rama,
+- indice de abstraccion,
+- tiempo promedio por skill,
+- patron de error conceptual,
+- curva de aprendizaje.
 
-- Entrypoint:
-  - `app/main.py`
-- Routes:
-  - auth/progress/modules/users/topics/attempts/adaptive/diagnostic/certificates
-- Services:
-  - mastery engine (`app/services/mastery_engine.py`)
-  - adaptive engine (`app/services/adaptation_engine.py`)
-  - auth/progress/module/certificate services
+Estado actual:
+- Implementado en `backend/academic/analyticsStore.js`.
+- Endpoints:
+  - `POST /api/academic/analytics/student`
+  - `POST /api/academic/analytics/teacher`
+  - `GET /api/academic/analytics/admin`
+  - `GET /api/academic/analytics/ranking`
 
-## 3) Functional status (what is already done)
+## 3) Capas adicionales (alto rendimiento)
 
-### Learning flow (frontend + Node backend)
+### Capa de Errores Conceptuales
 
-Implemented:
-1. Dashboard loads curriculum cards and branch cards from academic API.
-2. Course view resolves grade lessons and locks lessons progressively.
-3. Lesson view generates dynamic questions and tracks question state.
-4. Attempt flow:
-   - max attempts = 3,
-   - hint then full-solution behavior,
-   - lock after full help or max attempts,
-   - XP only on valid conditions.
-5. Adaptive difficulty updates through `/api/academic/level/update`.
-6. Final grade exam generation and exam rules (no AI help, pass threshold, XP multiplier).
+Categorias:
+- aritmetico,
+- algebraico-estructural,
+- interpretacion,
+- conceptual-profundo.
 
-### FastAPI domain (legacy/core)
+Estado actual:
+- Implementado en `backend/academic/errorClassifier.js`.
+- Se ejecuta en `POST /api/academic/question/submit`.
+- Resultado devuelto en `errorClassification`.
 
-Implemented:
-1. JWT auth, registration, token login.
-2. Module and progress management.
-3. Mastery update model with criticality, thresholds, decay/revalidation logic.
-4. Adaptive next-exercise selection based on mastery/dependencies.
-5. Certificate verification endpoint.
+### Capa de Gamificacion Estructural
 
-## 4) Current quality checks
+Objetivo:
+- XP por dificultad,
+- nivel matematico real,
+- logros por dominio,
+- rachas estables,
+- ranking por abstraccion.
 
-Executed in this workspace:
+Estado actual:
+- XP y nivel adaptativo activos (`xpSystem.js`).
+- Rachas y ranking de abstraccion integrados en analitica.
+- Ranking endpoint disponible.
 
-1. Backend tests (FastAPI): `12 passed`
-2. Frontend production build: `vite build` successful
+### Capa de Retencion y Recuperacion
 
-Notes:
-- FastAPI tests show deprecation warnings (Pydantic v2 config style, FastAPI startup event, `datetime.utcnow` usage).
-- No automated tests found for `backend/` Node academic API or frontend UI behavior.
+Objetivo:
+- spaced repetition,
+- reapertura de skills olvidadas,
+- indice de olvido temporal.
 
-## 5) Key risks / inconsistencies to resolve
+Modelo:
+- decaimiento exponencial de dominio.
 
-1. Two backend worlds coexist (FastAPI and Node academic API) with different responsibilities and storage models.
-2. Academic question/attempt state in Node backend is in-memory (`Map`), so progress resets on backend restart.
-3. API port mismatch risk:
-   - frontend default: `http://localhost:4010`
-   - Node backend default in code: `PORT || 4000`
-   This needs explicit env alignment.
-4. Root `README.md` does not fully describe the current dual-backend + Supabase architecture.
-5. Missing explicit `.env.example` files for `frontend/` and `backend/`.
+Estado actual:
+- Implementado en `backend/academic/retentionEngine.js`.
+- Endpoints:
+  - `POST /api/academic/retention/profile`
+  - `POST /api/academic/retention/due`
+- Integrado en recomendaciones adaptativas.
 
-## 6) Recommended source-of-truth boundaries
+### Capa de Modelo Predictivo
 
-If current direction remains unchanged, use this ownership model:
+Objetivo:
+- probabilidad de exito en evaluacion formal,
+- probabilidad de dominio completo,
+- nivel matematico proyectado.
 
-1. Frontend auth/progress identity: Supabase (`frontend/src/context/*`, `frontend/src/supabase/client.js`).
-2. Academic runtime logic: Node backend (`backend/academic/*` + `curriculum/*`).
-3. FastAPI backend: keep for mastery/certificate APIs only if still needed by product roadmap, otherwise plan merge/deprecation.
+Modelo base:
+- regresion logistica (heuristica calibrable).
 
-## 7) Local run checklist (ordered)
+Estado actual:
+- Implementado en `backend/academic/predictiveModel.js`.
+- Endpoints:
+  - `POST /api/academic/predictive/outcomes`
+  - incluido dentro de `analytics/student`.
 
-1. Start Node academic backend:
-   - `cd backend`
-   - `npm install`
-   - `npm start`
-2. Start frontend:
-   - `cd frontend`
-   - `npm install`
-   - `npm run dev`
-3. Ensure frontend env points to Node backend:
-   - `VITE_AI_API_URL=http://localhost:<NODE_PORT>`
-4. For FastAPI work/tests only:
-   - from repo root: `.\.venv\Scripts\python -m pytest -q`
+## 4) Experiencia de usuario (UX funcional)
 
-## 8) Immediate cleanup backlog (priority order)
+Pantallas clave objetivo:
+- dashboard principal,
+- mapa de dominio,
+- sesion de practica,
+- evaluacion formal,
+- reporte de desempeno,
+- historial de progreso.
 
-1. Align and document ports/env vars across frontend + backend.
-2. Add `frontend/.env.example` and `backend/.env.example`.
-3. Update root README to reflect real architecture and startup paths.
-4. Add tests for Node `academicController` flows (generate/help/submit/final exam).
-5. Decide long-term role of FastAPI vs Node academic backend to reduce duplication.
+Flujo base:
+1. ingreso,
+2. recomendacion automatica,
+3. sesion adaptativa,
+4. retroalimentacion inmediata,
+5. actualizacion de dominio,
+6. siguiente decision adaptativa.
+
+Estado actual:
+- Dashboard, Course, Lesson y Branch implementados.
+- Integracion de mapa de dominio y paneles avanzados: pendiente de UI dedicada.
+
+## 5) Modelo tecnico recomendado
+
+Frontend:
+- React (actual),
+- posible extension a React Native/Flutter.
+
+Backend:
+- Node.js (motor academico actual),
+- FastAPI (dominio legacy/certificados/migracion).
+
+API:
+- REST (actual),
+- GraphQL opcional futuro.
+
+Datos:
+- Supabase para auth/progreso frontend,
+- memoria en backend academico para estado temporal (actual),
+- objetivo recomendado: PostgreSQL + Redis.
+
+Grafo:
+- Neo4j opcional futuro para trazabilidad avanzada de skills.
+
+Motor adaptativo:
+- servicio dedicado (en progreso, hoy esta embebido en backend academico).
+
+## 6) Reglas fundamentales del sistema
+
+1. Toda habilidad debe tener prerrequisitos.
+2. Toda pregunta debe mapear a habilidad exacta.
+3. No se desbloquea contenido sin maestria.
+4. Dominio no es binario.
+5. El sistema aprende del estudiante.
+6. El estudiante no ve toda la estructura completa sin progreso.
+
+Estado actual:
+- reglas 1, 3, 4, 5 parcialmente implementadas,
+- regla 2 fortalecida con `skillId` en envio de respuestas,
+- regla 6 soportada por visibilidad del mapa.
+
+## 7) Escalabilidad futura
+
+El diseno debe permitir:
+- nivel universitario,
+- nivel olimpico,
+- IA generativa de preguntas,
+- tutor virtual ampliado,
+- analisis de escritura matematica,
+- reconocimiento de pasos.
+
+Estado actual:
+- arquitectura modular lista para extender por microservicios,
+- pendiente persistencia durable y versionado de modelos adaptativos.
+
+## 8) Objetivo tecnico definitivo
+
+Construir una app matematica adaptativa con:
+- motor de dominio estructural,
+- evaluacion inteligente,
+- analitica predictiva avanzada.
+
+Cualidades exigidas:
+- modular,
+- escalable,
+- API-ready,
+- data-driven,
+- matematicamente rigurosa,
+- lista para produccion.
+
+## 9) Instruccion para Codex (guia operativa)
+
+Codex debe:
+1. identificar modulos faltantes,
+2. proponer mejoras estructurales,
+3. optimizar modelo de datos,
+4. sugerir arquitectura escalable,
+5. detectar riesgos tecnicos,
+6. proponer KPIs clave.
+
+### KPIs propuestos (v1)
+
+- Dominio global promedio (%).
+- Dominio por rama (%).
+- Precision por skill (rolling window).
+- Tiempo promedio por skill (ms).
+- Tasa de asistencia IA (% de intentos con ayuda).
+- Tasa de retencion (skills con olvido bajo).
+- Probabilidad media de exito en evaluacion formal.
+- Probabilidad media de dominio completo.
+- Indice de abstraccion promedio.
+- Racha de estabilidad media.
+
+## 10) Restriccion de IA (obligatoria)
+
+No se usara OpenAI en el runtime academico.
+
+Proveedor de IA habilitado:
+- Ollama (local/self-hosted), con fallback local deterministico.
+
+Archivo clave:
+- `backend/academic/tutorAI.js`.
+
+## 11) Profesor Virtual (chat unico)
+
+Politica funcional activa:
+- Se elimina la logica de dos botones de ayuda ("pista" y "solucion") para la experiencia principal.
+- La ayuda se concentra en un chat unico: "Profesor Virtual".
+- La IA responde en espanol, estilo conversacional y adaptable al contexto del estudiante.
+- Se mantiene control academico deterministico para penalizacion XP y bloqueo.
+
+Reglas academicas de chat:
+1. Si el mensaje es de ayuda conceptual (ej.: "no entiendo", "guiame"):
+   - no bloquea la pregunta,
+   - aplica reduccion acumulada de XP en la pregunta (configurada en 10% por interaccion).
+2. Si el estudiante pide respuesta final explicita (ej.: "dame la respuesta", "resuelvelo completo"):
+   - la pregunta se bloquea,
+   - XP de esa pregunta = 0.
+
+Implementacion tecnica:
+- Endpoint principal de chat: `POST /api/academic/question/chat`.
+- Clasificacion de intencion: `backend/academic/tutorAI.js`.
+- Estado/penalizacion/bloqueo por chat: `backend/academic/attemptManager.js`.
+- Ajuste XP por ayuda en chat: `backend/academic/xpSystem.js`.
+- UI chat profesor virtual: `frontend/src/pages/Lesson.jsx` y `frontend/src/components/questions/QuestionCard.jsx`.

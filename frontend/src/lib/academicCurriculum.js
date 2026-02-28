@@ -1,9 +1,12 @@
 const normalizeId = (value) => String(value ?? '').trim()
+export const ADMIN_UNLOCK_SENTINEL = '__admin-unlock-all__'
+
 const normalizeCompletedLessons = (completedLessons) => {
   if (!Array.isArray(completedLessons)) return []
   return completedLessons.map((lessonId) => normalizeId(lessonId)).filter(Boolean)
 }
 const toCompletedSet = (completedLessons) => new Set(normalizeCompletedLessons(completedLessons))
+const hasAdminUnlock = (completedLessons) => toCompletedSet(completedLessons).has(ADMIN_UNLOCK_SENTINEL)
 const byGradeNumber = (left, right) => Number(left?.gradeNumber || 0) - Number(right?.gradeNumber || 0)
 
 export const buildLessonProgressId = ({ gradeId, topicId, lessonId }) => {
@@ -87,6 +90,7 @@ const sortGrades = (grades) => {
 }
 
 export const isFinalExamUnlockedInGrade = ({ grade, completedLessons }) => {
+  if (hasAdminUnlock(completedLessons)) return true
   const completedSet = toCompletedSet(completedLessons)
   const lessonRows = flattenGradeLessons(grade).sort((a, b) => a.globalIndex - b.globalIndex)
   if (!lessonRows.length) return false
@@ -94,6 +98,7 @@ export const isFinalExamUnlockedInGrade = ({ grade, completedLessons }) => {
 }
 
 export const isGradeAcademicallyCompleted = ({ grade, completedLessons }) => {
+  if (hasAdminUnlock(completedLessons)) return true
   if (!grade?.id) return false
   const completedSet = toCompletedSet(completedLessons)
   const regularLessonsCompleted = isFinalExamUnlockedInGrade({ grade, completedLessons })
@@ -104,6 +109,7 @@ export const isGradeAcademicallyCompleted = ({ grade, completedLessons }) => {
 export const getUnlockedGradeIds = ({ grades, completedLessons }) => {
   const orderedGrades = sortGrades(grades)
   if (!orderedGrades.length) return []
+  if (hasAdminUnlock(completedLessons)) return orderedGrades.map((grade) => grade.id)
 
   const unlocked = new Set([orderedGrades[0].id])
   for (let index = 1; index < orderedGrades.length; index += 1) {
@@ -119,11 +125,13 @@ export const getUnlockedGradeIds = ({ grades, completedLessons }) => {
 
 export const isGradeUnlocked = ({ grades, gradeId, completedLessons }) => {
   if (!gradeId) return false
+  if (hasAdminUnlock(completedLessons)) return true
   const unlockedGradeIds = new Set(getUnlockedGradeIds({ grades, completedLessons }))
   return unlockedGradeIds.has(String(gradeId))
 }
 
 export const isLessonUnlockedInGrade = ({ grade, lessonProgressId, completedLessons }) => {
+  if (hasAdminUnlock(completedLessons)) return true
   const targetProgressId = normalizeId(lessonProgressId)
   if (!grade?.id || !targetProgressId) return false
 

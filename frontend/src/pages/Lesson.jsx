@@ -34,6 +34,8 @@ const createFallbackQuestionState = (difficulty) => ({
   assisted: false,
   locked: false,
   helpClicks: 0,
+  helpPenaltyPct: 0,
+  lockReason: '',
   questionType: getQuestionTypeByDifficulty(difficulty),
 })
 
@@ -41,6 +43,31 @@ const toSafeInt = (value) => {
   const parsed = Number(value)
   if (!Number.isFinite(parsed) || parsed < 0) return 0
   return Math.floor(parsed)
+}
+
+const mapDifficultyToTutorLevel = (difficulty) => {
+  const parsed = Number(difficulty)
+  if (!Number.isFinite(parsed)) return 'intermediate'
+  if (parsed <= 3) return 'basic'
+  if (parsed <= 7) return 'intermediate'
+  return 'advanced'
+}
+
+const resolveHelpAnswerSnapshot = ({ question, selectedOption, freeResponse }) => {
+  if (!question) return ''
+
+  if (question.type === 'multiple-choice') {
+    if (selectedOption === null || selectedOption === undefined) return ''
+    const options = Array.isArray(question.options) ? question.options : []
+    const selected = options[selectedOption]
+    if (typeof selected === 'string') return selected
+    if (selected && typeof selected === 'object') {
+      return String(selected.text ?? selected.label ?? selected.value ?? selectedOption)
+    }
+    return String(selectedOption)
+  }
+
+  return String(freeResponse ?? '').trim()
 }
 
 function Lesson() {
@@ -73,9 +100,12 @@ function Lesson() {
   const [feedbackTone, setFeedbackTone] = useState('neutral')
   const [aiMessage, setAiMessage] = useState('')
   const [aiError, setAiError] = useState('')
+  const [chatOpen, setChatOpen] = useState(false)
+  const [chatInput, setChatInput] = useState('')
+  const [chatMessages, setChatMessages] = useState([])
 
   const [loadingSubmit, setLoadingSubmit] = useState(false)
-  const [loadingHelp, setLoadingHelp] = useState(false)
+  const [loadingChat, setLoadingChat] = useState(false)
   const [loadingNextQuestion, setLoadingNextQuestion] = useState(false)
 
   const [sessionEarnedXp, setSessionEarnedXp] = useState(0)
@@ -112,6 +142,9 @@ function Lesson() {
     setFeedbackTone('neutral')
     setAiMessage('')
     setAiError('')
+    setChatOpen(false)
+    setChatInput('')
+    setChatMessages([])
     questionStartedAtRef.current = Date.now()
   }, [])
 
@@ -145,7 +178,7 @@ function Lesson() {
         streak: stats.streak,
       })
       const nextDifficulty = toSafeInt(levelPayload?.nextDifficulty || recommendedDifficulty) || recommendedDifficulty
-      return Math.max(1, Math.min(9, nextDifficulty))
+      return Math.max(1, Math.min(10, nextDifficulty))
     } catch (error) {
       console.error('Error updating adaptive difficulty:', error?.message || error)
       return recommendedDifficulty
@@ -280,7 +313,7 @@ function Lesson() {
       const targetDifficulty = Math.max(
         1,
           Math.min(
-            9,
+            10,
             Math.max(
               progressiveFloor,
               Number(difficultyOverride || recommendedDifficulty || lessonContext.difficulty || 1),
@@ -292,6 +325,7 @@ function Lesson() {
         const payload = await academicApi.generateQuestion({
           userId: learnerId,
           grade: lessonContext.gradeNumber,
+          gradeId: lessonContext.gradeId,
           topic: lessonContext.topicId,
           lessonId: lessonContext.lessonId,
           lessonTitle: lessonContext.lessonTitle,
@@ -449,7 +483,7 @@ function Lesson() {
           setFinalExamQuestions(examQuestions)
           setFinalExamRules(exam?.rules || null)
           setTotalQuestions(Math.max(1, Number(exam?.questionCount || examQuestions.length)))
-          setRecommendedDifficulty(Math.max(1, Math.min(9, Number(examQuestions[0]?.difficulty || 4))))
+          setRecommendedDifficulty(Math.max(1, Math.min(10, Number(examQuestions[0]?.difficulty || 4))))
           setQuestion(examQuestions[0])
           resetQuestionUi()
           await loadExistingQuestionState(examQuestions[0]?.hash, Number(examQuestions[0]?.difficulty || 4))
@@ -490,7 +524,7 @@ function Lesson() {
             ? Math.floor(configuredQuestionCount)
             : fallbackQuestionCount
         setTotalQuestions(Math.max(1, questionsToResolve))
-        setRecommendedDifficulty(Math.max(1, Math.min(9, Number(found.difficulty || 1))))
+        setRecommendedDifficulty(Math.max(1, Math.min(10, Number(found.difficulty || 1))))
       } catch (error) {
         if (!isMounted) return
         setLessonError(error?.message || 'No se pudo cargar la leccion.')
@@ -534,6 +568,9 @@ function Lesson() {
         userId: learnerId,
         questionHash: question.hash,
         answer,
+        elapsedTimeMs: elapsedMs,
+        problemMix: lessonContext?.problemMix || 'mixed',
+        skillId: `${lessonContext?.gradeId || `grade-${lessonContext?.gradeNumber || 1}`}:${lessonContext?.topicId || question?.topic}:${lessonContext?.lessonId || question?.id}`,
       })
 
       const nextState = payload?.state || questionState
@@ -553,7 +590,12 @@ function Lesson() {
       } else if (payload?.maxAttemptsReached) {
         setFeedbackTone('warning')
         setFeedbackMessage(payload?.message || 'Se alcanzo el maximo de intentos. XP = 0')
-        setAiMessage(String(payload?.answer || '').trim())
+        const assistedMessage = String(payload?.answer || '').trim()
+        if (assistedMessage) {
+          setChatOpen(true)
+          setChatMessages([{ role: 'assistant', content: assistedMessage }])
+        }
+        setAiMessage('')
         setRevealedAnswer(String(payload?.correctAnswer || '').trim())
       } else {
         setFeedbackTone('error')
@@ -575,20 +617,45 @@ function Lesson() {
     }
   }
 
-  const requestHelp = async (mode) => {
-    if (!question || questionState.locked || loadingHelp || loadingSubmit || loadingNextQuestion) return
+  const openTeacherChat = () => {
+    if (!question || questionState.locked || isExamLesson) return
+    setChatOpen(true)
+  }
+
+  const sendTeacherMessage = async () => {
+    if (!question || questionState.locked || loadingChat || loadingSubmit || loadingNextQuestion) return
     if (isExamLesson) return
 
-    const safeMode = mode === 'full' ? 'full' : 'hint'
-    setLoadingHelp(true)
+    const message = String(chatInput || '').trim()
+    if (!message) return
+
+    setLoadingChat(true)
     setAiError('')
+    const elapsedMs = Date.now() - questionStartedAtRef.current
+    const studentMessageEntry = { role: 'student', content: message }
+    const nextHistory = [...chatMessages, studentMessageEntry]
+    const previousAiMessage = [...chatMessages].reverse().find((entry) => entry?.role === 'assistant')?.content || ''
+    setChatMessages(nextHistory)
+    setChatInput('')
 
     try {
-      const elapsedMs = Date.now() - questionStartedAtRef.current
-      const payload = await academicApi.requestHelp({
+      const lastStudentAnswer = resolveHelpAnswerSnapshot({
+        question,
+        selectedOption,
+        freeResponse,
+      })
+
+      const payload = await academicApi.requestTutorChat({
         userId: learnerId,
         questionHash: question.hash,
-        mode: safeMode,
+        message,
+        history: nextHistory,
+        previousExplanation: previousAiMessage,
+        studentAttempts: Number(questionState?.attempts || 0),
+        lastStudentAnswer,
+        errorCount: Number(questionState?.attempts || 0),
+        level: mapDifficultyToTutorLevel(question?.difficulty),
+        correctStreak: Number(lessonStatsRef.current?.streak || 0),
       })
 
       const nextState = payload?.state || questionState
@@ -597,15 +664,19 @@ function Lesson() {
         ...nextState,
       })
 
-      setAiMessage(String(payload?.answer || '').trim())
+      const assistantAnswer = String(payload?.answer || '').trim()
+      if (assistantAnswer) {
+        setChatMessages((prev) => [...prev, { role: 'assistant', content: assistantAnswer }])
+      }
+      setAiMessage('')
 
-      if (payload?.mode === 'full') {
+      if (payload?.blockedByPolicy) {
         setFeedbackTone('warning')
-        setFeedbackMessage('Resuelto con ayuda. XP = 0')
+        setFeedbackMessage(payload?.message || 'La pregunta fue bloqueada por solicitar respuesta final. XP = 0')
         setRevealedAnswer(String(payload?.correctAnswer || '').trim())
       } else {
         setFeedbackTone('neutral')
-        setFeedbackMessage('Pista cargada.')
+        setFeedbackMessage(payload?.message || 'Profesor virtual activo.')
       }
 
       if (nextState?.locked) {
@@ -616,9 +687,9 @@ function Lesson() {
         })
       }
     } catch (error) {
-      setAiError(error?.message || 'No se pudo solicitar ayuda.')
+      setAiError(error?.message || 'No se pudo enviar el mensaje al profesor virtual.')
     } finally {
-      setLoadingHelp(false)
+      setLoadingChat(false)
     }
   }
 
@@ -733,7 +804,7 @@ function Lesson() {
               aiMessage={aiMessage}
               feedbackMessage={feedbackMessage}
               feedbackTone={feedbackTone}
-              loadingHelp={loadingHelp || loadingNextQuestion}
+              loadingHelp={loadingChat || loadingNextQuestion}
               loadingSubmit={loadingSubmit || loadingNextQuestion}
               helpDisabled={isExamLesson}
               onSelectOption={(index) => {
@@ -745,14 +816,81 @@ function Lesson() {
                 setFreeResponse(value)
               }}
               onSubmit={submitAnswer}
-              onRequestHint={() => requestHelp('hint')}
-              onRequestSolution={() => requestHelp('full')}
+              onOpenChat={openTeacherChat}
               onNext={handleNext}
             />
 
+            {chatOpen && !isExamLesson && (
+              <div className="cm-card space-y-4 p-5">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <p className="text-sm font-semibold tracking-wide text-verdant-accent">PROFESOR VIRTUAL</p>
+                  <div className="flex items-center gap-2">
+                    <span className="rounded-full border border-coastal-steel px-3 py-1 text-xs text-coastal-mist/80">
+                      Ajuste XP actual: -{Number(questionState?.helpPenaltyPct || 0)}%
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setChatOpen(false)}
+                      className="rounded-full border border-coastal-steel px-3 py-1 text-xs text-coastal-mist/80 hover:bg-coastal-steel/60"
+                    >
+                      Cerrar chat
+                    </button>
+                  </div>
+                </div>
+
+                <div className="max-h-80 space-y-3 overflow-y-auto rounded-2xl border border-coastal-steel bg-coastal-ocean/70 p-3">
+                  {chatMessages.length === 0 ? (
+                    <p className="text-sm text-coastal-mist/70">
+                      Escribe tu duda y te ayudo paso a paso. Si pides respuesta final, la pregunta se bloquea.
+                    </p>
+                  ) : (
+                    chatMessages.map((entry, index) => (
+                      <div
+                        key={`chat-${index}`}
+                        className={`rounded-2xl px-4 py-3 text-sm leading-6 ${
+                          entry.role === 'assistant'
+                            ? 'border border-coastal-steel bg-coastal-ocean text-coastal-mist'
+                            : 'border border-coastal-neon/40 bg-coastal-steel text-coastal-mist'
+                        }`}
+                      >
+                        <p className="mb-1 text-xs font-semibold tracking-wide text-verdant-accent">
+                          {entry.role === 'assistant' ? 'Profesor virtual' : 'Tu'}
+                        </p>
+                        <p className="whitespace-pre-wrap">{entry.content}</p>
+                      </div>
+                    ))
+                  )}
+                </div>
+
+                <div className="flex flex-wrap items-center gap-3">
+                  <input
+                    value={chatInput}
+                    onChange={(event) => setChatInput(event.target.value)}
+                    onKeyDown={(event) => {
+                      if (event.key === 'Enter') {
+                        event.preventDefault()
+                        void sendTeacherMessage()
+                      }
+                    }}
+                    disabled={loadingChat || questionState.locked || loadingSubmit || loadingNextQuestion}
+                    className="flex-1 rounded-2xl border border-coastal-steel bg-coastal-ocean px-4 py-3 text-sm text-coastal-mist outline-none transition focus:border-coastal-neon/70"
+                    placeholder="Escribe tu mensaje al profesor virtual"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => void sendTeacherMessage()}
+                    disabled={loadingChat || !String(chatInput || '').trim() || questionState.locked || loadingSubmit || loadingNextQuestion}
+                    className="cm-btn-primary px-4 py-2 text-sm disabled:opacity-60"
+                  >
+                    {loadingChat ? 'Enviando...' : 'Enviar'}
+                  </button>
+                </div>
+              </div>
+            )}
+
             {isExamLesson && (
               <p className="rounded-2xl border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-sm text-amber-200">
-                Ayuda IA bloqueada en esta leccion de examen.
+                Chat del profesor virtual bloqueado en esta leccion de examen.
               </p>
             )}
 

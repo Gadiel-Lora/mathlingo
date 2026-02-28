@@ -6,7 +6,7 @@ import { generateQuestion } from './questionEngine.js'
 const clampDifficulty = (value) => {
   const parsed = Number(value)
   if (!Number.isFinite(parsed)) return 3
-  return Math.max(1, Math.min(9, Math.floor(parsed)))
+  return Math.max(1, Math.min(10, Math.floor(parsed)))
 }
 
 const shuffle = (items) => {

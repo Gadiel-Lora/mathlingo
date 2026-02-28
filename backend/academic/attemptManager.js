@@ -15,8 +15,10 @@ const buildQuestionState = (question, examMode = false) => ({
   assisted: false,
   locked: false,
   helpClicks: 0,
+  helpPenaltyPct: 0,
   completed: false,
   examMode: Boolean(examMode),
+  lockReason: '',
   questionType: question?.type || 'multiple-choice',
   createdAt: new Date().toISOString(),
   updatedAt: new Date().toISOString(),
@@ -74,8 +76,10 @@ export const getPublicQuestionState = (state) => {
     assisted: Boolean(state.assisted),
     locked: Boolean(state.locked),
     helpClicks: Number(state.helpClicks || 0),
+    helpPenaltyPct: Number(state.helpPenaltyPct || 0),
     completed: Boolean(state.completed),
     examMode: Boolean(state.examMode),
+    lockReason: String(state.lockReason || ''),
     questionType: state.questionType || 'multiple-choice',
     flowState: deriveFlowState(state),
   }
@@ -103,6 +107,8 @@ const lockByAssistance = ({ userId, questionHash }) => {
   state.locked = true
   state.completed = true
   state.helpClicks = Math.max(state.helpClicks, 2)
+  state.helpPenaltyPct = 100
+  state.lockReason = 'assisted-full'
   markUpdated(state)
   blockFingerprint(userId, question)
   return state
@@ -178,6 +184,53 @@ export const registerHelpRequest = ({ userId, questionHash, requestedMode = 'hin
     event: 'full',
     mode: 'full',
     state: lockedState,
+  }
+}
+
+export const registerChatInteraction = ({
+  userId,
+  questionHash,
+  intent = 'conceptual',
+  conceptualPenaltyPct = 10,
+}) => {
+  const key = getAttemptKey(userId, questionHash)
+  const state = attemptStateStore.get(key)
+  const question = questionStore.get(key)
+  if (!state) throw new Error('No existe estado de intentos para esta pregunta.')
+
+  if (state.locked) {
+    return {
+      event: 'locked',
+      state,
+    }
+  }
+
+  const normalizedIntent = String(intent || '').trim().toLowerCase()
+  if (normalizedIntent === 'final-answer') {
+    state.helpClicks += 1
+    state.helpPenaltyPct = 100
+    state.assisted = true
+    state.locked = true
+    state.completed = true
+    state.lockReason = 'final-answer-request'
+    markUpdated(state)
+    blockFingerprint(userId, question)
+    return {
+      event: 'blocked-final-answer',
+      state,
+    }
+  }
+
+  const penalty = Number.isFinite(Number(conceptualPenaltyPct))
+    ? Math.max(0, Math.floor(Number(conceptualPenaltyPct)))
+    : 10
+  state.helpClicks += 1
+  state.helpPenaltyPct = Math.min(80, Number(state.helpPenaltyPct || 0) + penalty)
+  state.lockReason = ''
+  markUpdated(state)
+  return {
+    event: 'chat',
+    state,
   }
 }
 

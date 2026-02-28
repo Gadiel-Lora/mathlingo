@@ -1,7 +1,7 @@
 const clampDifficulty = (value) => {
   const parsed = Number(value)
   if (!Number.isFinite(parsed)) return 1
-  return Math.max(1, Math.min(9, Math.floor(parsed)))
+  return Math.max(1, Math.min(10, Math.floor(parsed)))
 }
 
 export const createLesson = ({
@@ -46,7 +46,7 @@ export const createLesson = ({
 export const buildLessonsFromOutline = (topicId, outline = [], examDifficulty = 3) => {
   return outline.map((title, index) => {
     const isExam = /examen/i.test(String(title))
-    const difficulty = isExam ? examDifficulty : Math.max(1, Math.min(9, Math.floor(index / 2) + 1))
+    const difficulty = isExam ? examDifficulty : Math.max(1, Math.min(10, Math.floor(index / 2) + 1))
     const skills = String(title)
       .toLowerCase()
       .replace(/[^a-z0-9\s-]/g, '')

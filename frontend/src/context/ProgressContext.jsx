@@ -1,6 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 
+import { ADMIN_UNLOCK_SENTINEL } from '../lib/academicCurriculum'
 import { useAuth } from './AuthContext'
 
 const ProgressContext = createContext(null)
@@ -19,6 +20,23 @@ const normalizeLessons = (value) => {
     .map((item) => String(item ?? '').trim())
     .filter(Boolean)
     .filter((item, index, array) => array.indexOf(item) === index)
+}
+
+const ensureAdminUnlockedState = (state) => {
+  const current = {
+    completedLessons: normalizeLessons(state?.completedLessons),
+    xp: normalizeNumber(state?.xp),
+    currentStreak: normalizeNumber(state?.currentStreak),
+  }
+
+  if (current.completedLessons.includes(ADMIN_UNLOCK_SENTINEL)) {
+    return current
+  }
+
+  return {
+    ...current,
+    completedLessons: [...current.completedLessons, ADMIN_UNLOCK_SENTINEL],
+  }
 }
 
 const normalizeNumber = (value) => {
@@ -113,10 +131,14 @@ export function ProgressProvider({ children }) {
 
     setLoadingProgress(true)
     const localProgress = readLocalProgress(user.id)
-    setProgressState(localProgress)
-    progressRef.current = localProgress
+    const nextProgress = user?.isAdmin ? ensureAdminUnlockedState(localProgress) : localProgress
+    setProgressState(nextProgress)
+    progressRef.current = nextProgress
+    if (user?.isAdmin) {
+      writeLocalProgress(user.id, nextProgress)
+    }
     setLoadingProgress(false)
-  }, [user?.id])
+  }, [user?.id, user?.isAdmin])
 
   const completeLesson = useCallback(
     async (payload) => {

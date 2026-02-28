@@ -26,7 +26,7 @@ const slugify = (value) => {
 const clampDifficulty = (value, fallback = 1) => {
   const parsed = Number(value)
   if (!Number.isFinite(parsed)) return fallback
-  return Math.max(1, Math.min(9, Math.floor(parsed)))
+  return Math.max(1, Math.min(10, Math.floor(parsed)))
 }
 
 const clampQuestionCount = (value, fallback = 4) => {
@@ -168,8 +168,17 @@ const resolveBranchId = (area) => {
 
   if (key.includes('numeros-naturales')) return 'numeros-naturales'
   if (key.includes('aritmetica-fundamental')) return 'aritmetica-fundamental'
+  if (key.includes('numeros-enteros') || key.includes('entero')) return 'aritmetica-fundamental'
   if (key.includes('aritmetica-avanzada')) return 'aritmetica-avanzada'
-  if (key.includes('algebra-avanzada') || key.includes('algebra-basica') || key === 'algebra') return 'algebra'
+  if (
+    key.includes('algebra-avanzada') ||
+    key.includes('algebra-basica') ||
+    key.includes('algebra-ecuaciones') ||
+    key.includes('algebra-sistemas') ||
+    key === 'algebra'
+  ) {
+    return 'algebra'
+  }
   if (key.includes('estadistica-probabilidad')) return 'estadistica-probabilidad'
   if (key.includes('introduccion-funciones') || key.includes('funcion')) return 'funciones'
   if (key.includes('geometria')) return 'geometria'
