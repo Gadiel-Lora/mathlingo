@@ -75,8 +75,15 @@ function Branch() {
   if (loading || loadingProgress) {
     return (
       <div className="cm-shell px-6 pt-20 pb-16">
-        <div className="cm-card mx-auto max-w-5xl p-8 text-center">
-          <p className="text-coastal-mist/75">Cargando rama academica...</p>
+        <div className="mx-auto max-w-6xl space-y-4">
+          <div className="cm-card p-8">
+            <div className="cm-skeleton h-6 w-1/4" />
+            <div className="cm-skeleton mt-4 h-4 w-1/2" />
+          </div>
+          <div className="cm-card p-6">
+            <div className="cm-skeleton h-5 w-1/3" />
+            <div className="cm-skeleton mt-4 h-4 w-2/3" />
+          </div>
         </div>
       </div>
     )
@@ -85,7 +92,7 @@ function Branch() {
   if (error || !branch) {
     return (
       <div className="cm-shell px-6 pt-20 pb-16">
-        <div className="cm-card mx-auto max-w-5xl space-y-6 p-8 text-center">
+        <div className="cm-card cm-page mx-auto max-w-5xl space-y-6 p-8 text-center">
           <h1 className="text-2xl font-semibold tracking-tight text-coastal-mist">No se pudo abrir la rama</h1>
           <p className="text-coastal-mist/75">{error || 'Rama no encontrada.'}</p>
           <Link to="/dashboard" className="cm-btn-primary">
@@ -98,6 +105,9 @@ function Branch() {
 
   return (
     <div className="cm-shell">
+      <div className="cm-orb cm-orb-cyan left-[-7rem] top-[8rem] h-64 w-64" />
+      <div className="cm-orb cm-orb-coral right-[-4rem] top-[28rem] h-52 w-52" />
+
       <header className="cm-navbar">
         <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
           <Link
@@ -112,29 +122,34 @@ function Branch() {
         </nav>
       </header>
 
-      <main className="mx-auto max-w-6xl px-6 pt-20 pb-16">
+      <main className="cm-page mx-auto max-w-6xl px-6 pt-20 pb-16">
         <section className="mx-auto mb-10 max-w-2xl space-y-6 text-center">
-          <img src={brainLogo} alt="Mathlingo brain logo" className="mx-auto w-full max-w-24 drop-shadow-2xl" />
-          <h1 className="text-3xl font-semibold tracking-tight text-coastal-mist">{branch.name}</h1>
-          <p className="text-coastal-mist/75">
+          <img src={brainLogo} alt="Mathlingo brain logo" className="cm-float mx-auto w-full max-w-24 drop-shadow-2xl" />
+          <h1 className="cm-reveal cm-delay-1 text-3xl font-semibold tracking-tight text-coastal-mist">{branch.name}</h1>
+          <p className="cm-reveal cm-delay-2 text-coastal-mist/75">
             {branch.lessonCount} lecciones distribuidas en {branch.gradeCount} grados
           </p>
         </section>
 
-        <section className="space-y-8">
+        <section className="cm-stagger space-y-8">
           {(branch.modules || []).map((module) => {
             const moduleGrade = gradeById.get(String(module.gradeId)) || null
             const moduleGradeUnlocked = moduleGrade ? unlockedGradeIds.has(String(module.gradeId)) : false
 
             return (
               <article key={module.id} className="cm-card space-y-5 p-6">
-                <header>
-                  <p className="text-xs font-semibold tracking-wide text-coastal-mist/55">
-                    {module.gradeName} - {module.areaName}
-                  </p>
-                  <h2 className="mt-2 text-xl font-semibold tracking-tight text-coastal-mist">
-                    {module.lessonCount} lecciones
-                  </h2>
+                <header className="flex flex-wrap items-center justify-between gap-3">
+                  <div>
+                    <p className="text-xs font-semibold tracking-wide text-coastal-mist/55">
+                      {module.gradeName} - {module.areaName}
+                    </p>
+                    <h2 className="mt-2 text-xl font-semibold tracking-tight text-coastal-mist">
+                      {module.lessonCount} lecciones
+                    </h2>
+                  </div>
+                  <span className={`cm-badge ${moduleGradeUnlocked ? 'cm-badge-live' : 'cm-badge-locked'}`}>
+                    {moduleGradeUnlocked ? 'Grado activo' : 'Grado bloqueado'}
+                  </span>
                 </header>
 
                 {(module.topics || []).map((topic) => (
@@ -163,7 +178,7 @@ function Branch() {
                             disabled={!lessonUnlocked}
                             className={`rounded-xl border px-3 py-3 text-left transition-all duration-200 ${
                               lessonUnlocked
-                                ? 'border-coastal-steel bg-coastal-steel/40 hover:bg-coastal-steel'
+                                ? 'border-coastal-steel bg-coastal-steel/40 hover:-translate-y-0.5 hover:border-coastal-neon/40 hover:bg-coastal-steel'
                                 : 'cursor-not-allowed border-coastal-steel/50 bg-coastal-ocean/70 opacity-60'
                             }`}
                           >

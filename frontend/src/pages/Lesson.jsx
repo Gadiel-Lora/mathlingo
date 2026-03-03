@@ -5,6 +5,7 @@ import brainLogo from '../assets/brain-logo.png'
 import QuestionCard from '../components/questions/QuestionCard'
 import { useAuth } from '../context/AuthContext'
 import { useProgress } from '../context/ProgressContext'
+import { useCountUp } from '../hooks/useCountUp'
 import {
   decodeLessonRouteId,
   findLessonContext,
@@ -733,30 +734,6 @@ function Lesson() {
     await generateNewQuestion(nextDifficulty, nextQuestionNumber)
   }
 
-  if (loadingLesson) {
-    return (
-      <div className="cm-shell px-6 pt-20 pb-16">
-        <div className="cm-card mx-auto max-w-3xl p-8 text-center">
-          <p className="text-coastal-mist/75">Cargando leccion...</p>
-        </div>
-      </div>
-    )
-  }
-
-  if (!lessonContext || lessonError) {
-    return (
-      <div className="cm-shell px-6 pt-20 pb-16">
-        <div className="cm-card mx-auto max-w-3xl space-y-6 p-8 text-center">
-          <h1 className="mx-auto max-w-2xl text-2xl font-semibold tracking-tight text-coastal-mist">Leccion no disponible</h1>
-          <p className="text-coastal-mist/75">{lessonError || 'No se pudo cargar la leccion.'}</p>
-          <Link to="/dashboard" className="cm-btn-primary">
-            Volver al dashboard
-          </Link>
-        </div>
-      </div>
-    )
-  }
-
   const overallProgress = Math.round(((currentQuestionNumber - 1) / totalQuestions) * 100)
   const questionOrPlaceholder = question || {
     id: 'placeholder',
@@ -767,145 +744,253 @@ function Lesson() {
   }
   const lessonPassed = Boolean(lessonOutcome?.passed)
   const canLevelUpPreview = completed && lessonPassed && level > levelBeforeLesson
+  const animatedAwardXp = useCountUp(completionAwardXp, 780)
+  const animatedCurrentXp = useCountUp(xp, 850)
+
+  if (loadingLesson) {
+    return (
+      <div className="cm-shell px-6 pt-20 pb-16">
+        <div className="mx-auto max-w-3xl space-y-3">
+          <div className="cm-card p-8">
+            <div className="cm-skeleton h-5 w-1/3" />
+            <div className="cm-skeleton mt-4 h-4 w-2/3" />
+          </div>
+          <div className="cm-card p-8">
+            <div className="cm-skeleton h-4 w-full" />
+            <div className="cm-skeleton mt-3 h-4 w-5/6" />
+            <div className="cm-skeleton mt-3 h-4 w-2/3" />
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (!lessonContext || lessonError) {
+    return (
+      <div className="cm-shell px-6 pt-20 pb-16">
+        <div className="cm-card cm-page mx-auto max-w-3xl space-y-6 p-8 text-center">
+          <h1 className="mx-auto max-w-2xl text-2xl font-semibold tracking-tight text-coastal-mist">Leccion no disponible</h1>
+          <p className="text-coastal-mist/75">{lessonError || 'No se pudo cargar la leccion.'}</p>
+          <Link to="/dashboard" className="cm-btn-primary">
+            Volver al dashboard
+          </Link>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="cm-shell px-6 pt-20 pb-16">
-      <div className="mx-auto max-w-3xl">
-        <img src={brainLogo} alt="Mathlingo brain logo" className="mx-auto w-full max-w-24 drop-shadow-2xl" />
+      <div className="cm-orb cm-orb-cyan left-[-7rem] top-[8rem] h-56 w-56" />
+      <div className="cm-orb cm-orb-coral right-[-5rem] top-[22rem] h-48 w-48" />
+      <div className="cm-orb cm-orb-gold left-[30%] top-[46rem] h-44 w-44" />
 
-        {!completed ? (
-          <section className="mt-12 space-y-6">
-            <div className="cm-card space-y-5 p-6">
-              <h1 className="text-3xl font-semibold tracking-tight text-coastal-mist">{lessonContext.lessonTitle}</h1>
-              <p className="text-sm text-coastal-mist/70">
-                {lessonContext.gradeName} · {lessonContext.areaName} · {lessonContext.topicName}
-                {isExamLesson ? ' · EXAMEN' : ''}
+      <div className="cm-page mx-auto max-w-6xl">
+        <section className="cm-card relative overflow-hidden p-6 md:p-8">
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-coastal-neon/70 to-transparent" />
+          <div className="pointer-events-none absolute right-0 bottom-0 h-40 w-40 rounded-full bg-[radial-gradient(circle,_rgba(125,140,255,0.18),_rgba(125,140,255,0))]" />
+
+          <div className="flex flex-wrap items-start justify-between gap-6">
+            <div className="space-y-3">
+              <p className="text-[11px] font-semibold tracking-[0.2em] text-coastal-neon/80">LESSON PROTOCOL</p>
+              <h1 className="text-3xl font-semibold tracking-tight text-coastal-mist md:text-4xl">{lessonContext.lessonTitle}</h1>
+              <p className="text-sm text-coastal-mist/75">
+                {lessonContext.gradeName} | {lessonContext.areaName} | {lessonContext.topicName}
+                {isExamLesson ? ' | EXAMEN' : ' | PRACTICA ADAPTATIVA'}
               </p>
-
-              <div className="space-y-3">
-                <p className="text-sm text-coastal-mist/75">
-                  Pregunta {currentQuestionNumber} de {totalQuestions}
-                </p>
-                <div className="h-4 w-full rounded-full bg-coastal-steel">
-                  <div className="h-4 rounded-full bg-coastal-wave transition-all duration-500" style={{ width: `${overallProgress}%` }} />
-                </div>
-              </div>
             </div>
 
-            {aiError && (
-              <p className="rounded-2xl border border-red-600/40 bg-red-600/10 px-4 py-3 text-sm text-red-200">{aiError}</p>
-            )}
+            <div className="flex items-center gap-4">
+              <img src={brainLogo} alt="Mathlingo brain logo" className="cm-float w-16 drop-shadow-2xl md:w-20" />
+              <div className="rounded-2xl border border-coastal-neon/35 bg-coastal-midnight/60 px-4 py-3">
+                <p className="text-[10px] font-semibold tracking-[0.18em] text-coastal-neon/85">DIFICULTAD</p>
+                <p className="mt-1 text-2xl font-semibold text-coastal-mist">{questionOrPlaceholder.difficulty}</p>
+              </div>
+            </div>
+          </div>
 
-            <QuestionCard
-              question={questionOrPlaceholder}
-              state={questionState}
-              selectedOption={selectedOption}
-              freeResponse={freeResponse}
-              aiMessage={aiMessage}
-              feedbackMessage={feedbackMessage}
-              feedbackTone={feedbackTone}
-              loadingHelp={loadingChat || loadingNextQuestion}
-              loadingSubmit={loadingSubmit || loadingNextQuestion}
-              helpDisabled={isExamLesson}
-              onSelectOption={(index) => {
-                if (questionState.locked || loadingNextQuestion) return
-                setSelectedOption(index)
-              }}
-              onChangeFreeResponse={(value) => {
-                if (questionState.locked || loadingNextQuestion) return
-                setFreeResponse(value)
-              }}
-              onSubmit={submitAnswer}
-              onOpenChat={openTeacherChat}
-              onNext={handleNext}
-            />
+          <div className="mt-6 grid gap-3 sm:grid-cols-3">
+            <div className="rounded-2xl border border-coastal-steel/70 bg-coastal-midnight/45 px-4 py-3">
+              <p className="text-[11px] font-semibold tracking-[0.16em] text-coastal-neon/80">NODO ACTIVO</p>
+              <p className="mt-1 text-sm text-coastal-mist">
+                Pregunta {currentQuestionNumber}/{totalQuestions}
+              </p>
+            </div>
+            <div className="rounded-2xl border border-verdant-accent/45 bg-verdant-emerald/20 px-4 py-3">
+              <p className="text-[11px] font-semibold tracking-[0.16em] text-verdant-accent/95">PROGRESO</p>
+              <p className="mt-1 text-sm text-coastal-mist">{overallProgress}% completado</p>
+            </div>
+            <div className="rounded-2xl border border-amber-300/35 bg-amber-400/10 px-4 py-3">
+              <p className="text-[11px] font-semibold tracking-[0.16em] text-amber-200">MODO</p>
+              <p className="mt-1 text-sm text-coastal-mist">{isExamLesson ? 'Evaluacion cerrada' : 'Sesion guiada IA'}</p>
+            </div>
+          </div>
 
-            {chatOpen && !isExamLesson && (
-              <div className="cm-card space-y-4 p-5">
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                  <p className="text-sm font-semibold tracking-wide text-verdant-accent">PROFESOR VIRTUAL</p>
-                  <div className="flex items-center gap-2">
-                    <span className="rounded-full border border-coastal-steel px-3 py-1 text-xs text-coastal-mist/80">
-                      Ajuste XP actual: -{Number(questionState?.helpPenaltyPct || 0)}%
-                    </span>
+          <div className="mt-5">
+            <div className="cm-progress-track">
+              <div className="cm-progress-fill" style={{ width: `${Math.max(0, Math.min(100, overallProgress))}%` }} />
+            </div>
+          </div>
+        </section>
+
+        {!completed ? (
+          <section className="mt-8 grid gap-6 lg:grid-cols-[2fr_1fr]">
+            <div className="space-y-6">
+              {aiError && (
+                <p className="rounded-2xl border border-red-500/45 bg-red-500/12 px-4 py-3 text-sm text-red-100">{aiError}</p>
+              )}
+
+              <QuestionCard
+                question={questionOrPlaceholder}
+                state={questionState}
+                selectedOption={selectedOption}
+                freeResponse={freeResponse}
+                aiMessage={aiMessage}
+                feedbackMessage={feedbackMessage}
+                feedbackTone={feedbackTone}
+                loadingHelp={loadingChat || loadingNextQuestion}
+                loadingSubmit={loadingSubmit || loadingNextQuestion}
+                helpDisabled={isExamLesson}
+                onSelectOption={(index) => {
+                  if (questionState.locked || loadingNextQuestion) return
+                  setSelectedOption(index)
+                }}
+                onChangeFreeResponse={(value) => {
+                  if (questionState.locked || loadingNextQuestion) return
+                  setFreeResponse(value)
+                }}
+                onSubmit={submitAnswer}
+                onOpenChat={openTeacherChat}
+                onNext={handleNext}
+              />
+
+              {chatOpen && !isExamLesson && (
+                <div className="cm-card space-y-4 p-5">
+                  <div className="flex flex-wrap items-center justify-between gap-3">
+                    <p className="text-sm font-semibold tracking-[0.14em] text-verdant-accent">PROFESOR VIRTUAL</p>
+                    <div className="flex items-center gap-2">
+                      <span className="rounded-full border border-coastal-neon/40 bg-coastal-midnight/55 px-3 py-1 text-xs text-coastal-mist/85">
+                        Ajuste XP actual: -{Number(questionState?.helpPenaltyPct || 0)}%
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => setChatOpen(false)}
+                        className="rounded-full border border-coastal-steel px-3 py-1 text-xs text-coastal-mist/80 hover:bg-coastal-steel/60"
+                      >
+                        Cerrar chat
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="max-h-80 space-y-3 overflow-y-auto rounded-2xl border border-coastal-steel bg-coastal-ocean/70 p-3">
+                    {chatMessages.length === 0 ? (
+                      <p className="text-sm text-coastal-mist/70">
+                        Escribe tu duda y te ayudo paso a paso. Si pides respuesta final, la pregunta se bloquea.
+                      </p>
+                    ) : (
+                      chatMessages.map((entry, index) => (
+                        <div
+                          key={`chat-${index}`}
+                          className={`rounded-2xl px-4 py-3 text-sm leading-6 ${
+                            entry.role === 'assistant'
+                              ? 'border border-verdant-accent/35 bg-verdant-emerald/18 text-coastal-mist'
+                              : 'border border-violet-300/35 bg-violet-500/10 text-coastal-mist'
+                          }`}
+                        >
+                          <p className="mb-1 text-xs font-semibold tracking-wide text-verdant-accent">
+                            {entry.role === 'assistant' ? 'Profesor virtual' : 'Tu'}
+                          </p>
+                          <p className="whitespace-pre-wrap">{entry.content}</p>
+                        </div>
+                      ))
+                    )}
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-3">
+                    <input
+                      value={chatInput}
+                      onChange={(event) => setChatInput(event.target.value)}
+                      onKeyDown={(event) => {
+                        if (event.key === 'Enter') {
+                          event.preventDefault()
+                          void sendTeacherMessage()
+                        }
+                      }}
+                      disabled={loadingChat || questionState.locked || loadingSubmit || loadingNextQuestion}
+                      className="cm-input flex-1 px-4 py-3 text-sm"
+                      placeholder="Escribe tu mensaje al profesor virtual"
+                    />
                     <button
                       type="button"
-                      onClick={() => setChatOpen(false)}
-                      className="rounded-full border border-coastal-steel px-3 py-1 text-xs text-coastal-mist/80 hover:bg-coastal-steel/60"
+                      onClick={() => void sendTeacherMessage()}
+                      disabled={
+                        loadingChat ||
+                        !String(chatInput || '').trim() ||
+                        questionState.locked ||
+                        loadingSubmit ||
+                        loadingNextQuestion
+                      }
+                      className="cm-btn-primary px-4 py-2 text-sm disabled:opacity-60"
                     >
-                      Cerrar chat
+                      {loadingChat ? 'Enviando...' : 'Enviar'}
                     </button>
                   </div>
                 </div>
+              )}
 
-                <div className="max-h-80 space-y-3 overflow-y-auto rounded-2xl border border-coastal-steel bg-coastal-ocean/70 p-3">
-                  {chatMessages.length === 0 ? (
-                    <p className="text-sm text-coastal-mist/70">
-                      Escribe tu duda y te ayudo paso a paso. Si pides respuesta final, la pregunta se bloquea.
+              {isExamLesson && (
+                <p className="rounded-2xl border border-amber-500/45 bg-amber-500/12 px-4 py-3 text-sm text-amber-100">
+                  Chat del profesor virtual bloqueado en esta leccion de examen.
+                </p>
+              )}
+
+              {revealedAnswer && (
+                <p className="rounded-2xl border border-coastal-neon/45 bg-coastal-steel/55 px-4 py-3 text-sm text-coastal-mist">
+                  Respuesta correcta: <strong>{revealedAnswer}</strong>
+                </p>
+              )}
+            </div>
+
+            <aside className="space-y-4">
+              <div className="cm-card space-y-4 p-5">
+                <p className="text-xs font-semibold tracking-[0.16em] text-coastal-neon/90">TELEMETRIA DE SESION</p>
+                <div className="grid gap-3">
+                  <div className="rounded-xl border border-coastal-steel/70 bg-coastal-midnight/45 px-3 py-2">
+                    <p className="text-[11px] text-coastal-mist/70">XP de sesion</p>
+                    <p className="text-lg font-semibold text-coastal-neon">{sessionEarnedXp}</p>
+                  </div>
+                  <div className="rounded-xl border border-verdant-accent/40 bg-verdant-emerald/20 px-3 py-2">
+                    <p className="text-[11px] text-coastal-mist/70">Estado de ayuda</p>
+                    <p className="text-sm font-semibold text-verdant-accent">
+                      {Number(questionState?.helpPenaltyPct || 0) > 0
+                        ? `Penalizacion ${Number(questionState?.helpPenaltyPct || 0)}%`
+                        : 'Sin penalizacion'}
                     </p>
-                  ) : (
-                    chatMessages.map((entry, index) => (
-                      <div
-                        key={`chat-${index}`}
-                        className={`rounded-2xl px-4 py-3 text-sm leading-6 ${
-                          entry.role === 'assistant'
-                            ? 'border border-coastal-steel bg-coastal-ocean text-coastal-mist'
-                            : 'border border-coastal-neon/40 bg-coastal-steel text-coastal-mist'
-                        }`}
-                      >
-                        <p className="mb-1 text-xs font-semibold tracking-wide text-verdant-accent">
-                          {entry.role === 'assistant' ? 'Profesor virtual' : 'Tu'}
-                        </p>
-                        <p className="whitespace-pre-wrap">{entry.content}</p>
-                      </div>
-                    ))
-                  )}
-                </div>
-
-                <div className="flex flex-wrap items-center gap-3">
-                  <input
-                    value={chatInput}
-                    onChange={(event) => setChatInput(event.target.value)}
-                    onKeyDown={(event) => {
-                      if (event.key === 'Enter') {
-                        event.preventDefault()
-                        void sendTeacherMessage()
-                      }
-                    }}
-                    disabled={loadingChat || questionState.locked || loadingSubmit || loadingNextQuestion}
-                    className="flex-1 rounded-2xl border border-coastal-steel bg-coastal-ocean px-4 py-3 text-sm text-coastal-mist outline-none transition focus:border-coastal-neon/70"
-                    placeholder="Escribe tu mensaje al profesor virtual"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => void sendTeacherMessage()}
-                    disabled={loadingChat || !String(chatInput || '').trim() || questionState.locked || loadingSubmit || loadingNextQuestion}
-                    className="cm-btn-primary px-4 py-2 text-sm disabled:opacity-60"
-                  >
-                    {loadingChat ? 'Enviando...' : 'Enviar'}
-                  </button>
+                  </div>
+                  <div className="rounded-xl border border-amber-300/40 bg-amber-400/10 px-3 py-2">
+                    <p className="text-[11px] text-coastal-mist/70">Intentos actuales</p>
+                    <p className="text-sm font-semibold text-amber-200">{Number(questionState?.attempts || 0)} / 3</p>
+                  </div>
                 </div>
               </div>
-            )}
 
-            {isExamLesson && (
-              <p className="rounded-2xl border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-sm text-amber-200">
-                Chat del profesor virtual bloqueado en esta leccion de examen.
-              </p>
-            )}
-
-            {revealedAnswer && (
-              <p className="rounded-2xl border border-coastal-neon/40 bg-coastal-steel/60 px-4 py-3 text-sm text-coastal-mist">
-                Respuesta correcta: <strong>{revealedAnswer}</strong>
-              </p>
-            )}
+              <div className="cm-card space-y-3 p-5">
+                <p className="text-xs font-semibold tracking-[0.16em] text-coastal-neon/90">PROTOCOLO IA</p>
+                <p className="text-sm text-coastal-mist/75">
+                  Si pides guia conceptual, se aplica penalizacion parcial de XP. Si pides respuesta final, la pregunta se bloquea.
+                </p>
+                <div className="rounded-xl border border-coastal-steel/70 bg-coastal-midnight/45 px-3 py-2 text-xs text-coastal-mist/75">
+                  Estado actual: {questionState?.locked ? 'Pregunta bloqueada' : 'Pregunta activa'}
+                </div>
+              </div>
+            </aside>
           </section>
         ) : (
-          <section className="cm-card mt-12 space-y-6 p-8 text-center">
+          <section className="cm-card mt-8 space-y-6 p-8 text-center">
             <h2 className="mx-auto max-w-2xl text-3xl font-semibold tracking-tight text-coastal-mist">
               {lessonPassed ? 'Leccion completada' : 'Leccion finalizada (no aprobada)'}
             </h2>
-            <p className="text-2xl font-semibold text-coastal-neon">+{completionAwardXp} XP</p>
+            <p className="text-2xl font-semibold text-coastal-neon">+{animatedAwardXp} XP</p>
             {lessonOutcome && !finalExamOutcome && (
               <div
                 className={`rounded-2xl px-4 py-3 text-sm ${
@@ -975,7 +1060,7 @@ function Lesson() {
           </section>
         )}
 
-        <p className="mt-6 text-center text-xs text-coastal-mist/60">XP actual: {xp} - Nivel {level}</p>
+        <p className="mt-6 text-center text-xs text-coastal-mist/60">XP actual: {animatedCurrentXp} - Nivel {level}</p>
       </div>
     </div>
   )

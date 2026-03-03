@@ -1,7 +1,7 @@
 # CONTEXTO MAESTRO EXPANDIDO
 EliteMath App - Sistema Matematico Adaptativo de Alto Rendimiento
 
-Ultima actualizacion: 2026-02-28
+Ultima actualizacion: 2026-03-03
 
 ## 1) Definicion del producto
 
@@ -314,3 +314,34 @@ Implementacion tecnica:
 - Estado/penalizacion/bloqueo por chat: `backend/academic/attemptManager.js`.
 - Ajuste XP por ayuda en chat: `backend/academic/xpSystem.js`.
 - UI chat profesor virtual: `frontend/src/pages/Lesson.jsx` y `frontend/src/components/questions/QuestionCard.jsx`.
+
+## 12) Actualizacion UI/UX (2026-03-03)
+
+Objetivo de la iteracion:
+- eliminar el problema visual de "pantalla azul" en lecciones,
+- modernizar la interfaz con una estetica mas tecnologica,
+- aumentar contraste y variedad cromatica manteniendo tono elegante.
+
+Correcciones funcionales aplicadas:
+1. Se corrigio el orden de hooks en `frontend/src/pages/Lesson.jsx` para evitar fallas de render en la ruta de lecciones.
+2. Se agrego estado de carga visible en `frontend/src/components/ProtectedRoute.jsx` para evitar pantalla vacia durante bootstrap de sesion.
+3. Se reforzo el comportamiento de visibilidad base en `frontend/src/index.css` para que el contenido no dependa de animaciones.
+
+Rediseno visual aplicado:
+1. Nueva direccion visual global en `frontend/src/index.css` y `frontend/tailwind.config.js`:
+   - fondo multicapa con profundidad,
+   - tarjetas tipo glass/tech,
+   - botones con gradientes y contraste reforzado,
+   - acentos cian, coral, violeta, ambar y verde.
+2. Rediseno de experiencia de leccion (`frontend/src/pages/Lesson.jsx`):
+   - header tecnico de sesion,
+   - bloque de progreso y modo,
+   - layout principal + panel lateral de telemetria.
+3. Rediseno de tarjeta de pregunta (`frontend/src/components/questions/QuestionCard.jsx`):
+   - estados mas legibles,
+   - visual de intentos con gradiente,
+   - chat y feedback con estilos diferenciados.
+
+Estado:
+- Build frontend validado con `npm run build`.
+- Lint frontend mantiene issues previos en hooks/context no introducidos en esta iteracion.

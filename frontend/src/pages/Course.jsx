@@ -138,10 +138,12 @@ function Course() {
       lessonId: 'final-exam',
     })
   }, [grade?.id])
+
   const finalExamCompleted = useMemo(() => {
     if (!grade?.id) return false
     return completedLessons.includes(buildFinalExamProgressId(grade.id))
   }, [completedLessons, grade?.id])
+
   const finalExamQuestionText = useMemo(() => {
     const range = grade?.finalExam?.questionRange
     if (!Array.isArray(range) || range.length < 2) return 'Cantidad variable'
@@ -154,8 +156,16 @@ function Course() {
   if (loading || loadingProgress) {
     return (
       <div className="cm-shell px-6 pt-20 pb-16">
-        <div className="cm-card mx-auto max-w-5xl p-8 text-center">
-          <p className="text-coastal-mist/75">Cargando grado...</p>
+        <div className="mx-auto max-w-5xl space-y-3">
+          <div className="cm-card p-8">
+            <div className="cm-skeleton h-5 w-1/4" />
+            <div className="cm-skeleton mt-4 h-4 w-2/3" />
+          </div>
+          <div className="cm-card p-6">
+            <div className="cm-skeleton h-5 w-1/3" />
+            <div className="cm-skeleton mt-4 h-4 w-4/5" />
+            <div className="cm-skeleton mt-4 h-4 w-1/2" />
+          </div>
         </div>
       </div>
     )
@@ -164,7 +174,7 @@ function Course() {
   if (error || !grade) {
     return (
       <div className="cm-shell px-6 pt-20 pb-16">
-        <div className="cm-card mx-auto max-w-5xl space-y-6 p-8 text-center">
+        <div className="cm-card cm-page mx-auto max-w-5xl space-y-6 p-8 text-center">
           <h1 className="text-2xl font-semibold tracking-tight text-coastal-mist">No se pudo abrir el grado</h1>
           <p className="text-coastal-mist/75">{error || 'Grado no encontrado.'}</p>
           <Link to="/dashboard" className="cm-btn-primary">
@@ -178,7 +188,7 @@ function Course() {
   if (!gradeUnlocked) {
     return (
       <div className="cm-shell px-6 pt-20 pb-16">
-        <div className="cm-card mx-auto max-w-5xl space-y-6 p-8 text-center">
+        <div className="cm-card cm-page mx-auto max-w-5xl space-y-6 p-8 text-center">
           <h1 className="text-2xl font-semibold tracking-tight text-coastal-mist">Grado bloqueado</h1>
           <p className="text-coastal-mist/75">
             Este grado se desbloquea cuando completas academicamente el grado anterior.
@@ -193,6 +203,9 @@ function Course() {
 
   return (
     <div className="cm-shell">
+      <div className="cm-orb cm-orb-cyan left-[-7rem] top-[8rem] h-56 w-56" />
+      <div className="cm-orb cm-orb-gold right-[-5rem] top-[24rem] h-48 w-48" />
+
       <header className="cm-navbar">
         <nav className="mx-auto flex h-16 max-w-5xl items-center justify-between px-6">
           <Link
@@ -207,16 +220,16 @@ function Course() {
         </nav>
       </header>
 
-      <main className="mx-auto max-w-5xl px-6 pt-20 pb-16">
+      <main className="cm-page mx-auto max-w-5xl px-6 pt-20 pb-16">
         <section className="mx-auto mb-12 max-w-2xl space-y-6 text-center">
-          <img src={brainLogo} alt="Mathlingo brain logo" className="mx-auto w-full max-w-24 drop-shadow-2xl" />
-          <h1 className="text-3xl font-semibold tracking-tight text-coastal-mist">{grade.name}</h1>
-          <p className="text-coastal-mist/75">
+          <img src={brainLogo} alt="Mathlingo brain logo" className="cm-float mx-auto w-full max-w-24 drop-shadow-2xl" />
+          <h1 className="cm-reveal cm-delay-1 text-3xl font-semibold tracking-tight text-coastal-mist">{grade.name}</h1>
+          <p className="cm-reveal cm-delay-2 text-coastal-mist/75">
             {grade.areas?.length || 0} modulos - {lessonCards.length} lecciones
           </p>
         </section>
 
-        <section className="mt-12 space-y-6">
+        <section className="cm-stagger mt-12 space-y-6">
           {lessonCards.map((lesson, index) => (
             <article
               key={lesson.progressId}
@@ -225,9 +238,7 @@ function Course() {
                 navigate(`/lesson/${lesson.routeId}`)
               }}
               className={`cm-card p-6 ${
-                lesson.locked
-                  ? 'cursor-not-allowed bg-coastal-ocean/70 opacity-50'
-                  : 'cursor-pointer bg-coastal-ocean/70 transition-all duration-200 hover:-translate-y-0.5 hover:bg-coastal-steel/80'
+                lesson.locked ? 'cursor-not-allowed bg-coastal-ocean/70 opacity-50' : 'cm-card-interactive bg-coastal-ocean/70'
               }`}
             >
               <div className="flex flex-wrap items-center gap-2 text-xs text-coastal-mist/55">
@@ -243,10 +254,16 @@ function Course() {
                   </>
                 )}
               </div>
-              <h2 className="mt-2 text-xl font-semibold tracking-tight">{lesson.lessonTitle}</h2>
-              <p className="mt-2 text-sm text-coastal-mist/75">
-                {lesson.locked ? 'Bloqueada' : lesson.completed ? 'Completada' : 'Lista para continuar'}
-              </p>
+              <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
+                <h2 className="text-xl font-semibold tracking-tight">{lesson.lessonTitle}</h2>
+                <span
+                  className={`cm-badge ${
+                    lesson.locked ? 'cm-badge-locked' : lesson.completed ? 'cm-badge-live' : 'border-coastal-steel text-coastal-mist/80'
+                  }`}
+                >
+                  {lesson.locked ? 'Bloqueada' : lesson.completed ? 'Completada' : 'Disponible'}
+                </span>
+              </div>
               <p className="mt-2 text-xs text-coastal-mist/65">
                 Dificultad {lesson.difficulty} - {lesson.questionCount || 4} problemas -{' '}
                 {lesson.problemMix === 'contextualized'
@@ -255,9 +272,7 @@ function Course() {
                     ? 'Mecanicos'
                     : 'Mixtos'}
               </p>
-              <p className="mt-1 text-xs text-coastal-mist/65">
-                XP base {lesson.xpReward}
-              </p>
+              <p className="mt-1 text-xs text-coastal-mist/65">XP base {lesson.xpReward}</p>
             </article>
           ))}
 
@@ -267,9 +282,7 @@ function Course() {
               navigate(`/lesson/${finalExamRouteId}`)
             }}
             className={`cm-card p-6 ${
-              allRegularLessonsCompleted
-                ? 'cursor-pointer bg-coastal-ocean/70 transition-all duration-200 hover:-translate-y-0.5 hover:bg-coastal-steel/80'
-                : 'cursor-not-allowed bg-coastal-ocean/70 opacity-50'
+              allRegularLessonsCompleted ? 'cm-card-interactive bg-coastal-ocean/70' : 'cursor-not-allowed bg-coastal-ocean/70 opacity-50'
             }`}
           >
             <div className="flex flex-wrap items-center gap-2 text-xs text-coastal-mist/55">
@@ -279,7 +292,12 @@ function Course() {
               <span>-</span>
               <span>XP x2 si apruebas</span>
             </div>
-            <h2 className="mt-2 text-xl font-semibold tracking-tight">Examen Final del Grado</h2>
+            <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
+              <h2 className="text-xl font-semibold tracking-tight">Examen Final del Grado</h2>
+              <span className={`cm-badge ${allRegularLessonsCompleted ? 'cm-badge-live' : 'cm-badge-locked'}`}>
+                {finalExamCompleted ? 'Completado' : allRegularLessonsCompleted ? 'Listo' : 'Bloqueado'}
+              </span>
+            </div>
             <p className="mt-2 text-sm text-coastal-mist/75">
               {finalExamCompleted
                 ? 'Completado'
