@@ -801,6 +801,7 @@ router.post('/final-exam/generate', (req, res) => {
   const grade = parseGrade(req.body?.grade)
   const userId = sanitizeInput(req.body?.userId)
   const questionCount = Number(req.body?.questionCount)
+  const examMode = sanitizeInput(req.body?.examMode)
 
   if (!grade) {
     res.status(400).json({
@@ -812,6 +813,7 @@ router.post('/final-exam/generate', (req, res) => {
   try {
     const exam = generateFinalExam(grade, {
       questionCount: Number.isFinite(questionCount) ? questionCount : undefined,
+      examMode: examMode || undefined,
     })
 
     if (userId) {

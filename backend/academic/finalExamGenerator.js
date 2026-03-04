@@ -77,6 +77,15 @@ const normalizeMixLabel = (value) => {
   return 'mixed'
 }
 
+const normalizeExamMode = (value) => {
+  const key = String(value ?? '')
+    .trim()
+    .toLowerCase()
+  if (['standard', 'elite', 'extreme'].includes(key)) return key
+  if (['estandar', 'normal'].includes(key)) return 'standard'
+  return 'standard'
+}
+
 const buildMixSequence = (targetCount, mixDistribution = []) => {
   const safeTarget = Math.max(0, Math.floor(Number(targetCount) || 0))
   if (safeTarget === 0) return []
@@ -157,16 +166,31 @@ export const generateFinalExam = (grade, options = {}) => {
   }
 
   const blueprint = getFinalExamBlueprint(grade)
-  if (!blueprint?.distribution?.length) {
+  const examMode = normalizeExamMode(options.examMode)
+  const modeConfig = blueprint?.examModes?.[examMode] || null
+  const baseDistribution =
+    Array.isArray(modeConfig?.distribution) && modeConfig.distribution.length > 0 ? modeConfig.distribution : blueprint?.distribution
+
+  if (!Array.isArray(baseDistribution) || baseDistribution.length === 0) {
     throw new Error(`El grado ${gradeData.id} no tiene blueprint de examen final definido.`)
   }
 
-  const defaultTarget = sumCounts(blueprint.distribution)
+  const defaultTargetByMode = Number(modeConfig?.questionCount)
+  const defaultTarget =
+    Number.isFinite(defaultTargetByMode) && defaultTargetByMode > 0 ? Math.floor(defaultTargetByMode) : sumCounts(baseDistribution)
   const requestedCount = Number(options.questionCount)
   const targetCount = Number.isFinite(requestedCount) && requestedCount > 0 ? Math.floor(requestedCount) : defaultTarget
-  const distribution = scaleDistribution(blueprint.distribution, targetCount)
-  const hasMixDistribution = Array.isArray(blueprint.mixDistribution) && blueprint.mixDistribution.length > 0
-  const mixSequence = buildMixSequence(targetCount, blueprint.mixDistribution)
+  const distribution = scaleDistribution(baseDistribution, targetCount)
+  const modeMixDistribution =
+    Array.isArray(modeConfig?.mixDistribution) && modeConfig.mixDistribution.length > 0
+      ? modeConfig.mixDistribution
+      : blueprint.mixDistribution
+  const hasMixDistribution = Array.isArray(modeMixDistribution) && modeMixDistribution.length > 0
+  const mixSequence = buildMixSequence(targetCount, modeMixDistribution)
+  const minDifficultyByMode = Number(modeConfig?.minDifficulty)
+  const minDifficulty = Number.isFinite(minDifficultyByMode) ? clampDifficulty(minDifficultyByMode) : 1
+  const difficultyBoostByMode = Number(modeConfig?.difficultyBoost)
+  const difficultyBoost = Number.isFinite(difficultyBoostByMode) ? Math.floor(difficultyBoostByMode) : 0
 
   const generatedFingerprints = new Set()
   const generatedQuestions = []
@@ -180,7 +204,9 @@ export const generateFinalExam = (grade, options = {}) => {
     for (let index = 0; index < count; index += 1) {
       const requestedMix = normalizeMixLabel(mixSequence[generatedCount] || 'mixed')
       const baseDifficulty = pickDifficulty(block.difficultyRange || [3, 4])
-      const difficulty = requestedMix === 'advanced-modeling' ? Math.max(7, baseDifficulty) : baseDifficulty
+      const boostedDifficulty = clampDifficulty(baseDifficulty + difficultyBoost)
+      const mixDifficulty = requestedMix === 'advanced-modeling' ? Math.max(7, boostedDifficulty) : boostedDifficulty
+      const difficulty = clampDifficulty(Math.max(mixDifficulty, minDifficulty))
       const problemMix =
         requestedMix === 'mechanical'
           ? 'mechanical'
@@ -226,7 +252,7 @@ export const generateFinalExam = (grade, options = {}) => {
   }
 
   return {
-    id: `final-${gradeData.id}-${randomUUID()}`,
+    id: `final-${gradeData.id}-${examMode}-${randomUUID()}`,
     gradeId: gradeData.id,
     gradeNumber: gradeData.gradeNumber,
     title: blueprint.name || `Examen Final ${gradeData.name}`,
@@ -237,6 +263,7 @@ export const generateFinalExam = (grade, options = {}) => {
       xpMultiplier: Number(blueprint.xpMultiplier || 2),
       passingScore: Number(blueprint.passingScore || 0.7),
       targetRange: blueprint.questionRange || [generatedQuestions.length, generatedQuestions.length],
+      examMode,
     },
     generatedAt: new Date().toISOString(),
   }

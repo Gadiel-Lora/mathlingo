@@ -68,6 +68,18 @@ const TOPIC_ALIASES = {
   funciones: 'funcion-lineal-formal',
   'estadistica-descriptiva': 'estadistica-descriptiva-ampliada',
   'probabilidad-compuesta': 'probabilidad-compuesta-formal',
+  'funcion-cuadratica-analisis-estructural-completo': 'funcion-cuadratica',
+  'transformaciones-y-composicion-de-funciones': 'funcion-cuadratica',
+  'sistemas-no-lineales-y-analisis-grafico-avanzado': 'modelacion-integrada',
+  'modelacion-cuadratica-aplicada-pensamiento-estrategico': 'modelacion-integrada',
+  'potencias-y-leyes-de-los-exponentes': 'potencias-propiedades',
+  'radicales-y-racionalizacion': 'raices-cuadradas-cubicas',
+  'polinomios-y-factorizacion-avanzada': 'factorizacion-completa',
+  'expresiones-algebraicas-racionales': 'fracciones-algebraicas',
+  'ecuaciones-cuadraticas-metodos-resolucion': 'ecuaciones-cuadraticas',
+  'inecuaciones-lineales-cuadraticas': 'inecuaciones-modelacion-restricciones',
+  'sistemas-ecuaciones-modelacion-avanzada': 'sistemas-ecuaciones-2x2-formal',
+  'integracion-algebraica-pensamiento-estrategico': 'modelacion-integrada',
 }
 
 const GRADE_TOPIC_ALIASES = {

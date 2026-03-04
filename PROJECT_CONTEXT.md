@@ -1,7 +1,7 @@
 # CONTEXTO MAESTRO EXPANDIDO
 EliteMath App - Sistema Matematico Adaptativo de Alto Rendimiento
 
-Ultima actualizacion: 2026-03-03
+Ultima actualizacion: 2026-03-04
 
 ## 1) Definicion del producto
 
@@ -345,3 +345,75 @@ Rediseno visual aplicado:
 Estado:
 - Build frontend validado con `npm run build`.
 - Lint frontend mantiene issues previos en hooks/context no introducidos en esta iteracion.
+
+## 13) Actualizacion Curricular y UI Estatica (2026-03-04)
+
+### Curriculo 2do Secundaria - IV Bimestre integrado
+
+Se incorporo oficialmente en `curriculum/grades/grade2.js`:
+- Area: `IV Bimestre - Ecuaciones, Inecuaciones y Modelacion Algebraica`.
+- 4 unidades nuevas, cada una con 12 lecciones:
+  - `ecuaciones-cuadraticas-metodos-resolucion`,
+  - `inecuaciones-lineales-cuadraticas`,
+  - `sistemas-ecuaciones-modelacion-avanzada`,
+  - `integracion-algebraica-pensamiento-estrategico`.
+
+Tambien se actualizo el objetivo global del grado para reflejar consolidacion algebraica anual.
+
+### Examen final anual 2do (nivel elite)
+
+Blueprint actualizado en `grade2.finalExam`:
+- Nuevo id: `grade-2-final-exam-elite-anual`.
+- Rango de preguntas: `30-40`.
+- Secciones por integracion:
+  - Integracion algebraica,
+  - Funciones y sistemas,
+  - Inecuaciones y dominio,
+  - Modelacion avanzada.
+- Distribucion por topics de II, III y IV bimestre (40 base para escalado).
+
+Se agrego configuracion de modos:
+- `standard` (30),
+- `elite` (36),
+- `extreme` (40, dificultad minima 10).
+
+### Motor de examen final y API
+
+Cambios en backend:
+- `backend/academic/finalExamGenerator.js`:
+  - soporte de `examMode`,
+  - resolucion de `modeConfig`,
+  - mezcla de problemas por modo,
+  - ajuste de dificultad minima/boost por modo.
+- `backend/controllers/academicController.js`:
+  - endpoint `POST /api/academic/final-exam/generate` ahora acepta `examMode`.
+
+### Alineacion de generacion de preguntas
+
+En `backend/academic/questionEngine.js` se agregaron aliases para los nuevos `topicId` de II/III/IV bimestre, para enrutar a generadores canonicos estables y evitar fallback debil por coincidencia textual.
+
+### Rediseño UI (solo visual, sin logica academica)
+
+Se implemento un dashboard estatico modular en React, sin backend ni evaluacion:
+- `frontend/src/components/dashboard/MathLingoDashboard.jsx`
+- `frontend/src/components/dashboard/mathlingo-dashboard.css`
+- vistas:
+  - `JourneyView`,
+  - `AutonomousView`,
+  - `ReviewsView`,
+  - `AchievementsView`,
+  - `ProgressView`,
+  - `ProfileView`.
+
+Layout aplicado:
+- sidebar izquierda fija,
+- header superior,
+- panel central dinamico por vista,
+- panel derecho opcional en desktop.
+
+Sidebar con opciones exactas:
+- Recorrido, Autonomo, Repasos, Logros, Progreso, Perfil.
+
+Estado:
+- Build frontend validado: `npm run build`.
+- Implementacion UI es deliberadamente estatica (sin logica de negocio).
