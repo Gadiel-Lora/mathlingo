@@ -1,0 +1,3199 @@
+{
+  "skills": [
+    {
+      "id": "arith_counting_objects_to_20",
+      "name": "Counting Objects to 20",
+      "description": "Count concrete objects and quantities from 0 to 20.",
+      "domain": "arithmetic",
+      "difficulty_level": 1,
+      "mastery_threshold": 64,
+      "xp_reward": 10
+    },
+    {
+      "id": "arith_counting_to_100",
+      "name": "Counting to 100",
+      "description": "Count forward and backward up to 100.",
+      "domain": "arithmetic",
+      "difficulty_level": 1,
+      "mastery_threshold": 65,
+      "xp_reward": 11
+    },
+    {
+      "id": "arith_number_line_basics",
+      "name": "Number Line Basics",
+      "description": "Locate and interpret whole numbers on a number line.",
+      "domain": "arithmetic",
+      "difficulty_level": 1,
+      "mastery_threshold": 65,
+      "xp_reward": 11
+    },
+    {
+      "id": "arith_place_value_tens",
+      "name": "Place Value to Tens",
+      "description": "Represent numbers using ones and tens.",
+      "domain": "arithmetic",
+      "difficulty_level": 1,
+      "mastery_threshold": 66,
+      "xp_reward": 12
+    },
+    {
+      "id": "arith_place_value_hundreds",
+      "name": "Place Value to Hundreds",
+      "description": "Read, write, and decompose numbers to hundreds.",
+      "domain": "arithmetic",
+      "difficulty_level": 1,
+      "mastery_threshold": 66,
+      "xp_reward": 12
+    },
+    {
+      "id": "arith_place_value_thousands",
+      "name": "Place Value to Thousands",
+      "description": "Read, write, and decompose numbers to thousands.",
+      "domain": "arithmetic",
+      "difficulty_level": 2,
+      "mastery_threshold": 67,
+      "xp_reward": 13
+    },
+    {
+      "id": "arith_compare_whole_numbers",
+      "name": "Compare Whole Numbers",
+      "description": "Compare whole numbers using <, >, and =.",
+      "domain": "arithmetic",
+      "difficulty_level": 1,
+      "mastery_threshold": 66,
+      "xp_reward": 12
+    },
+    {
+      "id": "arith_order_whole_numbers",
+      "name": "Order Whole Numbers",
+      "description": "Order lists of whole numbers ascending and descending.",
+      "domain": "arithmetic",
+      "difficulty_level": 2,
+      "mastery_threshold": 67,
+      "xp_reward": 13
+    },
+    {
+      "id": "arith_round_whole_numbers",
+      "name": "Round Whole Numbers",
+      "description": "Round whole numbers to tens, hundreds, and thousands.",
+      "domain": "arithmetic",
+      "difficulty_level": 2,
+      "mastery_threshold": 68,
+      "xp_reward": 14
+    },
+    {
+      "id": "arith_even_odd_patterns",
+      "name": "Even and Odd Patterns",
+      "description": "Identify even/odd numbers and simple parity patterns.",
+      "domain": "arithmetic",
+      "difficulty_level": 2,
+      "mastery_threshold": 67,
+      "xp_reward": 13
+    },
+    {
+      "id": "arith_factors_multiples_intro",
+      "name": "Factors and Multiples Intro",
+      "description": "Find factors and multiples of whole numbers.",
+      "domain": "arithmetic",
+      "difficulty_level": 2,
+      "mastery_threshold": 68,
+      "xp_reward": 14
+    },
+    {
+      "id": "arith_divisibility_rules",
+      "name": "Divisibility Rules",
+      "description": "Use divisibility rules for 2, 3, 5, 9, and 10.",
+      "domain": "arithmetic",
+      "difficulty_level": 3,
+      "mastery_threshold": 70,
+      "xp_reward": 16
+    },
+    {
+      "id": "arith_addition_within_20",
+      "name": "Addition Within 20",
+      "description": "Add whole numbers within 20 accurately.",
+      "domain": "arithmetic",
+      "difficulty_level": 1,
+      "mastery_threshold": 65,
+      "xp_reward": 12
+    },
+    {
+      "id": "arith_addition_multi_digit",
+      "name": "Multi-digit Addition",
+      "description": "Add multi-digit whole numbers with regrouping.",
+      "domain": "arithmetic",
+      "difficulty_level": 2,
+      "mastery_threshold": 67,
+      "xp_reward": 14
+    },
+    {
+      "id": "arith_subtraction_within_20",
+      "name": "Subtraction Within 20",
+      "description": "Subtract whole numbers within 20 accurately.",
+      "domain": "arithmetic",
+      "difficulty_level": 1,
+      "mastery_threshold": 65,
+      "xp_reward": 12
+    },
+    {
+      "id": "arith_subtraction_multi_digit",
+      "name": "Multi-digit Subtraction",
+      "description": "Subtract multi-digit whole numbers with regrouping.",
+      "domain": "arithmetic",
+      "difficulty_level": 2,
+      "mastery_threshold": 67,
+      "xp_reward": 14
+    },
+    {
+      "id": "arith_multiplication_as_repeated_addition",
+      "name": "Multiplication as Repeated Addition",
+      "description": "Interpret multiplication as equal groups and repeated addition.",
+      "domain": "arithmetic",
+      "difficulty_level": 2,
+      "mastery_threshold": 68,
+      "xp_reward": 15
+    },
+    {
+      "id": "arith_multiplication_facts",
+      "name": "Multiplication Facts",
+      "description": "Recall multiplication facts fluently.",
+      "domain": "arithmetic",
+      "difficulty_level": 2,
+      "mastery_threshold": 69,
+      "xp_reward": 15
+    },
+    {
+      "id": "arith_multi_digit_multiplication",
+      "name": "Multi-digit Multiplication",
+      "description": "Multiply multi-digit numbers using standard algorithms.",
+      "domain": "arithmetic",
+      "difficulty_level": 3,
+      "mastery_threshold": 71,
+      "xp_reward": 18
+    },
+    {
+      "id": "arith_division_as_sharing",
+      "name": "Division as Sharing",
+      "description": "Interpret division as sharing and grouping.",
+      "domain": "arithmetic",
+      "difficulty_level": 2,
+      "mastery_threshold": 69,
+      "xp_reward": 15
+    },
+    {
+      "id": "arith_division_facts",
+      "name": "Division Facts",
+      "description": "Recall division facts fluently.",
+      "domain": "arithmetic",
+      "difficulty_level": 3,
+      "mastery_threshold": 70,
+      "xp_reward": 16
+    },
+    {
+      "id": "arith_long_division",
+      "name": "Long Division",
+      "description": "Divide multi-digit numbers using long division.",
+      "domain": "arithmetic",
+      "difficulty_level": 3,
+      "mastery_threshold": 72,
+      "xp_reward": 18
+    },
+    {
+      "id": "arith_inverse_operations",
+      "name": "Inverse Operations",
+      "description": "Use inverse relationships between operations to solve checks.",
+      "domain": "arithmetic",
+      "difficulty_level": 3,
+      "mastery_threshold": 70,
+      "xp_reward": 16
+    },
+    {
+      "id": "arith_order_of_operations_basic",
+      "name": "Order of Operations Basic",
+      "description": "Evaluate expressions using operation priority without exponents.",
+      "domain": "arithmetic",
+      "difficulty_level": 3,
+      "mastery_threshold": 72,
+      "xp_reward": 18
+    },
+    {
+      "id": "arith_order_of_operations_grouping",
+      "name": "Order of Operations with Grouping",
+      "description": "Evaluate grouped expressions with parentheses and brackets.",
+      "domain": "arithmetic",
+      "difficulty_level": 4,
+      "mastery_threshold": 74,
+      "xp_reward": 20
+    },
+    {
+      "id": "arith_integer_number_line",
+      "name": "Integer Number Line",
+      "description": "Represent positive and negative integers on the number line.",
+      "domain": "arithmetic",
+      "difficulty_level": 3,
+      "mastery_threshold": 70,
+      "xp_reward": 16
+    },
+    {
+      "id": "arith_compare_order_integers",
+      "name": "Compare and Order Integers",
+      "description": "Compare and order integers including negatives.",
+      "domain": "arithmetic",
+      "difficulty_level": 3,
+      "mastery_threshold": 71,
+      "xp_reward": 17
+    },
+    {
+      "id": "arith_absolute_value",
+      "name": "Absolute Value",
+      "description": "Interpret and compute absolute value as distance from zero.",
+      "domain": "arithmetic",
+      "difficulty_level": 3,
+      "mastery_threshold": 71,
+      "xp_reward": 17
+    },
+    {
+      "id": "arith_add_integers",
+      "name": "Add Integers",
+      "description": "Add positive and negative integers correctly.",
+      "domain": "arithmetic",
+      "difficulty_level": 4,
+      "mastery_threshold": 74,
+      "xp_reward": 20
+    },
+    {
+      "id": "arith_subtract_integers",
+      "name": "Subtract Integers",
+      "description": "Subtract integers using sign rules and number line logic.",
+      "domain": "arithmetic",
+      "difficulty_level": 4,
+      "mastery_threshold": 75,
+      "xp_reward": 20
+    },
+    {
+      "id": "arith_multiply_integers",
+      "name": "Multiply Integers",
+      "description": "Multiply integers using sign rules.",
+      "domain": "arithmetic",
+      "difficulty_level": 4,
+      "mastery_threshold": 75,
+      "xp_reward": 21
+    },
+    {
+      "id": "arith_divide_integers",
+      "name": "Divide Integers",
+      "description": "Divide integers using sign rules.",
+      "domain": "arithmetic",
+      "difficulty_level": 4,
+      "mastery_threshold": 76,
+      "xp_reward": 21
+    },
+    {
+      "id": "arith_integer_multi_step_expressions",
+      "name": "Integer Multi-step Expressions",
+      "description": "Solve multi-step arithmetic expressions with integers.",
+      "domain": "arithmetic",
+      "difficulty_level": 5,
+      "mastery_threshold": 78,
+      "xp_reward": 24
+    },
+    {
+      "id": "arith_fraction_part_of_whole",
+      "name": "Fractions as Part of a Whole",
+      "description": "Interpret fractions as parts of equal wholes.",
+      "domain": "arithmetic",
+      "difficulty_level": 2,
+      "mastery_threshold": 68,
+      "xp_reward": 15
+    },
+    {
+      "id": "arith_equivalent_fractions",
+      "name": "Equivalent Fractions",
+      "description": "Generate and recognize equivalent fractions.",
+      "domain": "arithmetic",
+      "difficulty_level": 3,
+      "mastery_threshold": 71,
+      "xp_reward": 17
+    },
+    {
+      "id": "arith_simplify_fractions",
+      "name": "Simplifying Fractions",
+      "description": "Reduce fractions to simplest form using GCD ideas.",
+      "domain": "arithmetic",
+      "difficulty_level": 3,
+      "mastery_threshold": 72,
+      "xp_reward": 18
+    },
+    {
+      "id": "arith_compare_order_fractions",
+      "name": "Compare and Order Fractions",
+      "description": "Compare and order fractions using common strategies.",
+      "domain": "arithmetic",
+      "difficulty_level": 3,
+      "mastery_threshold": 72,
+      "xp_reward": 18
+    },
+    {
+      "id": "arith_add_subtract_fractions_like_den",
+      "name": "Add/Subtract Fractions (Like Denominators)",
+      "description": "Add and subtract fractions with equal denominators.",
+      "domain": "arithmetic",
+      "difficulty_level": 3,
+      "mastery_threshold": 72,
+      "xp_reward": 18
+    },
+    {
+      "id": "arith_add_subtract_fractions_unlike_den",
+      "name": "Add/Subtract Fractions (Unlike Denominators)",
+      "description": "Add and subtract fractions with different denominators.",
+      "domain": "arithmetic",
+      "difficulty_level": 4,
+      "mastery_threshold": 75,
+      "xp_reward": 21
+    },
+    {
+      "id": "arith_multiply_fractions",
+      "name": "Multiply Fractions",
+      "description": "Multiply fractions and simplify results.",
+      "domain": "arithmetic",
+      "difficulty_level": 4,
+      "mastery_threshold": 75,
+      "xp_reward": 21
+    },
+    {
+      "id": "arith_divide_fractions",
+      "name": "Divide Fractions",
+      "description": "Divide fractions using reciprocal relationships.",
+      "domain": "arithmetic",
+      "difficulty_level": 5,
+      "mastery_threshold": 78,
+      "xp_reward": 24
+    },
+    {
+      "id": "arith_mixed_numbers_operations",
+      "name": "Mixed Number Operations",
+      "description": "Operate with mixed numbers across all four operations.",
+      "domain": "arithmetic",
+      "difficulty_level": 5,
+      "mastery_threshold": 78,
+      "xp_reward": 24
+    },
+    {
+      "id": "arith_decimal_place_value",
+      "name": "Decimal Place Value",
+      "description": "Read, write, and decompose decimal numbers.",
+      "domain": "arithmetic",
+      "difficulty_level": 3,
+      "mastery_threshold": 71,
+      "xp_reward": 17
+    },
+    {
+      "id": "arith_compare_order_decimals",
+      "name": "Compare and Order Decimals",
+      "description": "Compare and order decimal values.",
+      "domain": "arithmetic",
+      "difficulty_level": 3,
+      "mastery_threshold": 72,
+      "xp_reward": 18
+    },
+    {
+      "id": "arith_decimal_add_subtract",
+      "name": "Decimal Addition and Subtraction",
+      "description": "Add and subtract decimals with place-value alignment.",
+      "domain": "arithmetic",
+      "difficulty_level": 4,
+      "mastery_threshold": 74,
+      "xp_reward": 20
+    },
+    {
+      "id": "arith_decimal_multiply",
+      "name": "Decimal Multiplication",
+      "description": "Multiply decimals and place decimal points correctly.",
+      "domain": "arithmetic",
+      "difficulty_level": 4,
+      "mastery_threshold": 75,
+      "xp_reward": 21
+    },
+    {
+      "id": "arith_decimal_divide",
+      "name": "Decimal Division",
+      "description": "Divide decimals using scaling and long division.",
+      "domain": "arithmetic",
+      "difficulty_level": 5,
+      "mastery_threshold": 78,
+      "xp_reward": 24
+    },
+    {
+      "id": "arith_fraction_decimal_conversion",
+      "name": "Fraction-Decimal Conversion",
+      "description": "Convert values between fraction and decimal forms.",
+      "domain": "arithmetic",
+      "difficulty_level": 4,
+      "mastery_threshold": 75,
+      "xp_reward": 21
+    },
+    {
+      "id": "arith_ratio_basics",
+      "name": "Ratio Basics",
+      "description": "Represent and simplify ratios in multiple forms.",
+      "domain": "arithmetic",
+      "difficulty_level": 3,
+      "mastery_threshold": 72,
+      "xp_reward": 18
+    },
+    {
+      "id": "arith_unit_rates",
+      "name": "Unit Rates",
+      "description": "Compute and interpret unit rates in contexts.",
+      "domain": "arithmetic",
+      "difficulty_level": 4,
+      "mastery_threshold": 74,
+      "xp_reward": 20
+    },
+    {
+      "id": "arith_proportions",
+      "name": "Proportions",
+      "description": "Set up and solve proportional relationships.",
+      "domain": "arithmetic",
+      "difficulty_level": 4,
+      "mastery_threshold": 75,
+      "xp_reward": 21
+    },
+    {
+      "id": "arith_percent_basics",
+      "name": "Percent Basics",
+      "description": "Interpret percentages as per-hundred quantities.",
+      "domain": "arithmetic",
+      "difficulty_level": 4,
+      "mastery_threshold": 75,
+      "xp_reward": 21
+    },
+    {
+      "id": "arith_percent_of_quantity",
+      "name": "Percent of a Quantity",
+      "description": "Compute percentages of numbers using equivalent forms.",
+      "domain": "arithmetic",
+      "difficulty_level": 4,
+      "mastery_threshold": 76,
+      "xp_reward": 22
+    },
+    {
+      "id": "arith_percent_increase_decrease",
+      "name": "Percent Increase and Decrease",
+      "description": "Solve increase/decrease and discount/tax problems.",
+      "domain": "arithmetic",
+      "difficulty_level": 5,
+      "mastery_threshold": 79,
+      "xp_reward": 25
+    },
+    {
+      "id": "arith_percent_word_problems",
+      "name": "Percent Word Problems",
+      "description": "Apply percentages and proportions in multistep contexts.",
+      "domain": "arithmetic",
+      "difficulty_level": 5,
+      "mastery_threshold": 80,
+      "xp_reward": 26
+    },
+    {
+      "id": "arith_exponents_basics",
+      "name": "Exponents Basics",
+      "description": "Interpret repeated multiplication with exponents.",
+      "domain": "arithmetic",
+      "difficulty_level": 4,
+      "mastery_threshold": 75,
+      "xp_reward": 21
+    },
+    {
+      "id": "arith_powers_of_ten",
+      "name": "Powers of Ten",
+      "description": "Use powers of ten in place value and scaling.",
+      "domain": "arithmetic",
+      "difficulty_level": 4,
+      "mastery_threshold": 76,
+      "xp_reward": 22
+    },
+    {
+      "id": "arith_square_roots_perfect_squares",
+      "name": "Square Roots of Perfect Squares",
+      "description": "Compute square roots of perfect squares and inverse links.",
+      "domain": "arithmetic",
+      "difficulty_level": 5,
+      "mastery_threshold": 79,
+      "xp_reward": 25
+    },
+    {
+      "id": "arith_order_of_operations_with_exponents",
+      "name": "Order of Operations with Exponents",
+      "description": "Evaluate arithmetic expressions including powers and roots.",
+      "domain": "arithmetic",
+      "difficulty_level": 5,
+      "mastery_threshold": 80,
+      "xp_reward": 26
+    },
+    {
+      "id": "arith_pre_algebra_numeric_expressions",
+      "name": "Pre-Algebra Numeric Expressions",
+      "description": "Solve rich numeric expressions that bridge arithmetic to algebra.",
+      "domain": "arithmetic",
+      "difficulty_level": 5,
+      "mastery_threshold": 82,
+      "xp_reward": 30
+    },
+    {
+      "id": "alg_variables_constants_terms",
+      "name": "Variables, Constants, and Terms",
+      "description": "Identify variables, constants, coefficients, and terms in algebraic expressions.",
+      "domain": "algebra",
+      "difficulty_level": 3,
+      "mastery_threshold": 70,
+      "xp_reward": 18
+    },
+    {
+      "id": "alg_translate_verbal_expressions",
+      "name": "Translate Verbal Phrases to Expressions",
+      "description": "Convert verbal statements into algebraic expressions.",
+      "domain": "algebra",
+      "difficulty_level": 3,
+      "mastery_threshold": 70,
+      "xp_reward": 18
+    },
+    {
+      "id": "alg_evaluate_expressions_substitution",
+      "name": "Evaluate Expressions by Substitution",
+      "description": "Evaluate algebraic expressions by replacing variables with values.",
+      "domain": "algebra",
+      "difficulty_level": 3,
+      "mastery_threshold": 70,
+      "xp_reward": 18
+    },
+    {
+      "id": "alg_order_of_operations_algebraic",
+      "name": "Order of Operations in Algebraic Contexts",
+      "description": "Apply operation priority when evaluating expressions with variables.",
+      "domain": "algebra",
+      "difficulty_level": 3,
+      "mastery_threshold": 72,
+      "xp_reward": 22
+    },
+    {
+      "id": "alg_like_terms_identification",
+      "name": "Identify Like Terms",
+      "description": "Recognize terms that can be combined in algebraic expressions.",
+      "domain": "algebra",
+      "difficulty_level": 3,
+      "mastery_threshold": 70,
+      "xp_reward": 18
+    },
+    {
+      "id": "alg_simplify_like_terms",
+      "name": "Simplify by Combining Like Terms",
+      "description": "Simplify expressions by combining compatible terms.",
+      "domain": "algebra",
+      "difficulty_level": 3,
+      "mastery_threshold": 72,
+      "xp_reward": 22
+    },
+    {
+      "id": "alg_distributive_property",
+      "name": "Distributive Property",
+      "description": "Apply the distributive property to expand expressions.",
+      "domain": "algebra",
+      "difficulty_level": 3,
+      "mastery_threshold": 72,
+      "xp_reward": 22
+    },
+    {
+      "id": "alg_combining_distributive_like_terms",
+      "name": "Expand and Simplify Expressions",
+      "description": "Use distribution and combining like terms in multi-step simplification.",
+      "domain": "algebra",
+      "difficulty_level": 3,
+      "mastery_threshold": 72,
+      "xp_reward": 22
+    },
+    {
+      "id": "alg_rational_coefficients_expressions",
+      "name": "Expressions with Rational Coefficients",
+      "description": "Simplify expressions containing fractional and decimal coefficients.",
+      "domain": "algebra",
+      "difficulty_level": 3,
+      "mastery_threshold": 72,
+      "xp_reward": 22
+    },
+    {
+      "id": "alg_absolute_value_expressions",
+      "name": "Absolute Value in Expressions",
+      "description": "Evaluate and simplify expressions involving absolute value.",
+      "domain": "algebra",
+      "difficulty_level": 3,
+      "mastery_threshold": 72,
+      "xp_reward": 22
+    },
+    {
+      "id": "alg_exponent_rules_basic_algebra",
+      "name": "Basic Exponent Rules in Algebra",
+      "description": "Apply product, quotient, and power rules in algebraic expressions.",
+      "domain": "algebra",
+      "difficulty_level": 3,
+      "mastery_threshold": 72,
+      "xp_reward": 22
+    },
+    {
+      "id": "alg_scientific_notation_algebraic",
+      "name": "Scientific Notation in Algebra",
+      "description": "Operate with scientific notation in algebraic settings.",
+      "domain": "algebra",
+      "difficulty_level": 3,
+      "mastery_threshold": 72,
+      "xp_reward": 22
+    },
+    {
+      "id": "alg_formulas_rearrangement_intro",
+      "name": "Formula Rearrangement Intro",
+      "description": "Rearrange formulas to isolate a chosen variable.",
+      "domain": "algebra",
+      "difficulty_level": 3,
+      "mastery_threshold": 72,
+      "xp_reward": 22
+    },
+    {
+      "id": "alg_one_step_equations_add_sub",
+      "name": "One-step Equations (Add/Subtract)",
+      "description": "Solve one-step linear equations using addition and subtraction.",
+      "domain": "algebra",
+      "difficulty_level": 3,
+      "mastery_threshold": 72,
+      "xp_reward": 22
+    },
+    {
+      "id": "alg_one_step_equations_mul_div",
+      "name": "One-step Equations (Multiply/Divide)",
+      "description": "Solve one-step linear equations using multiplication and division.",
+      "domain": "algebra",
+      "difficulty_level": 3,
+      "mastery_threshold": 72,
+      "xp_reward": 22
+    },
+    {
+      "id": "alg_two_step_linear_equations",
+      "name": "Two-step Linear Equations",
+      "description": "Solve two-step linear equations with inverse operations.",
+      "domain": "algebra",
+      "difficulty_level": 4,
+      "mastery_threshold": 75,
+      "xp_reward": 27
+    },
+    {
+      "id": "alg_multi_step_linear_equations",
+      "name": "Multi-step Linear Equations",
+      "description": "Solve multi-step linear equations with simplification and balancing.",
+      "domain": "algebra",
+      "difficulty_level": 4,
+      "mastery_threshold": 75,
+      "xp_reward": 27
+    },
+    {
+      "id": "alg_linear_equations_parentheses",
+      "name": "Linear Equations with Parentheses",
+      "description": "Solve equations requiring distribution before isolating variables.",
+      "domain": "algebra",
+      "difficulty_level": 4,
+      "mastery_threshold": 75,
+      "xp_reward": 27
+    },
+    {
+      "id": "alg_linear_equations_fractions",
+      "name": "Linear Equations with Fractions",
+      "description": "Solve linear equations containing fractional coefficients and terms.",
+      "domain": "algebra",
+      "difficulty_level": 4,
+      "mastery_threshold": 75,
+      "xp_reward": 27
+    },
+    {
+      "id": "alg_literal_equations",
+      "name": "Literal Equations",
+      "description": "Solve equations for a specified variable in symbolic form.",
+      "domain": "algebra",
+      "difficulty_level": 4,
+      "mastery_threshold": 75,
+      "xp_reward": 27
+    },
+    {
+      "id": "alg_linear_equations_word_problems",
+      "name": "Linear Equation Word Problems",
+      "description": "Model contexts with linear equations and solve.",
+      "domain": "algebra",
+      "difficulty_level": 4,
+      "mastery_threshold": 75,
+      "xp_reward": 27
+    },
+    {
+      "id": "alg_linear_equations_parameters",
+      "name": "Linear Equations with Parameters",
+      "description": "Analyze linear equations containing parameters.",
+      "domain": "algebra",
+      "difficulty_level": 4,
+      "mastery_threshold": 75,
+      "xp_reward": 27
+    },
+    {
+      "id": "alg_linear_equation_identities_contradictions",
+      "name": "Identities and Contradictions",
+      "description": "Classify equations as one solution, no solution, or infinitely many.",
+      "domain": "algebra",
+      "difficulty_level": 4,
+      "mastery_threshold": 75,
+      "xp_reward": 27
+    },
+    {
+      "id": "alg_absolute_value_linear_equations",
+      "name": "Absolute Value Linear Equations",
+      "description": "Solve linear equations with absolute value by case analysis.",
+      "domain": "algebra",
+      "difficulty_level": 4,
+      "mastery_threshold": 75,
+      "xp_reward": 27
+    },
+    {
+      "id": "alg_solution_sets_interval_intro",
+      "name": "Solution Sets and Interval Intro",
+      "description": "Express solution sets using set and interval notation basics.",
+      "domain": "algebra",
+      "difficulty_level": 4,
+      "mastery_threshold": 75,
+      "xp_reward": 27
+    },
+    {
+      "id": "alg_inequality_basics",
+      "name": "Inequality Basics",
+      "description": "Interpret and manipulate inequality symbols in algebraic statements.",
+      "domain": "algebra",
+      "difficulty_level": 4,
+      "mastery_threshold": 75,
+      "xp_reward": 27
+    },
+    {
+      "id": "alg_one_step_inequalities",
+      "name": "One-step Inequalities",
+      "description": "Solve one-step inequalities and represent solutions.",
+      "domain": "algebra",
+      "difficulty_level": 4,
+      "mastery_threshold": 75,
+      "xp_reward": 27
+    },
+    {
+      "id": "alg_two_step_inequalities",
+      "name": "Two-step Inequalities",
+      "description": "Solve two-step inequalities including sign changes.",
+      "domain": "algebra",
+      "difficulty_level": 4,
+      "mastery_threshold": 75,
+      "xp_reward": 27
+    },
+    {
+      "id": "alg_multi_step_inequalities",
+      "name": "Multi-step Inequalities",
+      "description": "Solve multi-step inequalities with simplification and transformations.",
+      "domain": "algebra",
+      "difficulty_level": 4,
+      "mastery_threshold": 75,
+      "xp_reward": 27
+    },
+    {
+      "id": "alg_compound_inequalities_and",
+      "name": "Compound Inequalities (AND)",
+      "description": "Solve compound inequalities connected by AND.",
+      "domain": "algebra",
+      "difficulty_level": 4,
+      "mastery_threshold": 75,
+      "xp_reward": 27
+    },
+    {
+      "id": "alg_compound_inequalities_or",
+      "name": "Compound Inequalities (OR)",
+      "description": "Solve compound inequalities connected by OR.",
+      "domain": "algebra",
+      "difficulty_level": 4,
+      "mastery_threshold": 75,
+      "xp_reward": 27
+    },
+    {
+      "id": "alg_interval_notation_inequalities",
+      "name": "Interval Notation for Inequalities",
+      "description": "Express compound inequality solutions in interval notation.",
+      "domain": "algebra",
+      "difficulty_level": 5,
+      "mastery_threshold": 78,
+      "xp_reward": 33
+    },
+    {
+      "id": "alg_absolute_value_inequalities",
+      "name": "Absolute Value Inequalities",
+      "description": "Solve and graph absolute value inequalities by cases.",
+      "domain": "algebra",
+      "difficulty_level": 5,
+      "mastery_threshold": 78,
+      "xp_reward": 33
+    },
+    {
+      "id": "alg_linear_inequalities_word_problems",
+      "name": "Linear Inequality Word Problems",
+      "description": "Model constraints with inequalities and interpret feasible sets.",
+      "domain": "algebra",
+      "difficulty_level": 5,
+      "mastery_threshold": 78,
+      "xp_reward": 33
+    },
+    {
+      "id": "alg_graph_inequalities_number_line",
+      "name": "Graph Inequalities on Number Line",
+      "description": "Represent inequality solution sets graphically on a number line.",
+      "domain": "algebra",
+      "difficulty_level": 5,
+      "mastery_threshold": 78,
+      "xp_reward": 33
+    },
+    {
+      "id": "alg_systems_linear_inequalities_two_var",
+      "name": "Systems of Linear Inequalities (2 Variables)",
+      "description": "Find feasible regions satisfying two-variable linear inequalities.",
+      "domain": "algebra",
+      "difficulty_level": 5,
+      "mastery_threshold": 78,
+      "xp_reward": 33
+    },
+    {
+      "id": "alg_coordinate_plane_foundations",
+      "name": "Coordinate Plane Foundations",
+      "description": "Plot points, identify quadrants, and read coordinates.",
+      "domain": "algebra",
+      "difficulty_level": 4,
+      "mastery_threshold": 75,
+      "xp_reward": 27
+    },
+    {
+      "id": "alg_graph_linear_equations",
+      "name": "Graph Linear Equations",
+      "description": "Graph linear equations in two variables.",
+      "domain": "algebra",
+      "difficulty_level": 4,
+      "mastery_threshold": 75,
+      "xp_reward": 27
+    },
+    {
+      "id": "alg_slope_from_points",
+      "name": "Slope from Two Points",
+      "description": "Compute slope using coordinate pairs and rate interpretation.",
+      "domain": "algebra",
+      "difficulty_level": 4,
+      "mastery_threshold": 75,
+      "xp_reward": 27
+    },
+    {
+      "id": "alg_slope_intercept_form",
+      "name": "Slope-Intercept Form",
+      "description": "Interpret and use y = mx + b for graphing and analysis.",
+      "domain": "algebra",
+      "difficulty_level": 4,
+      "mastery_threshold": 75,
+      "xp_reward": 27
+    },
+    {
+      "id": "alg_point_slope_form",
+      "name": "Point-Slope Form",
+      "description": "Build and transform linear equations using point-slope form.",
+      "domain": "algebra",
+      "difficulty_level": 4,
+      "mastery_threshold": 75,
+      "xp_reward": 27
+    },
+    {
+      "id": "alg_standard_form_linear",
+      "name": "Standard Form of Linear Equations",
+      "description": "Convert and interpret linear equations in standard form.",
+      "domain": "algebra",
+      "difficulty_level": 4,
+      "mastery_threshold": 75,
+      "xp_reward": 27
+    },
+    {
+      "id": "alg_systems_two_var_graphing",
+      "name": "Systems of Two Variables by Graphing",
+      "description": "Solve systems of linear equations graphically.",
+      "domain": "algebra",
+      "difficulty_level": 5,
+      "mastery_threshold": 78,
+      "xp_reward": 33
+    },
+    {
+      "id": "alg_systems_two_var_substitution",
+      "name": "Systems by Substitution",
+      "description": "Solve systems of two equations using substitution.",
+      "domain": "algebra",
+      "difficulty_level": 5,
+      "mastery_threshold": 78,
+      "xp_reward": 33
+    },
+    {
+      "id": "alg_systems_two_var_elimination",
+      "name": "Systems by Elimination",
+      "description": "Solve systems of two equations using elimination.",
+      "domain": "algebra",
+      "difficulty_level": 5,
+      "mastery_threshold": 78,
+      "xp_reward": 33
+    },
+    {
+      "id": "alg_systems_two_var_word_problems",
+      "name": "Systems Word Problems",
+      "description": "Model real situations with linear systems and solve.",
+      "domain": "algebra",
+      "difficulty_level": 5,
+      "mastery_threshold": 78,
+      "xp_reward": 33
+    },
+    {
+      "id": "alg_systems_three_var_intro",
+      "name": "Systems of Three Variables Intro",
+      "description": "Set up and solve basic three-variable linear systems.",
+      "domain": "algebra",
+      "difficulty_level": 6,
+      "mastery_threshold": 81,
+      "xp_reward": 39
+    },
+    {
+      "id": "alg_systems_three_var_elimination",
+      "name": "Three-variable Elimination",
+      "description": "Solve 3x3 systems systematically by elimination.",
+      "domain": "algebra",
+      "difficulty_level": 6,
+      "mastery_threshold": 81,
+      "xp_reward": 39
+    },
+    {
+      "id": "alg_systems_solution_classification",
+      "name": "System Solution Classification",
+      "description": "Classify systems as consistent/inconsistent and dependent/independent.",
+      "domain": "algebra",
+      "difficulty_level": 6,
+      "mastery_threshold": 81,
+      "xp_reward": 39
+    },
+    {
+      "id": "alg_linear_programming_intro",
+      "name": "Linear Programming Intro",
+      "description": "Optimize a linear objective under linear constraints.",
+      "domain": "algebra",
+      "difficulty_level": 6,
+      "mastery_threshold": 81,
+      "xp_reward": 39
+    },
+    {
+      "id": "alg_polynomial_terms_degree",
+      "name": "Polynomial Terms and Degree",
+      "description": "Classify polynomials by terms, degree, and leading coefficient.",
+      "domain": "algebra",
+      "difficulty_level": 5,
+      "mastery_threshold": 78,
+      "xp_reward": 33
+    },
+    {
+      "id": "alg_add_subtract_polynomials",
+      "name": "Add and Subtract Polynomials",
+      "description": "Perform addition and subtraction with polynomial expressions.",
+      "domain": "algebra",
+      "difficulty_level": 5,
+      "mastery_threshold": 78,
+      "xp_reward": 33
+    },
+    {
+      "id": "alg_multiply_monomial_polynomial",
+      "name": "Multiply Monomial and Polynomial",
+      "description": "Multiply monomials across polynomial terms using distribution.",
+      "domain": "algebra",
+      "difficulty_level": 5,
+      "mastery_threshold": 78,
+      "xp_reward": 33
+    },
+    {
+      "id": "alg_multiply_binomials",
+      "name": "Multiply Binomials",
+      "description": "Multiply binomials accurately using structured expansion.",
+      "domain": "algebra",
+      "difficulty_level": 5,
+      "mastery_threshold": 78,
+      "xp_reward": 33
+    },
+    {
+      "id": "alg_multiply_polynomials_general",
+      "name": "General Polynomial Multiplication",
+      "description": "Multiply higher-degree polynomials systematically.",
+      "domain": "algebra",
+      "difficulty_level": 5,
+      "mastery_threshold": 78,
+      "xp_reward": 33
+    },
+    {
+      "id": "alg_special_products_square_binomial",
+      "name": "Special Products: Square of a Binomial",
+      "description": "Use identities for squares of binomials.",
+      "domain": "algebra",
+      "difficulty_level": 5,
+      "mastery_threshold": 78,
+      "xp_reward": 33
+    },
+    {
+      "id": "alg_special_products_conjugates",
+      "name": "Special Products: Conjugates",
+      "description": "Use conjugate identities to simplify products quickly.",
+      "domain": "algebra",
+      "difficulty_level": 5,
+      "mastery_threshold": 78,
+      "xp_reward": 33
+    },
+    {
+      "id": "alg_polynomial_long_division",
+      "name": "Polynomial Long Division",
+      "description": "Divide polynomials using long division.",
+      "domain": "algebra",
+      "difficulty_level": 6,
+      "mastery_threshold": 81,
+      "xp_reward": 39
+    },
+    {
+      "id": "alg_synthetic_division",
+      "name": "Synthetic Division",
+      "description": "Perform polynomial division efficiently with synthetic division.",
+      "domain": "algebra",
+      "difficulty_level": 6,
+      "mastery_threshold": 81,
+      "xp_reward": 39
+    },
+    {
+      "id": "alg_remainder_factor_theorem",
+      "name": "Remainder and Factor Theorem",
+      "description": "Use theorem-based tests to analyze polynomial factors and roots.",
+      "domain": "algebra",
+      "difficulty_level": 6,
+      "mastery_threshold": 81,
+      "xp_reward": 39
+    },
+    {
+      "id": "alg_polynomial_evaluation",
+      "name": "Polynomial Evaluation",
+      "description": "Evaluate polynomial functions at given inputs.",
+      "domain": "algebra",
+      "difficulty_level": 5,
+      "mastery_threshold": 78,
+      "xp_reward": 33
+    },
+    {
+      "id": "alg_polynomial_graph_features_intro",
+      "name": "Polynomial Graph Features Intro",
+      "description": "Relate polynomial form to zeros, intercepts, and shape features.",
+      "domain": "algebra",
+      "difficulty_level": 6,
+      "mastery_threshold": 81,
+      "xp_reward": 39
+    },
+    {
+      "id": "alg_polynomial_end_behavior",
+      "name": "Polynomial End Behavior",
+      "description": "Analyze end behavior using degree and leading coefficient.",
+      "domain": "algebra",
+      "difficulty_level": 6,
+      "mastery_threshold": 81,
+      "xp_reward": 39
+    },
+    {
+      "id": "alg_polynomial_roots_multiplicity_intro",
+      "name": "Roots and Multiplicity Intro",
+      "description": "Interpret roots and multiplicities in polynomial behavior.",
+      "domain": "algebra",
+      "difficulty_level": 6,
+      "mastery_threshold": 81,
+      "xp_reward": 39
+    },
+    {
+      "id": "alg_factor_gcf",
+      "name": "Factor by Greatest Common Factor",
+      "description": "Factor expressions by extracting the GCF.",
+      "domain": "algebra",
+      "difficulty_level": 5,
+      "mastery_threshold": 78,
+      "xp_reward": 33
+    },
+    {
+      "id": "alg_factor_trinomials_monic",
+      "name": "Factor Monic Trinomials",
+      "description": "Factor trinomials with leading coefficient 1.",
+      "domain": "algebra",
+      "difficulty_level": 6,
+      "mastery_threshold": 81,
+      "xp_reward": 39
+    },
+    {
+      "id": "alg_factor_trinomials_non_monic",
+      "name": "Factor Non-Monic Trinomials",
+      "description": "Factor trinomials with leading coefficients other than 1.",
+      "domain": "algebra",
+      "difficulty_level": 6,
+      "mastery_threshold": 81,
+      "xp_reward": 39
+    },
+    {
+      "id": "alg_factor_difference_of_squares",
+      "name": "Factor Difference of Squares",
+      "description": "Recognize and factor expressions of the form a^2 - b^2.",
+      "domain": "algebra",
+      "difficulty_level": 6,
+      "mastery_threshold": 81,
+      "xp_reward": 39
+    },
+    {
+      "id": "alg_factor_perfect_square_trinomials",
+      "name": "Factor Perfect Square Trinomials",
+      "description": "Identify and factor perfect square trinomials.",
+      "domain": "algebra",
+      "difficulty_level": 6,
+      "mastery_threshold": 81,
+      "xp_reward": 39
+    },
+    {
+      "id": "alg_factor_sum_difference_cubes",
+      "name": "Factor Sum and Difference of Cubes",
+      "description": "Apply cube identities to factor cubic expressions.",
+      "domain": "algebra",
+      "difficulty_level": 6,
+      "mastery_threshold": 81,
+      "xp_reward": 39
+    },
+    {
+      "id": "alg_factor_by_grouping",
+      "name": "Factor by Grouping",
+      "description": "Factor multi-term polynomials using grouping patterns.",
+      "domain": "algebra",
+      "difficulty_level": 6,
+      "mastery_threshold": 81,
+      "xp_reward": 39
+    },
+    {
+      "id": "alg_factoring_strategy_selection",
+      "name": "Factoring Strategy Selection",
+      "description": "Select efficient factoring methods for mixed expression types.",
+      "domain": "algebra",
+      "difficulty_level": 7,
+      "mastery_threshold": 84,
+      "xp_reward": 45
+    },
+    {
+      "id": "alg_solve_polynomial_equations_factoring",
+      "name": "Solve Polynomial Equations by Factoring",
+      "description": "Solve polynomial equations using zero-product reasoning.",
+      "domain": "algebra",
+      "difficulty_level": 7,
+      "mastery_threshold": 84,
+      "xp_reward": 45
+    },
+    {
+      "id": "alg_rational_expressions_simplify",
+      "name": "Simplify Rational Expressions",
+      "description": "Simplify rational expressions through factoring and cancellation.",
+      "domain": "algebra",
+      "difficulty_level": 6,
+      "mastery_threshold": 81,
+      "xp_reward": 39
+    },
+    {
+      "id": "alg_rational_expressions_multiply_divide",
+      "name": "Multiply and Divide Rational Expressions",
+      "description": "Perform multiplication and division of rational expressions.",
+      "domain": "algebra",
+      "difficulty_level": 6,
+      "mastery_threshold": 81,
+      "xp_reward": 39
+    },
+    {
+      "id": "alg_rational_expressions_add_subtract",
+      "name": "Add and Subtract Rational Expressions",
+      "description": "Add and subtract rational expressions using common denominators.",
+      "domain": "algebra",
+      "difficulty_level": 6,
+      "mastery_threshold": 81,
+      "xp_reward": 39
+    },
+    {
+      "id": "alg_rational_equations_linear",
+      "name": "Linear Rational Equations",
+      "description": "Solve linear equations containing rational expressions with restrictions.",
+      "domain": "algebra",
+      "difficulty_level": 7,
+      "mastery_threshold": 84,
+      "xp_reward": 45
+    },
+    {
+      "id": "alg_quadratic_forms_and_structure",
+      "name": "Quadratic Forms and Structure",
+      "description": "Recognize standard, factored, and vertex forms of quadratics.",
+      "domain": "algebra",
+      "difficulty_level": 6,
+      "mastery_threshold": 81,
+      "xp_reward": 39
+    },
+    {
+      "id": "alg_solve_quadratics_factoring",
+      "name": "Solve Quadratics by Factoring",
+      "description": "Solve quadratic equations using factorization methods.",
+      "domain": "algebra",
+      "difficulty_level": 7,
+      "mastery_threshold": 84,
+      "xp_reward": 45
+    },
+    {
+      "id": "alg_solve_quadratics_square_root",
+      "name": "Solve Quadratics by Square Root Method",
+      "description": "Solve quadratics reducible to squared binomial forms.",
+      "domain": "algebra",
+      "difficulty_level": 7,
+      "mastery_threshold": 84,
+      "xp_reward": 45
+    },
+    {
+      "id": "alg_complete_the_square",
+      "name": "Complete the Square",
+      "description": "Transform quadratics by completing the square.",
+      "domain": "algebra",
+      "difficulty_level": 7,
+      "mastery_threshold": 84,
+      "xp_reward": 45
+    },
+    {
+      "id": "alg_quadratic_formula",
+      "name": "Quadratic Formula",
+      "description": "Solve quadratic equations with the quadratic formula.",
+      "domain": "algebra",
+      "difficulty_level": 7,
+      "mastery_threshold": 84,
+      "xp_reward": 45
+    },
+    {
+      "id": "alg_quadratic_discriminant",
+      "name": "Quadratic Discriminant Analysis",
+      "description": "Use the discriminant to predict root types and counts.",
+      "domain": "algebra",
+      "difficulty_level": 7,
+      "mastery_threshold": 84,
+      "xp_reward": 45
+    },
+    {
+      "id": "alg_convert_to_vertex_form",
+      "name": "Convert to Vertex Form",
+      "description": "Rewrite quadratic expressions into vertex form.",
+      "domain": "algebra",
+      "difficulty_level": 7,
+      "mastery_threshold": 84,
+      "xp_reward": 45
+    },
+    {
+      "id": "alg_graph_quadratic_functions",
+      "name": "Graph Quadratic Functions",
+      "description": "Graph quadratic functions and identify key graph features.",
+      "domain": "algebra",
+      "difficulty_level": 7,
+      "mastery_threshold": 84,
+      "xp_reward": 45
+    },
+    {
+      "id": "alg_quadratic_vertex_axis",
+      "name": "Vertex and Axis of Symmetry",
+      "description": "Determine vertex and axis of symmetry from equation forms.",
+      "domain": "algebra",
+      "difficulty_level": 7,
+      "mastery_threshold": 84,
+      "xp_reward": 45
+    },
+    {
+      "id": "alg_quadratic_intercepts",
+      "name": "Quadratic Intercepts",
+      "description": "Find and interpret x- and y-intercepts of quadratic functions.",
+      "domain": "algebra",
+      "difficulty_level": 7,
+      "mastery_threshold": 84,
+      "xp_reward": 45
+    },
+    {
+      "id": "alg_quadratic_modeling_word_problems",
+      "name": "Quadratic Modeling Word Problems",
+      "description": "Model and solve contextual problems with quadratic functions.",
+      "domain": "algebra",
+      "difficulty_level": 7,
+      "mastery_threshold": 84,
+      "xp_reward": 45
+    },
+    {
+      "id": "alg_quadratic_inequalities",
+      "name": "Quadratic Inequalities",
+      "description": "Solve quadratic inequalities with interval reasoning.",
+      "domain": "algebra",
+      "difficulty_level": 8,
+      "mastery_threshold": 86,
+      "xp_reward": 52
+    },
+    {
+      "id": "alg_complex_numbers_intro",
+      "name": "Complex Numbers Intro",
+      "description": "Introduce imaginary unit and basic complex number operations.",
+      "domain": "algebra",
+      "difficulty_level": 7,
+      "mastery_threshold": 84,
+      "xp_reward": 45
+    },
+    {
+      "id": "alg_quadratics_complex_solutions",
+      "name": "Quadratics with Complex Solutions",
+      "description": "Solve quadratics whose roots are complex.",
+      "domain": "algebra",
+      "difficulty_level": 8,
+      "mastery_threshold": 86,
+      "xp_reward": 52
+    },
+    {
+      "id": "alg_function_concept_domain_range",
+      "name": "Function Concept, Domain, and Range",
+      "description": "Define functions and determine domain/range in basic representations.",
+      "domain": "algebra",
+      "difficulty_level": 5,
+      "mastery_threshold": 78,
+      "xp_reward": 33
+    },
+    {
+      "id": "alg_function_notation_evaluation",
+      "name": "Function Notation and Evaluation",
+      "description": "Use function notation and evaluate functions at given inputs.",
+      "domain": "algebra",
+      "difficulty_level": 5,
+      "mastery_threshold": 78,
+      "xp_reward": 33
+    },
+    {
+      "id": "alg_functions_tables_graphs_mapping",
+      "name": "Functions: Tables, Graphs, and Mapping",
+      "description": "Relate tabular, graphical, and mapping representations of functions.",
+      "domain": "algebra",
+      "difficulty_level": 5,
+      "mastery_threshold": 78,
+      "xp_reward": 33
+    },
+    {
+      "id": "alg_rate_of_change_average",
+      "name": "Average Rate of Change",
+      "description": "Compute and interpret average rate of change between points.",
+      "domain": "algebra",
+      "difficulty_level": 5,
+      "mastery_threshold": 78,
+      "xp_reward": 33
+    },
+    {
+      "id": "alg_linear_function_modeling",
+      "name": "Linear Function Modeling",
+      "description": "Build linear models for contextual relationships.",
+      "domain": "algebra",
+      "difficulty_level": 6,
+      "mastery_threshold": 81,
+      "xp_reward": 39
+    },
+    {
+      "id": "alg_piecewise_functions_intro",
+      "name": "Piecewise Functions Intro",
+      "description": "Interpret and evaluate piecewise-defined functions.",
+      "domain": "algebra",
+      "difficulty_level": 6,
+      "mastery_threshold": 81,
+      "xp_reward": 39
+    },
+    {
+      "id": "alg_inverse_functions_intro",
+      "name": "Inverse Functions Intro",
+      "description": "Identify and compute inverses of basic functions.",
+      "domain": "algebra",
+      "difficulty_level": 6,
+      "mastery_threshold": 81,
+      "xp_reward": 39
+    },
+    {
+      "id": "alg_function_composition_intro",
+      "name": "Function Composition Intro",
+      "description": "Compose functions and evaluate composite expressions.",
+      "domain": "algebra",
+      "difficulty_level": 6,
+      "mastery_threshold": 81,
+      "xp_reward": 39
+    },
+    {
+      "id": "alg_function_transformations",
+      "name": "Function Transformations",
+      "description": "Apply shifts, stretches, reflections, and compressions to graphs.",
+      "domain": "algebra",
+      "difficulty_level": 6,
+      "mastery_threshold": 81,
+      "xp_reward": 39
+    },
+    {
+      "id": "alg_parent_function_families",
+      "name": "Parent Function Families",
+      "description": "Compare key families of functions by shape and behavior.",
+      "domain": "algebra",
+      "difficulty_level": 6,
+      "mastery_threshold": 81,
+      "xp_reward": 39
+    },
+    {
+      "id": "alg_exponential_functions_intro",
+      "name": "Exponential Functions Intro",
+      "description": "Understand exponential form and core graph behavior.",
+      "domain": "algebra",
+      "difficulty_level": 6,
+      "mastery_threshold": 81,
+      "xp_reward": 39
+    },
+    {
+      "id": "alg_exponential_growth_decay",
+      "name": "Exponential Growth and Decay",
+      "description": "Model growth and decay processes with exponentials.",
+      "domain": "algebra",
+      "difficulty_level": 6,
+      "mastery_threshold": 81,
+      "xp_reward": 39
+    },
+    {
+      "id": "alg_logarithm_concept_intro",
+      "name": "Logarithm Concept Intro",
+      "description": "Interpret logarithms as inverse operations of exponentials.",
+      "domain": "algebra",
+      "difficulty_level": 7,
+      "mastery_threshold": 84,
+      "xp_reward": 45
+    },
+    {
+      "id": "alg_logarithm_properties",
+      "name": "Logarithm Properties",
+      "description": "Apply product, quotient, and power properties of logarithms.",
+      "domain": "algebra",
+      "difficulty_level": 7,
+      "mastery_threshold": 84,
+      "xp_reward": 45
+    },
+    {
+      "id": "alg_solve_exponential_equations_logs",
+      "name": "Solve Exponential Equations with Logs",
+      "description": "Solve exponential equations using logarithmic transformations.",
+      "domain": "algebra",
+      "difficulty_level": 8,
+      "mastery_threshold": 86,
+      "xp_reward": 52
+    },
+    {
+      "id": "alg_solve_logarithmic_equations",
+      "name": "Solve Logarithmic Equations",
+      "description": "Solve logarithmic equations and verify valid domains.",
+      "domain": "algebra",
+      "difficulty_level": 8,
+      "mastery_threshold": 86,
+      "xp_reward": 52
+    },
+    {
+      "id": "alg_sequence_patterns_intro",
+      "name": "Sequence Pattern Intro",
+      "description": "Recognize and extend arithmetic and geometric patterns.",
+      "domain": "algebra",
+      "difficulty_level": 5,
+      "mastery_threshold": 78,
+      "xp_reward": 33
+    },
+    {
+      "id": "alg_arithmetic_sequence_nth_term",
+      "name": "Arithmetic Sequence nth Term",
+      "description": "Derive and use explicit formulas for arithmetic sequences.",
+      "domain": "algebra",
+      "difficulty_level": 6,
+      "mastery_threshold": 81,
+      "xp_reward": 39
+    },
+    {
+      "id": "alg_arithmetic_series_sum",
+      "name": "Arithmetic Series Sum",
+      "description": "Compute finite sums of arithmetic sequences.",
+      "domain": "algebra",
+      "difficulty_level": 6,
+      "mastery_threshold": 81,
+      "xp_reward": 39
+    },
+    {
+      "id": "alg_geometric_sequence_nth_term",
+      "name": "Geometric Sequence nth Term",
+      "description": "Derive and use explicit formulas for geometric sequences.",
+      "domain": "algebra",
+      "difficulty_level": 6,
+      "mastery_threshold": 81,
+      "xp_reward": 39
+    },
+    {
+      "id": "alg_geometric_series_sum",
+      "name": "Geometric Series Sum",
+      "description": "Compute finite sums of geometric sequences.",
+      "domain": "algebra",
+      "difficulty_level": 6,
+      "mastery_threshold": 81,
+      "xp_reward": 39
+    },
+    {
+      "id": "alg_recursive_sequences_intro",
+      "name": "Recursive Sequences Intro",
+      "description": "Define and analyze recursive sequences.",
+      "domain": "algebra",
+      "difficulty_level": 6,
+      "mastery_threshold": 81,
+      "xp_reward": 39
+    },
+    {
+      "id": "alg_sigma_notation_series",
+      "name": "Sigma Notation and Series",
+      "description": "Represent and evaluate series using sigma notation.",
+      "domain": "algebra",
+      "difficulty_level": 7,
+      "mastery_threshold": 84,
+      "xp_reward": 45
+    },
+    {
+      "id": "alg_series_convergence_intuition",
+      "name": "Series Convergence Intuition",
+      "description": "Develop intuition about boundedness and convergence patterns.",
+      "domain": "algebra",
+      "difficulty_level": 7,
+      "mastery_threshold": 84,
+      "xp_reward": 45
+    },
+    {
+      "id": "alg_binomial_theorem_intro",
+      "name": "Binomial Theorem Intro",
+      "description": "Use binomial coefficients to expand binomial powers.",
+      "domain": "algebra",
+      "difficulty_level": 7,
+      "mastery_threshold": 84,
+      "xp_reward": 45
+    },
+    {
+      "id": "alg_matrices_intro_systems",
+      "name": "Matrices Intro for Systems",
+      "description": "Represent systems of equations using matrices.",
+      "domain": "algebra",
+      "difficulty_level": 6,
+      "mastery_threshold": 81,
+      "xp_reward": 39
+    },
+    {
+      "id": "alg_matrix_operations_basic",
+      "name": "Basic Matrix Operations",
+      "description": "Add, subtract, and multiply matrices in compatible dimensions.",
+      "domain": "algebra",
+      "difficulty_level": 6,
+      "mastery_threshold": 81,
+      "xp_reward": 39
+    },
+    {
+      "id": "alg_matrix_determinant_2x2",
+      "name": "Determinant of 2x2 Matrices",
+      "description": "Compute determinants and interpret invertibility in 2x2 case.",
+      "domain": "algebra",
+      "difficulty_level": 7,
+      "mastery_threshold": 84,
+      "xp_reward": 45
+    },
+    {
+      "id": "alg_inverse_matrix_method_systems",
+      "name": "Inverse Matrix Method for Systems",
+      "description": "Solve linear systems using matrix inverses.",
+      "domain": "algebra",
+      "difficulty_level": 7,
+      "mastery_threshold": 84,
+      "xp_reward": 45
+    },
+    {
+      "id": "geom_skill_1",
+      "name": "Geometry Skill 1",
+      "description": "Understanding geometry skill 1",
+      "domain": "geometry",
+      "difficulty_level": 5,
+      "mastery_threshold": 70,
+      "xp_reward": 18
+    },
+    {
+      "id": "geom_skill_2",
+      "name": "Geometry Skill 2",
+      "description": "Understanding geometry skill 2",
+      "domain": "geometry",
+      "difficulty_level": 5,
+      "mastery_threshold": 70,
+      "xp_reward": 18
+    },
+    {
+      "id": "geom_skill_3",
+      "name": "Geometry Skill 3",
+      "description": "Understanding geometry skill 3",
+      "domain": "geometry",
+      "difficulty_level": 5,
+      "mastery_threshold": 70,
+      "xp_reward": 18
+    },
+    {
+      "id": "geom_skill_4",
+      "name": "Geometry Skill 4",
+      "description": "Understanding geometry skill 4",
+      "domain": "geometry",
+      "difficulty_level": 5,
+      "mastery_threshold": 70,
+      "xp_reward": 18
+    },
+    {
+      "id": "geom_skill_5",
+      "name": "Geometry Skill 5",
+      "description": "Understanding geometry skill 5",
+      "domain": "geometry",
+      "difficulty_level": 5,
+      "mastery_threshold": 71,
+      "xp_reward": 18
+    },
+    {
+      "id": "geom_skill_6",
+      "name": "Geometry Skill 6",
+      "description": "Understanding geometry skill 6",
+      "domain": "geometry",
+      "difficulty_level": 5,
+      "mastery_threshold": 71,
+      "xp_reward": 18
+    },
+    {
+      "id": "geom_skill_7",
+      "name": "Geometry Skill 7",
+      "description": "Understanding geometry skill 7",
+      "domain": "geometry",
+      "difficulty_level": 5,
+      "mastery_threshold": 71,
+      "xp_reward": 18
+    },
+    {
+      "id": "geom_skill_8",
+      "name": "Geometry Skill 8",
+      "description": "Understanding geometry skill 8",
+      "domain": "geometry",
+      "difficulty_level": 5,
+      "mastery_threshold": 71,
+      "xp_reward": 20
+    },
+    {
+      "id": "geom_skill_9",
+      "name": "Geometry Skill 9",
+      "description": "Understanding geometry skill 9",
+      "domain": "geometry",
+      "difficulty_level": 5,
+      "mastery_threshold": 72,
+      "xp_reward": 20
+    },
+    {
+      "id": "geom_skill_10",
+      "name": "Geometry Skill 10",
+      "description": "Understanding geometry skill 10",
+      "domain": "geometry",
+      "difficulty_level": 5,
+      "mastery_threshold": 72,
+      "xp_reward": 20
+    },
+    {
+      "id": "geom_skill_11",
+      "name": "Geometry Skill 11",
+      "description": "Understanding geometry skill 11",
+      "domain": "geometry",
+      "difficulty_level": 5,
+      "mastery_threshold": 72,
+      "xp_reward": 20
+    },
+    {
+      "id": "geom_skill_12",
+      "name": "Geometry Skill 12",
+      "description": "Understanding geometry skill 12",
+      "domain": "geometry",
+      "difficulty_level": 5,
+      "mastery_threshold": 72,
+      "xp_reward": 20
+    },
+    {
+      "id": "geom_skill_13",
+      "name": "Geometry Skill 13",
+      "description": "Understanding geometry skill 13",
+      "domain": "geometry",
+      "difficulty_level": 5,
+      "mastery_threshold": 72,
+      "xp_reward": 20
+    },
+    {
+      "id": "geom_skill_14",
+      "name": "Geometry Skill 14",
+      "description": "Understanding geometry skill 14",
+      "domain": "geometry",
+      "difficulty_level": 5,
+      "mastery_threshold": 73,
+      "xp_reward": 20
+    },
+    {
+      "id": "geom_skill_15",
+      "name": "Geometry Skill 15",
+      "description": "Understanding geometry skill 15",
+      "domain": "geometry",
+      "difficulty_level": 5,
+      "mastery_threshold": 73,
+      "xp_reward": 20
+    },
+    {
+      "id": "geom_skill_16",
+      "name": "Geometry Skill 16",
+      "description": "Understanding geometry skill 16",
+      "domain": "geometry",
+      "difficulty_level": 5,
+      "mastery_threshold": 73,
+      "xp_reward": 20
+    },
+    {
+      "id": "geom_skill_17",
+      "name": "Geometry Skill 17",
+      "description": "Understanding geometry skill 17",
+      "domain": "geometry",
+      "difficulty_level": 5,
+      "mastery_threshold": 73,
+      "xp_reward": 20
+    },
+    {
+      "id": "geom_skill_18",
+      "name": "Geometry Skill 18",
+      "description": "Understanding geometry skill 18",
+      "domain": "geometry",
+      "difficulty_level": 5,
+      "mastery_threshold": 74,
+      "xp_reward": 20
+    },
+    {
+      "id": "geom_skill_19",
+      "name": "Geometry Skill 19",
+      "description": "Understanding geometry skill 19",
+      "domain": "geometry",
+      "difficulty_level": 5,
+      "mastery_threshold": 74,
+      "xp_reward": 20
+    },
+    {
+      "id": "geom_skill_20",
+      "name": "Geometry Skill 20",
+      "description": "Understanding geometry skill 20",
+      "domain": "geometry",
+      "difficulty_level": 5,
+      "mastery_threshold": 74,
+      "xp_reward": 20
+    },
+    {
+      "id": "geom_skill_21",
+      "name": "Geometry Skill 21",
+      "description": "Understanding geometry skill 21",
+      "domain": "geometry",
+      "difficulty_level": 5,
+      "mastery_threshold": 74,
+      "xp_reward": 20
+    },
+    {
+      "id": "geom_skill_22",
+      "name": "Geometry Skill 22",
+      "description": "Understanding geometry skill 22",
+      "domain": "geometry",
+      "difficulty_level": 5,
+      "mastery_threshold": 74,
+      "xp_reward": 20
+    },
+    {
+      "id": "geom_skill_23",
+      "name": "Geometry Skill 23",
+      "description": "Understanding geometry skill 23",
+      "domain": "geometry",
+      "difficulty_level": 6,
+      "mastery_threshold": 75,
+      "xp_reward": 22
+    },
+    {
+      "id": "geom_skill_24",
+      "name": "Geometry Skill 24",
+      "description": "Understanding geometry skill 24",
+      "domain": "geometry",
+      "difficulty_level": 6,
+      "mastery_threshold": 75,
+      "xp_reward": 22
+    },
+    {
+      "id": "geom_skill_25",
+      "name": "Geometry Skill 25",
+      "description": "Understanding geometry skill 25",
+      "domain": "geometry",
+      "difficulty_level": 6,
+      "mastery_threshold": 75,
+      "xp_reward": 22
+    },
+    {
+      "id": "geom_skill_26",
+      "name": "Geometry Skill 26",
+      "description": "Understanding geometry skill 26",
+      "domain": "geometry",
+      "difficulty_level": 6,
+      "mastery_threshold": 75,
+      "xp_reward": 22
+    },
+    {
+      "id": "geom_skill_27",
+      "name": "Geometry Skill 27",
+      "description": "Understanding geometry skill 27",
+      "domain": "geometry",
+      "difficulty_level": 6,
+      "mastery_threshold": 76,
+      "xp_reward": 22
+    },
+    {
+      "id": "geom_skill_28",
+      "name": "Geometry Skill 28",
+      "description": "Understanding geometry skill 28",
+      "domain": "geometry",
+      "difficulty_level": 6,
+      "mastery_threshold": 76,
+      "xp_reward": 22
+    },
+    {
+      "id": "geom_skill_29",
+      "name": "Geometry Skill 29",
+      "description": "Understanding geometry skill 29",
+      "domain": "geometry",
+      "difficulty_level": 6,
+      "mastery_threshold": 76,
+      "xp_reward": 22
+    },
+    {
+      "id": "geom_skill_30",
+      "name": "Geometry Skill 30",
+      "description": "Understanding geometry skill 30",
+      "domain": "geometry",
+      "difficulty_level": 6,
+      "mastery_threshold": 76,
+      "xp_reward": 22
+    },
+    {
+      "id": "geom_skill_31",
+      "name": "Geometry Skill 31",
+      "description": "Understanding geometry skill 31",
+      "domain": "geometry",
+      "difficulty_level": 6,
+      "mastery_threshold": 76,
+      "xp_reward": 22
+    },
+    {
+      "id": "geom_skill_32",
+      "name": "Geometry Skill 32",
+      "description": "Understanding geometry skill 32",
+      "domain": "geometry",
+      "difficulty_level": 6,
+      "mastery_threshold": 77,
+      "xp_reward": 22
+    },
+    {
+      "id": "geom_skill_33",
+      "name": "Geometry Skill 33",
+      "description": "Understanding geometry skill 33",
+      "domain": "geometry",
+      "difficulty_level": 6,
+      "mastery_threshold": 77,
+      "xp_reward": 22
+    },
+    {
+      "id": "geom_skill_34",
+      "name": "Geometry Skill 34",
+      "description": "Understanding geometry skill 34",
+      "domain": "geometry",
+      "difficulty_level": 6,
+      "mastery_threshold": 77,
+      "xp_reward": 22
+    },
+    {
+      "id": "geom_skill_35",
+      "name": "Geometry Skill 35",
+      "description": "Understanding geometry skill 35",
+      "domain": "geometry",
+      "difficulty_level": 6,
+      "mastery_threshold": 77,
+      "xp_reward": 22
+    },
+    {
+      "id": "geom_skill_36",
+      "name": "Geometry Skill 36",
+      "description": "Understanding geometry skill 36",
+      "domain": "geometry",
+      "difficulty_level": 6,
+      "mastery_threshold": 78,
+      "xp_reward": 22
+    },
+    {
+      "id": "geom_skill_37",
+      "name": "Geometry Skill 37",
+      "description": "Understanding geometry skill 37",
+      "domain": "geometry",
+      "difficulty_level": 6,
+      "mastery_threshold": 78,
+      "xp_reward": 22
+    },
+    {
+      "id": "geom_skill_38",
+      "name": "Geometry Skill 38",
+      "description": "Understanding geometry skill 38",
+      "domain": "geometry",
+      "difficulty_level": 7,
+      "mastery_threshold": 78,
+      "xp_reward": 24
+    },
+    {
+      "id": "geom_skill_39",
+      "name": "Geometry Skill 39",
+      "description": "Understanding geometry skill 39",
+      "domain": "geometry",
+      "difficulty_level": 7,
+      "mastery_threshold": 78,
+      "xp_reward": 24
+    },
+    {
+      "id": "geom_skill_40",
+      "name": "Geometry Skill 40",
+      "description": "Understanding geometry skill 40",
+      "domain": "geometry",
+      "difficulty_level": 7,
+      "mastery_threshold": 78,
+      "xp_reward": 24
+    },
+    {
+      "id": "geom_skill_41",
+      "name": "Geometry Skill 41",
+      "description": "Understanding geometry skill 41",
+      "domain": "geometry",
+      "difficulty_level": 7,
+      "mastery_threshold": 79,
+      "xp_reward": 24
+    },
+    {
+      "id": "geom_skill_42",
+      "name": "Geometry Skill 42",
+      "description": "Understanding geometry skill 42",
+      "domain": "geometry",
+      "difficulty_level": 7,
+      "mastery_threshold": 79,
+      "xp_reward": 24
+    },
+    {
+      "id": "geom_skill_43",
+      "name": "Geometry Skill 43",
+      "description": "Understanding geometry skill 43",
+      "domain": "geometry",
+      "difficulty_level": 7,
+      "mastery_threshold": 79,
+      "xp_reward": 24
+    },
+    {
+      "id": "geom_skill_44",
+      "name": "Geometry Skill 44",
+      "description": "Understanding geometry skill 44",
+      "domain": "geometry",
+      "difficulty_level": 7,
+      "mastery_threshold": 79,
+      "xp_reward": 24
+    },
+    {
+      "id": "geom_skill_45",
+      "name": "Geometry Skill 45",
+      "description": "Understanding geometry skill 45",
+      "domain": "geometry",
+      "difficulty_level": 7,
+      "mastery_threshold": 80,
+      "xp_reward": 24
+    },
+    {
+      "id": "trig_skill_1",
+      "name": "Trigonometry Skill 1",
+      "description": "Understanding trigonometry skill 1",
+      "domain": "trigonometry",
+      "difficulty_level": 7,
+      "mastery_threshold": 70,
+      "xp_reward": 24
+    },
+    {
+      "id": "trig_skill_2",
+      "name": "Trigonometry Skill 2",
+      "description": "Understanding trigonometry skill 2",
+      "domain": "trigonometry",
+      "difficulty_level": 7,
+      "mastery_threshold": 70,
+      "xp_reward": 24
+    },
+    {
+      "id": "trig_skill_3",
+      "name": "Trigonometry Skill 3",
+      "description": "Understanding trigonometry skill 3",
+      "domain": "trigonometry",
+      "difficulty_level": 7,
+      "mastery_threshold": 71,
+      "xp_reward": 24
+    },
+    {
+      "id": "trig_skill_4",
+      "name": "Trigonometry Skill 4",
+      "description": "Understanding trigonometry skill 4",
+      "domain": "trigonometry",
+      "difficulty_level": 7,
+      "mastery_threshold": 71,
+      "xp_reward": 24
+    },
+    {
+      "id": "trig_skill_5",
+      "name": "Trigonometry Skill 5",
+      "description": "Understanding trigonometry skill 5",
+      "domain": "trigonometry",
+      "difficulty_level": 7,
+      "mastery_threshold": 71,
+      "xp_reward": 24
+    },
+    {
+      "id": "trig_skill_6",
+      "name": "Trigonometry Skill 6",
+      "description": "Understanding trigonometry skill 6",
+      "domain": "trigonometry",
+      "difficulty_level": 7,
+      "mastery_threshold": 72,
+      "xp_reward": 24
+    },
+    {
+      "id": "trig_skill_7",
+      "name": "Trigonometry Skill 7",
+      "description": "Understanding trigonometry skill 7",
+      "domain": "trigonometry",
+      "difficulty_level": 7,
+      "mastery_threshold": 72,
+      "xp_reward": 24
+    },
+    {
+      "id": "trig_skill_8",
+      "name": "Trigonometry Skill 8",
+      "description": "Understanding trigonometry skill 8",
+      "domain": "trigonometry",
+      "difficulty_level": 8,
+      "mastery_threshold": 72,
+      "xp_reward": 26
+    },
+    {
+      "id": "trig_skill_9",
+      "name": "Trigonometry Skill 9",
+      "description": "Understanding trigonometry skill 9",
+      "domain": "trigonometry",
+      "difficulty_level": 8,
+      "mastery_threshold": 73,
+      "xp_reward": 26
+    },
+    {
+      "id": "trig_skill_10",
+      "name": "Trigonometry Skill 10",
+      "description": "Understanding trigonometry skill 10",
+      "domain": "trigonometry",
+      "difficulty_level": 8,
+      "mastery_threshold": 73,
+      "xp_reward": 26
+    },
+    {
+      "id": "trig_skill_11",
+      "name": "Trigonometry Skill 11",
+      "description": "Understanding trigonometry skill 11",
+      "domain": "trigonometry",
+      "difficulty_level": 8,
+      "mastery_threshold": 73,
+      "xp_reward": 26
+    },
+    {
+      "id": "trig_skill_12",
+      "name": "Trigonometry Skill 12",
+      "description": "Understanding trigonometry skill 12",
+      "domain": "trigonometry",
+      "difficulty_level": 8,
+      "mastery_threshold": 74,
+      "xp_reward": 26
+    },
+    {
+      "id": "trig_skill_13",
+      "name": "Trigonometry Skill 13",
+      "description": "Understanding trigonometry skill 13",
+      "domain": "trigonometry",
+      "difficulty_level": 8,
+      "mastery_threshold": 74,
+      "xp_reward": 26
+    },
+    {
+      "id": "trig_skill_14",
+      "name": "Trigonometry Skill 14",
+      "description": "Understanding trigonometry skill 14",
+      "domain": "trigonometry",
+      "difficulty_level": 8,
+      "mastery_threshold": 74,
+      "xp_reward": 26
+    },
+    {
+      "id": "trig_skill_15",
+      "name": "Trigonometry Skill 15",
+      "description": "Understanding trigonometry skill 15",
+      "domain": "trigonometry",
+      "difficulty_level": 8,
+      "mastery_threshold": 75,
+      "xp_reward": 26
+    },
+    {
+      "id": "trig_skill_16",
+      "name": "Trigonometry Skill 16",
+      "description": "Understanding trigonometry skill 16",
+      "domain": "trigonometry",
+      "difficulty_level": 8,
+      "mastery_threshold": 75,
+      "xp_reward": 26
+    },
+    {
+      "id": "trig_skill_17",
+      "name": "Trigonometry Skill 17",
+      "description": "Understanding trigonometry skill 17",
+      "domain": "trigonometry",
+      "difficulty_level": 8,
+      "mastery_threshold": 75,
+      "xp_reward": 26
+    },
+    {
+      "id": "trig_skill_18",
+      "name": "Trigonometry Skill 18",
+      "description": "Understanding trigonometry skill 18",
+      "domain": "trigonometry",
+      "difficulty_level": 8,
+      "mastery_threshold": 76,
+      "xp_reward": 26
+    },
+    {
+      "id": "trig_skill_19",
+      "name": "Trigonometry Skill 19",
+      "description": "Understanding trigonometry skill 19",
+      "domain": "trigonometry",
+      "difficulty_level": 8,
+      "mastery_threshold": 76,
+      "xp_reward": 26
+    },
+    {
+      "id": "trig_skill_20",
+      "name": "Trigonometry Skill 20",
+      "description": "Understanding trigonometry skill 20",
+      "domain": "trigonometry",
+      "difficulty_level": 8,
+      "mastery_threshold": 76,
+      "xp_reward": 26
+    },
+    {
+      "id": "trig_skill_21",
+      "name": "Trigonometry Skill 21",
+      "description": "Understanding trigonometry skill 21",
+      "domain": "trigonometry",
+      "difficulty_level": 8,
+      "mastery_threshold": 77,
+      "xp_reward": 26
+    },
+    {
+      "id": "trig_skill_22",
+      "name": "Trigonometry Skill 22",
+      "description": "Understanding trigonometry skill 22",
+      "domain": "trigonometry",
+      "difficulty_level": 8,
+      "mastery_threshold": 77,
+      "xp_reward": 26
+    },
+    {
+      "id": "trig_skill_23",
+      "name": "Trigonometry Skill 23",
+      "description": "Understanding trigonometry skill 23",
+      "domain": "trigonometry",
+      "difficulty_level": 9,
+      "mastery_threshold": 77,
+      "xp_reward": 28
+    },
+    {
+      "id": "trig_skill_24",
+      "name": "Trigonometry Skill 24",
+      "description": "Understanding trigonometry skill 24",
+      "domain": "trigonometry",
+      "difficulty_level": 9,
+      "mastery_threshold": 78,
+      "xp_reward": 28
+    },
+    {
+      "id": "trig_skill_25",
+      "name": "Trigonometry Skill 25",
+      "description": "Understanding trigonometry skill 25",
+      "domain": "trigonometry",
+      "difficulty_level": 9,
+      "mastery_threshold": 78,
+      "xp_reward": 28
+    },
+    {
+      "id": "trig_skill_26",
+      "name": "Trigonometry Skill 26",
+      "description": "Understanding trigonometry skill 26",
+      "domain": "trigonometry",
+      "difficulty_level": 9,
+      "mastery_threshold": 78,
+      "xp_reward": 28
+    },
+    {
+      "id": "trig_skill_27",
+      "name": "Trigonometry Skill 27",
+      "description": "Understanding trigonometry skill 27",
+      "domain": "trigonometry",
+      "difficulty_level": 9,
+      "mastery_threshold": 79,
+      "xp_reward": 28
+    },
+    {
+      "id": "trig_skill_28",
+      "name": "Trigonometry Skill 28",
+      "description": "Understanding trigonometry skill 28",
+      "domain": "trigonometry",
+      "difficulty_level": 9,
+      "mastery_threshold": 79,
+      "xp_reward": 28
+    },
+    {
+      "id": "trig_skill_29",
+      "name": "Trigonometry Skill 29",
+      "description": "Understanding trigonometry skill 29",
+      "domain": "trigonometry",
+      "difficulty_level": 9,
+      "mastery_threshold": 79,
+      "xp_reward": 28
+    },
+    {
+      "id": "trig_skill_30",
+      "name": "Trigonometry Skill 30",
+      "description": "Understanding trigonometry skill 30",
+      "domain": "trigonometry",
+      "difficulty_level": 9,
+      "mastery_threshold": 80,
+      "xp_reward": 28
+    },
+    {
+      "id": "prob_skill_1",
+      "name": "Probability Stats Skill 1",
+      "description": "Understanding probability stats skill 1",
+      "domain": "probability_stats",
+      "difficulty_level": 5,
+      "mastery_threshold": 70,
+      "xp_reward": 20
+    },
+    {
+      "id": "prob_skill_2",
+      "name": "Probability Stats Skill 2",
+      "description": "Understanding probability stats skill 2",
+      "domain": "probability_stats",
+      "difficulty_level": 5,
+      "mastery_threshold": 70,
+      "xp_reward": 20
+    },
+    {
+      "id": "prob_skill_3",
+      "name": "Probability Stats Skill 3",
+      "description": "Understanding probability stats skill 3",
+      "domain": "probability_stats",
+      "difficulty_level": 5,
+      "mastery_threshold": 70,
+      "xp_reward": 20
+    },
+    {
+      "id": "prob_skill_4",
+      "name": "Probability Stats Skill 4",
+      "description": "Understanding probability stats skill 4",
+      "domain": "probability_stats",
+      "difficulty_level": 5,
+      "mastery_threshold": 71,
+      "xp_reward": 20
+    },
+    {
+      "id": "prob_skill_5",
+      "name": "Probability Stats Skill 5",
+      "description": "Understanding probability stats skill 5",
+      "domain": "probability_stats",
+      "difficulty_level": 5,
+      "mastery_threshold": 71,
+      "xp_reward": 20
+    },
+    {
+      "id": "prob_skill_6",
+      "name": "Probability Stats Skill 6",
+      "description": "Understanding probability stats skill 6",
+      "domain": "probability_stats",
+      "difficulty_level": 6,
+      "mastery_threshold": 71,
+      "xp_reward": 22
+    },
+    {
+      "id": "prob_skill_7",
+      "name": "Probability Stats Skill 7",
+      "description": "Understanding probability stats skill 7",
+      "domain": "probability_stats",
+      "difficulty_level": 6,
+      "mastery_threshold": 72,
+      "xp_reward": 22
+    },
+    {
+      "id": "prob_skill_8",
+      "name": "Probability Stats Skill 8",
+      "description": "Understanding probability stats skill 8",
+      "domain": "probability_stats",
+      "difficulty_level": 6,
+      "mastery_threshold": 72,
+      "xp_reward": 22
+    },
+    {
+      "id": "prob_skill_9",
+      "name": "Probability Stats Skill 9",
+      "description": "Understanding probability stats skill 9",
+      "domain": "probability_stats",
+      "difficulty_level": 6,
+      "mastery_threshold": 72,
+      "xp_reward": 22
+    },
+    {
+      "id": "prob_skill_10",
+      "name": "Probability Stats Skill 10",
+      "description": "Understanding probability stats skill 10",
+      "domain": "probability_stats",
+      "difficulty_level": 6,
+      "mastery_threshold": 72,
+      "xp_reward": 22
+    },
+    {
+      "id": "prob_skill_11",
+      "name": "Probability Stats Skill 11",
+      "description": "Understanding probability stats skill 11",
+      "domain": "probability_stats",
+      "difficulty_level": 6,
+      "mastery_threshold": 73,
+      "xp_reward": 22
+    },
+    {
+      "id": "prob_skill_12",
+      "name": "Probability Stats Skill 12",
+      "description": "Understanding probability stats skill 12",
+      "domain": "probability_stats",
+      "difficulty_level": 6,
+      "mastery_threshold": 73,
+      "xp_reward": 22
+    },
+    {
+      "id": "prob_skill_13",
+      "name": "Probability Stats Skill 13",
+      "description": "Understanding probability stats skill 13",
+      "domain": "probability_stats",
+      "difficulty_level": 6,
+      "mastery_threshold": 73,
+      "xp_reward": 22
+    },
+    {
+      "id": "prob_skill_14",
+      "name": "Probability Stats Skill 14",
+      "description": "Understanding probability stats skill 14",
+      "domain": "probability_stats",
+      "difficulty_level": 6,
+      "mastery_threshold": 74,
+      "xp_reward": 22
+    },
+    {
+      "id": "prob_skill_15",
+      "name": "Probability Stats Skill 15",
+      "description": "Understanding probability stats skill 15",
+      "domain": "probability_stats",
+      "difficulty_level": 6,
+      "mastery_threshold": 74,
+      "xp_reward": 22
+    },
+    {
+      "id": "prob_skill_16",
+      "name": "Probability Stats Skill 16",
+      "description": "Understanding probability stats skill 16",
+      "domain": "probability_stats",
+      "difficulty_level": 6,
+      "mastery_threshold": 74,
+      "xp_reward": 22
+    },
+    {
+      "id": "prob_skill_17",
+      "name": "Probability Stats Skill 17",
+      "description": "Understanding probability stats skill 17",
+      "domain": "probability_stats",
+      "difficulty_level": 6,
+      "mastery_threshold": 74,
+      "xp_reward": 22
+    },
+    {
+      "id": "prob_skill_18",
+      "name": "Probability Stats Skill 18",
+      "description": "Understanding probability stats skill 18",
+      "domain": "probability_stats",
+      "difficulty_level": 7,
+      "mastery_threshold": 75,
+      "xp_reward": 24
+    },
+    {
+      "id": "prob_skill_19",
+      "name": "Probability Stats Skill 19",
+      "description": "Understanding probability stats skill 19",
+      "domain": "probability_stats",
+      "difficulty_level": 7,
+      "mastery_threshold": 75,
+      "xp_reward": 24
+    },
+    {
+      "id": "prob_skill_20",
+      "name": "Probability Stats Skill 20",
+      "description": "Understanding probability stats skill 20",
+      "domain": "probability_stats",
+      "difficulty_level": 7,
+      "mastery_threshold": 75,
+      "xp_reward": 24
+    },
+    {
+      "id": "prob_skill_21",
+      "name": "Probability Stats Skill 21",
+      "description": "Understanding probability stats skill 21",
+      "domain": "probability_stats",
+      "difficulty_level": 7,
+      "mastery_threshold": 76,
+      "xp_reward": 24
+    },
+    {
+      "id": "prob_skill_22",
+      "name": "Probability Stats Skill 22",
+      "description": "Understanding probability stats skill 22",
+      "domain": "probability_stats",
+      "difficulty_level": 7,
+      "mastery_threshold": 76,
+      "xp_reward": 24
+    },
+    {
+      "id": "prob_skill_23",
+      "name": "Probability Stats Skill 23",
+      "description": "Understanding probability stats skill 23",
+      "domain": "probability_stats",
+      "difficulty_level": 7,
+      "mastery_threshold": 76,
+      "xp_reward": 24
+    },
+    {
+      "id": "prob_skill_24",
+      "name": "Probability Stats Skill 24",
+      "description": "Understanding probability stats skill 24",
+      "domain": "probability_stats",
+      "difficulty_level": 7,
+      "mastery_threshold": 76,
+      "xp_reward": 24
+    },
+    {
+      "id": "prob_skill_25",
+      "name": "Probability Stats Skill 25",
+      "description": "Understanding probability stats skill 25",
+      "domain": "probability_stats",
+      "difficulty_level": 7,
+      "mastery_threshold": 77,
+      "xp_reward": 24
+    },
+    {
+      "id": "prob_skill_26",
+      "name": "Probability Stats Skill 26",
+      "description": "Understanding probability stats skill 26",
+      "domain": "probability_stats",
+      "difficulty_level": 7,
+      "mastery_threshold": 77,
+      "xp_reward": 24
+    },
+    {
+      "id": "prob_skill_27",
+      "name": "Probability Stats Skill 27",
+      "description": "Understanding probability stats skill 27",
+      "domain": "probability_stats",
+      "difficulty_level": 7,
+      "mastery_threshold": 77,
+      "xp_reward": 24
+    },
+    {
+      "id": "prob_skill_28",
+      "name": "Probability Stats Skill 28",
+      "description": "Understanding probability stats skill 28",
+      "domain": "probability_stats",
+      "difficulty_level": 7,
+      "mastery_threshold": 78,
+      "xp_reward": 24
+    },
+    {
+      "id": "prob_skill_29",
+      "name": "Probability Stats Skill 29",
+      "description": "Understanding probability stats skill 29",
+      "domain": "probability_stats",
+      "difficulty_level": 7,
+      "mastery_threshold": 78,
+      "xp_reward": 24
+    },
+    {
+      "id": "prob_skill_30",
+      "name": "Probability Stats Skill 30",
+      "description": "Understanding probability stats skill 30",
+      "domain": "probability_stats",
+      "difficulty_level": 8,
+      "mastery_threshold": 78,
+      "xp_reward": 26
+    },
+    {
+      "id": "prob_skill_31",
+      "name": "Probability Stats Skill 31",
+      "description": "Understanding probability stats skill 31",
+      "domain": "probability_stats",
+      "difficulty_level": 8,
+      "mastery_threshold": 78,
+      "xp_reward": 26
+    },
+    {
+      "id": "prob_skill_32",
+      "name": "Probability Stats Skill 32",
+      "description": "Understanding probability stats skill 32",
+      "domain": "probability_stats",
+      "difficulty_level": 8,
+      "mastery_threshold": 79,
+      "xp_reward": 26
+    },
+    {
+      "id": "prob_skill_33",
+      "name": "Probability Stats Skill 33",
+      "description": "Understanding probability stats skill 33",
+      "domain": "probability_stats",
+      "difficulty_level": 8,
+      "mastery_threshold": 79,
+      "xp_reward": 26
+    },
+    {
+      "id": "prob_skill_34",
+      "name": "Probability Stats Skill 34",
+      "description": "Understanding probability stats skill 34",
+      "domain": "probability_stats",
+      "difficulty_level": 8,
+      "mastery_threshold": 79,
+      "xp_reward": 26
+    },
+    {
+      "id": "prob_skill_35",
+      "name": "Probability Stats Skill 35",
+      "description": "Understanding probability stats skill 35",
+      "domain": "probability_stats",
+      "difficulty_level": 8,
+      "mastery_threshold": 80,
+      "xp_reward": 26
+    },
+    {
+      "id": "logic_skill_1",
+      "name": "Logic Discrete Skill 1",
+      "description": "Understanding logic discrete skill 1",
+      "domain": "logic_discrete",
+      "difficulty_level": 6,
+      "mastery_threshold": 70,
+      "xp_reward": 22
+    },
+    {
+      "id": "logic_skill_2",
+      "name": "Logic Discrete Skill 2",
+      "description": "Understanding logic discrete skill 2",
+      "domain": "logic_discrete",
+      "difficulty_level": 6,
+      "mastery_threshold": 70,
+      "xp_reward": 22
+    },
+    {
+      "id": "logic_skill_3",
+      "name": "Logic Discrete Skill 3",
+      "description": "Understanding logic discrete skill 3",
+      "domain": "logic_discrete",
+      "difficulty_level": 6,
+      "mastery_threshold": 71,
+      "xp_reward": 22
+    },
+    {
+      "id": "logic_skill_4",
+      "name": "Logic Discrete Skill 4",
+      "description": "Understanding logic discrete skill 4",
+      "domain": "logic_discrete",
+      "difficulty_level": 6,
+      "mastery_threshold": 71,
+      "xp_reward": 22
+    },
+    {
+      "id": "logic_skill_5",
+      "name": "Logic Discrete Skill 5",
+      "description": "Understanding logic discrete skill 5",
+      "domain": "logic_discrete",
+      "difficulty_level": 6,
+      "mastery_threshold": 71,
+      "xp_reward": 22
+    },
+    {
+      "id": "logic_skill_6",
+      "name": "Logic Discrete Skill 6",
+      "description": "Understanding logic discrete skill 6",
+      "domain": "logic_discrete",
+      "difficulty_level": 6,
+      "mastery_threshold": 72,
+      "xp_reward": 22
+    },
+    {
+      "id": "logic_skill_7",
+      "name": "Logic Discrete Skill 7",
+      "description": "Understanding logic discrete skill 7",
+      "domain": "logic_discrete",
+      "difficulty_level": 6,
+      "mastery_threshold": 72,
+      "xp_reward": 22
+    },
+    {
+      "id": "logic_skill_8",
+      "name": "Logic Discrete Skill 8",
+      "description": "Understanding logic discrete skill 8",
+      "domain": "logic_discrete",
+      "difficulty_level": 7,
+      "mastery_threshold": 72,
+      "xp_reward": 24
+    },
+    {
+      "id": "logic_skill_9",
+      "name": "Logic Discrete Skill 9",
+      "description": "Understanding logic discrete skill 9",
+      "domain": "logic_discrete",
+      "difficulty_level": 7,
+      "mastery_threshold": 73,
+      "xp_reward": 24
+    },
+    {
+      "id": "logic_skill_10",
+      "name": "Logic Discrete Skill 10",
+      "description": "Understanding logic discrete skill 10",
+      "domain": "logic_discrete",
+      "difficulty_level": 7,
+      "mastery_threshold": 73,
+      "xp_reward": 24
+    },
+    {
+      "id": "logic_skill_11",
+      "name": "Logic Discrete Skill 11",
+      "description": "Understanding logic discrete skill 11",
+      "domain": "logic_discrete",
+      "difficulty_level": 7,
+      "mastery_threshold": 73,
+      "xp_reward": 24
+    },
+    {
+      "id": "logic_skill_12",
+      "name": "Logic Discrete Skill 12",
+      "description": "Understanding logic discrete skill 12",
+      "domain": "logic_discrete",
+      "difficulty_level": 7,
+      "mastery_threshold": 74,
+      "xp_reward": 24
+    },
+    {
+      "id": "logic_skill_13",
+      "name": "Logic Discrete Skill 13",
+      "description": "Understanding logic discrete skill 13",
+      "domain": "logic_discrete",
+      "difficulty_level": 7,
+      "mastery_threshold": 74,
+      "xp_reward": 24
+    },
+    {
+      "id": "logic_skill_14",
+      "name": "Logic Discrete Skill 14",
+      "description": "Understanding logic discrete skill 14",
+      "domain": "logic_discrete",
+      "difficulty_level": 7,
+      "mastery_threshold": 74,
+      "xp_reward": 24
+    },
+    {
+      "id": "logic_skill_15",
+      "name": "Logic Discrete Skill 15",
+      "description": "Understanding logic discrete skill 15",
+      "domain": "logic_discrete",
+      "difficulty_level": 7,
+      "mastery_threshold": 75,
+      "xp_reward": 24
+    },
+    {
+      "id": "logic_skill_16",
+      "name": "Logic Discrete Skill 16",
+      "description": "Understanding logic discrete skill 16",
+      "domain": "logic_discrete",
+      "difficulty_level": 7,
+      "mastery_threshold": 75,
+      "xp_reward": 24
+    },
+    {
+      "id": "logic_skill_17",
+      "name": "Logic Discrete Skill 17",
+      "description": "Understanding logic discrete skill 17",
+      "domain": "logic_discrete",
+      "difficulty_level": 7,
+      "mastery_threshold": 75,
+      "xp_reward": 24
+    },
+    {
+      "id": "logic_skill_18",
+      "name": "Logic Discrete Skill 18",
+      "description": "Understanding logic discrete skill 18",
+      "domain": "logic_discrete",
+      "difficulty_level": 7,
+      "mastery_threshold": 76,
+      "xp_reward": 24
+    },
+    {
+      "id": "logic_skill_19",
+      "name": "Logic Discrete Skill 19",
+      "description": "Understanding logic discrete skill 19",
+      "domain": "logic_discrete",
+      "difficulty_level": 7,
+      "mastery_threshold": 76,
+      "xp_reward": 24
+    },
+    {
+      "id": "logic_skill_20",
+      "name": "Logic Discrete Skill 20",
+      "description": "Understanding logic discrete skill 20",
+      "domain": "logic_discrete",
+      "difficulty_level": 7,
+      "mastery_threshold": 76,
+      "xp_reward": 24
+    },
+    {
+      "id": "logic_skill_21",
+      "name": "Logic Discrete Skill 21",
+      "description": "Understanding logic discrete skill 21",
+      "domain": "logic_discrete",
+      "difficulty_level": 7,
+      "mastery_threshold": 77,
+      "xp_reward": 24
+    },
+    {
+      "id": "logic_skill_22",
+      "name": "Logic Discrete Skill 22",
+      "description": "Understanding logic discrete skill 22",
+      "domain": "logic_discrete",
+      "difficulty_level": 7,
+      "mastery_threshold": 77,
+      "xp_reward": 24
+    },
+    {
+      "id": "logic_skill_23",
+      "name": "Logic Discrete Skill 23",
+      "description": "Understanding logic discrete skill 23",
+      "domain": "logic_discrete",
+      "difficulty_level": 8,
+      "mastery_threshold": 77,
+      "xp_reward": 26
+    },
+    {
+      "id": "logic_skill_24",
+      "name": "Logic Discrete Skill 24",
+      "description": "Understanding logic discrete skill 24",
+      "domain": "logic_discrete",
+      "difficulty_level": 8,
+      "mastery_threshold": 78,
+      "xp_reward": 26
+    },
+    {
+      "id": "logic_skill_25",
+      "name": "Logic Discrete Skill 25",
+      "description": "Understanding logic discrete skill 25",
+      "domain": "logic_discrete",
+      "difficulty_level": 8,
+      "mastery_threshold": 78,
+      "xp_reward": 26
+    },
+    {
+      "id": "logic_skill_26",
+      "name": "Logic Discrete Skill 26",
+      "description": "Understanding logic discrete skill 26",
+      "domain": "logic_discrete",
+      "difficulty_level": 8,
+      "mastery_threshold": 78,
+      "xp_reward": 26
+    },
+    {
+      "id": "logic_skill_27",
+      "name": "Logic Discrete Skill 27",
+      "description": "Understanding logic discrete skill 27",
+      "domain": "logic_discrete",
+      "difficulty_level": 8,
+      "mastery_threshold": 79,
+      "xp_reward": 26
+    },
+    {
+      "id": "logic_skill_28",
+      "name": "Logic Discrete Skill 28",
+      "description": "Understanding logic discrete skill 28",
+      "domain": "logic_discrete",
+      "difficulty_level": 8,
+      "mastery_threshold": 79,
+      "xp_reward": 26
+    },
+    {
+      "id": "logic_skill_29",
+      "name": "Logic Discrete Skill 29",
+      "description": "Understanding logic discrete skill 29",
+      "domain": "logic_discrete",
+      "difficulty_level": 8,
+      "mastery_threshold": 79,
+      "xp_reward": 26
+    },
+    {
+      "id": "logic_skill_30",
+      "name": "Logic Discrete Skill 30",
+      "description": "Understanding logic discrete skill 30",
+      "domain": "logic_discrete",
+      "difficulty_level": 8,
+      "mastery_threshold": 80,
+      "xp_reward": 26
+    },
+    {
+      "id": "calc_skill_1",
+      "name": "Calculus Skill 1",
+      "description": "Understanding calculus skill 1",
+      "domain": "calculus",
+      "difficulty_level": 9,
+      "mastery_threshold": 70,
+      "xp_reward": 28
+    },
+    {
+      "id": "calc_skill_2",
+      "name": "Calculus Skill 2",
+      "description": "Understanding calculus skill 2",
+      "domain": "calculus",
+      "difficulty_level": 9,
+      "mastery_threshold": 70,
+      "xp_reward": 28
+    },
+    {
+      "id": "calc_skill_3",
+      "name": "Calculus Skill 3",
+      "description": "Understanding calculus skill 3",
+      "domain": "calculus",
+      "difficulty_level": 9,
+      "mastery_threshold": 70,
+      "xp_reward": 28
+    },
+    {
+      "id": "calc_skill_4",
+      "name": "Calculus Skill 4",
+      "description": "Understanding calculus skill 4",
+      "domain": "calculus",
+      "difficulty_level": 9,
+      "mastery_threshold": 71,
+      "xp_reward": 28
+    },
+    {
+      "id": "calc_skill_5",
+      "name": "Calculus Skill 5",
+      "description": "Understanding calculus skill 5",
+      "domain": "calculus",
+      "difficulty_level": 9,
+      "mastery_threshold": 71,
+      "xp_reward": 28
+    },
+    {
+      "id": "calc_skill_6",
+      "name": "Calculus Skill 6",
+      "description": "Understanding calculus skill 6",
+      "domain": "calculus",
+      "difficulty_level": 9,
+      "mastery_threshold": 71,
+      "xp_reward": 28
+    },
+    {
+      "id": "calc_skill_7",
+      "name": "Calculus Skill 7",
+      "description": "Understanding calculus skill 7",
+      "domain": "calculus",
+      "difficulty_level": 9,
+      "mastery_threshold": 72,
+      "xp_reward": 28
+    },
+    {
+      "id": "calc_skill_8",
+      "name": "Calculus Skill 8",
+      "description": "Understanding calculus skill 8",
+      "domain": "calculus",
+      "difficulty_level": 9,
+      "mastery_threshold": 72,
+      "xp_reward": 28
+    },
+    {
+      "id": "calc_skill_9",
+      "name": "Calculus Skill 9",
+      "description": "Understanding calculus skill 9",
+      "domain": "calculus",
+      "difficulty_level": 9,
+      "mastery_threshold": 72,
+      "xp_reward": 28
+    },
+    {
+      "id": "calc_skill_10",
+      "name": "Calculus Skill 10",
+      "description": "Understanding calculus skill 10",
+      "domain": "calculus",
+      "difficulty_level": 9,
+      "mastery_threshold": 72,
+      "xp_reward": 28
+    },
+    {
+      "id": "calc_skill_11",
+      "name": "Calculus Skill 11",
+      "description": "Understanding calculus skill 11",
+      "domain": "calculus",
+      "difficulty_level": 9,
+      "mastery_threshold": 73,
+      "xp_reward": 28
+    },
+    {
+      "id": "calc_skill_12",
+      "name": "Calculus Skill 12",
+      "description": "Understanding calculus skill 12",
+      "domain": "calculus",
+      "difficulty_level": 9,
+      "mastery_threshold": 73,
+      "xp_reward": 28
+    },
+    {
+      "id": "calc_skill_13",
+      "name": "Calculus Skill 13",
+      "description": "Understanding calculus skill 13",
+      "domain": "calculus",
+      "difficulty_level": 9,
+      "mastery_threshold": 73,
+      "xp_reward": 28
+    },
+    {
+      "id": "calc_skill_14",
+      "name": "Calculus Skill 14",
+      "description": "Understanding calculus skill 14",
+      "domain": "calculus",
+      "difficulty_level": 9,
+      "mastery_threshold": 74,
+      "xp_reward": 28
+    },
+    {
+      "id": "calc_skill_15",
+      "name": "Calculus Skill 15",
+      "description": "Understanding calculus skill 15",
+      "domain": "calculus",
+      "difficulty_level": 9,
+      "mastery_threshold": 74,
+      "xp_reward": 28
+    },
+    {
+      "id": "calc_skill_16",
+      "name": "Calculus Skill 16",
+      "description": "Understanding calculus skill 16",
+      "domain": "calculus",
+      "difficulty_level": 9,
+      "mastery_threshold": 74,
+      "xp_reward": 28
+    },
+    {
+      "id": "calc_skill_17",
+      "name": "Calculus Skill 17",
+      "description": "Understanding calculus skill 17",
+      "domain": "calculus",
+      "difficulty_level": 9,
+      "mastery_threshold": 74,
+      "xp_reward": 28
+    },
+    {
+      "id": "calc_skill_18",
+      "name": "Calculus Skill 18",
+      "description": "Understanding calculus skill 18",
+      "domain": "calculus",
+      "difficulty_level": 10,
+      "mastery_threshold": 75,
+      "xp_reward": 30
+    },
+    {
+      "id": "calc_skill_19",
+      "name": "Calculus Skill 19",
+      "description": "Understanding calculus skill 19",
+      "domain": "calculus",
+      "difficulty_level": 10,
+      "mastery_threshold": 75,
+      "xp_reward": 30
+    },
+    {
+      "id": "calc_skill_20",
+      "name": "Calculus Skill 20",
+      "description": "Understanding calculus skill 20",
+      "domain": "calculus",
+      "difficulty_level": 10,
+      "mastery_threshold": 75,
+      "xp_reward": 30
+    },
+    {
+      "id": "calc_skill_21",
+      "name": "Calculus Skill 21",
+      "description": "Understanding calculus skill 21",
+      "domain": "calculus",
+      "difficulty_level": 10,
+      "mastery_threshold": 76,
+      "xp_reward": 30
+    },
+    {
+      "id": "calc_skill_22",
+      "name": "Calculus Skill 22",
+      "description": "Understanding calculus skill 22",
+      "domain": "calculus",
+      "difficulty_level": 10,
+      "mastery_threshold": 76,
+      "xp_reward": 30
+    },
+    {
+      "id": "calc_skill_23",
+      "name": "Calculus Skill 23",
+      "description": "Understanding calculus skill 23",
+      "domain": "calculus",
+      "difficulty_level": 10,
+      "mastery_threshold": 76,
+      "xp_reward": 30
+    },
+    {
+      "id": "calc_skill_24",
+      "name": "Calculus Skill 24",
+      "description": "Understanding calculus skill 24",
+      "domain": "calculus",
+      "difficulty_level": 10,
+      "mastery_threshold": 76,
+      "xp_reward": 30
+    },
+    {
+      "id": "calc_skill_25",
+      "name": "Calculus Skill 25",
+      "description": "Understanding calculus skill 25",
+      "domain": "calculus",
+      "difficulty_level": 10,
+      "mastery_threshold": 77,
+      "xp_reward": 30
+    },
+    {
+      "id": "calc_skill_26",
+      "name": "Calculus Skill 26",
+      "description": "Understanding calculus skill 26",
+      "domain": "calculus",
+      "difficulty_level": 10,
+      "mastery_threshold": 77,
+      "xp_reward": 30
+    },
+    {
+      "id": "calc_skill_27",
+      "name": "Calculus Skill 27",
+      "description": "Understanding calculus skill 27",
+      "domain": "calculus",
+      "difficulty_level": 10,
+      "mastery_threshold": 77,
+      "xp_reward": 30
+    },
+    {
+      "id": "calc_skill_28",
+      "name": "Calculus Skill 28",
+      "description": "Understanding calculus skill 28",
+      "domain": "calculus",
+      "difficulty_level": 10,
+      "mastery_threshold": 78,
+      "xp_reward": 30
+    },
+    {
+      "id": "calc_skill_29",
+      "name": "Calculus Skill 29",
+      "description": "Understanding calculus skill 29",
+      "domain": "calculus",
+      "difficulty_level": 10,
+      "mastery_threshold": 78,
+      "xp_reward": 30
+    },
+    {
+      "id": "calc_skill_30",
+      "name": "Calculus Skill 30",
+      "description": "Understanding calculus skill 30",
+      "domain": "calculus",
+      "difficulty_level": 10,
+      "mastery_threshold": 78,
+      "xp_reward": 30
+    },
+    {
+      "id": "calc_skill_31",
+      "name": "Calculus Skill 31",
+      "description": "Understanding calculus skill 31",
+      "domain": "calculus",
+      "difficulty_level": 10,
+      "mastery_threshold": 78,
+      "xp_reward": 30
+    },
+    {
+      "id": "calc_skill_32",
+      "name": "Calculus Skill 32",
+      "description": "Understanding calculus skill 32",
+      "domain": "calculus",
+      "difficulty_level": 10,
+      "mastery_threshold": 79,
+      "xp_reward": 30
+    },
+    {
+      "id": "calc_skill_33",
+      "name": "Calculus Skill 33",
+      "description": "Understanding calculus skill 33",
+      "domain": "calculus",
+      "difficulty_level": 10,
+      "mastery_threshold": 79,
+      "xp_reward": 30
+    },
+    {
+      "id": "calc_skill_34",
+      "name": "Calculus Skill 34",
+      "description": "Understanding calculus skill 34",
+      "domain": "calculus",
+      "difficulty_level": 10,
+      "mastery_threshold": 79,
+      "xp_reward": 30
+    },
+    {
+      "id": "calc_skill_35",
+      "name": "Calculus Skill 35",
+      "description": "Understanding calculus skill 35",
+      "domain": "calculus",
+      "difficulty_level": 10,
+      "mastery_threshold": 80,
+      "xp_reward": 30
+    }
+  ]
+}

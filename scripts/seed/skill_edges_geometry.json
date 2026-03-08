@@ -1,0 +1,236 @@
+{
+  "edges": [
+    {
+      "from": "geom_skill_1",
+      "to": "geom_skill_2"
+    },
+    {
+      "from": "geom_skill_2",
+      "to": "geom_skill_3"
+    },
+    {
+      "from": "geom_skill_3",
+      "to": "geom_skill_4"
+    },
+    {
+      "from": "geom_skill_4",
+      "to": "geom_skill_5"
+    },
+    {
+      "from": "geom_skill_5",
+      "to": "geom_skill_6"
+    },
+    {
+      "from": "geom_skill_4",
+      "to": "geom_skill_6"
+    },
+    {
+      "from": "geom_skill_6",
+      "to": "geom_skill_7"
+    },
+    {
+      "from": "geom_skill_7",
+      "to": "geom_skill_8"
+    },
+    {
+      "from": "geom_skill_8",
+      "to": "geom_skill_9"
+    },
+    {
+      "from": "geom_skill_7",
+      "to": "geom_skill_9"
+    },
+    {
+      "from": "geom_skill_9",
+      "to": "geom_skill_10"
+    },
+    {
+      "from": "geom_skill_10",
+      "to": "geom_skill_11"
+    },
+    {
+      "from": "geom_skill_11",
+      "to": "geom_skill_12"
+    },
+    {
+      "from": "geom_skill_10",
+      "to": "geom_skill_12"
+    },
+    {
+      "from": "geom_skill_12",
+      "to": "geom_skill_13"
+    },
+    {
+      "from": "geom_skill_13",
+      "to": "geom_skill_14"
+    },
+    {
+      "from": "geom_skill_14",
+      "to": "geom_skill_15"
+    },
+    {
+      "from": "geom_skill_13",
+      "to": "geom_skill_15"
+    },
+    {
+      "from": "geom_skill_15",
+      "to": "geom_skill_16"
+    },
+    {
+      "from": "geom_skill_16",
+      "to": "geom_skill_17"
+    },
+    {
+      "from": "geom_skill_17",
+      "to": "geom_skill_18"
+    },
+    {
+      "from": "geom_skill_16",
+      "to": "geom_skill_18"
+    },
+    {
+      "from": "geom_skill_18",
+      "to": "geom_skill_19"
+    },
+    {
+      "from": "geom_skill_19",
+      "to": "geom_skill_20"
+    },
+    {
+      "from": "geom_skill_20",
+      "to": "geom_skill_21"
+    },
+    {
+      "from": "geom_skill_19",
+      "to": "geom_skill_21"
+    },
+    {
+      "from": "geom_skill_21",
+      "to": "geom_skill_22"
+    },
+    {
+      "from": "geom_skill_22",
+      "to": "geom_skill_23"
+    },
+    {
+      "from": "geom_skill_23",
+      "to": "geom_skill_24"
+    },
+    {
+      "from": "geom_skill_22",
+      "to": "geom_skill_24"
+    },
+    {
+      "from": "geom_skill_24",
+      "to": "geom_skill_25"
+    },
+    {
+      "from": "geom_skill_25",
+      "to": "geom_skill_26"
+    },
+    {
+      "from": "geom_skill_26",
+      "to": "geom_skill_27"
+    },
+    {
+      "from": "geom_skill_25",
+      "to": "geom_skill_27"
+    },
+    {
+      "from": "geom_skill_27",
+      "to": "geom_skill_28"
+    },
+    {
+      "from": "geom_skill_28",
+      "to": "geom_skill_29"
+    },
+    {
+      "from": "geom_skill_29",
+      "to": "geom_skill_30"
+    },
+    {
+      "from": "geom_skill_28",
+      "to": "geom_skill_30"
+    },
+    {
+      "from": "geom_skill_30",
+      "to": "geom_skill_31"
+    },
+    {
+      "from": "geom_skill_31",
+      "to": "geom_skill_32"
+    },
+    {
+      "from": "geom_skill_32",
+      "to": "geom_skill_33"
+    },
+    {
+      "from": "geom_skill_31",
+      "to": "geom_skill_33"
+    },
+    {
+      "from": "geom_skill_33",
+      "to": "geom_skill_34"
+    },
+    {
+      "from": "geom_skill_34",
+      "to": "geom_skill_35"
+    },
+    {
+      "from": "geom_skill_35",
+      "to": "geom_skill_36"
+    },
+    {
+      "from": "geom_skill_34",
+      "to": "geom_skill_36"
+    },
+    {
+      "from": "geom_skill_36",
+      "to": "geom_skill_37"
+    },
+    {
+      "from": "geom_skill_37",
+      "to": "geom_skill_38"
+    },
+    {
+      "from": "geom_skill_38",
+      "to": "geom_skill_39"
+    },
+    {
+      "from": "geom_skill_37",
+      "to": "geom_skill_39"
+    },
+    {
+      "from": "geom_skill_39",
+      "to": "geom_skill_40"
+    },
+    {
+      "from": "geom_skill_40",
+      "to": "geom_skill_41"
+    },
+    {
+      "from": "geom_skill_41",
+      "to": "geom_skill_42"
+    },
+    {
+      "from": "geom_skill_40",
+      "to": "geom_skill_42"
+    },
+    {
+      "from": "geom_skill_42",
+      "to": "geom_skill_43"
+    },
+    {
+      "from": "geom_skill_43",
+      "to": "geom_skill_44"
+    },
+    {
+      "from": "geom_skill_44",
+      "to": "geom_skill_45"
+    },
+    {
+      "from": "geom_skill_43",
+      "to": "geom_skill_45"
+    }
+  ]
+}

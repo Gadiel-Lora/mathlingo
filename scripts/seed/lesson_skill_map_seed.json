@@ -1,0 +1,5402 @@
+{
+  "lesson_skill_map": [
+    {
+      "grade": 5,
+      "bimester": 1,
+      "unit": 1,
+      "lesson": 1,
+      "skills": [
+        "arith_counting_objects_to_20"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 1,
+      "unit": 1,
+      "lesson": 2,
+      "skills": [
+        "arith_counting_to_100",
+        "arith_counting_objects_to_20"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 1,
+      "unit": 1,
+      "lesson": 3,
+      "skills": [
+        "arith_number_line_basics",
+        "arith_counting_to_100",
+        "arith_counting_objects_to_20"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 1,
+      "unit": 1,
+      "lesson": 4,
+      "skills": [
+        "arith_place_value_tens",
+        "arith_number_line_basics",
+        "arith_counting_to_100"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 1,
+      "unit": 2,
+      "lesson": 1,
+      "skills": [
+        "arith_addition_within_20",
+        "arith_place_value_tens",
+        "arith_number_line_basics"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 1,
+      "unit": 2,
+      "lesson": 2,
+      "skills": [
+        "arith_place_value_hundreds",
+        "arith_addition_within_20",
+        "arith_place_value_tens"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 1,
+      "unit": 2,
+      "lesson": 3,
+      "skills": [
+        "arith_compare_whole_numbers",
+        "arith_place_value_hundreds",
+        "arith_addition_within_20"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 1,
+      "unit": 2,
+      "lesson": 4,
+      "skills": [
+        "arith_subtraction_within_20",
+        "arith_compare_whole_numbers",
+        "arith_place_value_hundreds"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 1,
+      "unit": 3,
+      "lesson": 1,
+      "skills": [
+        "arith_place_value_thousands",
+        "arith_subtraction_within_20",
+        "arith_compare_whole_numbers"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 1,
+      "unit": 3,
+      "lesson": 2,
+      "skills": [
+        "arith_order_whole_numbers",
+        "arith_place_value_thousands",
+        "arith_subtraction_within_20"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 1,
+      "unit": 3,
+      "lesson": 3,
+      "skills": [
+        "arith_even_odd_patterns",
+        "arith_order_whole_numbers",
+        "arith_place_value_thousands"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 1,
+      "unit": 3,
+      "lesson": 4,
+      "skills": [
+        "arith_addition_multi_digit",
+        "arith_even_odd_patterns",
+        "arith_order_whole_numbers"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 1,
+      "unit": 4,
+      "lesson": 1,
+      "skills": [
+        "arith_fraction_part_of_whole",
+        "arith_addition_multi_digit",
+        "arith_even_odd_patterns"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 1,
+      "unit": 4,
+      "lesson": 2,
+      "skills": [
+        "arith_round_whole_numbers",
+        "arith_fraction_part_of_whole",
+        "arith_addition_multi_digit"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 1,
+      "unit": 4,
+      "lesson": 3,
+      "skills": [
+        "arith_factors_multiples_intro",
+        "arith_round_whole_numbers",
+        "arith_fraction_part_of_whole"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 1,
+      "unit": 4,
+      "lesson": 4,
+      "skills": [
+        "arith_subtraction_multi_digit",
+        "arith_factors_multiples_intro",
+        "arith_round_whole_numbers"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 2,
+      "unit": 1,
+      "lesson": 1,
+      "skills": [
+        "arith_multiplication_as_repeated_addition",
+        "arith_subtraction_multi_digit",
+        "arith_factors_multiples_intro"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 2,
+      "unit": 1,
+      "lesson": 2,
+      "skills": [
+        "arith_multiplication_facts",
+        "arith_multiplication_as_repeated_addition",
+        "arith_subtraction_multi_digit"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 2,
+      "unit": 1,
+      "lesson": 3,
+      "skills": [
+        "arith_division_as_sharing",
+        "arith_multiplication_facts",
+        "arith_multiplication_as_repeated_addition"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 2,
+      "unit": 1,
+      "lesson": 4,
+      "skills": [
+        "arith_integer_number_line",
+        "arith_division_as_sharing",
+        "arith_multiplication_facts"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 2,
+      "unit": 2,
+      "lesson": 1,
+      "skills": [
+        "arith_add_subtract_fractions_like_den",
+        "arith_integer_number_line",
+        "arith_division_as_sharing"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 2,
+      "unit": 2,
+      "lesson": 2,
+      "skills": [
+        "arith_decimal_place_value",
+        "arith_add_subtract_fractions_like_den",
+        "arith_integer_number_line"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 2,
+      "unit": 2,
+      "lesson": 3,
+      "skills": [
+        "arith_divisibility_rules",
+        "arith_decimal_place_value",
+        "arith_add_subtract_fractions_like_den"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 2,
+      "unit": 2,
+      "lesson": 4,
+      "skills": [
+        "arith_compare_order_integers",
+        "arith_divisibility_rules",
+        "arith_decimal_place_value"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 2,
+      "unit": 3,
+      "lesson": 1,
+      "skills": [
+        "arith_absolute_value",
+        "arith_compare_order_integers",
+        "arith_divisibility_rules"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 2,
+      "unit": 3,
+      "lesson": 2,
+      "skills": [
+        "arith_compare_order_decimals",
+        "arith_absolute_value",
+        "arith_compare_order_integers"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 2,
+      "unit": 3,
+      "lesson": 3,
+      "skills": [
+        "arith_multi_digit_multiplication",
+        "arith_compare_order_decimals",
+        "arith_absolute_value"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 2,
+      "unit": 3,
+      "lesson": 4,
+      "skills": [
+        "arith_equivalent_fractions",
+        "arith_multi_digit_multiplication",
+        "arith_compare_order_decimals"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 2,
+      "unit": 4,
+      "lesson": 1,
+      "skills": [
+        "arith_division_facts",
+        "arith_equivalent_fractions",
+        "arith_multi_digit_multiplication"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 2,
+      "unit": 4,
+      "lesson": 2,
+      "skills": [
+        "arith_inverse_operations",
+        "arith_division_facts",
+        "arith_equivalent_fractions"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 2,
+      "unit": 4,
+      "lesson": 3,
+      "skills": [
+        "arith_simplify_fractions",
+        "arith_inverse_operations",
+        "arith_division_facts"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 2,
+      "unit": 4,
+      "lesson": 4,
+      "skills": [
+        "arith_compare_order_fractions",
+        "arith_simplify_fractions",
+        "arith_inverse_operations"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 3,
+      "unit": 1,
+      "lesson": 1,
+      "skills": [
+        "arith_long_division",
+        "arith_compare_order_fractions",
+        "arith_simplify_fractions"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 3,
+      "unit": 1,
+      "lesson": 2,
+      "skills": [
+        "arith_ratio_basics",
+        "arith_long_division",
+        "arith_compare_order_fractions"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 3,
+      "unit": 1,
+      "lesson": 3,
+      "skills": [
+        "arith_order_of_operations_basic",
+        "arith_ratio_basics",
+        "arith_long_division"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 3,
+      "unit": 1,
+      "lesson": 4,
+      "skills": [
+        "arith_order_of_operations_basic",
+        "arith_ratio_basics",
+        "arith_divisibility_rules"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 3,
+      "unit": 2,
+      "lesson": 1,
+      "skills": [
+        "arith_order_of_operations_basic",
+        "arith_place_value_thousands",
+        "arith_order_whole_numbers"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 3,
+      "unit": 2,
+      "lesson": 2,
+      "skills": [
+        "arith_round_whole_numbers",
+        "arith_even_odd_patterns",
+        "arith_factors_multiples_intro"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 3,
+      "unit": 2,
+      "lesson": 3,
+      "skills": [
+        "arith_addition_multi_digit",
+        "arith_subtraction_multi_digit",
+        "arith_multiplication_as_repeated_addition"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 3,
+      "unit": 2,
+      "lesson": 4,
+      "skills": [
+        "arith_multiplication_facts",
+        "arith_division_as_sharing",
+        "arith_fraction_part_of_whole"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 3,
+      "unit": 3,
+      "lesson": 1,
+      "skills": [
+        "arith_counting_objects_to_20",
+        "arith_counting_to_100",
+        "arith_number_line_basics"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 3,
+      "unit": 3,
+      "lesson": 2,
+      "skills": [
+        "arith_place_value_tens",
+        "arith_place_value_hundreds",
+        "arith_compare_whole_numbers"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 3,
+      "unit": 3,
+      "lesson": 3,
+      "skills": [
+        "arith_addition_within_20",
+        "arith_subtraction_within_20",
+        "arith_multi_digit_multiplication"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 3,
+      "unit": 3,
+      "lesson": 4,
+      "skills": [
+        "arith_division_facts",
+        "arith_long_division",
+        "arith_inverse_operations"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 3,
+      "unit": 4,
+      "lesson": 1,
+      "skills": [
+        "arith_order_of_operations_basic",
+        "arith_integer_number_line",
+        "arith_compare_order_integers"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 3,
+      "unit": 4,
+      "lesson": 2,
+      "skills": [
+        "arith_absolute_value",
+        "arith_equivalent_fractions",
+        "arith_simplify_fractions"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 3,
+      "unit": 4,
+      "lesson": 3,
+      "skills": [
+        "arith_compare_order_fractions",
+        "arith_add_subtract_fractions_like_den",
+        "arith_decimal_place_value"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 3,
+      "unit": 4,
+      "lesson": 4,
+      "skills": [
+        "arith_compare_order_decimals",
+        "arith_ratio_basics",
+        "arith_divisibility_rules"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 4,
+      "unit": 1,
+      "lesson": 1,
+      "skills": [
+        "arith_place_value_thousands",
+        "arith_order_whole_numbers",
+        "arith_round_whole_numbers"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 4,
+      "unit": 1,
+      "lesson": 2,
+      "skills": [
+        "arith_even_odd_patterns",
+        "arith_factors_multiples_intro",
+        "arith_addition_multi_digit"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 4,
+      "unit": 1,
+      "lesson": 3,
+      "skills": [
+        "arith_subtraction_multi_digit",
+        "arith_multiplication_as_repeated_addition",
+        "arith_multiplication_facts"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 4,
+      "unit": 1,
+      "lesson": 4,
+      "skills": [
+        "arith_division_as_sharing",
+        "arith_fraction_part_of_whole",
+        "arith_counting_objects_to_20"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 4,
+      "unit": 2,
+      "lesson": 1,
+      "skills": [
+        "arith_counting_to_100",
+        "arith_number_line_basics",
+        "arith_place_value_tens"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 4,
+      "unit": 2,
+      "lesson": 2,
+      "skills": [
+        "arith_place_value_hundreds",
+        "arith_compare_whole_numbers",
+        "arith_addition_within_20"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 4,
+      "unit": 2,
+      "lesson": 3,
+      "skills": [
+        "arith_subtraction_within_20",
+        "arith_multi_digit_multiplication",
+        "arith_division_facts"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 4,
+      "unit": 2,
+      "lesson": 4,
+      "skills": [
+        "arith_long_division",
+        "arith_inverse_operations",
+        "arith_order_of_operations_basic"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 4,
+      "unit": 3,
+      "lesson": 1,
+      "skills": [
+        "arith_integer_number_line",
+        "arith_compare_order_integers",
+        "arith_absolute_value"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 4,
+      "unit": 3,
+      "lesson": 2,
+      "skills": [
+        "arith_equivalent_fractions",
+        "arith_simplify_fractions",
+        "arith_compare_order_fractions"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 4,
+      "unit": 3,
+      "lesson": 3,
+      "skills": [
+        "arith_add_subtract_fractions_like_den",
+        "arith_decimal_place_value",
+        "arith_compare_order_decimals"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 4,
+      "unit": 3,
+      "lesson": 4,
+      "skills": [
+        "arith_ratio_basics",
+        "arith_divisibility_rules",
+        "arith_multi_digit_multiplication"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 4,
+      "unit": 4,
+      "lesson": 1,
+      "skills": [
+        "arith_place_value_thousands",
+        "arith_order_whole_numbers",
+        "arith_round_whole_numbers"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 4,
+      "unit": 4,
+      "lesson": 2,
+      "skills": [
+        "arith_even_odd_patterns",
+        "arith_factors_multiples_intro",
+        "arith_addition_multi_digit"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 4,
+      "unit": 4,
+      "lesson": 3,
+      "skills": [
+        "arith_subtraction_multi_digit",
+        "arith_multiplication_as_repeated_addition",
+        "arith_multiplication_facts"
+      ]
+    },
+    {
+      "grade": 5,
+      "bimester": 4,
+      "unit": 4,
+      "lesson": 4,
+      "skills": [
+        "arith_division_as_sharing",
+        "arith_fraction_part_of_whole",
+        "arith_counting_objects_to_20"
+      ]
+    },
+    {
+      "grade": 6,
+      "bimester": 1,
+      "unit": 1,
+      "lesson": 1,
+      "skills": [
+        "arith_division_facts",
+        "arith_long_division",
+        "arith_inverse_operations"
+      ]
+    },
+    {
+      "grade": 6,
+      "bimester": 1,
+      "unit": 1,
+      "lesson": 2,
+      "skills": [
+        "arith_order_of_operations_basic",
+        "arith_integer_number_line",
+        "arith_compare_order_integers"
+      ]
+    },
+    {
+      "grade": 6,
+      "bimester": 1,
+      "unit": 1,
+      "lesson": 3,
+      "skills": [
+        "arith_absolute_value",
+        "arith_equivalent_fractions",
+        "arith_simplify_fractions"
+      ]
+    },
+    {
+      "grade": 6,
+      "bimester": 1,
+      "unit": 1,
+      "lesson": 4,
+      "skills": [
+        "arith_compare_order_fractions",
+        "arith_add_subtract_fractions_like_den",
+        "arith_decimal_place_value"
+      ]
+    },
+    {
+      "grade": 6,
+      "bimester": 1,
+      "unit": 2,
+      "lesson": 1,
+      "skills": [
+        "arith_compare_order_decimals",
+        "arith_ratio_basics",
+        "arith_counting_to_100"
+      ]
+    },
+    {
+      "grade": 6,
+      "bimester": 1,
+      "unit": 2,
+      "lesson": 2,
+      "skills": [
+        "arith_number_line_basics",
+        "arith_place_value_tens",
+        "arith_place_value_hundreds"
+      ]
+    },
+    {
+      "grade": 6,
+      "bimester": 1,
+      "unit": 2,
+      "lesson": 3,
+      "skills": [
+        "arith_compare_whole_numbers",
+        "arith_addition_within_20",
+        "arith_subtraction_within_20"
+      ]
+    },
+    {
+      "grade": 6,
+      "bimester": 1,
+      "unit": 2,
+      "lesson": 4,
+      "skills": []
+    },
+    {
+      "grade": 6,
+      "bimester": 1,
+      "unit": 3,
+      "lesson": 1,
+      "skills": []
+    },
+    {
+      "grade": 6,
+      "bimester": 1,
+      "unit": 3,
+      "lesson": 2,
+      "skills": []
+    },
+    {
+      "grade": 6,
+      "bimester": 1,
+      "unit": 3,
+      "lesson": 3,
+      "skills": []
+    },
+    {
+      "grade": 6,
+      "bimester": 1,
+      "unit": 3,
+      "lesson": 4,
+      "skills": []
+    },
+    {
+      "grade": 6,
+      "bimester": 1,
+      "unit": 4,
+      "lesson": 1,
+      "skills": []
+    },
+    {
+      "grade": 6,
+      "bimester": 1,
+      "unit": 4,
+      "lesson": 2,
+      "skills": []
+    },
+    {
+      "grade": 6,
+      "bimester": 1,
+      "unit": 4,
+      "lesson": 3,
+      "skills": []
+    },
+    {
+      "grade": 6,
+      "bimester": 1,
+      "unit": 4,
+      "lesson": 4,
+      "skills": []
+    },
+    {
+      "grade": 6,
+      "bimester": 2,
+      "unit": 1,
+      "lesson": 1,
+      "skills": []
+    },
+    {
+      "grade": 6,
+      "bimester": 2,
+      "unit": 1,
+      "lesson": 2,
+      "skills": []
+    },
+    {
+      "grade": 6,
+      "bimester": 2,
+      "unit": 1,
+      "lesson": 3,
+      "skills": []
+    },
+    {
+      "grade": 6,
+      "bimester": 2,
+      "unit": 1,
+      "lesson": 4,
+      "skills": []
+    },
+    {
+      "grade": 6,
+      "bimester": 2,
+      "unit": 2,
+      "lesson": 1,
+      "skills": []
+    },
+    {
+      "grade": 6,
+      "bimester": 2,
+      "unit": 2,
+      "lesson": 2,
+      "skills": []
+    },
+    {
+      "grade": 6,
+      "bimester": 2,
+      "unit": 2,
+      "lesson": 3,
+      "skills": []
+    },
+    {
+      "grade": 6,
+      "bimester": 2,
+      "unit": 2,
+      "lesson": 4,
+      "skills": []
+    },
+    {
+      "grade": 6,
+      "bimester": 2,
+      "unit": 3,
+      "lesson": 1,
+      "skills": []
+    },
+    {
+      "grade": 6,
+      "bimester": 2,
+      "unit": 3,
+      "lesson": 2,
+      "skills": []
+    },
+    {
+      "grade": 6,
+      "bimester": 2,
+      "unit": 3,
+      "lesson": 3,
+      "skills": []
+    },
+    {
+      "grade": 6,
+      "bimester": 2,
+      "unit": 3,
+      "lesson": 4,
+      "skills": []
+    },
+    {
+      "grade": 6,
+      "bimester": 2,
+      "unit": 4,
+      "lesson": 1,
+      "skills": []
+    },
+    {
+      "grade": 6,
+      "bimester": 2,
+      "unit": 4,
+      "lesson": 2,
+      "skills": []
+    },
+    {
+      "grade": 6,
+      "bimester": 2,
+      "unit": 4,
+      "lesson": 3,
+      "skills": []
+    },
+    {
+      "grade": 6,
+      "bimester": 2,
+      "unit": 4,
+      "lesson": 4,
+      "skills": []
+    },
+    {
+      "grade": 6,
+      "bimester": 3,
+      "unit": 1,
+      "lesson": 1,
+      "skills": []
+    },
+    {
+      "grade": 6,
+      "bimester": 3,
+      "unit": 1,
+      "lesson": 2,
+      "skills": []
+    },
+    {
+      "grade": 6,
+      "bimester": 3,
+      "unit": 1,
+      "lesson": 3,
+      "skills": []
+    },
+    {
+      "grade": 6,
+      "bimester": 3,
+      "unit": 1,
+      "lesson": 4,
+      "skills": []
+    },
+    {
+      "grade": 6,
+      "bimester": 3,
+      "unit": 2,
+      "lesson": 1,
+      "skills": []
+    },
+    {
+      "grade": 6,
+      "bimester": 3,
+      "unit": 2,
+      "lesson": 2,
+      "skills": []
+    },
+    {
+      "grade": 6,
+      "bimester": 3,
+      "unit": 2,
+      "lesson": 3,
+      "skills": []
+    },
+    {
+      "grade": 6,
+      "bimester": 3,
+      "unit": 2,
+      "lesson": 4,
+      "skills": []
+    },
+    {
+      "grade": 6,
+      "bimester": 3,
+      "unit": 3,
+      "lesson": 1,
+      "skills": []
+    },
+    {
+      "grade": 6,
+      "bimester": 3,
+      "unit": 3,
+      "lesson": 2,
+      "skills": []
+    },
+    {
+      "grade": 6,
+      "bimester": 3,
+      "unit": 3,
+      "lesson": 3,
+      "skills": []
+    },
+    {
+      "grade": 6,
+      "bimester": 3,
+      "unit": 3,
+      "lesson": 4,
+      "skills": []
+    },
+    {
+      "grade": 6,
+      "bimester": 3,
+      "unit": 4,
+      "lesson": 1,
+      "skills": []
+    },
+    {
+      "grade": 6,
+      "bimester": 3,
+      "unit": 4,
+      "lesson": 2,
+      "skills": []
+    },
+    {
+      "grade": 6,
+      "bimester": 3,
+      "unit": 4,
+      "lesson": 3,
+      "skills": []
+    },
+    {
+      "grade": 6,
+      "bimester": 3,
+      "unit": 4,
+      "lesson": 4,
+      "skills": []
+    },
+    {
+      "grade": 6,
+      "bimester": 4,
+      "unit": 1,
+      "lesson": 1,
+      "skills": []
+    },
+    {
+      "grade": 6,
+      "bimester": 4,
+      "unit": 1,
+      "lesson": 2,
+      "skills": []
+    },
+    {
+      "grade": 6,
+      "bimester": 4,
+      "unit": 1,
+      "lesson": 3,
+      "skills": []
+    },
+    {
+      "grade": 6,
+      "bimester": 4,
+      "unit": 1,
+      "lesson": 4,
+      "skills": []
+    },
+    {
+      "grade": 6,
+      "bimester": 4,
+      "unit": 2,
+      "lesson": 1,
+      "skills": []
+    },
+    {
+      "grade": 6,
+      "bimester": 4,
+      "unit": 2,
+      "lesson": 2,
+      "skills": []
+    },
+    {
+      "grade": 6,
+      "bimester": 4,
+      "unit": 2,
+      "lesson": 3,
+      "skills": []
+    },
+    {
+      "grade": 6,
+      "bimester": 4,
+      "unit": 2,
+      "lesson": 4,
+      "skills": []
+    },
+    {
+      "grade": 6,
+      "bimester": 4,
+      "unit": 3,
+      "lesson": 1,
+      "skills": []
+    },
+    {
+      "grade": 6,
+      "bimester": 4,
+      "unit": 3,
+      "lesson": 2,
+      "skills": []
+    },
+    {
+      "grade": 6,
+      "bimester": 4,
+      "unit": 3,
+      "lesson": 3,
+      "skills": []
+    },
+    {
+      "grade": 6,
+      "bimester": 4,
+      "unit": 3,
+      "lesson": 4,
+      "skills": []
+    },
+    {
+      "grade": 6,
+      "bimester": 4,
+      "unit": 4,
+      "lesson": 1,
+      "skills": []
+    },
+    {
+      "grade": 6,
+      "bimester": 4,
+      "unit": 4,
+      "lesson": 2,
+      "skills": []
+    },
+    {
+      "grade": 6,
+      "bimester": 4,
+      "unit": 4,
+      "lesson": 3,
+      "skills": []
+    },
+    {
+      "grade": 6,
+      "bimester": 4,
+      "unit": 4,
+      "lesson": 4,
+      "skills": []
+    },
+    {
+      "grade": 7,
+      "bimester": 1,
+      "unit": 1,
+      "lesson": 1,
+      "skills": [
+        "arith_decimal_add_subtract"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 1,
+      "unit": 1,
+      "lesson": 2,
+      "skills": [
+        "arith_add_integers",
+        "arith_decimal_add_subtract"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 1,
+      "unit": 1,
+      "lesson": 3,
+      "skills": [
+        "arith_subtract_integers",
+        "arith_add_integers",
+        "arith_decimal_add_subtract"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 1,
+      "unit": 1,
+      "lesson": 4,
+      "skills": [
+        "arith_multiply_integers",
+        "arith_subtract_integers",
+        "arith_add_integers"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 1,
+      "unit": 2,
+      "lesson": 1,
+      "skills": [
+        "arith_decimal_multiply",
+        "arith_multiply_integers",
+        "arith_subtract_integers"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 1,
+      "unit": 2,
+      "lesson": 2,
+      "skills": [
+        "arith_divide_integers",
+        "arith_decimal_multiply",
+        "arith_multiply_integers"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 1,
+      "unit": 2,
+      "lesson": 3,
+      "skills": [
+        "arith_add_subtract_fractions_unlike_den",
+        "arith_divide_integers",
+        "arith_decimal_multiply"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 1,
+      "unit": 2,
+      "lesson": 4,
+      "skills": [
+        "arith_multiply_fractions",
+        "arith_add_subtract_fractions_unlike_den",
+        "arith_divide_integers"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 1,
+      "unit": 3,
+      "lesson": 1,
+      "skills": [
+        "arith_fraction_decimal_conversion",
+        "arith_multiply_fractions",
+        "arith_add_subtract_fractions_unlike_den"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 1,
+      "unit": 3,
+      "lesson": 2,
+      "skills": [
+        "arith_unit_rates",
+        "arith_fraction_decimal_conversion",
+        "arith_multiply_fractions"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 1,
+      "unit": 3,
+      "lesson": 3,
+      "skills": [
+        "arith_proportions",
+        "arith_unit_rates",
+        "arith_fraction_decimal_conversion"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 1,
+      "unit": 3,
+      "lesson": 4,
+      "skills": [
+        "arith_percent_basics",
+        "arith_proportions",
+        "arith_unit_rates"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 1,
+      "unit": 4,
+      "lesson": 1,
+      "skills": [
+        "alg_coordinate_plane_foundations",
+        "arith_percent_basics",
+        "arith_proportions"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 1,
+      "unit": 4,
+      "lesson": 2,
+      "skills": [
+        "arith_order_of_operations_grouping",
+        "alg_coordinate_plane_foundations",
+        "arith_percent_basics"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 1,
+      "unit": 4,
+      "lesson": 3,
+      "skills": [
+        "arith_percent_of_quantity",
+        "arith_order_of_operations_grouping",
+        "alg_coordinate_plane_foundations"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 1,
+      "unit": 4,
+      "lesson": 4,
+      "skills": [
+        "arith_exponents_basics",
+        "arith_percent_of_quantity",
+        "arith_order_of_operations_grouping"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 2,
+      "unit": 1,
+      "lesson": 1,
+      "skills": [
+        "alg_slope_from_points",
+        "arith_exponents_basics",
+        "arith_percent_of_quantity"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 2,
+      "unit": 1,
+      "lesson": 2,
+      "skills": [
+        "arith_powers_of_ten",
+        "alg_slope_from_points",
+        "arith_exponents_basics"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 2,
+      "unit": 1,
+      "lesson": 3,
+      "skills": [
+        "arith_divide_fractions",
+        "arith_powers_of_ten",
+        "alg_slope_from_points"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 2,
+      "unit": 1,
+      "lesson": 4,
+      "skills": [
+        "arith_mixed_numbers_operations",
+        "arith_divide_fractions",
+        "arith_powers_of_ten"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 2,
+      "unit": 2,
+      "lesson": 1,
+      "skills": [
+        "arith_decimal_divide",
+        "arith_mixed_numbers_operations",
+        "arith_divide_fractions"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 2,
+      "unit": 2,
+      "lesson": 2,
+      "skills": [
+        "alg_sequence_patterns_intro",
+        "arith_decimal_divide",
+        "arith_mixed_numbers_operations"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 2,
+      "unit": 2,
+      "lesson": 3,
+      "skills": [
+        "arith_integer_multi_step_expressions",
+        "alg_sequence_patterns_intro",
+        "arith_decimal_divide"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 2,
+      "unit": 2,
+      "lesson": 4,
+      "skills": [
+        "arith_percent_increase_decrease",
+        "arith_integer_multi_step_expressions",
+        "alg_sequence_patterns_intro"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 2,
+      "unit": 3,
+      "lesson": 1,
+      "skills": [
+        "arith_square_roots_perfect_squares",
+        "arith_percent_increase_decrease",
+        "arith_integer_multi_step_expressions"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 2,
+      "unit": 3,
+      "lesson": 2,
+      "skills": [
+        "arith_percent_word_problems",
+        "arith_square_roots_perfect_squares",
+        "arith_percent_increase_decrease"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 2,
+      "unit": 3,
+      "lesson": 3,
+      "skills": [
+        "arith_order_of_operations_with_exponents",
+        "arith_percent_word_problems",
+        "arith_square_roots_perfect_squares"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 2,
+      "unit": 3,
+      "lesson": 4,
+      "skills": [
+        "arith_pre_algebra_numeric_expressions",
+        "arith_order_of_operations_with_exponents",
+        "arith_percent_word_problems"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 2,
+      "unit": 4,
+      "lesson": 1,
+      "skills": [
+        "alg_variables_constants_terms",
+        "arith_pre_algebra_numeric_expressions",
+        "arith_order_of_operations_with_exponents"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 2,
+      "unit": 4,
+      "lesson": 2,
+      "skills": [
+        "alg_translate_verbal_expressions",
+        "alg_variables_constants_terms",
+        "arith_pre_algebra_numeric_expressions"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 2,
+      "unit": 4,
+      "lesson": 3,
+      "skills": [
+        "alg_evaluate_expressions_substitution",
+        "alg_translate_verbal_expressions",
+        "alg_variables_constants_terms"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 2,
+      "unit": 4,
+      "lesson": 4,
+      "skills": [
+        "alg_order_of_operations_algebraic",
+        "alg_evaluate_expressions_substitution",
+        "alg_translate_verbal_expressions"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 3,
+      "unit": 1,
+      "lesson": 1,
+      "skills": [
+        "alg_like_terms_identification",
+        "alg_order_of_operations_algebraic",
+        "alg_evaluate_expressions_substitution"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 3,
+      "unit": 1,
+      "lesson": 2,
+      "skills": [
+        "alg_simplify_like_terms",
+        "alg_like_terms_identification",
+        "alg_order_of_operations_algebraic"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 3,
+      "unit": 1,
+      "lesson": 3,
+      "skills": [
+        "alg_distributive_property",
+        "alg_simplify_like_terms",
+        "alg_like_terms_identification"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 3,
+      "unit": 1,
+      "lesson": 4,
+      "skills": [
+        "alg_absolute_value_expressions",
+        "alg_distributive_property",
+        "alg_simplify_like_terms"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 3,
+      "unit": 2,
+      "lesson": 1,
+      "skills": [
+        "alg_one_step_equations_add_sub",
+        "alg_absolute_value_expressions",
+        "alg_distributive_property"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 3,
+      "unit": 2,
+      "lesson": 2,
+      "skills": [
+        "alg_combining_distributive_like_terms",
+        "alg_one_step_equations_add_sub",
+        "alg_absolute_value_expressions"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 3,
+      "unit": 2,
+      "lesson": 3,
+      "skills": [
+        "alg_one_step_equations_mul_div",
+        "alg_combining_distributive_like_terms",
+        "alg_one_step_equations_add_sub"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 3,
+      "unit": 2,
+      "lesson": 4,
+      "skills": [
+        "alg_rational_coefficients_expressions",
+        "alg_one_step_equations_mul_div",
+        "alg_combining_distributive_like_terms"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 3,
+      "unit": 3,
+      "lesson": 1,
+      "skills": [
+        "alg_exponent_rules_basic_algebra",
+        "alg_rational_coefficients_expressions",
+        "alg_one_step_equations_mul_div"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 3,
+      "unit": 3,
+      "lesson": 2,
+      "skills": [
+        "alg_formulas_rearrangement_intro",
+        "alg_exponent_rules_basic_algebra",
+        "alg_rational_coefficients_expressions"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 3,
+      "unit": 3,
+      "lesson": 3,
+      "skills": [
+        "alg_scientific_notation_algebraic",
+        "alg_formulas_rearrangement_intro",
+        "alg_exponent_rules_basic_algebra"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 3,
+      "unit": 3,
+      "lesson": 4,
+      "skills": [
+        "alg_inequality_basics",
+        "alg_scientific_notation_algebraic",
+        "alg_formulas_rearrangement_intro"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 3,
+      "unit": 4,
+      "lesson": 1,
+      "skills": [
+        "alg_two_step_linear_equations",
+        "alg_inequality_basics",
+        "alg_scientific_notation_algebraic"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 3,
+      "unit": 4,
+      "lesson": 2,
+      "skills": [
+        "alg_one_step_inequalities",
+        "alg_two_step_linear_equations",
+        "alg_inequality_basics"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 3,
+      "unit": 4,
+      "lesson": 3,
+      "skills": [
+        "alg_multi_step_linear_equations",
+        "alg_one_step_inequalities",
+        "alg_two_step_linear_equations"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 3,
+      "unit": 4,
+      "lesson": 4,
+      "skills": [
+        "alg_two_step_inequalities",
+        "alg_multi_step_linear_equations",
+        "alg_one_step_inequalities"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 4,
+      "unit": 1,
+      "lesson": 1,
+      "skills": [
+        "alg_linear_equations_parentheses",
+        "alg_two_step_inequalities",
+        "alg_multi_step_linear_equations"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 4,
+      "unit": 1,
+      "lesson": 2,
+      "skills": [
+        "alg_linear_equations_fractions",
+        "alg_linear_equations_parentheses",
+        "alg_two_step_inequalities"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 4,
+      "unit": 1,
+      "lesson": 3,
+      "skills": [
+        "alg_literal_equations",
+        "alg_linear_equations_fractions",
+        "alg_linear_equations_parentheses"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 4,
+      "unit": 1,
+      "lesson": 4,
+      "skills": [
+        "alg_linear_equations_word_problems",
+        "alg_literal_equations",
+        "alg_linear_equations_fractions"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 4,
+      "unit": 2,
+      "lesson": 1,
+      "skills": [
+        "alg_linear_equation_identities_contradictions",
+        "alg_linear_equations_word_problems",
+        "alg_literal_equations"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 4,
+      "unit": 2,
+      "lesson": 2,
+      "skills": [
+        "alg_absolute_value_linear_equations",
+        "alg_linear_equation_identities_contradictions",
+        "alg_linear_equations_word_problems"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 4,
+      "unit": 2,
+      "lesson": 3,
+      "skills": [
+        "alg_multi_step_inequalities",
+        "alg_absolute_value_linear_equations",
+        "alg_linear_equation_identities_contradictions"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 4,
+      "unit": 2,
+      "lesson": 4,
+      "skills": [
+        "alg_graph_linear_equations",
+        "alg_multi_step_inequalities",
+        "alg_absolute_value_linear_equations"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 4,
+      "unit": 3,
+      "lesson": 1,
+      "skills": [
+        "alg_linear_equations_parameters",
+        "alg_graph_linear_equations",
+        "alg_multi_step_inequalities"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 4,
+      "unit": 3,
+      "lesson": 2,
+      "skills": [
+        "alg_solution_sets_interval_intro",
+        "alg_linear_equations_parameters",
+        "alg_graph_linear_equations"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 4,
+      "unit": 3,
+      "lesson": 3,
+      "skills": [
+        "alg_compound_inequalities_and",
+        "alg_solution_sets_interval_intro",
+        "alg_linear_equations_parameters"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 4,
+      "unit": 3,
+      "lesson": 4,
+      "skills": [
+        "alg_compound_inequalities_or",
+        "alg_compound_inequalities_and",
+        "alg_solution_sets_interval_intro"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 4,
+      "unit": 4,
+      "lesson": 1,
+      "skills": [
+        "alg_slope_intercept_form",
+        "alg_compound_inequalities_or",
+        "alg_compound_inequalities_and"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 4,
+      "unit": 4,
+      "lesson": 2,
+      "skills": [
+        "alg_point_slope_form",
+        "alg_slope_intercept_form",
+        "alg_compound_inequalities_or"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 4,
+      "unit": 4,
+      "lesson": 3,
+      "skills": [
+        "alg_standard_form_linear",
+        "alg_point_slope_form",
+        "alg_slope_intercept_form"
+      ]
+    },
+    {
+      "grade": 7,
+      "bimester": 4,
+      "unit": 4,
+      "lesson": 4,
+      "skills": [
+        "alg_polynomial_terms_degree",
+        "alg_standard_form_linear",
+        "alg_point_slope_form"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 1,
+      "unit": 1,
+      "lesson": 1,
+      "skills": [
+        "alg_add_subtract_polynomials",
+        "alg_polynomial_terms_degree",
+        "alg_standard_form_linear"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 1,
+      "unit": 1,
+      "lesson": 2,
+      "skills": [
+        "alg_multiply_monomial_polynomial",
+        "alg_add_subtract_polynomials",
+        "alg_polynomial_terms_degree"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 1,
+      "unit": 1,
+      "lesson": 3,
+      "skills": [
+        "alg_polynomial_evaluation",
+        "alg_multiply_monomial_polynomial",
+        "alg_add_subtract_polynomials"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 1,
+      "unit": 1,
+      "lesson": 4,
+      "skills": [
+        "alg_factor_gcf",
+        "alg_polynomial_evaluation",
+        "alg_multiply_monomial_polynomial"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 1,
+      "unit": 2,
+      "lesson": 1,
+      "skills": [
+        "geom_skill_1",
+        "alg_factor_gcf",
+        "alg_polynomial_evaluation"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 1,
+      "unit": 2,
+      "lesson": 2,
+      "skills": [
+        "alg_absolute_value_inequalities",
+        "geom_skill_1",
+        "alg_factor_gcf"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 1,
+      "unit": 2,
+      "lesson": 3,
+      "skills": [
+        "alg_linear_inequalities_word_problems",
+        "alg_absolute_value_inequalities",
+        "geom_skill_1"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 1,
+      "unit": 2,
+      "lesson": 4,
+      "skills": [
+        "alg_multiply_binomials",
+        "alg_linear_inequalities_word_problems",
+        "alg_absolute_value_inequalities"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 1,
+      "unit": 3,
+      "lesson": 1,
+      "skills": [
+        "geom_skill_2",
+        "alg_multiply_binomials",
+        "alg_linear_inequalities_word_problems"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 1,
+      "unit": 3,
+      "lesson": 2,
+      "skills": [
+        "alg_interval_notation_inequalities",
+        "geom_skill_2",
+        "alg_multiply_binomials"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 1,
+      "unit": 3,
+      "lesson": 3,
+      "skills": [
+        "alg_systems_two_var_graphing",
+        "alg_interval_notation_inequalities",
+        "geom_skill_2"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 1,
+      "unit": 3,
+      "lesson": 4,
+      "skills": [
+        "alg_multiply_polynomials_general",
+        "alg_systems_two_var_graphing",
+        "alg_interval_notation_inequalities"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 1,
+      "unit": 4,
+      "lesson": 1,
+      "skills": [
+        "alg_special_products_square_binomial",
+        "alg_multiply_polynomials_general",
+        "alg_systems_two_var_graphing"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 1,
+      "unit": 4,
+      "lesson": 2,
+      "skills": [
+        "alg_special_products_conjugates",
+        "alg_function_concept_domain_range",
+        "alg_special_products_square_binomial"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 1,
+      "unit": 4,
+      "lesson": 3,
+      "skills": [
+        "geom_skill_3",
+        "alg_graph_inequalities_number_line",
+        "alg_special_products_conjugates"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 1,
+      "unit": 4,
+      "lesson": 4,
+      "skills": [
+        "alg_systems_two_var_substitution",
+        "alg_systems_two_var_elimination",
+        "alg_graph_inequalities_number_line"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 2,
+      "unit": 1,
+      "lesson": 1,
+      "skills": [
+        "alg_function_notation_evaluation",
+        "geom_skill_4",
+        "alg_systems_two_var_substitution"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 2,
+      "unit": 1,
+      "lesson": 2,
+      "skills": [
+        "alg_systems_linear_inequalities_two_var",
+        "alg_systems_two_var_word_problems",
+        "alg_systems_two_var_elimination"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 2,
+      "unit": 1,
+      "lesson": 3,
+      "skills": [
+        "alg_functions_tables_graphs_mapping",
+        "alg_rate_of_change_average",
+        "alg_systems_linear_inequalities_two_var"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 2,
+      "unit": 1,
+      "lesson": 4,
+      "skills": [
+        "geom_skill_5",
+        "logic_skill_1",
+        "alg_systems_two_var_word_problems"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 2,
+      "unit": 2,
+      "lesson": 1,
+      "skills": [
+        "geom_skill_6",
+        "logic_skill_2",
+        "alg_function_concept_domain_range"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 2,
+      "unit": 2,
+      "lesson": 2,
+      "skills": [
+        "geom_skill_7",
+        "logic_skill_3",
+        "alg_function_notation_evaluation"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 2,
+      "unit": 2,
+      "lesson": 3,
+      "skills": [
+        "geom_skill_8",
+        "logic_skill_4",
+        "alg_functions_tables_graphs_mapping"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 2,
+      "unit": 2,
+      "lesson": 4,
+      "skills": [
+        "geom_skill_9",
+        "logic_skill_5",
+        "alg_rate_of_change_average"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 2,
+      "unit": 3,
+      "lesson": 1,
+      "skills": [
+        "geom_skill_10",
+        "logic_skill_6",
+        "geom_skill_3"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 2,
+      "unit": 3,
+      "lesson": 2,
+      "skills": [
+        "geom_skill_11",
+        "logic_skill_7",
+        "geom_skill_4"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 2,
+      "unit": 3,
+      "lesson": 3,
+      "skills": [
+        "geom_skill_12",
+        "alg_rational_expressions_simplify",
+        "geom_skill_5"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 2,
+      "unit": 3,
+      "lesson": 4,
+      "skills": [
+        "geom_skill_13",
+        "alg_polynomial_graph_features_intro",
+        "alg_rational_expressions_simplify"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 2,
+      "unit": 4,
+      "lesson": 1,
+      "skills": [
+        "geom_skill_14",
+        "alg_factor_trinomials_monic",
+        "alg_polynomial_graph_features_intro"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 2,
+      "unit": 4,
+      "lesson": 2,
+      "skills": [
+        "geom_skill_15",
+        "alg_rational_expressions_multiply_divide",
+        "alg_factor_trinomials_monic"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 2,
+      "unit": 4,
+      "lesson": 3,
+      "skills": [
+        "geom_skill_16",
+        "alg_quadratic_forms_and_structure",
+        "alg_rational_expressions_multiply_divide"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 2,
+      "unit": 4,
+      "lesson": 4,
+      "skills": [
+        "geom_skill_17",
+        "alg_polynomial_long_division",
+        "alg_quadratic_forms_and_structure"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 3,
+      "unit": 1,
+      "lesson": 1,
+      "skills": [
+        "geom_skill_18",
+        "alg_polynomial_end_behavior",
+        "alg_polynomial_long_division"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 3,
+      "unit": 1,
+      "lesson": 2,
+      "skills": [
+        "geom_skill_19",
+        "alg_factor_trinomials_non_monic",
+        "alg_polynomial_end_behavior"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 3,
+      "unit": 1,
+      "lesson": 3,
+      "skills": [
+        "geom_skill_20",
+        "geom_skill_6",
+        "geom_skill_7"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 3,
+      "unit": 1,
+      "lesson": 4,
+      "skills": [
+        "geom_skill_21",
+        "geom_skill_8",
+        "geom_skill_9"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 3,
+      "unit": 2,
+      "lesson": 1,
+      "skills": [
+        "geom_skill_22",
+        "geom_skill_10",
+        "geom_skill_11"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 3,
+      "unit": 2,
+      "lesson": 2,
+      "skills": [
+        "alg_factor_difference_of_squares",
+        "alg_factor_trinomials_non_monic",
+        "logic_skill_1"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 3,
+      "unit": 2,
+      "lesson": 3,
+      "skills": [
+        "alg_factor_perfect_square_trinomials",
+        "alg_factor_difference_of_squares",
+        "logic_skill_2"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 3,
+      "unit": 2,
+      "lesson": 4,
+      "skills": [
+        "alg_factor_sum_difference_cubes",
+        "alg_factor_perfect_square_trinomials",
+        "logic_skill_3"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 3,
+      "unit": 3,
+      "lesson": 1,
+      "skills": [
+        "alg_factor_by_grouping",
+        "alg_factor_sum_difference_cubes",
+        "logic_skill_4"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 3,
+      "unit": 3,
+      "lesson": 2,
+      "skills": [
+        "alg_rational_expressions_add_subtract",
+        "alg_factor_by_grouping",
+        "logic_skill_5"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 3,
+      "unit": 3,
+      "lesson": 3,
+      "skills": [
+        "alg_systems_three_var_intro",
+        "alg_rational_expressions_add_subtract",
+        "logic_skill_6"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 3,
+      "unit": 3,
+      "lesson": 4,
+      "skills": [
+        "alg_systems_solution_classification",
+        "alg_systems_three_var_intro",
+        "logic_skill_7"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 3,
+      "unit": 4,
+      "lesson": 1,
+      "skills": [
+        "alg_synthetic_division",
+        "alg_systems_solution_classification",
+        "geom_skill_12"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 3,
+      "unit": 4,
+      "lesson": 2,
+      "skills": [
+        "alg_piecewise_functions_intro",
+        "alg_synthetic_division",
+        "geom_skill_13"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 3,
+      "unit": 4,
+      "lesson": 3,
+      "skills": [
+        "alg_inverse_functions_intro",
+        "alg_piecewise_functions_intro",
+        "geom_skill_14"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 3,
+      "unit": 4,
+      "lesson": 4,
+      "skills": [
+        "alg_exponential_functions_intro",
+        "alg_inverse_functions_intro",
+        "geom_skill_15"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 4,
+      "unit": 1,
+      "lesson": 1,
+      "skills": [
+        "alg_systems_three_var_elimination",
+        "alg_exponential_functions_intro",
+        "geom_skill_16"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 4,
+      "unit": 1,
+      "lesson": 2,
+      "skills": [
+        "alg_linear_programming_intro",
+        "alg_systems_three_var_elimination",
+        "geom_skill_17"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 4,
+      "unit": 1,
+      "lesson": 3,
+      "skills": [
+        "alg_remainder_factor_theorem",
+        "alg_linear_programming_intro",
+        "geom_skill_18"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 4,
+      "unit": 1,
+      "lesson": 4,
+      "skills": [
+        "alg_linear_function_modeling",
+        "alg_remainder_factor_theorem",
+        "geom_skill_19"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 4,
+      "unit": 2,
+      "lesson": 1,
+      "skills": [
+        "alg_function_composition_intro",
+        "alg_linear_function_modeling",
+        "geom_skill_20"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 4,
+      "unit": 2,
+      "lesson": 2,
+      "skills": [
+        "alg_geometric_sequence_nth_term",
+        "alg_function_composition_intro",
+        "geom_skill_21"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 4,
+      "unit": 2,
+      "lesson": 3,
+      "skills": [
+        "alg_matrices_intro_systems",
+        "alg_geometric_sequence_nth_term",
+        "geom_skill_22"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 4,
+      "unit": 2,
+      "lesson": 4,
+      "skills": [
+        "alg_polynomial_roots_multiplicity_intro",
+        "alg_matrices_intro_systems",
+        "alg_systems_three_var_intro"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 4,
+      "unit": 3,
+      "lesson": 1,
+      "skills": [
+        "alg_exponential_growth_decay",
+        "alg_polynomial_roots_multiplicity_intro",
+        "alg_systems_three_var_elimination"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 4,
+      "unit": 3,
+      "lesson": 2,
+      "skills": [
+        "alg_arithmetic_sequence_nth_term",
+        "alg_exponential_growth_decay",
+        "alg_systems_solution_classification"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 4,
+      "unit": 3,
+      "lesson": 3,
+      "skills": [
+        "alg_geometric_series_sum",
+        "alg_arithmetic_sequence_nth_term",
+        "alg_linear_programming_intro"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 4,
+      "unit": 3,
+      "lesson": 4,
+      "skills": [
+        "alg_matrix_operations_basic",
+        "alg_geometric_series_sum",
+        "alg_polynomial_long_division"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 4,
+      "unit": 4,
+      "lesson": 1,
+      "skills": [
+        "alg_arithmetic_series_sum",
+        "alg_matrix_operations_basic",
+        "alg_synthetic_division"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 4,
+      "unit": 4,
+      "lesson": 2,
+      "skills": [
+        "alg_recursive_sequences_intro",
+        "alg_arithmetic_series_sum",
+        "alg_remainder_factor_theorem"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 4,
+      "unit": 4,
+      "lesson": 3,
+      "skills": [
+        "geom_skill_23",
+        "alg_recursive_sequences_intro",
+        "alg_polynomial_graph_features_intro"
+      ]
+    },
+    {
+      "grade": 8,
+      "bimester": 4,
+      "unit": 4,
+      "lesson": 4,
+      "skills": [
+        "geom_skill_24",
+        "geom_skill_23",
+        "alg_polynomial_end_behavior"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 1,
+      "unit": 1,
+      "lesson": 1,
+      "skills": [
+        "geom_skill_25",
+        "geom_skill_24",
+        "alg_polynomial_roots_multiplicity_intro"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 1,
+      "unit": 1,
+      "lesson": 2,
+      "skills": [
+        "geom_skill_26",
+        "geom_skill_25",
+        "alg_factor_trinomials_monic"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 1,
+      "unit": 1,
+      "lesson": 3,
+      "skills": [
+        "geom_skill_27",
+        "geom_skill_26",
+        "alg_factor_trinomials_non_monic"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 1,
+      "unit": 1,
+      "lesson": 4,
+      "skills": [
+        "geom_skill_28",
+        "geom_skill_27",
+        "alg_factor_difference_of_squares"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 1,
+      "unit": 2,
+      "lesson": 1,
+      "skills": [
+        "geom_skill_29",
+        "geom_skill_28",
+        "alg_factor_perfect_square_trinomials"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 1,
+      "unit": 2,
+      "lesson": 2,
+      "skills": [
+        "geom_skill_30",
+        "geom_skill_29",
+        "alg_factor_sum_difference_cubes"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 1,
+      "unit": 2,
+      "lesson": 3,
+      "skills": [
+        "geom_skill_31",
+        "geom_skill_30",
+        "alg_factor_by_grouping"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 1,
+      "unit": 2,
+      "lesson": 4,
+      "skills": [
+        "geom_skill_32",
+        "geom_skill_31",
+        "alg_rational_expressions_simplify"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 1,
+      "unit": 3,
+      "lesson": 1,
+      "skills": [
+        "geom_skill_33",
+        "geom_skill_32",
+        "alg_rational_expressions_multiply_divide"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 1,
+      "unit": 3,
+      "lesson": 2,
+      "skills": [
+        "geom_skill_34",
+        "geom_skill_33",
+        "alg_rational_expressions_add_subtract"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 1,
+      "unit": 3,
+      "lesson": 3,
+      "skills": [
+        "geom_skill_35",
+        "geom_skill_34",
+        "alg_quadratic_forms_and_structure"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 1,
+      "unit": 3,
+      "lesson": 4,
+      "skills": [
+        "geom_skill_36",
+        "geom_skill_35",
+        "alg_linear_function_modeling"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 1,
+      "unit": 4,
+      "lesson": 1,
+      "skills": [
+        "geom_skill_37",
+        "geom_skill_36",
+        "alg_piecewise_functions_intro"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 1,
+      "unit": 4,
+      "lesson": 2,
+      "skills": [
+        "logic_skill_8",
+        "geom_skill_37",
+        "alg_inverse_functions_intro"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 1,
+      "unit": 4,
+      "lesson": 3,
+      "skills": [
+        "logic_skill_9",
+        "logic_skill_8",
+        "alg_function_composition_intro"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 1,
+      "unit": 4,
+      "lesson": 4,
+      "skills": [
+        "logic_skill_10",
+        "logic_skill_9",
+        "logic_skill_8"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 2,
+      "unit": 1,
+      "lesson": 1,
+      "skills": [
+        "prob_skill_1",
+        "logic_skill_10",
+        "alg_graph_inequalities_number_line"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 2,
+      "unit": 1,
+      "lesson": 2,
+      "skills": [
+        "prob_skill_2",
+        "prob_skill_1",
+        "alg_systems_linear_inequalities_two_var"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 2,
+      "unit": 1,
+      "lesson": 3,
+      "skills": [
+        "prob_skill_3",
+        "prob_skill_2",
+        "alg_systems_two_var_substitution"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 2,
+      "unit": 1,
+      "lesson": 4,
+      "skills": [
+        "prob_skill_4",
+        "prob_skill_3",
+        "alg_systems_two_var_elimination"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 2,
+      "unit": 2,
+      "lesson": 1,
+      "skills": [
+        "prob_skill_5",
+        "prob_skill_4",
+        "alg_systems_two_var_word_problems"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 2,
+      "unit": 2,
+      "lesson": 2,
+      "skills": [
+        "prob_skill_6",
+        "prob_skill_5",
+        "alg_exponential_functions_intro"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 2,
+      "unit": 2,
+      "lesson": 3,
+      "skills": [
+        "prob_skill_7",
+        "prob_skill_6",
+        "alg_exponential_growth_decay"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 2,
+      "unit": 2,
+      "lesson": 4,
+      "skills": [
+        "prob_skill_8",
+        "prob_skill_7",
+        "alg_arithmetic_sequence_nth_term"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 2,
+      "unit": 3,
+      "lesson": 1,
+      "skills": [
+        "prob_skill_9",
+        "prob_skill_8",
+        "alg_arithmetic_series_sum"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 2,
+      "unit": 3,
+      "lesson": 2,
+      "skills": [
+        "prob_skill_10",
+        "prob_skill_9",
+        "alg_geometric_sequence_nth_term"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 2,
+      "unit": 3,
+      "lesson": 3,
+      "skills": [
+        "prob_skill_11",
+        "prob_skill_10",
+        "alg_geometric_series_sum"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 2,
+      "unit": 3,
+      "lesson": 4,
+      "skills": [
+        "prob_skill_12",
+        "prob_skill_11",
+        "alg_recursive_sequences_intro"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 2,
+      "unit": 4,
+      "lesson": 1,
+      "skills": [
+        "prob_skill_13",
+        "prob_skill_12",
+        "alg_matrices_intro_systems"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 2,
+      "unit": 4,
+      "lesson": 2,
+      "skills": [
+        "prob_skill_14",
+        "prob_skill_13",
+        "alg_matrix_operations_basic"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 2,
+      "unit": 4,
+      "lesson": 3,
+      "skills": [
+        "prob_skill_15",
+        "prob_skill_14",
+        "geom_skill_23"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 2,
+      "unit": 4,
+      "lesson": 4,
+      "skills": [
+        "prob_skill_16",
+        "prob_skill_15",
+        "geom_skill_24"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 3,
+      "unit": 1,
+      "lesson": 1,
+      "skills": [
+        "prob_skill_17",
+        "prob_skill_16",
+        "geom_skill_25"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 3,
+      "unit": 1,
+      "lesson": 2,
+      "skills": [
+        "logic_skill_11",
+        "prob_skill_17",
+        "logic_skill_9"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 3,
+      "unit": 1,
+      "lesson": 3,
+      "skills": [
+        "logic_skill_12",
+        "logic_skill_11",
+        "logic_skill_10"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 3,
+      "unit": 1,
+      "lesson": 4,
+      "skills": [
+        "logic_skill_13",
+        "logic_skill_12",
+        "logic_skill_11"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 3,
+      "unit": 2,
+      "lesson": 1,
+      "skills": [
+        "logic_skill_14",
+        "logic_skill_13",
+        "logic_skill_12"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 3,
+      "unit": 2,
+      "lesson": 2,
+      "skills": [
+        "logic_skill_15",
+        "logic_skill_14",
+        "logic_skill_13"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 3,
+      "unit": 2,
+      "lesson": 3,
+      "skills": [
+        "logic_skill_16",
+        "logic_skill_15",
+        "logic_skill_14"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 3,
+      "unit": 2,
+      "lesson": 4,
+      "skills": [
+        "logic_skill_17",
+        "logic_skill_16",
+        "logic_skill_15"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 3,
+      "unit": 3,
+      "lesson": 1,
+      "skills": [
+        "logic_skill_18",
+        "logic_skill_17",
+        "logic_skill_16"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 3,
+      "unit": 3,
+      "lesson": 2,
+      "skills": [
+        "logic_skill_19",
+        "logic_skill_18",
+        "logic_skill_17"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 3,
+      "unit": 3,
+      "lesson": 3,
+      "skills": [
+        "logic_skill_20",
+        "logic_skill_19",
+        "logic_skill_18"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 3,
+      "unit": 3,
+      "lesson": 4,
+      "skills": [
+        "logic_skill_21",
+        "logic_skill_20",
+        "logic_skill_19"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 3,
+      "unit": 4,
+      "lesson": 1,
+      "skills": [
+        "logic_skill_22",
+        "logic_skill_21",
+        "logic_skill_20"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 3,
+      "unit": 4,
+      "lesson": 2,
+      "skills": [
+        "alg_solve_quadratics_square_root",
+        "logic_skill_22",
+        "logic_skill_21"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 3,
+      "unit": 4,
+      "lesson": 3,
+      "skills": [
+        "alg_complete_the_square",
+        "alg_solve_quadratics_square_root",
+        "logic_skill_22"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 3,
+      "unit": 4,
+      "lesson": 4,
+      "skills": [
+        "alg_graph_quadratic_functions",
+        "alg_complete_the_square",
+        "alg_solve_quadratics_square_root"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 4,
+      "unit": 1,
+      "lesson": 1,
+      "skills": [
+        "alg_factoring_strategy_selection",
+        "alg_graph_quadratic_functions",
+        "alg_complete_the_square"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 4,
+      "unit": 1,
+      "lesson": 2,
+      "skills": [
+        "alg_rational_equations_linear",
+        "alg_factoring_strategy_selection",
+        "alg_graph_quadratic_functions"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 4,
+      "unit": 1,
+      "lesson": 3,
+      "skills": [
+        "alg_quadratic_formula",
+        "alg_rational_equations_linear",
+        "alg_factoring_strategy_selection"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 4,
+      "unit": 1,
+      "lesson": 4,
+      "skills": [
+        "alg_convert_to_vertex_form",
+        "alg_quadratic_formula",
+        "alg_rational_equations_linear"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 4,
+      "unit": 2,
+      "lesson": 1,
+      "skills": [
+        "alg_function_transformations",
+        "alg_convert_to_vertex_form",
+        "geom_skill_26"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 4,
+      "unit": 2,
+      "lesson": 2,
+      "skills": [
+        "alg_parent_function_families",
+        "alg_function_transformations",
+        "geom_skill_27"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 4,
+      "unit": 2,
+      "lesson": 3,
+      "skills": [
+        "prob_skill_18",
+        "alg_parent_function_families",
+        "alg_quadratic_formula"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 4,
+      "unit": 2,
+      "lesson": 4,
+      "skills": [
+        "alg_solve_polynomial_equations_factoring",
+        "prob_skill_18",
+        "alg_convert_to_vertex_form"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 4,
+      "unit": 3,
+      "lesson": 1,
+      "skills": [
+        "alg_quadratic_discriminant",
+        "alg_solve_polynomial_equations_factoring",
+        "prob_skill_18"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 4,
+      "unit": 3,
+      "lesson": 2,
+      "skills": [
+        "alg_quadratic_vertex_axis",
+        "alg_quadratic_discriminant",
+        "alg_solve_polynomial_equations_factoring"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 4,
+      "unit": 3,
+      "lesson": 3,
+      "skills": [
+        "alg_quadratic_intercepts",
+        "alg_quadratic_vertex_axis",
+        "alg_quadratic_discriminant"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 4,
+      "unit": 3,
+      "lesson": 4,
+      "skills": [
+        "alg_logarithm_concept_intro",
+        "alg_quadratic_intercepts",
+        "alg_quadratic_vertex_axis"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 4,
+      "unit": 4,
+      "lesson": 1,
+      "skills": [
+        "prob_skill_19",
+        "alg_logarithm_concept_intro",
+        "alg_quadratic_intercepts"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 4,
+      "unit": 4,
+      "lesson": 2,
+      "skills": [
+        "alg_solve_quadratics_factoring",
+        "prob_skill_19",
+        "alg_logarithm_concept_intro"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 4,
+      "unit": 4,
+      "lesson": 3,
+      "skills": [
+        "alg_quadratic_modeling_word_problems",
+        "alg_solve_quadratics_factoring",
+        "prob_skill_19"
+      ]
+    },
+    {
+      "grade": 9,
+      "bimester": 4,
+      "unit": 4,
+      "lesson": 4,
+      "skills": [
+        "alg_logarithm_properties",
+        "alg_quadratic_modeling_word_problems",
+        "alg_solve_quadratics_factoring"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 1,
+      "unit": 1,
+      "lesson": 1,
+      "skills": [
+        "alg_binomial_theorem_intro",
+        "alg_logarithm_properties",
+        "alg_quadratic_modeling_word_problems"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 1,
+      "unit": 1,
+      "lesson": 2,
+      "skills": [
+        "prob_skill_20",
+        "alg_binomial_theorem_intro",
+        "alg_logarithm_properties"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 1,
+      "unit": 1,
+      "lesson": 3,
+      "skills": [
+        "alg_complex_numbers_intro",
+        "prob_skill_20",
+        "alg_binomial_theorem_intro"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 1,
+      "unit": 1,
+      "lesson": 4,
+      "skills": [
+        "alg_matrix_determinant_2x2",
+        "alg_complex_numbers_intro",
+        "prob_skill_20"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 1,
+      "unit": 2,
+      "lesson": 1,
+      "skills": [
+        "prob_skill_21",
+        "alg_matrix_determinant_2x2",
+        "alg_complex_numbers_intro"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 1,
+      "unit": 2,
+      "lesson": 2,
+      "skills": [
+        "alg_sigma_notation_series",
+        "prob_skill_21",
+        "alg_matrix_determinant_2x2"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 1,
+      "unit": 2,
+      "lesson": 3,
+      "skills": [
+        "alg_inverse_matrix_method_systems",
+        "alg_sigma_notation_series",
+        "prob_skill_21"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 1,
+      "unit": 2,
+      "lesson": 4,
+      "skills": [
+        "prob_skill_22",
+        "alg_inverse_matrix_method_systems",
+        "alg_sigma_notation_series"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 1,
+      "unit": 3,
+      "lesson": 1,
+      "skills": [
+        "alg_series_convergence_intuition",
+        "prob_skill_22",
+        "alg_inverse_matrix_method_systems"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 1,
+      "unit": 3,
+      "lesson": 2,
+      "skills": [
+        "prob_skill_23",
+        "alg_series_convergence_intuition",
+        "prob_skill_22"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 1,
+      "unit": 3,
+      "lesson": 3,
+      "skills": [
+        "prob_skill_24",
+        "prob_skill_23",
+        "alg_series_convergence_intuition"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 1,
+      "unit": 3,
+      "lesson": 4,
+      "skills": [
+        "prob_skill_25",
+        "prob_skill_24",
+        "prob_skill_23"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 1,
+      "unit": 4,
+      "lesson": 1,
+      "skills": [
+        "prob_skill_26",
+        "prob_skill_25",
+        "prob_skill_24"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 1,
+      "unit": 4,
+      "lesson": 2,
+      "skills": [
+        "prob_skill_27",
+        "prob_skill_26",
+        "prob_skill_25"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 1,
+      "unit": 4,
+      "lesson": 3,
+      "skills": [
+        "prob_skill_28",
+        "prob_skill_27",
+        "prob_skill_26"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 1,
+      "unit": 4,
+      "lesson": 4,
+      "skills": [
+        "trig_skill_1",
+        "prob_skill_28",
+        "prob_skill_27"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 2,
+      "unit": 1,
+      "lesson": 1,
+      "skills": [
+        "prob_skill_29",
+        "trig_skill_1",
+        "prob_skill_28"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 2,
+      "unit": 1,
+      "lesson": 2,
+      "skills": [
+        "trig_skill_2",
+        "prob_skill_29",
+        "trig_skill_1"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 2,
+      "unit": 1,
+      "lesson": 3,
+      "skills": [
+        "trig_skill_3",
+        "trig_skill_2",
+        "prob_skill_29"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 2,
+      "unit": 1,
+      "lesson": 4,
+      "skills": [
+        "trig_skill_4",
+        "trig_skill_3",
+        "trig_skill_2"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 2,
+      "unit": 2,
+      "lesson": 1,
+      "skills": [
+        "trig_skill_5",
+        "trig_skill_4",
+        "trig_skill_3"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 2,
+      "unit": 2,
+      "lesson": 2,
+      "skills": [
+        "trig_skill_6",
+        "trig_skill_5",
+        "trig_skill_4"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 2,
+      "unit": 2,
+      "lesson": 3,
+      "skills": [
+        "trig_skill_7",
+        "trig_skill_6",
+        "trig_skill_5"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 2,
+      "unit": 2,
+      "lesson": 4,
+      "skills": [
+        "geom_skill_38",
+        "trig_skill_7",
+        "trig_skill_6"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 2,
+      "unit": 3,
+      "lesson": 1,
+      "skills": [
+        "geom_skill_39",
+        "geom_skill_38",
+        "trig_skill_7"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 2,
+      "unit": 3,
+      "lesson": 2,
+      "skills": [
+        "geom_skill_40",
+        "geom_skill_39",
+        "geom_skill_38"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 2,
+      "unit": 3,
+      "lesson": 3,
+      "skills": [
+        "geom_skill_41",
+        "geom_skill_40",
+        "geom_skill_39"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 2,
+      "unit": 3,
+      "lesson": 4,
+      "skills": [
+        "geom_skill_42",
+        "geom_skill_41",
+        "geom_skill_40"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 2,
+      "unit": 4,
+      "lesson": 1,
+      "skills": [
+        "geom_skill_43",
+        "geom_skill_42",
+        "geom_skill_41"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 2,
+      "unit": 4,
+      "lesson": 2,
+      "skills": [
+        "geom_skill_44",
+        "geom_skill_43",
+        "geom_skill_42"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 2,
+      "unit": 4,
+      "lesson": 3,
+      "skills": [
+        "geom_skill_45",
+        "geom_skill_44",
+        "geom_skill_43"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 2,
+      "unit": 4,
+      "lesson": 4,
+      "skills": [
+        "logic_skill_23",
+        "geom_skill_45",
+        "geom_skill_44"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 3,
+      "unit": 1,
+      "lesson": 1,
+      "skills": [
+        "logic_skill_24",
+        "logic_skill_23",
+        "geom_skill_45"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 3,
+      "unit": 1,
+      "lesson": 2,
+      "skills": [
+        "logic_skill_25",
+        "logic_skill_24",
+        "logic_skill_23"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 3,
+      "unit": 1,
+      "lesson": 3,
+      "skills": [
+        "logic_skill_26",
+        "logic_skill_25",
+        "logic_skill_24"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 3,
+      "unit": 1,
+      "lesson": 4,
+      "skills": [
+        "logic_skill_27",
+        "logic_skill_26",
+        "logic_skill_25"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 3,
+      "unit": 2,
+      "lesson": 1,
+      "skills": [
+        "logic_skill_28",
+        "logic_skill_27",
+        "logic_skill_26"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 3,
+      "unit": 2,
+      "lesson": 2,
+      "skills": [
+        "logic_skill_29",
+        "logic_skill_28",
+        "logic_skill_27"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 3,
+      "unit": 2,
+      "lesson": 3,
+      "skills": [
+        "logic_skill_30",
+        "logic_skill_29",
+        "logic_skill_28"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 3,
+      "unit": 2,
+      "lesson": 4,
+      "skills": [
+        "alg_quadratic_inequalities",
+        "logic_skill_30",
+        "logic_skill_29"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 3,
+      "unit": 3,
+      "lesson": 1,
+      "skills": [
+        "alg_solve_exponential_equations_logs",
+        "alg_quadratic_inequalities",
+        "logic_skill_30"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 3,
+      "unit": 3,
+      "lesson": 2,
+      "skills": [
+        "alg_quadratics_complex_solutions",
+        "alg_solve_exponential_equations_logs",
+        "alg_quadratic_inequalities"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 3,
+      "unit": 3,
+      "lesson": 3,
+      "skills": [
+        "alg_solve_logarithmic_equations",
+        "alg_quadratics_complex_solutions",
+        "alg_solve_exponential_equations_logs"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 3,
+      "unit": 3,
+      "lesson": 4,
+      "skills": [
+        "prob_skill_30",
+        "alg_solve_logarithmic_equations",
+        "alg_quadratics_complex_solutions"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 3,
+      "unit": 4,
+      "lesson": 1,
+      "skills": [
+        "prob_skill_31",
+        "prob_skill_30",
+        "alg_solve_logarithmic_equations"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 3,
+      "unit": 4,
+      "lesson": 2,
+      "skills": [
+        "prob_skill_32",
+        "prob_skill_31",
+        "prob_skill_30"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 3,
+      "unit": 4,
+      "lesson": 3,
+      "skills": [
+        "prob_skill_33",
+        "prob_skill_32",
+        "prob_skill_31"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 3,
+      "unit": 4,
+      "lesson": 4,
+      "skills": [
+        "prob_skill_34",
+        "prob_skill_33",
+        "prob_skill_32"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 4,
+      "unit": 1,
+      "lesson": 1,
+      "skills": [
+        "prob_skill_35",
+        "prob_skill_34",
+        "prob_skill_33"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 4,
+      "unit": 1,
+      "lesson": 2,
+      "skills": [
+        "trig_skill_8",
+        "prob_skill_35",
+        "prob_skill_34"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 4,
+      "unit": 1,
+      "lesson": 3,
+      "skills": [
+        "trig_skill_9",
+        "trig_skill_8",
+        "prob_skill_35"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 4,
+      "unit": 1,
+      "lesson": 4,
+      "skills": [
+        "trig_skill_10",
+        "trig_skill_9",
+        "trig_skill_8"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 4,
+      "unit": 2,
+      "lesson": 1,
+      "skills": [
+        "trig_skill_11",
+        "trig_skill_10",
+        "trig_skill_9"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 4,
+      "unit": 2,
+      "lesson": 2,
+      "skills": [
+        "trig_skill_12",
+        "trig_skill_11",
+        "trig_skill_10"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 4,
+      "unit": 2,
+      "lesson": 3,
+      "skills": [
+        "trig_skill_13",
+        "trig_skill_12",
+        "trig_skill_11"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 4,
+      "unit": 2,
+      "lesson": 4,
+      "skills": [
+        "trig_skill_14",
+        "trig_skill_13",
+        "trig_skill_12"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 4,
+      "unit": 3,
+      "lesson": 1,
+      "skills": [
+        "trig_skill_15",
+        "trig_skill_14",
+        "trig_skill_13"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 4,
+      "unit": 3,
+      "lesson": 2,
+      "skills": [
+        "trig_skill_16",
+        "trig_skill_15",
+        "trig_skill_14"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 4,
+      "unit": 3,
+      "lesson": 3,
+      "skills": [
+        "trig_skill_17",
+        "trig_skill_16",
+        "trig_skill_15"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 4,
+      "unit": 3,
+      "lesson": 4,
+      "skills": [
+        "trig_skill_18",
+        "trig_skill_17",
+        "trig_skill_16"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 4,
+      "unit": 4,
+      "lesson": 1,
+      "skills": [
+        "trig_skill_19",
+        "trig_skill_18",
+        "trig_skill_17"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 4,
+      "unit": 4,
+      "lesson": 2,
+      "skills": [
+        "trig_skill_20",
+        "trig_skill_19",
+        "trig_skill_18"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 4,
+      "unit": 4,
+      "lesson": 3,
+      "skills": [
+        "trig_skill_21",
+        "trig_skill_20",
+        "trig_skill_19"
+      ]
+    },
+    {
+      "grade": 10,
+      "bimester": 4,
+      "unit": 4,
+      "lesson": 4,
+      "skills": [
+        "trig_skill_22",
+        "trig_skill_21",
+        "trig_skill_20"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 1,
+      "unit": 1,
+      "lesson": 1,
+      "skills": [
+        "calc_skill_1",
+        "trig_skill_22",
+        "trig_skill_21"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 1,
+      "unit": 1,
+      "lesson": 2,
+      "skills": [
+        "calc_skill_2",
+        "calc_skill_1",
+        "trig_skill_22"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 1,
+      "unit": 1,
+      "lesson": 3,
+      "skills": [
+        "calc_skill_3",
+        "calc_skill_2",
+        "calc_skill_1"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 1,
+      "unit": 1,
+      "lesson": 4,
+      "skills": [
+        "calc_skill_4",
+        "calc_skill_3",
+        "calc_skill_2"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 1,
+      "unit": 2,
+      "lesson": 1,
+      "skills": [
+        "calc_skill_5",
+        "calc_skill_4",
+        "calc_skill_3"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 1,
+      "unit": 2,
+      "lesson": 2,
+      "skills": [
+        "calc_skill_6",
+        "calc_skill_5",
+        "calc_skill_4"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 1,
+      "unit": 2,
+      "lesson": 3,
+      "skills": [
+        "calc_skill_7",
+        "calc_skill_6",
+        "calc_skill_5"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 1,
+      "unit": 2,
+      "lesson": 4,
+      "skills": [
+        "calc_skill_8",
+        "calc_skill_7",
+        "calc_skill_6"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 1,
+      "unit": 3,
+      "lesson": 1,
+      "skills": [
+        "calc_skill_9",
+        "calc_skill_8",
+        "calc_skill_7"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 1,
+      "unit": 3,
+      "lesson": 2,
+      "skills": [
+        "calc_skill_10",
+        "calc_skill_9",
+        "calc_skill_8"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 1,
+      "unit": 3,
+      "lesson": 3,
+      "skills": [
+        "calc_skill_11",
+        "calc_skill_10",
+        "calc_skill_9"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 1,
+      "unit": 3,
+      "lesson": 4,
+      "skills": [
+        "calc_skill_12",
+        "calc_skill_11",
+        "calc_skill_10"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 1,
+      "unit": 4,
+      "lesson": 1,
+      "skills": [
+        "calc_skill_13",
+        "calc_skill_12",
+        "calc_skill_11"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 1,
+      "unit": 4,
+      "lesson": 2,
+      "skills": [
+        "calc_skill_14",
+        "calc_skill_13",
+        "calc_skill_12"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 1,
+      "unit": 4,
+      "lesson": 3,
+      "skills": [
+        "calc_skill_15",
+        "calc_skill_14",
+        "calc_skill_13"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 1,
+      "unit": 4,
+      "lesson": 4,
+      "skills": [
+        "calc_skill_16",
+        "calc_skill_15",
+        "calc_skill_14"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 2,
+      "unit": 1,
+      "lesson": 1,
+      "skills": [
+        "calc_skill_17",
+        "calc_skill_16",
+        "calc_skill_15"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 2,
+      "unit": 1,
+      "lesson": 2,
+      "skills": [
+        "trig_skill_23",
+        "calc_skill_17",
+        "calc_skill_16"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 2,
+      "unit": 1,
+      "lesson": 3,
+      "skills": [
+        "trig_skill_24",
+        "trig_skill_23",
+        "calc_skill_17"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 2,
+      "unit": 1,
+      "lesson": 4,
+      "skills": [
+        "trig_skill_25",
+        "trig_skill_24",
+        "trig_skill_23"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 2,
+      "unit": 2,
+      "lesson": 1,
+      "skills": [
+        "trig_skill_26",
+        "trig_skill_25",
+        "trig_skill_24"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 2,
+      "unit": 2,
+      "lesson": 2,
+      "skills": [
+        "trig_skill_27",
+        "trig_skill_26",
+        "trig_skill_25"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 2,
+      "unit": 2,
+      "lesson": 3,
+      "skills": [
+        "trig_skill_28",
+        "trig_skill_27",
+        "trig_skill_26"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 2,
+      "unit": 2,
+      "lesson": 4,
+      "skills": [
+        "trig_skill_29",
+        "trig_skill_28",
+        "trig_skill_27"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 2,
+      "unit": 3,
+      "lesson": 1,
+      "skills": [
+        "trig_skill_30",
+        "trig_skill_29",
+        "trig_skill_28"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 2,
+      "unit": 3,
+      "lesson": 2,
+      "skills": [
+        "calc_skill_18",
+        "trig_skill_30",
+        "trig_skill_29"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 2,
+      "unit": 3,
+      "lesson": 3,
+      "skills": [
+        "calc_skill_19",
+        "calc_skill_18",
+        "trig_skill_30"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 2,
+      "unit": 3,
+      "lesson": 4,
+      "skills": [
+        "calc_skill_20",
+        "calc_skill_19",
+        "calc_skill_18"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 2,
+      "unit": 4,
+      "lesson": 1,
+      "skills": [
+        "calc_skill_21",
+        "calc_skill_20",
+        "calc_skill_19"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 2,
+      "unit": 4,
+      "lesson": 2,
+      "skills": [
+        "calc_skill_22",
+        "calc_skill_21",
+        "calc_skill_20"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 2,
+      "unit": 4,
+      "lesson": 3,
+      "skills": [
+        "calc_skill_23",
+        "calc_skill_22",
+        "calc_skill_21"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 2,
+      "unit": 4,
+      "lesson": 4,
+      "skills": [
+        "calc_skill_24",
+        "calc_skill_23",
+        "calc_skill_22"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 3,
+      "unit": 1,
+      "lesson": 1,
+      "skills": [
+        "calc_skill_25",
+        "calc_skill_24",
+        "calc_skill_23"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 3,
+      "unit": 1,
+      "lesson": 2,
+      "skills": [
+        "calc_skill_26",
+        "calc_skill_25",
+        "calc_skill_24"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 3,
+      "unit": 1,
+      "lesson": 3,
+      "skills": [
+        "calc_skill_27",
+        "calc_skill_26",
+        "calc_skill_25"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 3,
+      "unit": 1,
+      "lesson": 4,
+      "skills": [
+        "calc_skill_28",
+        "calc_skill_27",
+        "calc_skill_26"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 3,
+      "unit": 2,
+      "lesson": 1,
+      "skills": [
+        "calc_skill_29",
+        "calc_skill_28",
+        "calc_skill_27"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 3,
+      "unit": 2,
+      "lesson": 2,
+      "skills": [
+        "calc_skill_30",
+        "calc_skill_29",
+        "calc_skill_28"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 3,
+      "unit": 2,
+      "lesson": 3,
+      "skills": [
+        "calc_skill_31",
+        "calc_skill_30",
+        "calc_skill_29"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 3,
+      "unit": 2,
+      "lesson": 4,
+      "skills": [
+        "calc_skill_32",
+        "calc_skill_31",
+        "calc_skill_30"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 3,
+      "unit": 3,
+      "lesson": 1,
+      "skills": [
+        "calc_skill_33",
+        "calc_skill_32",
+        "calc_skill_31"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 3,
+      "unit": 3,
+      "lesson": 2,
+      "skills": [
+        "calc_skill_34",
+        "calc_skill_33",
+        "calc_skill_32"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 3,
+      "unit": 3,
+      "lesson": 3,
+      "skills": [
+        "calc_skill_35",
+        "calc_skill_34",
+        "calc_skill_33"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 3,
+      "unit": 3,
+      "lesson": 4,
+      "skills": [
+        "calc_skill_35",
+        "calc_skill_34",
+        "calc_skill_18"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 3,
+      "unit": 4,
+      "lesson": 1,
+      "skills": [
+        "calc_skill_35",
+        "trig_skill_23",
+        "trig_skill_24"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 3,
+      "unit": 4,
+      "lesson": 2,
+      "skills": [
+        "trig_skill_25",
+        "trig_skill_26",
+        "trig_skill_27"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 3,
+      "unit": 4,
+      "lesson": 3,
+      "skills": [
+        "trig_skill_28",
+        "trig_skill_29",
+        "trig_skill_30"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 3,
+      "unit": 4,
+      "lesson": 4,
+      "skills": [
+        "calc_skill_1",
+        "calc_skill_2",
+        "calc_skill_3"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 4,
+      "unit": 1,
+      "lesson": 1,
+      "skills": [
+        "calc_skill_4",
+        "calc_skill_5",
+        "calc_skill_6"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 4,
+      "unit": 1,
+      "lesson": 2,
+      "skills": [
+        "calc_skill_7",
+        "calc_skill_8",
+        "calc_skill_9"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 4,
+      "unit": 1,
+      "lesson": 3,
+      "skills": [
+        "calc_skill_10",
+        "calc_skill_11",
+        "calc_skill_12"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 4,
+      "unit": 1,
+      "lesson": 4,
+      "skills": [
+        "calc_skill_13",
+        "calc_skill_14",
+        "calc_skill_15"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 4,
+      "unit": 2,
+      "lesson": 1,
+      "skills": [
+        "calc_skill_16",
+        "calc_skill_17",
+        "alg_quadratic_inequalities"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 4,
+      "unit": 2,
+      "lesson": 2,
+      "skills": [
+        "alg_quadratics_complex_solutions",
+        "alg_solve_exponential_equations_logs",
+        "alg_solve_logarithmic_equations"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 4,
+      "unit": 2,
+      "lesson": 3,
+      "skills": [
+        "trig_skill_8",
+        "trig_skill_9",
+        "trig_skill_10"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 4,
+      "unit": 2,
+      "lesson": 4,
+      "skills": [
+        "trig_skill_11",
+        "trig_skill_12",
+        "trig_skill_13"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 4,
+      "unit": 3,
+      "lesson": 1,
+      "skills": [
+        "trig_skill_14",
+        "trig_skill_15",
+        "trig_skill_16"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 4,
+      "unit": 3,
+      "lesson": 2,
+      "skills": [
+        "trig_skill_17",
+        "trig_skill_18",
+        "trig_skill_19"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 4,
+      "unit": 3,
+      "lesson": 3,
+      "skills": [
+        "trig_skill_20",
+        "trig_skill_21",
+        "trig_skill_22"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 4,
+      "unit": 3,
+      "lesson": 4,
+      "skills": [
+        "prob_skill_30",
+        "prob_skill_31",
+        "prob_skill_32"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 4,
+      "unit": 4,
+      "lesson": 1,
+      "skills": [
+        "prob_skill_33",
+        "prob_skill_34",
+        "prob_skill_35"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 4,
+      "unit": 4,
+      "lesson": 2,
+      "skills": [
+        "logic_skill_23",
+        "logic_skill_24",
+        "logic_skill_25"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 4,
+      "unit": 4,
+      "lesson": 3,
+      "skills": [
+        "logic_skill_26",
+        "logic_skill_27",
+        "logic_skill_28"
+      ]
+    },
+    {
+      "grade": 11,
+      "bimester": 4,
+      "unit": 4,
+      "lesson": 4,
+      "skills": [
+        "logic_skill_29",
+        "logic_skill_30",
+        "alg_factoring_strategy_selection"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 1,
+      "unit": 1,
+      "lesson": 1,
+      "skills": [
+        "calc_skill_19",
+        "calc_skill_20",
+        "calc_skill_21"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 1,
+      "unit": 1,
+      "lesson": 2,
+      "skills": [
+        "calc_skill_22",
+        "calc_skill_23",
+        "calc_skill_24"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 1,
+      "unit": 1,
+      "lesson": 3,
+      "skills": [
+        "calc_skill_25",
+        "calc_skill_26",
+        "calc_skill_27"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 1,
+      "unit": 1,
+      "lesson": 4,
+      "skills": [
+        "calc_skill_28",
+        "calc_skill_29",
+        "calc_skill_30"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 1,
+      "unit": 2,
+      "lesson": 1,
+      "skills": [
+        "calc_skill_31",
+        "calc_skill_32",
+        "calc_skill_33"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 1,
+      "unit": 2,
+      "lesson": 2,
+      "skills": [
+        "calc_skill_34",
+        "calc_skill_35",
+        "alg_solve_polynomial_equations_factoring"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 1,
+      "unit": 2,
+      "lesson": 3,
+      "skills": [
+        "alg_rational_equations_linear",
+        "alg_solve_quadratics_factoring",
+        "alg_solve_quadratics_square_root"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 1,
+      "unit": 2,
+      "lesson": 4,
+      "skills": [
+        "alg_complete_the_square",
+        "alg_quadratic_formula",
+        "alg_quadratic_discriminant"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 1,
+      "unit": 3,
+      "lesson": 1,
+      "skills": [
+        "alg_convert_to_vertex_form",
+        "alg_graph_quadratic_functions",
+        "alg_quadratic_vertex_axis"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 1,
+      "unit": 3,
+      "lesson": 2,
+      "skills": [
+        "alg_quadratic_intercepts",
+        "alg_quadratic_modeling_word_problems",
+        "alg_complex_numbers_intro"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 1,
+      "unit": 3,
+      "lesson": 3,
+      "skills": [
+        "alg_logarithm_concept_intro",
+        "alg_logarithm_properties",
+        "alg_sigma_notation_series"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 1,
+      "unit": 3,
+      "lesson": 4,
+      "skills": [
+        "alg_series_convergence_intuition",
+        "alg_binomial_theorem_intro",
+        "alg_matrix_determinant_2x2"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 1,
+      "unit": 4,
+      "lesson": 1,
+      "skills": [
+        "alg_inverse_matrix_method_systems",
+        "geom_skill_38",
+        "geom_skill_39"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 1,
+      "unit": 4,
+      "lesson": 2,
+      "skills": [
+        "geom_skill_40",
+        "geom_skill_41",
+        "geom_skill_42"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 1,
+      "unit": 4,
+      "lesson": 3,
+      "skills": [
+        "geom_skill_43",
+        "geom_skill_44",
+        "geom_skill_45"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 1,
+      "unit": 4,
+      "lesson": 4,
+      "skills": [
+        "trig_skill_1",
+        "trig_skill_2",
+        "trig_skill_3"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 2,
+      "unit": 1,
+      "lesson": 1,
+      "skills": [
+        "trig_skill_4",
+        "trig_skill_5",
+        "trig_skill_6"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 2,
+      "unit": 1,
+      "lesson": 2,
+      "skills": [
+        "trig_skill_7",
+        "prob_skill_18",
+        "prob_skill_19"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 2,
+      "unit": 1,
+      "lesson": 3,
+      "skills": [
+        "prob_skill_20",
+        "prob_skill_21",
+        "prob_skill_22"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 2,
+      "unit": 1,
+      "lesson": 4,
+      "skills": [
+        "prob_skill_23",
+        "prob_skill_24",
+        "prob_skill_25"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 2,
+      "unit": 2,
+      "lesson": 1,
+      "skills": [
+        "prob_skill_26",
+        "prob_skill_27",
+        "prob_skill_28"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 2,
+      "unit": 2,
+      "lesson": 2,
+      "skills": [
+        "prob_skill_29",
+        "logic_skill_8",
+        "logic_skill_9"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 2,
+      "unit": 2,
+      "lesson": 3,
+      "skills": [
+        "logic_skill_10",
+        "logic_skill_11",
+        "logic_skill_12"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 2,
+      "unit": 2,
+      "lesson": 4,
+      "skills": [
+        "logic_skill_13",
+        "logic_skill_14",
+        "logic_skill_15"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 2,
+      "unit": 3,
+      "lesson": 1,
+      "skills": [
+        "logic_skill_16",
+        "logic_skill_17",
+        "logic_skill_18"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 2,
+      "unit": 3,
+      "lesson": 2,
+      "skills": [
+        "logic_skill_19",
+        "logic_skill_20",
+        "logic_skill_21"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 2,
+      "unit": 3,
+      "lesson": 3,
+      "skills": [
+        "logic_skill_22",
+        "alg_factoring_strategy_selection",
+        "alg_solve_polynomial_equations_factoring"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 2,
+      "unit": 3,
+      "lesson": 4,
+      "skills": [
+        "alg_rational_equations_linear",
+        "alg_solve_quadratics_factoring",
+        "alg_solve_quadratics_square_root"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 2,
+      "unit": 4,
+      "lesson": 1,
+      "skills": [
+        "trig_skill_23",
+        "trig_skill_24",
+        "trig_skill_25"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 2,
+      "unit": 4,
+      "lesson": 2,
+      "skills": [
+        "trig_skill_26",
+        "trig_skill_27",
+        "trig_skill_28"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 2,
+      "unit": 4,
+      "lesson": 3,
+      "skills": [
+        "trig_skill_29",
+        "trig_skill_30",
+        "calc_skill_1"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 2,
+      "unit": 4,
+      "lesson": 4,
+      "skills": [
+        "calc_skill_2",
+        "calc_skill_3",
+        "calc_skill_4"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 3,
+      "unit": 1,
+      "lesson": 1,
+      "skills": [
+        "calc_skill_18",
+        "calc_skill_19",
+        "calc_skill_20"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 3,
+      "unit": 1,
+      "lesson": 2,
+      "skills": [
+        "calc_skill_21",
+        "calc_skill_22",
+        "calc_skill_23"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 3,
+      "unit": 1,
+      "lesson": 3,
+      "skills": [
+        "calc_skill_24",
+        "calc_skill_25",
+        "calc_skill_26"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 3,
+      "unit": 1,
+      "lesson": 4,
+      "skills": [
+        "calc_skill_27",
+        "calc_skill_28",
+        "calc_skill_29"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 3,
+      "unit": 2,
+      "lesson": 1,
+      "skills": [
+        "calc_skill_30",
+        "calc_skill_31",
+        "calc_skill_32"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 3,
+      "unit": 2,
+      "lesson": 2,
+      "skills": [
+        "calc_skill_33",
+        "calc_skill_34",
+        "calc_skill_35"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 3,
+      "unit": 2,
+      "lesson": 3,
+      "skills": [
+        "calc_skill_5",
+        "calc_skill_6",
+        "calc_skill_7"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 3,
+      "unit": 2,
+      "lesson": 4,
+      "skills": [
+        "calc_skill_8",
+        "calc_skill_9",
+        "calc_skill_10"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 3,
+      "unit": 3,
+      "lesson": 1,
+      "skills": [
+        "calc_skill_11",
+        "calc_skill_12",
+        "calc_skill_13"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 3,
+      "unit": 3,
+      "lesson": 2,
+      "skills": [
+        "calc_skill_14",
+        "calc_skill_15",
+        "calc_skill_16"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 3,
+      "unit": 3,
+      "lesson": 3,
+      "skills": [
+        "calc_skill_17",
+        "alg_quadratic_inequalities",
+        "alg_quadratics_complex_solutions"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 3,
+      "unit": 3,
+      "lesson": 4,
+      "skills": [
+        "alg_solve_exponential_equations_logs",
+        "alg_solve_logarithmic_equations",
+        "trig_skill_8"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 3,
+      "unit": 4,
+      "lesson": 1,
+      "skills": [
+        "trig_skill_9",
+        "trig_skill_10",
+        "trig_skill_11"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 3,
+      "unit": 4,
+      "lesson": 2,
+      "skills": [
+        "trig_skill_12",
+        "trig_skill_13",
+        "trig_skill_14"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 3,
+      "unit": 4,
+      "lesson": 3,
+      "skills": [
+        "trig_skill_15",
+        "trig_skill_16",
+        "trig_skill_17"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 3,
+      "unit": 4,
+      "lesson": 4,
+      "skills": [
+        "trig_skill_18",
+        "trig_skill_19",
+        "trig_skill_20"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 4,
+      "unit": 1,
+      "lesson": 1,
+      "skills": [
+        "trig_skill_21",
+        "trig_skill_22",
+        "prob_skill_30"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 4,
+      "unit": 1,
+      "lesson": 2,
+      "skills": [
+        "prob_skill_31",
+        "prob_skill_32",
+        "prob_skill_33"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 4,
+      "unit": 1,
+      "lesson": 3,
+      "skills": [
+        "prob_skill_34",
+        "prob_skill_35",
+        "logic_skill_23"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 4,
+      "unit": 1,
+      "lesson": 4,
+      "skills": [
+        "logic_skill_24",
+        "logic_skill_25",
+        "logic_skill_26"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 4,
+      "unit": 2,
+      "lesson": 1,
+      "skills": [
+        "logic_skill_27",
+        "logic_skill_28",
+        "logic_skill_29"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 4,
+      "unit": 2,
+      "lesson": 2,
+      "skills": [
+        "logic_skill_30",
+        "alg_complete_the_square",
+        "alg_quadratic_formula"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 4,
+      "unit": 2,
+      "lesson": 3,
+      "skills": [
+        "alg_quadratic_discriminant",
+        "alg_convert_to_vertex_form",
+        "alg_graph_quadratic_functions"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 4,
+      "unit": 2,
+      "lesson": 4,
+      "skills": [
+        "alg_quadratic_vertex_axis",
+        "alg_quadratic_intercepts",
+        "alg_quadratic_modeling_word_problems"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 4,
+      "unit": 3,
+      "lesson": 1,
+      "skills": [
+        "alg_complex_numbers_intro",
+        "alg_logarithm_concept_intro",
+        "alg_logarithm_properties"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 4,
+      "unit": 3,
+      "lesson": 2,
+      "skills": [
+        "alg_sigma_notation_series",
+        "alg_series_convergence_intuition",
+        "alg_binomial_theorem_intro"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 4,
+      "unit": 3,
+      "lesson": 3,
+      "skills": [
+        "alg_matrix_determinant_2x2",
+        "alg_inverse_matrix_method_systems",
+        "geom_skill_38"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 4,
+      "unit": 3,
+      "lesson": 4,
+      "skills": [
+        "geom_skill_39",
+        "geom_skill_40",
+        "geom_skill_41"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 4,
+      "unit": 4,
+      "lesson": 1,
+      "skills": [
+        "geom_skill_42",
+        "geom_skill_43",
+        "geom_skill_44"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 4,
+      "unit": 4,
+      "lesson": 2,
+      "skills": [
+        "geom_skill_45",
+        "trig_skill_1",
+        "trig_skill_2"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 4,
+      "unit": 4,
+      "lesson": 3,
+      "skills": [
+        "trig_skill_3",
+        "trig_skill_4",
+        "trig_skill_5"
+      ]
+    },
+    {
+      "grade": 12,
+      "bimester": 4,
+      "unit": 4,
+      "lesson": 4,
+      "skills": [
+        "trig_skill_6",
+        "trig_skill_7",
+        "prob_skill_18"
+      ]
+    }
+  ]
+}

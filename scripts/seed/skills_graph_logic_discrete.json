@@ -1,0 +1,274 @@
+{
+  "skills": [
+    {
+      "id": "logic_skill_1",
+      "name": "Logic Discrete Skill 1",
+      "description": "Understanding logic discrete skill 1",
+      "domain": "logic_discrete",
+      "difficulty_level": 6,
+      "mastery_threshold": 70,
+      "xp_reward": 22
+    },
+    {
+      "id": "logic_skill_2",
+      "name": "Logic Discrete Skill 2",
+      "description": "Understanding logic discrete skill 2",
+      "domain": "logic_discrete",
+      "difficulty_level": 6,
+      "mastery_threshold": 70,
+      "xp_reward": 22
+    },
+    {
+      "id": "logic_skill_3",
+      "name": "Logic Discrete Skill 3",
+      "description": "Understanding logic discrete skill 3",
+      "domain": "logic_discrete",
+      "difficulty_level": 6,
+      "mastery_threshold": 71,
+      "xp_reward": 22
+    },
+    {
+      "id": "logic_skill_4",
+      "name": "Logic Discrete Skill 4",
+      "description": "Understanding logic discrete skill 4",
+      "domain": "logic_discrete",
+      "difficulty_level": 6,
+      "mastery_threshold": 71,
+      "xp_reward": 22
+    },
+    {
+      "id": "logic_skill_5",
+      "name": "Logic Discrete Skill 5",
+      "description": "Understanding logic discrete skill 5",
+      "domain": "logic_discrete",
+      "difficulty_level": 6,
+      "mastery_threshold": 71,
+      "xp_reward": 22
+    },
+    {
+      "id": "logic_skill_6",
+      "name": "Logic Discrete Skill 6",
+      "description": "Understanding logic discrete skill 6",
+      "domain": "logic_discrete",
+      "difficulty_level": 6,
+      "mastery_threshold": 72,
+      "xp_reward": 22
+    },
+    {
+      "id": "logic_skill_7",
+      "name": "Logic Discrete Skill 7",
+      "description": "Understanding logic discrete skill 7",
+      "domain": "logic_discrete",
+      "difficulty_level": 6,
+      "mastery_threshold": 72,
+      "xp_reward": 22
+    },
+    {
+      "id": "logic_skill_8",
+      "name": "Logic Discrete Skill 8",
+      "description": "Understanding logic discrete skill 8",
+      "domain": "logic_discrete",
+      "difficulty_level": 7,
+      "mastery_threshold": 72,
+      "xp_reward": 24
+    },
+    {
+      "id": "logic_skill_9",
+      "name": "Logic Discrete Skill 9",
+      "description": "Understanding logic discrete skill 9",
+      "domain": "logic_discrete",
+      "difficulty_level": 7,
+      "mastery_threshold": 73,
+      "xp_reward": 24
+    },
+    {
+      "id": "logic_skill_10",
+      "name": "Logic Discrete Skill 10",
+      "description": "Understanding logic discrete skill 10",
+      "domain": "logic_discrete",
+      "difficulty_level": 7,
+      "mastery_threshold": 73,
+      "xp_reward": 24
+    },
+    {
+      "id": "logic_skill_11",
+      "name": "Logic Discrete Skill 11",
+      "description": "Understanding logic discrete skill 11",
+      "domain": "logic_discrete",
+      "difficulty_level": 7,
+      "mastery_threshold": 73,
+      "xp_reward": 24
+    },
+    {
+      "id": "logic_skill_12",
+      "name": "Logic Discrete Skill 12",
+      "description": "Understanding logic discrete skill 12",
+      "domain": "logic_discrete",
+      "difficulty_level": 7,
+      "mastery_threshold": 74,
+      "xp_reward": 24
+    },
+    {
+      "id": "logic_skill_13",
+      "name": "Logic Discrete Skill 13",
+      "description": "Understanding logic discrete skill 13",
+      "domain": "logic_discrete",
+      "difficulty_level": 7,
+      "mastery_threshold": 74,
+      "xp_reward": 24
+    },
+    {
+      "id": "logic_skill_14",
+      "name": "Logic Discrete Skill 14",
+      "description": "Understanding logic discrete skill 14",
+      "domain": "logic_discrete",
+      "difficulty_level": 7,
+      "mastery_threshold": 74,
+      "xp_reward": 24
+    },
+    {
+      "id": "logic_skill_15",
+      "name": "Logic Discrete Skill 15",
+      "description": "Understanding logic discrete skill 15",
+      "domain": "logic_discrete",
+      "difficulty_level": 7,
+      "mastery_threshold": 75,
+      "xp_reward": 24
+    },
+    {
+      "id": "logic_skill_16",
+      "name": "Logic Discrete Skill 16",
+      "description": "Understanding logic discrete skill 16",
+      "domain": "logic_discrete",
+      "difficulty_level": 7,
+      "mastery_threshold": 75,
+      "xp_reward": 24
+    },
+    {
+      "id": "logic_skill_17",
+      "name": "Logic Discrete Skill 17",
+      "description": "Understanding logic discrete skill 17",
+      "domain": "logic_discrete",
+      "difficulty_level": 7,
+      "mastery_threshold": 75,
+      "xp_reward": 24
+    },
+    {
+      "id": "logic_skill_18",
+      "name": "Logic Discrete Skill 18",
+      "description": "Understanding logic discrete skill 18",
+      "domain": "logic_discrete",
+      "difficulty_level": 7,
+      "mastery_threshold": 76,
+      "xp_reward": 24
+    },
+    {
+      "id": "logic_skill_19",
+      "name": "Logic Discrete Skill 19",
+      "description": "Understanding logic discrete skill 19",
+      "domain": "logic_discrete",
+      "difficulty_level": 7,
+      "mastery_threshold": 76,
+      "xp_reward": 24
+    },
+    {
+      "id": "logic_skill_20",
+      "name": "Logic Discrete Skill 20",
+      "description": "Understanding logic discrete skill 20",
+      "domain": "logic_discrete",
+      "difficulty_level": 7,
+      "mastery_threshold": 76,
+      "xp_reward": 24
+    },
+    {
+      "id": "logic_skill_21",
+      "name": "Logic Discrete Skill 21",
+      "description": "Understanding logic discrete skill 21",
+      "domain": "logic_discrete",
+      "difficulty_level": 7,
+      "mastery_threshold": 77,
+      "xp_reward": 24
+    },
+    {
+      "id": "logic_skill_22",
+      "name": "Logic Discrete Skill 22",
+      "description": "Understanding logic discrete skill 22",
+      "domain": "logic_discrete",
+      "difficulty_level": 7,
+      "mastery_threshold": 77,
+      "xp_reward": 24
+    },
+    {
+      "id": "logic_skill_23",
+      "name": "Logic Discrete Skill 23",
+      "description": "Understanding logic discrete skill 23",
+      "domain": "logic_discrete",
+      "difficulty_level": 8,
+      "mastery_threshold": 77,
+      "xp_reward": 26
+    },
+    {
+      "id": "logic_skill_24",
+      "name": "Logic Discrete Skill 24",
+      "description": "Understanding logic discrete skill 24",
+      "domain": "logic_discrete",
+      "difficulty_level": 8,
+      "mastery_threshold": 78,
+      "xp_reward": 26
+    },
+    {
+      "id": "logic_skill_25",
+      "name": "Logic Discrete Skill 25",
+      "description": "Understanding logic discrete skill 25",
+      "domain": "logic_discrete",
+      "difficulty_level": 8,
+      "mastery_threshold": 78,
+      "xp_reward": 26
+    },
+    {
+      "id": "logic_skill_26",
+      "name": "Logic Discrete Skill 26",
+      "description": "Understanding logic discrete skill 26",
+      "domain": "logic_discrete",
+      "difficulty_level": 8,
+      "mastery_threshold": 78,
+      "xp_reward": 26
+    },
+    {
+      "id": "logic_skill_27",
+      "name": "Logic Discrete Skill 27",
+      "description": "Understanding logic discrete skill 27",
+      "domain": "logic_discrete",
+      "difficulty_level": 8,
+      "mastery_threshold": 79,
+      "xp_reward": 26
+    },
+    {
+      "id": "logic_skill_28",
+      "name": "Logic Discrete Skill 28",
+      "description": "Understanding logic discrete skill 28",
+      "domain": "logic_discrete",
+      "difficulty_level": 8,
+      "mastery_threshold": 79,
+      "xp_reward": 26
+    },
+    {
+      "id": "logic_skill_29",
+      "name": "Logic Discrete Skill 29",
+      "description": "Understanding logic discrete skill 29",
+      "domain": "logic_discrete",
+      "difficulty_level": 8,
+      "mastery_threshold": 79,
+      "xp_reward": 26
+    },
+    {
+      "id": "logic_skill_30",
+      "name": "Logic Discrete Skill 30",
+      "description": "Understanding logic discrete skill 30",
+      "domain": "logic_discrete",
+      "difficulty_level": 8,
+      "mastery_threshold": 80,
+      "xp_reward": 26
+    }
+  ]
+}

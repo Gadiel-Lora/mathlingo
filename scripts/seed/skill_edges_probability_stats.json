@@ -1,0 +1,180 @@
+{
+  "edges": [
+    {
+      "from": "prob_skill_1",
+      "to": "prob_skill_2"
+    },
+    {
+      "from": "prob_skill_2",
+      "to": "prob_skill_3"
+    },
+    {
+      "from": "prob_skill_3",
+      "to": "prob_skill_4"
+    },
+    {
+      "from": "prob_skill_4",
+      "to": "prob_skill_5"
+    },
+    {
+      "from": "prob_skill_5",
+      "to": "prob_skill_6"
+    },
+    {
+      "from": "prob_skill_4",
+      "to": "prob_skill_6"
+    },
+    {
+      "from": "prob_skill_6",
+      "to": "prob_skill_7"
+    },
+    {
+      "from": "prob_skill_7",
+      "to": "prob_skill_8"
+    },
+    {
+      "from": "prob_skill_8",
+      "to": "prob_skill_9"
+    },
+    {
+      "from": "prob_skill_7",
+      "to": "prob_skill_9"
+    },
+    {
+      "from": "prob_skill_9",
+      "to": "prob_skill_10"
+    },
+    {
+      "from": "prob_skill_10",
+      "to": "prob_skill_11"
+    },
+    {
+      "from": "prob_skill_11",
+      "to": "prob_skill_12"
+    },
+    {
+      "from": "prob_skill_10",
+      "to": "prob_skill_12"
+    },
+    {
+      "from": "prob_skill_12",
+      "to": "prob_skill_13"
+    },
+    {
+      "from": "prob_skill_13",
+      "to": "prob_skill_14"
+    },
+    {
+      "from": "prob_skill_14",
+      "to": "prob_skill_15"
+    },
+    {
+      "from": "prob_skill_13",
+      "to": "prob_skill_15"
+    },
+    {
+      "from": "prob_skill_15",
+      "to": "prob_skill_16"
+    },
+    {
+      "from": "prob_skill_16",
+      "to": "prob_skill_17"
+    },
+    {
+      "from": "prob_skill_17",
+      "to": "prob_skill_18"
+    },
+    {
+      "from": "prob_skill_16",
+      "to": "prob_skill_18"
+    },
+    {
+      "from": "prob_skill_18",
+      "to": "prob_skill_19"
+    },
+    {
+      "from": "prob_skill_19",
+      "to": "prob_skill_20"
+    },
+    {
+      "from": "prob_skill_20",
+      "to": "prob_skill_21"
+    },
+    {
+      "from": "prob_skill_19",
+      "to": "prob_skill_21"
+    },
+    {
+      "from": "prob_skill_21",
+      "to": "prob_skill_22"
+    },
+    {
+      "from": "prob_skill_22",
+      "to": "prob_skill_23"
+    },
+    {
+      "from": "prob_skill_23",
+      "to": "prob_skill_24"
+    },
+    {
+      "from": "prob_skill_22",
+      "to": "prob_skill_24"
+    },
+    {
+      "from": "prob_skill_24",
+      "to": "prob_skill_25"
+    },
+    {
+      "from": "prob_skill_25",
+      "to": "prob_skill_26"
+    },
+    {
+      "from": "prob_skill_26",
+      "to": "prob_skill_27"
+    },
+    {
+      "from": "prob_skill_25",
+      "to": "prob_skill_27"
+    },
+    {
+      "from": "prob_skill_27",
+      "to": "prob_skill_28"
+    },
+    {
+      "from": "prob_skill_28",
+      "to": "prob_skill_29"
+    },
+    {
+      "from": "prob_skill_29",
+      "to": "prob_skill_30"
+    },
+    {
+      "from": "prob_skill_28",
+      "to": "prob_skill_30"
+    },
+    {
+      "from": "prob_skill_30",
+      "to": "prob_skill_31"
+    },
+    {
+      "from": "prob_skill_31",
+      "to": "prob_skill_32"
+    },
+    {
+      "from": "prob_skill_32",
+      "to": "prob_skill_33"
+    },
+    {
+      "from": "prob_skill_31",
+      "to": "prob_skill_33"
+    },
+    {
+      "from": "prob_skill_33",
+      "to": "prob_skill_34"
+    },
+    {
+      "from": "prob_skill_34",
+      "to": "prob_skill_35"
+    }
+  ]
+}

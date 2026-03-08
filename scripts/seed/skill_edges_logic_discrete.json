@@ -1,0 +1,156 @@
+{
+  "edges": [
+    {
+      "from": "logic_skill_1",
+      "to": "logic_skill_2"
+    },
+    {
+      "from": "logic_skill_2",
+      "to": "logic_skill_3"
+    },
+    {
+      "from": "logic_skill_3",
+      "to": "logic_skill_4"
+    },
+    {
+      "from": "logic_skill_4",
+      "to": "logic_skill_5"
+    },
+    {
+      "from": "logic_skill_5",
+      "to": "logic_skill_6"
+    },
+    {
+      "from": "logic_skill_4",
+      "to": "logic_skill_6"
+    },
+    {
+      "from": "logic_skill_6",
+      "to": "logic_skill_7"
+    },
+    {
+      "from": "logic_skill_7",
+      "to": "logic_skill_8"
+    },
+    {
+      "from": "logic_skill_8",
+      "to": "logic_skill_9"
+    },
+    {
+      "from": "logic_skill_7",
+      "to": "logic_skill_9"
+    },
+    {
+      "from": "logic_skill_9",
+      "to": "logic_skill_10"
+    },
+    {
+      "from": "logic_skill_10",
+      "to": "logic_skill_11"
+    },
+    {
+      "from": "logic_skill_11",
+      "to": "logic_skill_12"
+    },
+    {
+      "from": "logic_skill_10",
+      "to": "logic_skill_12"
+    },
+    {
+      "from": "logic_skill_12",
+      "to": "logic_skill_13"
+    },
+    {
+      "from": "logic_skill_13",
+      "to": "logic_skill_14"
+    },
+    {
+      "from": "logic_skill_14",
+      "to": "logic_skill_15"
+    },
+    {
+      "from": "logic_skill_13",
+      "to": "logic_skill_15"
+    },
+    {
+      "from": "logic_skill_15",
+      "to": "logic_skill_16"
+    },
+    {
+      "from": "logic_skill_16",
+      "to": "logic_skill_17"
+    },
+    {
+      "from": "logic_skill_17",
+      "to": "logic_skill_18"
+    },
+    {
+      "from": "logic_skill_16",
+      "to": "logic_skill_18"
+    },
+    {
+      "from": "logic_skill_18",
+      "to": "logic_skill_19"
+    },
+    {
+      "from": "logic_skill_19",
+      "to": "logic_skill_20"
+    },
+    {
+      "from": "logic_skill_20",
+      "to": "logic_skill_21"
+    },
+    {
+      "from": "logic_skill_19",
+      "to": "logic_skill_21"
+    },
+    {
+      "from": "logic_skill_21",
+      "to": "logic_skill_22"
+    },
+    {
+      "from": "logic_skill_22",
+      "to": "logic_skill_23"
+    },
+    {
+      "from": "logic_skill_23",
+      "to": "logic_skill_24"
+    },
+    {
+      "from": "logic_skill_22",
+      "to": "logic_skill_24"
+    },
+    {
+      "from": "logic_skill_24",
+      "to": "logic_skill_25"
+    },
+    {
+      "from": "logic_skill_25",
+      "to": "logic_skill_26"
+    },
+    {
+      "from": "logic_skill_26",
+      "to": "logic_skill_27"
+    },
+    {
+      "from": "logic_skill_25",
+      "to": "logic_skill_27"
+    },
+    {
+      "from": "logic_skill_27",
+      "to": "logic_skill_28"
+    },
+    {
+      "from": "logic_skill_28",
+      "to": "logic_skill_29"
+    },
+    {
+      "from": "logic_skill_29",
+      "to": "logic_skill_30"
+    },
+    {
+      "from": "logic_skill_28",
+      "to": "logic_skill_30"
+    }
+  ]
+}

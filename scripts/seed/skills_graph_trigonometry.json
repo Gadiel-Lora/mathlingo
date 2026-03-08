@@ -1,0 +1,274 @@
+{
+  "skills": [
+    {
+      "id": "trig_skill_1",
+      "name": "Trigonometry Skill 1",
+      "description": "Understanding trigonometry skill 1",
+      "domain": "trigonometry",
+      "difficulty_level": 7,
+      "mastery_threshold": 70,
+      "xp_reward": 24
+    },
+    {
+      "id": "trig_skill_2",
+      "name": "Trigonometry Skill 2",
+      "description": "Understanding trigonometry skill 2",
+      "domain": "trigonometry",
+      "difficulty_level": 7,
+      "mastery_threshold": 70,
+      "xp_reward": 24
+    },
+    {
+      "id": "trig_skill_3",
+      "name": "Trigonometry Skill 3",
+      "description": "Understanding trigonometry skill 3",
+      "domain": "trigonometry",
+      "difficulty_level": 7,
+      "mastery_threshold": 71,
+      "xp_reward": 24
+    },
+    {
+      "id": "trig_skill_4",
+      "name": "Trigonometry Skill 4",
+      "description": "Understanding trigonometry skill 4",
+      "domain": "trigonometry",
+      "difficulty_level": 7,
+      "mastery_threshold": 71,
+      "xp_reward": 24
+    },
+    {
+      "id": "trig_skill_5",
+      "name": "Trigonometry Skill 5",
+      "description": "Understanding trigonometry skill 5",
+      "domain": "trigonometry",
+      "difficulty_level": 7,
+      "mastery_threshold": 71,
+      "xp_reward": 24
+    },
+    {
+      "id": "trig_skill_6",
+      "name": "Trigonometry Skill 6",
+      "description": "Understanding trigonometry skill 6",
+      "domain": "trigonometry",
+      "difficulty_level": 7,
+      "mastery_threshold": 72,
+      "xp_reward": 24
+    },
+    {
+      "id": "trig_skill_7",
+      "name": "Trigonometry Skill 7",
+      "description": "Understanding trigonometry skill 7",
+      "domain": "trigonometry",
+      "difficulty_level": 7,
+      "mastery_threshold": 72,
+      "xp_reward": 24
+    },
+    {
+      "id": "trig_skill_8",
+      "name": "Trigonometry Skill 8",
+      "description": "Understanding trigonometry skill 8",
+      "domain": "trigonometry",
+      "difficulty_level": 8,
+      "mastery_threshold": 72,
+      "xp_reward": 26
+    },
+    {
+      "id": "trig_skill_9",
+      "name": "Trigonometry Skill 9",
+      "description": "Understanding trigonometry skill 9",
+      "domain": "trigonometry",
+      "difficulty_level": 8,
+      "mastery_threshold": 73,
+      "xp_reward": 26
+    },
+    {
+      "id": "trig_skill_10",
+      "name": "Trigonometry Skill 10",
+      "description": "Understanding trigonometry skill 10",
+      "domain": "trigonometry",
+      "difficulty_level": 8,
+      "mastery_threshold": 73,
+      "xp_reward": 26
+    },
+    {
+      "id": "trig_skill_11",
+      "name": "Trigonometry Skill 11",
+      "description": "Understanding trigonometry skill 11",
+      "domain": "trigonometry",
+      "difficulty_level": 8,
+      "mastery_threshold": 73,
+      "xp_reward": 26
+    },
+    {
+      "id": "trig_skill_12",
+      "name": "Trigonometry Skill 12",
+      "description": "Understanding trigonometry skill 12",
+      "domain": "trigonometry",
+      "difficulty_level": 8,
+      "mastery_threshold": 74,
+      "xp_reward": 26
+    },
+    {
+      "id": "trig_skill_13",
+      "name": "Trigonometry Skill 13",
+      "description": "Understanding trigonometry skill 13",
+      "domain": "trigonometry",
+      "difficulty_level": 8,
+      "mastery_threshold": 74,
+      "xp_reward": 26
+    },
+    {
+      "id": "trig_skill_14",
+      "name": "Trigonometry Skill 14",
+      "description": "Understanding trigonometry skill 14",
+      "domain": "trigonometry",
+      "difficulty_level": 8,
+      "mastery_threshold": 74,
+      "xp_reward": 26
+    },
+    {
+      "id": "trig_skill_15",
+      "name": "Trigonometry Skill 15",
+      "description": "Understanding trigonometry skill 15",
+      "domain": "trigonometry",
+      "difficulty_level": 8,
+      "mastery_threshold": 75,
+      "xp_reward": 26
+    },
+    {
+      "id": "trig_skill_16",
+      "name": "Trigonometry Skill 16",
+      "description": "Understanding trigonometry skill 16",
+      "domain": "trigonometry",
+      "difficulty_level": 8,
+      "mastery_threshold": 75,
+      "xp_reward": 26
+    },
+    {
+      "id": "trig_skill_17",
+      "name": "Trigonometry Skill 17",
+      "description": "Understanding trigonometry skill 17",
+      "domain": "trigonometry",
+      "difficulty_level": 8,
+      "mastery_threshold": 75,
+      "xp_reward": 26
+    },
+    {
+      "id": "trig_skill_18",
+      "name": "Trigonometry Skill 18",
+      "description": "Understanding trigonometry skill 18",
+      "domain": "trigonometry",
+      "difficulty_level": 8,
+      "mastery_threshold": 76,
+      "xp_reward": 26
+    },
+    {
+      "id": "trig_skill_19",
+      "name": "Trigonometry Skill 19",
+      "description": "Understanding trigonometry skill 19",
+      "domain": "trigonometry",
+      "difficulty_level": 8,
+      "mastery_threshold": 76,
+      "xp_reward": 26
+    },
+    {
+      "id": "trig_skill_20",
+      "name": "Trigonometry Skill 20",
+      "description": "Understanding trigonometry skill 20",
+      "domain": "trigonometry",
+      "difficulty_level": 8,
+      "mastery_threshold": 76,
+      "xp_reward": 26
+    },
+    {
+      "id": "trig_skill_21",
+      "name": "Trigonometry Skill 21",
+      "description": "Understanding trigonometry skill 21",
+      "domain": "trigonometry",
+      "difficulty_level": 8,
+      "mastery_threshold": 77,
+      "xp_reward": 26
+    },
+    {
+      "id": "trig_skill_22",
+      "name": "Trigonometry Skill 22",
+      "description": "Understanding trigonometry skill 22",
+      "domain": "trigonometry",
+      "difficulty_level": 8,
+      "mastery_threshold": 77,
+      "xp_reward": 26
+    },
+    {
+      "id": "trig_skill_23",
+      "name": "Trigonometry Skill 23",
+      "description": "Understanding trigonometry skill 23",
+      "domain": "trigonometry",
+      "difficulty_level": 9,
+      "mastery_threshold": 77,
+      "xp_reward": 28
+    },
+    {
+      "id": "trig_skill_24",
+      "name": "Trigonometry Skill 24",
+      "description": "Understanding trigonometry skill 24",
+      "domain": "trigonometry",
+      "difficulty_level": 9,
+      "mastery_threshold": 78,
+      "xp_reward": 28
+    },
+    {
+      "id": "trig_skill_25",
+      "name": "Trigonometry Skill 25",
+      "description": "Understanding trigonometry skill 25",
+      "domain": "trigonometry",
+      "difficulty_level": 9,
+      "mastery_threshold": 78,
+      "xp_reward": 28
+    },
+    {
+      "id": "trig_skill_26",
+      "name": "Trigonometry Skill 26",
+      "description": "Understanding trigonometry skill 26",
+      "domain": "trigonometry",
+      "difficulty_level": 9,
+      "mastery_threshold": 78,
+      "xp_reward": 28
+    },
+    {
+      "id": "trig_skill_27",
+      "name": "Trigonometry Skill 27",
+      "description": "Understanding trigonometry skill 27",
+      "domain": "trigonometry",
+      "difficulty_level": 9,
+      "mastery_threshold": 79,
+      "xp_reward": 28
+    },
+    {
+      "id": "trig_skill_28",
+      "name": "Trigonometry Skill 28",
+      "description": "Understanding trigonometry skill 28",
+      "domain": "trigonometry",
+      "difficulty_level": 9,
+      "mastery_threshold": 79,
+      "xp_reward": 28
+    },
+    {
+      "id": "trig_skill_29",
+      "name": "Trigonometry Skill 29",
+      "description": "Understanding trigonometry skill 29",
+      "domain": "trigonometry",
+      "difficulty_level": 9,
+      "mastery_threshold": 79,
+      "xp_reward": 28
+    },
+    {
+      "id": "trig_skill_30",
+      "name": "Trigonometry Skill 30",
+      "description": "Understanding trigonometry skill 30",
+      "domain": "trigonometry",
+      "difficulty_level": 9,
+      "mastery_threshold": 80,
+      "xp_reward": 28
+    }
+  ]
+}

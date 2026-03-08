@@ -1,0 +1,544 @@
+{
+  "skills": [
+    {
+      "id": "arith_counting_objects_to_20",
+      "name": "Counting Objects to 20",
+      "description": "Count concrete objects and quantities from 0 to 20.",
+      "domain": "arithmetic",
+      "difficulty_level": 1,
+      "mastery_threshold": 64,
+      "xp_reward": 10
+    },
+    {
+      "id": "arith_counting_to_100",
+      "name": "Counting to 100",
+      "description": "Count forward and backward up to 100.",
+      "domain": "arithmetic",
+      "difficulty_level": 1,
+      "mastery_threshold": 65,
+      "xp_reward": 11
+    },
+    {
+      "id": "arith_number_line_basics",
+      "name": "Number Line Basics",
+      "description": "Locate and interpret whole numbers on a number line.",
+      "domain": "arithmetic",
+      "difficulty_level": 1,
+      "mastery_threshold": 65,
+      "xp_reward": 11
+    },
+    {
+      "id": "arith_place_value_tens",
+      "name": "Place Value to Tens",
+      "description": "Represent numbers using ones and tens.",
+      "domain": "arithmetic",
+      "difficulty_level": 1,
+      "mastery_threshold": 66,
+      "xp_reward": 12
+    },
+    {
+      "id": "arith_place_value_hundreds",
+      "name": "Place Value to Hundreds",
+      "description": "Read, write, and decompose numbers to hundreds.",
+      "domain": "arithmetic",
+      "difficulty_level": 1,
+      "mastery_threshold": 66,
+      "xp_reward": 12
+    },
+    {
+      "id": "arith_place_value_thousands",
+      "name": "Place Value to Thousands",
+      "description": "Read, write, and decompose numbers to thousands.",
+      "domain": "arithmetic",
+      "difficulty_level": 2,
+      "mastery_threshold": 67,
+      "xp_reward": 13
+    },
+    {
+      "id": "arith_compare_whole_numbers",
+      "name": "Compare Whole Numbers",
+      "description": "Compare whole numbers using <, >, and =.",
+      "domain": "arithmetic",
+      "difficulty_level": 1,
+      "mastery_threshold": 66,
+      "xp_reward": 12
+    },
+    {
+      "id": "arith_order_whole_numbers",
+      "name": "Order Whole Numbers",
+      "description": "Order lists of whole numbers ascending and descending.",
+      "domain": "arithmetic",
+      "difficulty_level": 2,
+      "mastery_threshold": 67,
+      "xp_reward": 13
+    },
+    {
+      "id": "arith_round_whole_numbers",
+      "name": "Round Whole Numbers",
+      "description": "Round whole numbers to tens, hundreds, and thousands.",
+      "domain": "arithmetic",
+      "difficulty_level": 2,
+      "mastery_threshold": 68,
+      "xp_reward": 14
+    },
+    {
+      "id": "arith_even_odd_patterns",
+      "name": "Even and Odd Patterns",
+      "description": "Identify even/odd numbers and simple parity patterns.",
+      "domain": "arithmetic",
+      "difficulty_level": 2,
+      "mastery_threshold": 67,
+      "xp_reward": 13
+    },
+    {
+      "id": "arith_factors_multiples_intro",
+      "name": "Factors and Multiples Intro",
+      "description": "Find factors and multiples of whole numbers.",
+      "domain": "arithmetic",
+      "difficulty_level": 2,
+      "mastery_threshold": 68,
+      "xp_reward": 14
+    },
+    {
+      "id": "arith_divisibility_rules",
+      "name": "Divisibility Rules",
+      "description": "Use divisibility rules for 2, 3, 5, 9, and 10.",
+      "domain": "arithmetic",
+      "difficulty_level": 3,
+      "mastery_threshold": 70,
+      "xp_reward": 16
+    },
+    {
+      "id": "arith_addition_within_20",
+      "name": "Addition Within 20",
+      "description": "Add whole numbers within 20 accurately.",
+      "domain": "arithmetic",
+      "difficulty_level": 1,
+      "mastery_threshold": 65,
+      "xp_reward": 12
+    },
+    {
+      "id": "arith_addition_multi_digit",
+      "name": "Multi-digit Addition",
+      "description": "Add multi-digit whole numbers with regrouping.",
+      "domain": "arithmetic",
+      "difficulty_level": 2,
+      "mastery_threshold": 67,
+      "xp_reward": 14
+    },
+    {
+      "id": "arith_subtraction_within_20",
+      "name": "Subtraction Within 20",
+      "description": "Subtract whole numbers within 20 accurately.",
+      "domain": "arithmetic",
+      "difficulty_level": 1,
+      "mastery_threshold": 65,
+      "xp_reward": 12
+    },
+    {
+      "id": "arith_subtraction_multi_digit",
+      "name": "Multi-digit Subtraction",
+      "description": "Subtract multi-digit whole numbers with regrouping.",
+      "domain": "arithmetic",
+      "difficulty_level": 2,
+      "mastery_threshold": 67,
+      "xp_reward": 14
+    },
+    {
+      "id": "arith_multiplication_as_repeated_addition",
+      "name": "Multiplication as Repeated Addition",
+      "description": "Interpret multiplication as equal groups and repeated addition.",
+      "domain": "arithmetic",
+      "difficulty_level": 2,
+      "mastery_threshold": 68,
+      "xp_reward": 15
+    },
+    {
+      "id": "arith_multiplication_facts",
+      "name": "Multiplication Facts",
+      "description": "Recall multiplication facts fluently.",
+      "domain": "arithmetic",
+      "difficulty_level": 2,
+      "mastery_threshold": 69,
+      "xp_reward": 15
+    },
+    {
+      "id": "arith_multi_digit_multiplication",
+      "name": "Multi-digit Multiplication",
+      "description": "Multiply multi-digit numbers using standard algorithms.",
+      "domain": "arithmetic",
+      "difficulty_level": 3,
+      "mastery_threshold": 71,
+      "xp_reward": 18
+    },
+    {
+      "id": "arith_division_as_sharing",
+      "name": "Division as Sharing",
+      "description": "Interpret division as sharing and grouping.",
+      "domain": "arithmetic",
+      "difficulty_level": 2,
+      "mastery_threshold": 69,
+      "xp_reward": 15
+    },
+    {
+      "id": "arith_division_facts",
+      "name": "Division Facts",
+      "description": "Recall division facts fluently.",
+      "domain": "arithmetic",
+      "difficulty_level": 3,
+      "mastery_threshold": 70,
+      "xp_reward": 16
+    },
+    {
+      "id": "arith_long_division",
+      "name": "Long Division",
+      "description": "Divide multi-digit numbers using long division.",
+      "domain": "arithmetic",
+      "difficulty_level": 3,
+      "mastery_threshold": 72,
+      "xp_reward": 18
+    },
+    {
+      "id": "arith_inverse_operations",
+      "name": "Inverse Operations",
+      "description": "Use inverse relationships between operations to solve checks.",
+      "domain": "arithmetic",
+      "difficulty_level": 3,
+      "mastery_threshold": 70,
+      "xp_reward": 16
+    },
+    {
+      "id": "arith_order_of_operations_basic",
+      "name": "Order of Operations Basic",
+      "description": "Evaluate expressions using operation priority without exponents.",
+      "domain": "arithmetic",
+      "difficulty_level": 3,
+      "mastery_threshold": 72,
+      "xp_reward": 18
+    },
+    {
+      "id": "arith_order_of_operations_grouping",
+      "name": "Order of Operations with Grouping",
+      "description": "Evaluate grouped expressions with parentheses and brackets.",
+      "domain": "arithmetic",
+      "difficulty_level": 4,
+      "mastery_threshold": 74,
+      "xp_reward": 20
+    },
+    {
+      "id": "arith_integer_number_line",
+      "name": "Integer Number Line",
+      "description": "Represent positive and negative integers on the number line.",
+      "domain": "arithmetic",
+      "difficulty_level": 3,
+      "mastery_threshold": 70,
+      "xp_reward": 16
+    },
+    {
+      "id": "arith_compare_order_integers",
+      "name": "Compare and Order Integers",
+      "description": "Compare and order integers including negatives.",
+      "domain": "arithmetic",
+      "difficulty_level": 3,
+      "mastery_threshold": 71,
+      "xp_reward": 17
+    },
+    {
+      "id": "arith_absolute_value",
+      "name": "Absolute Value",
+      "description": "Interpret and compute absolute value as distance from zero.",
+      "domain": "arithmetic",
+      "difficulty_level": 3,
+      "mastery_threshold": 71,
+      "xp_reward": 17
+    },
+    {
+      "id": "arith_add_integers",
+      "name": "Add Integers",
+      "description": "Add positive and negative integers correctly.",
+      "domain": "arithmetic",
+      "difficulty_level": 4,
+      "mastery_threshold": 74,
+      "xp_reward": 20
+    },
+    {
+      "id": "arith_subtract_integers",
+      "name": "Subtract Integers",
+      "description": "Subtract integers using sign rules and number line logic.",
+      "domain": "arithmetic",
+      "difficulty_level": 4,
+      "mastery_threshold": 75,
+      "xp_reward": 20
+    },
+    {
+      "id": "arith_multiply_integers",
+      "name": "Multiply Integers",
+      "description": "Multiply integers using sign rules.",
+      "domain": "arithmetic",
+      "difficulty_level": 4,
+      "mastery_threshold": 75,
+      "xp_reward": 21
+    },
+    {
+      "id": "arith_divide_integers",
+      "name": "Divide Integers",
+      "description": "Divide integers using sign rules.",
+      "domain": "arithmetic",
+      "difficulty_level": 4,
+      "mastery_threshold": 76,
+      "xp_reward": 21
+    },
+    {
+      "id": "arith_integer_multi_step_expressions",
+      "name": "Integer Multi-step Expressions",
+      "description": "Solve multi-step arithmetic expressions with integers.",
+      "domain": "arithmetic",
+      "difficulty_level": 5,
+      "mastery_threshold": 78,
+      "xp_reward": 24
+    },
+    {
+      "id": "arith_fraction_part_of_whole",
+      "name": "Fractions as Part of a Whole",
+      "description": "Interpret fractions as parts of equal wholes.",
+      "domain": "arithmetic",
+      "difficulty_level": 2,
+      "mastery_threshold": 68,
+      "xp_reward": 15
+    },
+    {
+      "id": "arith_equivalent_fractions",
+      "name": "Equivalent Fractions",
+      "description": "Generate and recognize equivalent fractions.",
+      "domain": "arithmetic",
+      "difficulty_level": 3,
+      "mastery_threshold": 71,
+      "xp_reward": 17
+    },
+    {
+      "id": "arith_simplify_fractions",
+      "name": "Simplifying Fractions",
+      "description": "Reduce fractions to simplest form using GCD ideas.",
+      "domain": "arithmetic",
+      "difficulty_level": 3,
+      "mastery_threshold": 72,
+      "xp_reward": 18
+    },
+    {
+      "id": "arith_compare_order_fractions",
+      "name": "Compare and Order Fractions",
+      "description": "Compare and order fractions using common strategies.",
+      "domain": "arithmetic",
+      "difficulty_level": 3,
+      "mastery_threshold": 72,
+      "xp_reward": 18
+    },
+    {
+      "id": "arith_add_subtract_fractions_like_den",
+      "name": "Add/Subtract Fractions (Like Denominators)",
+      "description": "Add and subtract fractions with equal denominators.",
+      "domain": "arithmetic",
+      "difficulty_level": 3,
+      "mastery_threshold": 72,
+      "xp_reward": 18
+    },
+    {
+      "id": "arith_add_subtract_fractions_unlike_den",
+      "name": "Add/Subtract Fractions (Unlike Denominators)",
+      "description": "Add and subtract fractions with different denominators.",
+      "domain": "arithmetic",
+      "difficulty_level": 4,
+      "mastery_threshold": 75,
+      "xp_reward": 21
+    },
+    {
+      "id": "arith_multiply_fractions",
+      "name": "Multiply Fractions",
+      "description": "Multiply fractions and simplify results.",
+      "domain": "arithmetic",
+      "difficulty_level": 4,
+      "mastery_threshold": 75,
+      "xp_reward": 21
+    },
+    {
+      "id": "arith_divide_fractions",
+      "name": "Divide Fractions",
+      "description": "Divide fractions using reciprocal relationships.",
+      "domain": "arithmetic",
+      "difficulty_level": 5,
+      "mastery_threshold": 78,
+      "xp_reward": 24
+    },
+    {
+      "id": "arith_mixed_numbers_operations",
+      "name": "Mixed Number Operations",
+      "description": "Operate with mixed numbers across all four operations.",
+      "domain": "arithmetic",
+      "difficulty_level": 5,
+      "mastery_threshold": 78,
+      "xp_reward": 24
+    },
+    {
+      "id": "arith_decimal_place_value",
+      "name": "Decimal Place Value",
+      "description": "Read, write, and decompose decimal numbers.",
+      "domain": "arithmetic",
+      "difficulty_level": 3,
+      "mastery_threshold": 71,
+      "xp_reward": 17
+    },
+    {
+      "id": "arith_compare_order_decimals",
+      "name": "Compare and Order Decimals",
+      "description": "Compare and order decimal values.",
+      "domain": "arithmetic",
+      "difficulty_level": 3,
+      "mastery_threshold": 72,
+      "xp_reward": 18
+    },
+    {
+      "id": "arith_decimal_add_subtract",
+      "name": "Decimal Addition and Subtraction",
+      "description": "Add and subtract decimals with place-value alignment.",
+      "domain": "arithmetic",
+      "difficulty_level": 4,
+      "mastery_threshold": 74,
+      "xp_reward": 20
+    },
+    {
+      "id": "arith_decimal_multiply",
+      "name": "Decimal Multiplication",
+      "description": "Multiply decimals and place decimal points correctly.",
+      "domain": "arithmetic",
+      "difficulty_level": 4,
+      "mastery_threshold": 75,
+      "xp_reward": 21
+    },
+    {
+      "id": "arith_decimal_divide",
+      "name": "Decimal Division",
+      "description": "Divide decimals using scaling and long division.",
+      "domain": "arithmetic",
+      "difficulty_level": 5,
+      "mastery_threshold": 78,
+      "xp_reward": 24
+    },
+    {
+      "id": "arith_fraction_decimal_conversion",
+      "name": "Fraction-Decimal Conversion",
+      "description": "Convert values between fraction and decimal forms.",
+      "domain": "arithmetic",
+      "difficulty_level": 4,
+      "mastery_threshold": 75,
+      "xp_reward": 21
+    },
+    {
+      "id": "arith_ratio_basics",
+      "name": "Ratio Basics",
+      "description": "Represent and simplify ratios in multiple forms.",
+      "domain": "arithmetic",
+      "difficulty_level": 3,
+      "mastery_threshold": 72,
+      "xp_reward": 18
+    },
+    {
+      "id": "arith_unit_rates",
+      "name": "Unit Rates",
+      "description": "Compute and interpret unit rates in contexts.",
+      "domain": "arithmetic",
+      "difficulty_level": 4,
+      "mastery_threshold": 74,
+      "xp_reward": 20
+    },
+    {
+      "id": "arith_proportions",
+      "name": "Proportions",
+      "description": "Set up and solve proportional relationships.",
+      "domain": "arithmetic",
+      "difficulty_level": 4,
+      "mastery_threshold": 75,
+      "xp_reward": 21
+    },
+    {
+      "id": "arith_percent_basics",
+      "name": "Percent Basics",
+      "description": "Interpret percentages as per-hundred quantities.",
+      "domain": "arithmetic",
+      "difficulty_level": 4,
+      "mastery_threshold": 75,
+      "xp_reward": 21
+    },
+    {
+      "id": "arith_percent_of_quantity",
+      "name": "Percent of a Quantity",
+      "description": "Compute percentages of numbers using equivalent forms.",
+      "domain": "arithmetic",
+      "difficulty_level": 4,
+      "mastery_threshold": 76,
+      "xp_reward": 22
+    },
+    {
+      "id": "arith_percent_increase_decrease",
+      "name": "Percent Increase and Decrease",
+      "description": "Solve increase/decrease and discount/tax problems.",
+      "domain": "arithmetic",
+      "difficulty_level": 5,
+      "mastery_threshold": 79,
+      "xp_reward": 25
+    },
+    {
+      "id": "arith_percent_word_problems",
+      "name": "Percent Word Problems",
+      "description": "Apply percentages and proportions in multistep contexts.",
+      "domain": "arithmetic",
+      "difficulty_level": 5,
+      "mastery_threshold": 80,
+      "xp_reward": 26
+    },
+    {
+      "id": "arith_exponents_basics",
+      "name": "Exponents Basics",
+      "description": "Interpret repeated multiplication with exponents.",
+      "domain": "arithmetic",
+      "difficulty_level": 4,
+      "mastery_threshold": 75,
+      "xp_reward": 21
+    },
+    {
+      "id": "arith_powers_of_ten",
+      "name": "Powers of Ten",
+      "description": "Use powers of ten in place value and scaling.",
+      "domain": "arithmetic",
+      "difficulty_level": 4,
+      "mastery_threshold": 76,
+      "xp_reward": 22
+    },
+    {
+      "id": "arith_square_roots_perfect_squares",
+      "name": "Square Roots of Perfect Squares",
+      "description": "Compute square roots of perfect squares and inverse links.",
+      "domain": "arithmetic",
+      "difficulty_level": 5,
+      "mastery_threshold": 79,
+      "xp_reward": 25
+    },
+    {
+      "id": "arith_order_of_operations_with_exponents",
+      "name": "Order of Operations with Exponents",
+      "description": "Evaluate arithmetic expressions including powers and roots.",
+      "domain": "arithmetic",
+      "difficulty_level": 5,
+      "mastery_threshold": 80,
+      "xp_reward": 26
+    },
+    {
+      "id": "arith_pre_algebra_numeric_expressions",
+      "name": "Pre-Algebra Numeric Expressions",
+      "description": "Solve rich numeric expressions that bridge arithmetic to algebra.",
+      "domain": "arithmetic",
+      "difficulty_level": 6,
+      "mastery_threshold": 82,
+      "xp_reward": 30
+    }
+  ]
+}

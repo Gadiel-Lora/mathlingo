@@ -415,5 +415,33 @@ Sidebar con opciones exactas:
 - Recorrido, Autonomo, Repasos, Logros, Progreso, Perfil.
 
 Estado:
-- Build frontend validado: `npm run build`.
 - Implementacion UI es deliberadamente estatica (sin logica de negocio).
+
+## 14) Generación de Grafo de Habilidades y Mapeo Curricular (2026-03-08)
+
+### Grafo de Habilidades Canónico
+Se unificaron y generaron grafos de dominio estructurados para:
+- Aritmética, Álgebra, Geometría, Trigonometría, Probabilidad/Estadística, Cálculo, Lógica y Matemática Discreta.
+
+Reglas aplicadas y validadas:
+- Total: 355 habilidades, 561 aristas.
+- Estructura: Grafo Dirigido Acíclico (DAG) puro, verificado algorítmicamente.
+- Restricciones: Máximo 3 prerrequisitos por habilidad.
+- Progresión de dificultad validada y dependencias cruzadas explícitas (ej. Fracciones -> Álgebra -> Geometría).
+
+Archivos semilla generados en `scripts/seed`:
+- `math_skills_graph.json`, `math_skill_edges.json`
+- `skills_seed.sql`, `skill_edges_seed.sql`
+
+### Mapeo Curricular (Lesson -> Skills)
+Se generó un mapeo automatizado para conectar las 355 habilidades a los 512 slots de lecciones disponibles (Grados 5-12, 4 Bimestres, 4 Unidades, 4 Lecciones).
+
+Reglas aplicadas y validadas:
+- Dificultad escalonada por bloque de grado.
+- Suavizado de dificultad inter e intra-unidad.
+- Respeto estricto del orden topológico: ningún prerrequisito se enseña después de la habilidad dependiente.
+- Repetición espaciada: cada habilidad se presenta entre 2 y 6 veces (1 primaria, resto como repaso/soporte).
+- Capacidad: máximo 3 habilidades por lección.
+
+Archivos semilla generados en `scripts/seed`:
+- `lesson_skill_map_seed.json`, `lesson_skill_map_seed.sql`

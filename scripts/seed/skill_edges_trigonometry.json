@@ -1,0 +1,156 @@
+{
+  "edges": [
+    {
+      "from": "trig_skill_1",
+      "to": "trig_skill_2"
+    },
+    {
+      "from": "trig_skill_2",
+      "to": "trig_skill_3"
+    },
+    {
+      "from": "trig_skill_3",
+      "to": "trig_skill_4"
+    },
+    {
+      "from": "trig_skill_4",
+      "to": "trig_skill_5"
+    },
+    {
+      "from": "trig_skill_5",
+      "to": "trig_skill_6"
+    },
+    {
+      "from": "trig_skill_4",
+      "to": "trig_skill_6"
+    },
+    {
+      "from": "trig_skill_6",
+      "to": "trig_skill_7"
+    },
+    {
+      "from": "trig_skill_7",
+      "to": "trig_skill_8"
+    },
+    {
+      "from": "trig_skill_8",
+      "to": "trig_skill_9"
+    },
+    {
+      "from": "trig_skill_7",
+      "to": "trig_skill_9"
+    },
+    {
+      "from": "trig_skill_9",
+      "to": "trig_skill_10"
+    },
+    {
+      "from": "trig_skill_10",
+      "to": "trig_skill_11"
+    },
+    {
+      "from": "trig_skill_11",
+      "to": "trig_skill_12"
+    },
+    {
+      "from": "trig_skill_10",
+      "to": "trig_skill_12"
+    },
+    {
+      "from": "trig_skill_12",
+      "to": "trig_skill_13"
+    },
+    {
+      "from": "trig_skill_13",
+      "to": "trig_skill_14"
+    },
+    {
+      "from": "trig_skill_14",
+      "to": "trig_skill_15"
+    },
+    {
+      "from": "trig_skill_13",
+      "to": "trig_skill_15"
+    },
+    {
+      "from": "trig_skill_15",
+      "to": "trig_skill_16"
+    },
+    {
+      "from": "trig_skill_16",
+      "to": "trig_skill_17"
+    },
+    {
+      "from": "trig_skill_17",
+      "to": "trig_skill_18"
+    },
+    {
+      "from": "trig_skill_16",
+      "to": "trig_skill_18"
+    },
+    {
+      "from": "trig_skill_18",
+      "to": "trig_skill_19"
+    },
+    {
+      "from": "trig_skill_19",
+      "to": "trig_skill_20"
+    },
+    {
+      "from": "trig_skill_20",
+      "to": "trig_skill_21"
+    },
+    {
+      "from": "trig_skill_19",
+      "to": "trig_skill_21"
+    },
+    {
+      "from": "trig_skill_21",
+      "to": "trig_skill_22"
+    },
+    {
+      "from": "trig_skill_22",
+      "to": "trig_skill_23"
+    },
+    {
+      "from": "trig_skill_23",
+      "to": "trig_skill_24"
+    },
+    {
+      "from": "trig_skill_22",
+      "to": "trig_skill_24"
+    },
+    {
+      "from": "trig_skill_24",
+      "to": "trig_skill_25"
+    },
+    {
+      "from": "trig_skill_25",
+      "to": "trig_skill_26"
+    },
+    {
+      "from": "trig_skill_26",
+      "to": "trig_skill_27"
+    },
+    {
+      "from": "trig_skill_25",
+      "to": "trig_skill_27"
+    },
+    {
+      "from": "trig_skill_27",
+      "to": "trig_skill_28"
+    },
+    {
+      "from": "trig_skill_28",
+      "to": "trig_skill_29"
+    },
+    {
+      "from": "trig_skill_29",
+      "to": "trig_skill_30"
+    },
+    {
+      "from": "trig_skill_28",
+      "to": "trig_skill_30"
+    }
+  ]
+}

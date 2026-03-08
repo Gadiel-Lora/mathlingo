@@ -1,0 +1,319 @@
+{
+  "skills": [
+    {
+      "id": "prob_skill_1",
+      "name": "Probability Stats Skill 1",
+      "description": "Understanding probability stats skill 1",
+      "domain": "probability_stats",
+      "difficulty_level": 5,
+      "mastery_threshold": 70,
+      "xp_reward": 20
+    },
+    {
+      "id": "prob_skill_2",
+      "name": "Probability Stats Skill 2",
+      "description": "Understanding probability stats skill 2",
+      "domain": "probability_stats",
+      "difficulty_level": 5,
+      "mastery_threshold": 70,
+      "xp_reward": 20
+    },
+    {
+      "id": "prob_skill_3",
+      "name": "Probability Stats Skill 3",
+      "description": "Understanding probability stats skill 3",
+      "domain": "probability_stats",
+      "difficulty_level": 5,
+      "mastery_threshold": 70,
+      "xp_reward": 20
+    },
+    {
+      "id": "prob_skill_4",
+      "name": "Probability Stats Skill 4",
+      "description": "Understanding probability stats skill 4",
+      "domain": "probability_stats",
+      "difficulty_level": 5,
+      "mastery_threshold": 71,
+      "xp_reward": 20
+    },
+    {
+      "id": "prob_skill_5",
+      "name": "Probability Stats Skill 5",
+      "description": "Understanding probability stats skill 5",
+      "domain": "probability_stats",
+      "difficulty_level": 5,
+      "mastery_threshold": 71,
+      "xp_reward": 20
+    },
+    {
+      "id": "prob_skill_6",
+      "name": "Probability Stats Skill 6",
+      "description": "Understanding probability stats skill 6",
+      "domain": "probability_stats",
+      "difficulty_level": 6,
+      "mastery_threshold": 71,
+      "xp_reward": 22
+    },
+    {
+      "id": "prob_skill_7",
+      "name": "Probability Stats Skill 7",
+      "description": "Understanding probability stats skill 7",
+      "domain": "probability_stats",
+      "difficulty_level": 6,
+      "mastery_threshold": 72,
+      "xp_reward": 22
+    },
+    {
+      "id": "prob_skill_8",
+      "name": "Probability Stats Skill 8",
+      "description": "Understanding probability stats skill 8",
+      "domain": "probability_stats",
+      "difficulty_level": 6,
+      "mastery_threshold": 72,
+      "xp_reward": 22
+    },
+    {
+      "id": "prob_skill_9",
+      "name": "Probability Stats Skill 9",
+      "description": "Understanding probability stats skill 9",
+      "domain": "probability_stats",
+      "difficulty_level": 6,
+      "mastery_threshold": 72,
+      "xp_reward": 22
+    },
+    {
+      "id": "prob_skill_10",
+      "name": "Probability Stats Skill 10",
+      "description": "Understanding probability stats skill 10",
+      "domain": "probability_stats",
+      "difficulty_level": 6,
+      "mastery_threshold": 72,
+      "xp_reward": 22
+    },
+    {
+      "id": "prob_skill_11",
+      "name": "Probability Stats Skill 11",
+      "description": "Understanding probability stats skill 11",
+      "domain": "probability_stats",
+      "difficulty_level": 6,
+      "mastery_threshold": 73,
+      "xp_reward": 22
+    },
+    {
+      "id": "prob_skill_12",
+      "name": "Probability Stats Skill 12",
+      "description": "Understanding probability stats skill 12",
+      "domain": "probability_stats",
+      "difficulty_level": 6,
+      "mastery_threshold": 73,
+      "xp_reward": 22
+    },
+    {
+      "id": "prob_skill_13",
+      "name": "Probability Stats Skill 13",
+      "description": "Understanding probability stats skill 13",
+      "domain": "probability_stats",
+      "difficulty_level": 6,
+      "mastery_threshold": 73,
+      "xp_reward": 22
+    },
+    {
+      "id": "prob_skill_14",
+      "name": "Probability Stats Skill 14",
+      "description": "Understanding probability stats skill 14",
+      "domain": "probability_stats",
+      "difficulty_level": 6,
+      "mastery_threshold": 74,
+      "xp_reward": 22
+    },
+    {
+      "id": "prob_skill_15",
+      "name": "Probability Stats Skill 15",
+      "description": "Understanding probability stats skill 15",
+      "domain": "probability_stats",
+      "difficulty_level": 6,
+      "mastery_threshold": 74,
+      "xp_reward": 22
+    },
+    {
+      "id": "prob_skill_16",
+      "name": "Probability Stats Skill 16",
+      "description": "Understanding probability stats skill 16",
+      "domain": "probability_stats",
+      "difficulty_level": 6,
+      "mastery_threshold": 74,
+      "xp_reward": 22
+    },
+    {
+      "id": "prob_skill_17",
+      "name": "Probability Stats Skill 17",
+      "description": "Understanding probability stats skill 17",
+      "domain": "probability_stats",
+      "difficulty_level": 6,
+      "mastery_threshold": 74,
+      "xp_reward": 22
+    },
+    {
+      "id": "prob_skill_18",
+      "name": "Probability Stats Skill 18",
+      "description": "Understanding probability stats skill 18",
+      "domain": "probability_stats",
+      "difficulty_level": 7,
+      "mastery_threshold": 75,
+      "xp_reward": 24
+    },
+    {
+      "id": "prob_skill_19",
+      "name": "Probability Stats Skill 19",
+      "description": "Understanding probability stats skill 19",
+      "domain": "probability_stats",
+      "difficulty_level": 7,
+      "mastery_threshold": 75,
+      "xp_reward": 24
+    },
+    {
+      "id": "prob_skill_20",
+      "name": "Probability Stats Skill 20",
+      "description": "Understanding probability stats skill 20",
+      "domain": "probability_stats",
+      "difficulty_level": 7,
+      "mastery_threshold": 75,
+      "xp_reward": 24
+    },
+    {
+      "id": "prob_skill_21",
+      "name": "Probability Stats Skill 21",
+      "description": "Understanding probability stats skill 21",
+      "domain": "probability_stats",
+      "difficulty_level": 7,
+      "mastery_threshold": 76,
+      "xp_reward": 24
+    },
+    {
+      "id": "prob_skill_22",
+      "name": "Probability Stats Skill 22",
+      "description": "Understanding probability stats skill 22",
+      "domain": "probability_stats",
+      "difficulty_level": 7,
+      "mastery_threshold": 76,
+      "xp_reward": 24
+    },
+    {
+      "id": "prob_skill_23",
+      "name": "Probability Stats Skill 23",
+      "description": "Understanding probability stats skill 23",
+      "domain": "probability_stats",
+      "difficulty_level": 7,
+      "mastery_threshold": 76,
+      "xp_reward": 24
+    },
+    {
+      "id": "prob_skill_24",
+      "name": "Probability Stats Skill 24",
+      "description": "Understanding probability stats skill 24",
+      "domain": "probability_stats",
+      "difficulty_level": 7,
+      "mastery_threshold": 76,
+      "xp_reward": 24
+    },
+    {
+      "id": "prob_skill_25",
+      "name": "Probability Stats Skill 25",
+      "description": "Understanding probability stats skill 25",
+      "domain": "probability_stats",
+      "difficulty_level": 7,
+      "mastery_threshold": 77,
+      "xp_reward": 24
+    },
+    {
+      "id": "prob_skill_26",
+      "name": "Probability Stats Skill 26",
+      "description": "Understanding probability stats skill 26",
+      "domain": "probability_stats",
+      "difficulty_level": 7,
+      "mastery_threshold": 77,
+      "xp_reward": 24
+    },
+    {
+      "id": "prob_skill_27",
+      "name": "Probability Stats Skill 27",
+      "description": "Understanding probability stats skill 27",
+      "domain": "probability_stats",
+      "difficulty_level": 7,
+      "mastery_threshold": 77,
+      "xp_reward": 24
+    },
+    {
+      "id": "prob_skill_28",
+      "name": "Probability Stats Skill 28",
+      "description": "Understanding probability stats skill 28",
+      "domain": "probability_stats",
+      "difficulty_level": 7,
+      "mastery_threshold": 78,
+      "xp_reward": 24
+    },
+    {
+      "id": "prob_skill_29",
+      "name": "Probability Stats Skill 29",
+      "description": "Understanding probability stats skill 29",
+      "domain": "probability_stats",
+      "difficulty_level": 7,
+      "mastery_threshold": 78,
+      "xp_reward": 24
+    },
+    {
+      "id": "prob_skill_30",
+      "name": "Probability Stats Skill 30",
+      "description": "Understanding probability stats skill 30",
+      "domain": "probability_stats",
+      "difficulty_level": 8,
+      "mastery_threshold": 78,
+      "xp_reward": 26
+    },
+    {
+      "id": "prob_skill_31",
+      "name": "Probability Stats Skill 31",
+      "description": "Understanding probability stats skill 31",
+      "domain": "probability_stats",
+      "difficulty_level": 8,
+      "mastery_threshold": 78,
+      "xp_reward": 26
+    },
+    {
+      "id": "prob_skill_32",
+      "name": "Probability Stats Skill 32",
+      "description": "Understanding probability stats skill 32",
+      "domain": "probability_stats",
+      "difficulty_level": 8,
+      "mastery_threshold": 79,
+      "xp_reward": 26
+    },
+    {
+      "id": "prob_skill_33",
+      "name": "Probability Stats Skill 33",
+      "description": "Understanding probability stats skill 33",
+      "domain": "probability_stats",
+      "difficulty_level": 8,
+      "mastery_threshold": 79,
+      "xp_reward": 26
+    },
+    {
+      "id": "prob_skill_34",
+      "name": "Probability Stats Skill 34",
+      "description": "Understanding probability stats skill 34",
+      "domain": "probability_stats",
+      "difficulty_level": 8,
+      "mastery_threshold": 79,
+      "xp_reward": 26
+    },
+    {
+      "id": "prob_skill_35",
+      "name": "Probability Stats Skill 35",
+      "description": "Understanding probability stats skill 35",
+      "domain": "probability_stats",
+      "difficulty_level": 8,
+      "mastery_threshold": 80,
+      "xp_reward": 26
+    }
+  ]
+}

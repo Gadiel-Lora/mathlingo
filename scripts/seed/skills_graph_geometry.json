@@ -1,0 +1,409 @@
+{
+  "skills": [
+    {
+      "id": "geom_skill_1",
+      "name": "Geometry Skill 1",
+      "description": "Understanding geometry skill 1",
+      "domain": "geometry",
+      "difficulty_level": 4,
+      "mastery_threshold": 70,
+      "xp_reward": 18
+    },
+    {
+      "id": "geom_skill_2",
+      "name": "Geometry Skill 2",
+      "description": "Understanding geometry skill 2",
+      "domain": "geometry",
+      "difficulty_level": 4,
+      "mastery_threshold": 70,
+      "xp_reward": 18
+    },
+    {
+      "id": "geom_skill_3",
+      "name": "Geometry Skill 3",
+      "description": "Understanding geometry skill 3",
+      "domain": "geometry",
+      "difficulty_level": 4,
+      "mastery_threshold": 70,
+      "xp_reward": 18
+    },
+    {
+      "id": "geom_skill_4",
+      "name": "Geometry Skill 4",
+      "description": "Understanding geometry skill 4",
+      "domain": "geometry",
+      "difficulty_level": 4,
+      "mastery_threshold": 70,
+      "xp_reward": 18
+    },
+    {
+      "id": "geom_skill_5",
+      "name": "Geometry Skill 5",
+      "description": "Understanding geometry skill 5",
+      "domain": "geometry",
+      "difficulty_level": 4,
+      "mastery_threshold": 71,
+      "xp_reward": 18
+    },
+    {
+      "id": "geom_skill_6",
+      "name": "Geometry Skill 6",
+      "description": "Understanding geometry skill 6",
+      "domain": "geometry",
+      "difficulty_level": 4,
+      "mastery_threshold": 71,
+      "xp_reward": 18
+    },
+    {
+      "id": "geom_skill_7",
+      "name": "Geometry Skill 7",
+      "description": "Understanding geometry skill 7",
+      "domain": "geometry",
+      "difficulty_level": 4,
+      "mastery_threshold": 71,
+      "xp_reward": 18
+    },
+    {
+      "id": "geom_skill_8",
+      "name": "Geometry Skill 8",
+      "description": "Understanding geometry skill 8",
+      "domain": "geometry",
+      "difficulty_level": 5,
+      "mastery_threshold": 71,
+      "xp_reward": 20
+    },
+    {
+      "id": "geom_skill_9",
+      "name": "Geometry Skill 9",
+      "description": "Understanding geometry skill 9",
+      "domain": "geometry",
+      "difficulty_level": 5,
+      "mastery_threshold": 72,
+      "xp_reward": 20
+    },
+    {
+      "id": "geom_skill_10",
+      "name": "Geometry Skill 10",
+      "description": "Understanding geometry skill 10",
+      "domain": "geometry",
+      "difficulty_level": 5,
+      "mastery_threshold": 72,
+      "xp_reward": 20
+    },
+    {
+      "id": "geom_skill_11",
+      "name": "Geometry Skill 11",
+      "description": "Understanding geometry skill 11",
+      "domain": "geometry",
+      "difficulty_level": 5,
+      "mastery_threshold": 72,
+      "xp_reward": 20
+    },
+    {
+      "id": "geom_skill_12",
+      "name": "Geometry Skill 12",
+      "description": "Understanding geometry skill 12",
+      "domain": "geometry",
+      "difficulty_level": 5,
+      "mastery_threshold": 72,
+      "xp_reward": 20
+    },
+    {
+      "id": "geom_skill_13",
+      "name": "Geometry Skill 13",
+      "description": "Understanding geometry skill 13",
+      "domain": "geometry",
+      "difficulty_level": 5,
+      "mastery_threshold": 72,
+      "xp_reward": 20
+    },
+    {
+      "id": "geom_skill_14",
+      "name": "Geometry Skill 14",
+      "description": "Understanding geometry skill 14",
+      "domain": "geometry",
+      "difficulty_level": 5,
+      "mastery_threshold": 73,
+      "xp_reward": 20
+    },
+    {
+      "id": "geom_skill_15",
+      "name": "Geometry Skill 15",
+      "description": "Understanding geometry skill 15",
+      "domain": "geometry",
+      "difficulty_level": 5,
+      "mastery_threshold": 73,
+      "xp_reward": 20
+    },
+    {
+      "id": "geom_skill_16",
+      "name": "Geometry Skill 16",
+      "description": "Understanding geometry skill 16",
+      "domain": "geometry",
+      "difficulty_level": 5,
+      "mastery_threshold": 73,
+      "xp_reward": 20
+    },
+    {
+      "id": "geom_skill_17",
+      "name": "Geometry Skill 17",
+      "description": "Understanding geometry skill 17",
+      "domain": "geometry",
+      "difficulty_level": 5,
+      "mastery_threshold": 73,
+      "xp_reward": 20
+    },
+    {
+      "id": "geom_skill_18",
+      "name": "Geometry Skill 18",
+      "description": "Understanding geometry skill 18",
+      "domain": "geometry",
+      "difficulty_level": 5,
+      "mastery_threshold": 74,
+      "xp_reward": 20
+    },
+    {
+      "id": "geom_skill_19",
+      "name": "Geometry Skill 19",
+      "description": "Understanding geometry skill 19",
+      "domain": "geometry",
+      "difficulty_level": 5,
+      "mastery_threshold": 74,
+      "xp_reward": 20
+    },
+    {
+      "id": "geom_skill_20",
+      "name": "Geometry Skill 20",
+      "description": "Understanding geometry skill 20",
+      "domain": "geometry",
+      "difficulty_level": 5,
+      "mastery_threshold": 74,
+      "xp_reward": 20
+    },
+    {
+      "id": "geom_skill_21",
+      "name": "Geometry Skill 21",
+      "description": "Understanding geometry skill 21",
+      "domain": "geometry",
+      "difficulty_level": 5,
+      "mastery_threshold": 74,
+      "xp_reward": 20
+    },
+    {
+      "id": "geom_skill_22",
+      "name": "Geometry Skill 22",
+      "description": "Understanding geometry skill 22",
+      "domain": "geometry",
+      "difficulty_level": 5,
+      "mastery_threshold": 74,
+      "xp_reward": 20
+    },
+    {
+      "id": "geom_skill_23",
+      "name": "Geometry Skill 23",
+      "description": "Understanding geometry skill 23",
+      "domain": "geometry",
+      "difficulty_level": 6,
+      "mastery_threshold": 75,
+      "xp_reward": 22
+    },
+    {
+      "id": "geom_skill_24",
+      "name": "Geometry Skill 24",
+      "description": "Understanding geometry skill 24",
+      "domain": "geometry",
+      "difficulty_level": 6,
+      "mastery_threshold": 75,
+      "xp_reward": 22
+    },
+    {
+      "id": "geom_skill_25",
+      "name": "Geometry Skill 25",
+      "description": "Understanding geometry skill 25",
+      "domain": "geometry",
+      "difficulty_level": 6,
+      "mastery_threshold": 75,
+      "xp_reward": 22
+    },
+    {
+      "id": "geom_skill_26",
+      "name": "Geometry Skill 26",
+      "description": "Understanding geometry skill 26",
+      "domain": "geometry",
+      "difficulty_level": 6,
+      "mastery_threshold": 75,
+      "xp_reward": 22
+    },
+    {
+      "id": "geom_skill_27",
+      "name": "Geometry Skill 27",
+      "description": "Understanding geometry skill 27",
+      "domain": "geometry",
+      "difficulty_level": 6,
+      "mastery_threshold": 76,
+      "xp_reward": 22
+    },
+    {
+      "id": "geom_skill_28",
+      "name": "Geometry Skill 28",
+      "description": "Understanding geometry skill 28",
+      "domain": "geometry",
+      "difficulty_level": 6,
+      "mastery_threshold": 76,
+      "xp_reward": 22
+    },
+    {
+      "id": "geom_skill_29",
+      "name": "Geometry Skill 29",
+      "description": "Understanding geometry skill 29",
+      "domain": "geometry",
+      "difficulty_level": 6,
+      "mastery_threshold": 76,
+      "xp_reward": 22
+    },
+    {
+      "id": "geom_skill_30",
+      "name": "Geometry Skill 30",
+      "description": "Understanding geometry skill 30",
+      "domain": "geometry",
+      "difficulty_level": 6,
+      "mastery_threshold": 76,
+      "xp_reward": 22
+    },
+    {
+      "id": "geom_skill_31",
+      "name": "Geometry Skill 31",
+      "description": "Understanding geometry skill 31",
+      "domain": "geometry",
+      "difficulty_level": 6,
+      "mastery_threshold": 76,
+      "xp_reward": 22
+    },
+    {
+      "id": "geom_skill_32",
+      "name": "Geometry Skill 32",
+      "description": "Understanding geometry skill 32",
+      "domain": "geometry",
+      "difficulty_level": 6,
+      "mastery_threshold": 77,
+      "xp_reward": 22
+    },
+    {
+      "id": "geom_skill_33",
+      "name": "Geometry Skill 33",
+      "description": "Understanding geometry skill 33",
+      "domain": "geometry",
+      "difficulty_level": 6,
+      "mastery_threshold": 77,
+      "xp_reward": 22
+    },
+    {
+      "id": "geom_skill_34",
+      "name": "Geometry Skill 34",
+      "description": "Understanding geometry skill 34",
+      "domain": "geometry",
+      "difficulty_level": 6,
+      "mastery_threshold": 77,
+      "xp_reward": 22
+    },
+    {
+      "id": "geom_skill_35",
+      "name": "Geometry Skill 35",
+      "description": "Understanding geometry skill 35",
+      "domain": "geometry",
+      "difficulty_level": 6,
+      "mastery_threshold": 77,
+      "xp_reward": 22
+    },
+    {
+      "id": "geom_skill_36",
+      "name": "Geometry Skill 36",
+      "description": "Understanding geometry skill 36",
+      "domain": "geometry",
+      "difficulty_level": 6,
+      "mastery_threshold": 78,
+      "xp_reward": 22
+    },
+    {
+      "id": "geom_skill_37",
+      "name": "Geometry Skill 37",
+      "description": "Understanding geometry skill 37",
+      "domain": "geometry",
+      "difficulty_level": 6,
+      "mastery_threshold": 78,
+      "xp_reward": 22
+    },
+    {
+      "id": "geom_skill_38",
+      "name": "Geometry Skill 38",
+      "description": "Understanding geometry skill 38",
+      "domain": "geometry",
+      "difficulty_level": 7,
+      "mastery_threshold": 78,
+      "xp_reward": 24
+    },
+    {
+      "id": "geom_skill_39",
+      "name": "Geometry Skill 39",
+      "description": "Understanding geometry skill 39",
+      "domain": "geometry",
+      "difficulty_level": 7,
+      "mastery_threshold": 78,
+      "xp_reward": 24
+    },
+    {
+      "id": "geom_skill_40",
+      "name": "Geometry Skill 40",
+      "description": "Understanding geometry skill 40",
+      "domain": "geometry",
+      "difficulty_level": 7,
+      "mastery_threshold": 78,
+      "xp_reward": 24
+    },
+    {
+      "id": "geom_skill_41",
+      "name": "Geometry Skill 41",
+      "description": "Understanding geometry skill 41",
+      "domain": "geometry",
+      "difficulty_level": 7,
+      "mastery_threshold": 79,
+      "xp_reward": 24
+    },
+    {
+      "id": "geom_skill_42",
+      "name": "Geometry Skill 42",
+      "description": "Understanding geometry skill 42",
+      "domain": "geometry",
+      "difficulty_level": 7,
+      "mastery_threshold": 79,
+      "xp_reward": 24
+    },
+    {
+      "id": "geom_skill_43",
+      "name": "Geometry Skill 43",
+      "description": "Understanding geometry skill 43",
+      "domain": "geometry",
+      "difficulty_level": 7,
+      "mastery_threshold": 79,
+      "xp_reward": 24
+    },
+    {
+      "id": "geom_skill_44",
+      "name": "Geometry Skill 44",
+      "description": "Understanding geometry skill 44",
+      "domain": "geometry",
+      "difficulty_level": 7,
+      "mastery_threshold": 79,
+      "xp_reward": 24
+    },
+    {
+      "id": "geom_skill_45",
+      "name": "Geometry Skill 45",
+      "description": "Understanding geometry skill 45",
+      "domain": "geometry",
+      "difficulty_level": 7,
+      "mastery_threshold": 80,
+      "xp_reward": 24
+    }
+  ]
+}

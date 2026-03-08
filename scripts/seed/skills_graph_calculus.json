@@ -1,0 +1,319 @@
+{
+  "skills": [
+    {
+      "id": "calc_skill_1",
+      "name": "Calculus Skill 1",
+      "description": "Understanding calculus skill 1",
+      "domain": "calculus",
+      "difficulty_level": 9,
+      "mastery_threshold": 70,
+      "xp_reward": 28
+    },
+    {
+      "id": "calc_skill_2",
+      "name": "Calculus Skill 2",
+      "description": "Understanding calculus skill 2",
+      "domain": "calculus",
+      "difficulty_level": 9,
+      "mastery_threshold": 70,
+      "xp_reward": 28
+    },
+    {
+      "id": "calc_skill_3",
+      "name": "Calculus Skill 3",
+      "description": "Understanding calculus skill 3",
+      "domain": "calculus",
+      "difficulty_level": 9,
+      "mastery_threshold": 70,
+      "xp_reward": 28
+    },
+    {
+      "id": "calc_skill_4",
+      "name": "Calculus Skill 4",
+      "description": "Understanding calculus skill 4",
+      "domain": "calculus",
+      "difficulty_level": 9,
+      "mastery_threshold": 71,
+      "xp_reward": 28
+    },
+    {
+      "id": "calc_skill_5",
+      "name": "Calculus Skill 5",
+      "description": "Understanding calculus skill 5",
+      "domain": "calculus",
+      "difficulty_level": 9,
+      "mastery_threshold": 71,
+      "xp_reward": 28
+    },
+    {
+      "id": "calc_skill_6",
+      "name": "Calculus Skill 6",
+      "description": "Understanding calculus skill 6",
+      "domain": "calculus",
+      "difficulty_level": 9,
+      "mastery_threshold": 71,
+      "xp_reward": 28
+    },
+    {
+      "id": "calc_skill_7",
+      "name": "Calculus Skill 7",
+      "description": "Understanding calculus skill 7",
+      "domain": "calculus",
+      "difficulty_level": 9,
+      "mastery_threshold": 72,
+      "xp_reward": 28
+    },
+    {
+      "id": "calc_skill_8",
+      "name": "Calculus Skill 8",
+      "description": "Understanding calculus skill 8",
+      "domain": "calculus",
+      "difficulty_level": 9,
+      "mastery_threshold": 72,
+      "xp_reward": 28
+    },
+    {
+      "id": "calc_skill_9",
+      "name": "Calculus Skill 9",
+      "description": "Understanding calculus skill 9",
+      "domain": "calculus",
+      "difficulty_level": 9,
+      "mastery_threshold": 72,
+      "xp_reward": 28
+    },
+    {
+      "id": "calc_skill_10",
+      "name": "Calculus Skill 10",
+      "description": "Understanding calculus skill 10",
+      "domain": "calculus",
+      "difficulty_level": 9,
+      "mastery_threshold": 72,
+      "xp_reward": 28
+    },
+    {
+      "id": "calc_skill_11",
+      "name": "Calculus Skill 11",
+      "description": "Understanding calculus skill 11",
+      "domain": "calculus",
+      "difficulty_level": 9,
+      "mastery_threshold": 73,
+      "xp_reward": 28
+    },
+    {
+      "id": "calc_skill_12",
+      "name": "Calculus Skill 12",
+      "description": "Understanding calculus skill 12",
+      "domain": "calculus",
+      "difficulty_level": 9,
+      "mastery_threshold": 73,
+      "xp_reward": 28
+    },
+    {
+      "id": "calc_skill_13",
+      "name": "Calculus Skill 13",
+      "description": "Understanding calculus skill 13",
+      "domain": "calculus",
+      "difficulty_level": 9,
+      "mastery_threshold": 73,
+      "xp_reward": 28
+    },
+    {
+      "id": "calc_skill_14",
+      "name": "Calculus Skill 14",
+      "description": "Understanding calculus skill 14",
+      "domain": "calculus",
+      "difficulty_level": 9,
+      "mastery_threshold": 74,
+      "xp_reward": 28
+    },
+    {
+      "id": "calc_skill_15",
+      "name": "Calculus Skill 15",
+      "description": "Understanding calculus skill 15",
+      "domain": "calculus",
+      "difficulty_level": 9,
+      "mastery_threshold": 74,
+      "xp_reward": 28
+    },
+    {
+      "id": "calc_skill_16",
+      "name": "Calculus Skill 16",
+      "description": "Understanding calculus skill 16",
+      "domain": "calculus",
+      "difficulty_level": 9,
+      "mastery_threshold": 74,
+      "xp_reward": 28
+    },
+    {
+      "id": "calc_skill_17",
+      "name": "Calculus Skill 17",
+      "description": "Understanding calculus skill 17",
+      "domain": "calculus",
+      "difficulty_level": 9,
+      "mastery_threshold": 74,
+      "xp_reward": 28
+    },
+    {
+      "id": "calc_skill_18",
+      "name": "Calculus Skill 18",
+      "description": "Understanding calculus skill 18",
+      "domain": "calculus",
+      "difficulty_level": 10,
+      "mastery_threshold": 75,
+      "xp_reward": 30
+    },
+    {
+      "id": "calc_skill_19",
+      "name": "Calculus Skill 19",
+      "description": "Understanding calculus skill 19",
+      "domain": "calculus",
+      "difficulty_level": 10,
+      "mastery_threshold": 75,
+      "xp_reward": 30
+    },
+    {
+      "id": "calc_skill_20",
+      "name": "Calculus Skill 20",
+      "description": "Understanding calculus skill 20",
+      "domain": "calculus",
+      "difficulty_level": 10,
+      "mastery_threshold": 75,
+      "xp_reward": 30
+    },
+    {
+      "id": "calc_skill_21",
+      "name": "Calculus Skill 21",
+      "description": "Understanding calculus skill 21",
+      "domain": "calculus",
+      "difficulty_level": 10,
+      "mastery_threshold": 76,
+      "xp_reward": 30
+    },
+    {
+      "id": "calc_skill_22",
+      "name": "Calculus Skill 22",
+      "description": "Understanding calculus skill 22",
+      "domain": "calculus",
+      "difficulty_level": 10,
+      "mastery_threshold": 76,
+      "xp_reward": 30
+    },
+    {
+      "id": "calc_skill_23",
+      "name": "Calculus Skill 23",
+      "description": "Understanding calculus skill 23",
+      "domain": "calculus",
+      "difficulty_level": 10,
+      "mastery_threshold": 76,
+      "xp_reward": 30
+    },
+    {
+      "id": "calc_skill_24",
+      "name": "Calculus Skill 24",
+      "description": "Understanding calculus skill 24",
+      "domain": "calculus",
+      "difficulty_level": 10,
+      "mastery_threshold": 76,
+      "xp_reward": 30
+    },
+    {
+      "id": "calc_skill_25",
+      "name": "Calculus Skill 25",
+      "description": "Understanding calculus skill 25",
+      "domain": "calculus",
+      "difficulty_level": 10,
+      "mastery_threshold": 77,
+      "xp_reward": 30
+    },
+    {
+      "id": "calc_skill_26",
+      "name": "Calculus Skill 26",
+      "description": "Understanding calculus skill 26",
+      "domain": "calculus",
+      "difficulty_level": 10,
+      "mastery_threshold": 77,
+      "xp_reward": 30
+    },
+    {
+      "id": "calc_skill_27",
+      "name": "Calculus Skill 27",
+      "description": "Understanding calculus skill 27",
+      "domain": "calculus",
+      "difficulty_level": 10,
+      "mastery_threshold": 77,
+      "xp_reward": 30
+    },
+    {
+      "id": "calc_skill_28",
+      "name": "Calculus Skill 28",
+      "description": "Understanding calculus skill 28",
+      "domain": "calculus",
+      "difficulty_level": 10,
+      "mastery_threshold": 78,
+      "xp_reward": 30
+    },
+    {
+      "id": "calc_skill_29",
+      "name": "Calculus Skill 29",
+      "description": "Understanding calculus skill 29",
+      "domain": "calculus",
+      "difficulty_level": 10,
+      "mastery_threshold": 78,
+      "xp_reward": 30
+    },
+    {
+      "id": "calc_skill_30",
+      "name": "Calculus Skill 30",
+      "description": "Understanding calculus skill 30",
+      "domain": "calculus",
+      "difficulty_level": 10,
+      "mastery_threshold": 78,
+      "xp_reward": 30
+    },
+    {
+      "id": "calc_skill_31",
+      "name": "Calculus Skill 31",
+      "description": "Understanding calculus skill 31",
+      "domain": "calculus",
+      "difficulty_level": 10,
+      "mastery_threshold": 78,
+      "xp_reward": 30
+    },
+    {
+      "id": "calc_skill_32",
+      "name": "Calculus Skill 32",
+      "description": "Understanding calculus skill 32",
+      "domain": "calculus",
+      "difficulty_level": 10,
+      "mastery_threshold": 79,
+      "xp_reward": 30
+    },
+    {
+      "id": "calc_skill_33",
+      "name": "Calculus Skill 33",
+      "description": "Understanding calculus skill 33",
+      "domain": "calculus",
+      "difficulty_level": 10,
+      "mastery_threshold": 79,
+      "xp_reward": 30
+    },
+    {
+      "id": "calc_skill_34",
+      "name": "Calculus Skill 34",
+      "description": "Understanding calculus skill 34",
+      "domain": "calculus",
+      "difficulty_level": 10,
+      "mastery_threshold": 79,
+      "xp_reward": 30
+    },
+    {
+      "id": "calc_skill_35",
+      "name": "Calculus Skill 35",
+      "description": "Understanding calculus skill 35",
+      "domain": "calculus",
+      "difficulty_level": 10,
+      "mastery_threshold": 80,
+      "xp_reward": 30
+    }
+  ]
+}
