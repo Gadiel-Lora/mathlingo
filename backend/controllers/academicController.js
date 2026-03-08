@@ -19,15 +19,18 @@ import {
   registerAttemptAnalyticsEvent,
   registerQuestionGeneratedEvent,
 } from '../academic/analyticsStore.js'
-import { getDomainGraph } from '../academic/domainGraph.js'
+import { getLessonSkills, isLessonCompleted, isUnitCompleted } from '../academic/curriculumSkillMap.js'
+import { getDomainGraph, getDomainSkills, getPrerequisites, getDependents, getSkill, getRecommendedSkills, getUnlockFrontier } from '../academic/domainGraph.js'
 import { classifyConceptualError } from '../academic/errorClassifier.js'
 import { generateAdaptiveEvaluation } from '../academic/evaluationEngine.js'
 import { generateFinalExam } from '../academic/finalExamGenerator.js'
+import { applyCompletedSkillsSnapshot, getUserMasteryMap, getUserSkillStates, isMasteryTrackingMode, updateMastery } from '../academic/masteryEngine.js'
 import { estimatePredictiveOutcomes } from '../academic/predictiveModel.js'
 import { QUESTION_STATE_FLOW } from '../academic/questionStateFlow.js'
 import { generateQuestion, isAnswerCorrect, toPublicQuestion } from '../academic/questionEngine.js'
 import { getDueSkillsForReview, getRetentionSummary, getUserRetentionProfile, registerSkillObservation } from '../academic/retentionEngine.js'
 import { CHAT_INTENTS, classifyTutorIntent, requestTutorChat, requestTutorHelp } from '../academic/tutorAI.js'
+import { getNextSkills, getUnlockedSkills } from '../academic/unlockEngine.js'
 import { calculateXP, updateUserLevel } from '../academic/xpSystem.js'
 
 const MAX_ATTEMPTS = 3
@@ -83,6 +86,29 @@ const parseMix = (value) => {
   return 'mixed'
 }
 
+const LEARNING_MODES = Object.freeze({
+  CURRICULUM: 'curriculum',
+  AUTONOMOUS: 'autonomous',
+  REVIEW: 'review',
+})
+
+const parseLearningMode = (value, fallback = LEARNING_MODES.CURRICULUM) => {
+  const normalized = sanitizeInput(value).toLowerCase()
+  if (!normalized) return fallback
+  if (['autonomous', 'autonomo', 'auto'].includes(normalized)) return LEARNING_MODES.AUTONOMOUS
+  if (['review', 'repasos', 'free-practice', 'free_practice', 'practice-only'].includes(normalized)) {
+    return LEARNING_MODES.REVIEW
+  }
+  if (['curriculum', 'journey', 'recorrido'].includes(normalized)) return LEARNING_MODES.CURRICULUM
+  return fallback
+}
+
+const parseOptionalLimit = (value, fallback = 8, max = 50) => {
+  const parsed = Number(value)
+  if (!Number.isFinite(parsed)) return Math.max(1, Math.floor(fallback))
+  return Math.max(1, Math.min(Math.floor(parsed), max))
+}
+
 const parseOptionalCount = (value) => {
   const parsed = Number(value)
   if (!Number.isFinite(parsed)) return null
@@ -134,79 +160,121 @@ const summarizePredictionPayload = ({ analyticsSummary, retentionSummary }) => {
   })
 }
 
-const buildAdaptiveRecommendation = ({ userId, grade, completedSkills }) => {
+const buildAdaptiveRecommendation = ({ userId, grade, completedSkills, learningMode, domain }) => {
   const normalizedGrade = parseGradeNumber(grade)
-  const graph = getDomainGraph({
+  const mode = parseLearningMode(learningMode, LEARNING_MODES.CURRICULUM)
+  const domainFilter = sanitizeInput(domain).toLowerCase()
+
+  applyCompletedSkillsSnapshot(userId, completedSkills, 100)
+  const masteryMap = getUserMasteryMap(userId)
+  for (const completedSkillId of completedSkills || []) {
+    const safeSkillId = sanitizeInput(completedSkillId)
+    if (!safeSkillId) continue
+    if (masteryMap[safeSkillId] == null) masteryMap[safeSkillId] = 100
+  }
+
+  const unlockFrontier = getUnlockedSkills(userId, {
+    masteryMap,
+    domain: domainFilter || null,
     grade: normalizedGrade || null,
-    completedSkills,
-    revealAll: true,
+    includeMastered: true,
   })
-  const availableSkills = graph.nodes.filter((node) => node.state === 'unlocked')
-  const dueSkills = getDueSkillsForReview(userId, 25)
-  const dueMap = new Map(dueSkills.map((item) => [item.skillId, item]))
-  const dueCandidates = availableSkills
-    .filter((node) => dueMap.has(node.id))
-    .map((node) => ({ node, due: dueMap.get(node.id) }))
+  const recommendationCandidates = getNextSkills(userId, domainFilter || null, {
+    masteryMap,
+    grade: normalizedGrade || null,
+    limit: 25,
+  })
+
+  const dueSkills = mode === LEARNING_MODES.REVIEW ? [] : getDueSkillsForReview(userId, 25)
+  const unlockedById = new Map(unlockFrontier.map((skill) => [skill.id, skill]))
+  const dueCandidates = dueSkills
+    .map((dueSkill) => ({
+      skill: unlockedById.get(sanitizeInput(dueSkill.skillId)),
+      due: dueSkill,
+    }))
+    .filter((item) => item.skill)
     .sort((left, right) => (right.due?.forgetIndex || 0) - (left.due?.forgetIndex || 0))
 
   const analyticsSummary = getUserAnalyticsSummary(userId)
-  const branchMasteryMap = new Map(
-    (analyticsSummary?.dominioPorRama || []).map((item) => [item.branchId, Number(item.dominio || 0)]),
-  )
-  const unlockedByWeakBranch = [...availableSkills].sort((left, right) => {
-    const leftMastery = Number(branchMasteryMap.get(left.branchId) || 0)
-    const rightMastery = Number(branchMasteryMap.get(right.branchId) || 0)
-    if (leftMastery !== rightMastery) return leftMastery - rightMastery
-    return Number(left.complexityWeight || 0) - Number(right.complexityWeight || 0)
-  })
+  const branchMasteryMap = new Map((analyticsSummary?.dominioPorRama || []).map((item) => [item.branchId, Number(item.dominio || 0)]))
+  const branchWeaknessCandidates = [...unlockFrontier]
+    .filter((skill) => !Boolean(skill.mastered))
+    .sort((left, right) => {
+      const leftMastery = Number(branchMasteryMap.get(left.domain) || branchMasteryMap.get(left.branchId) || 0)
+      const rightMastery = Number(branchMasteryMap.get(right.domain) || branchMasteryMap.get(right.branchId) || 0)
+      if (leftMastery !== rightMastery) return leftMastery - rightMastery
+      return Number(left.complexityWeight || 0) - Number(right.complexityWeight || 0)
+    })
 
-  const selected = dueCandidates[0]?.node || unlockedByWeakBranch[0] || null
+  const selected = dueCandidates[0]?.skill || recommendationCandidates[0] || branchWeaknessCandidates[0] || null
   const retentionSummary = getRetentionSummary(userId)
   const accuracyRate = Number(analyticsSummary?.rates?.accuracyRate || 0)
   const averageForget = Number(retentionSummary?.averageForgetIndex || 0)
 
-  let mode = 'practice'
-  if (dueCandidates.length > 0) mode = 'practice'
-  else if (accuracyRate >= 0.86 && averageForget <= 0.35) mode = 'challenge'
-  else if (accuracyRate >= 0.72) mode = 'evaluation'
+  let recommendationMode = 'practice'
+  if (mode === LEARNING_MODES.REVIEW) recommendationMode = 'review'
+  else if (dueCandidates.length > 0) recommendationMode = 'practice'
+  else if (accuracyRate >= 0.86 && averageForget <= 0.35) recommendationMode = 'challenge'
+  else if (accuracyRate >= 0.72) recommendationMode = 'evaluation'
 
-  const recommendedDifficulty = selected
-    ? Math.max(1, Math.min(10, Number(selected.difficulty || 1) + (mode === 'challenge' ? 1 : 0)))
-    : 3
+  const baseDifficulty = Number(selected?.difficulty_level || selected?.difficulty || 3)
+  const recommendedDifficulty = Math.max(1, Math.min(10, baseDifficulty + (recommendationMode === 'challenge' ? 1 : 0)))
   const recommendedType = deriveQuestionTypeFromDifficulty(recommendedDifficulty)
+  const frontier = getUnlockFrontier(masteryMap, {
+    domain: domainFilter || null,
+    grade: normalizedGrade || null,
+    includeMastered: false,
+  })
+  const graphRecommendations = getRecommendedSkills(masteryMap, {
+    domain: domainFilter || null,
+    grade: normalizedGrade || null,
+    limit: 10,
+  })
 
   return {
     nextSkill: selected
       ? {
           id: selected.id,
+          name: selected.name,
+          domain: selected.domain,
           gradeId: selected.gradeId,
           gradeNumber: selected.gradeNumber,
-          branchId: selected.branchId,
+          branchId: selected.branchId || selected.domain,
           topicId: selected.topicId,
           lessonId: selected.lessonId,
           lessonTitle: selected.lessonTitle,
           complexityWeight: selected.complexityWeight,
-          state: selected.state,
+          masteryThreshold: selected.mastery_threshold,
+          state: selected.state || 'unlocked',
         }
       : null,
-    mode,
+    mode: recommendationMode,
+    learningMode: mode,
     reason:
-      dueCandidates.length > 0
-        ? 'review-due'
-        : mode === 'challenge'
-          ? 'high-performance'
-          : mode === 'evaluation'
-            ? 'stability-window'
-            : 'practice-gap',
+      mode === LEARNING_MODES.REVIEW
+        ? 'manual-practice-mode'
+        : dueCandidates.length > 0
+          ? 'review-due'
+          : recommendationMode === 'challenge'
+            ? 'high-performance'
+            : recommendationMode === 'evaluation'
+              ? 'stability-window'
+              : 'practice-gap',
     recommendedDifficulty,
     recommendedQuestionType: recommendedType,
-    suggestedProblemMix: mode === 'challenge' ? 'advanced-modeling' : mode === 'evaluation' ? 'mixed' : 'contextualized',
+    suggestedProblemMix:
+      recommendationMode === 'challenge' ? 'advanced-modeling' : recommendationMode === 'evaluation' ? 'mixed' : 'contextualized',
     telemetry: {
-      availableSkills: availableSkills.length,
+      availableSkills: unlockFrontier.length,
       dueSkills: dueSkills.length,
       dueCandidates: dueCandidates.length,
+      unlockFrontier: frontier.length,
+      graphRecommendations: graphRecommendations.length,
+      masteryTrackedSkills: Object.keys(masteryMap).length,
       accuracyRate: Number(analyticsSummary?.rates?.accuracyRate || 0),
       averageForgetIndex: averageForget,
+      xpEnabled: mode !== LEARNING_MODES.REVIEW,
+      masteryEnabled: mode !== LEARNING_MODES.REVIEW,
     },
   }
 }
@@ -263,6 +331,197 @@ router.get('/branches/:id', (req, res) => {
   })
 })
 
+router.get('/skills/domain/:domain', (req, res) => {
+  const domain = sanitizeInput(req.params?.domain).toLowerCase()
+  if (!domain) {
+    res.status(400).json({
+      error: 'domain es obligatorio.',
+    })
+    return
+  }
+
+  const skills = getDomainSkills(domain)
+  if (!skills.length) {
+    res.status(404).json({
+      error: `No existen habilidades para domain=${domain}.`,
+    })
+    return
+  }
+
+  res.status(200).json({
+    domain,
+    skills,
+    totalSkills: skills.length,
+  })
+})
+
+router.get('/skills/:id/prerequisites', (req, res) => {
+  const skillId = sanitizeInput(req.params?.id)
+  const skill = getSkill(skillId)
+  if (!skill) {
+    res.status(404).json({
+      error: `No existe skill id=${skillId}.`,
+    })
+    return
+  }
+
+  res.status(200).json({
+    skillId,
+    prerequisites: getPrerequisites(skillId),
+  })
+})
+
+router.get('/skills/:id/dependents', (req, res) => {
+  const skillId = sanitizeInput(req.params?.id)
+  const skill = getSkill(skillId)
+  if (!skill) {
+    res.status(404).json({
+      error: `No existe skill id=${skillId}.`,
+    })
+    return
+  }
+
+  res.status(200).json({
+    skillId,
+    dependents: getDependents(skillId),
+  })
+})
+
+router.get('/skills/:id', (req, res) => {
+  const skillId = sanitizeInput(req.params?.id)
+  const skill = getSkill(skillId)
+  if (!skill) {
+    res.status(404).json({
+      error: `No existe skill id=${skillId}.`,
+    })
+    return
+  }
+
+  res.status(200).json({
+    skill,
+    prerequisites: getPrerequisites(skillId).map((item) => item.id),
+    unlocks: getDependents(skillId).map((item) => item.id),
+  })
+})
+
+router.post('/skills/unlocked', (req, res) => {
+  const userId = sanitizeInput(req.body?.userId)
+  const domain = sanitizeInput(req.body?.domain)
+  const grade = parseGrade(req.body?.grade)
+  if (!userId) {
+    res.status(400).json({
+      error: 'userId es obligatorio.',
+    })
+    return
+  }
+
+  const unlocked = getUnlockedSkills(userId, {
+    domain: domain || null,
+    grade: grade || null,
+    includeMastered: true,
+  })
+  res.status(200).json({
+    userId,
+    domain: domain || null,
+    grade: grade || null,
+    unlocked,
+    totalUnlocked: unlocked.length,
+  })
+})
+
+router.post('/skills/next', (req, res) => {
+  const userId = sanitizeInput(req.body?.userId)
+  const domain = sanitizeInput(req.body?.domain)
+  const grade = parseGrade(req.body?.grade)
+  const limit = parseOptionalLimit(req.body?.limit, 8, 50)
+  if (!userId) {
+    res.status(400).json({
+      error: 'userId es obligatorio.',
+    })
+    return
+  }
+
+  const nextSkills = getNextSkills(userId, domain || null, {
+    grade: grade || null,
+    limit,
+  })
+  res.status(200).json({
+    userId,
+    domain: domain || null,
+    grade: grade || null,
+    nextSkills,
+  })
+})
+
+router.post('/mastery/state', (req, res) => {
+  const userId = sanitizeInput(req.body?.userId)
+  if (!userId) {
+    res.status(400).json({
+      error: 'userId es obligatorio.',
+    })
+    return
+  }
+
+  const masteryMap = getUserMasteryMap(userId)
+  res.status(200).json({
+    userId,
+    trackedSkills: Object.keys(masteryMap).length,
+    mastery: masteryMap,
+    states: getUserSkillStates(userId),
+  })
+})
+
+router.post('/curriculum/lesson/skills', (req, res) => {
+  const lessonId = sanitizeInput(req.body?.lessonId)
+  if (!lessonId) {
+    res.status(400).json({
+      error: 'lessonId es obligatorio.',
+    })
+    return
+  }
+
+  const lessonSkills = getLessonSkills(lessonId)
+  res.status(200).json({
+    lessonId,
+    skills: lessonSkills,
+    totalSkills: lessonSkills.length,
+  })
+})
+
+router.post('/curriculum/lesson/completed', (req, res) => {
+  const userId = sanitizeInput(req.body?.userId)
+  const lessonId = sanitizeInput(req.body?.lessonId)
+  if (!userId || !lessonId) {
+    res.status(400).json({
+      error: 'userId y lessonId son obligatorios.',
+    })
+    return
+  }
+
+  res.status(200).json({
+    userId,
+    lessonId,
+    completion: isLessonCompleted(userId, lessonId),
+  })
+})
+
+router.post('/curriculum/unit/completed', (req, res) => {
+  const userId = sanitizeInput(req.body?.userId)
+  const unitId = sanitizeInput(req.body?.unitId)
+  if (!userId || !unitId) {
+    res.status(400).json({
+      error: 'userId y unitId son obligatorios.',
+    })
+    return
+  }
+
+  res.status(200).json({
+    userId,
+    unitId,
+    completion: isUnitCompleted(userId, unitId),
+  })
+})
+
 router.post('/domain/map', (req, res) => {
   const grade = parseGrade(req.body?.grade)
   const completedSkills = parseCompletedSkills(req.body?.completedSkills)
@@ -282,6 +541,8 @@ router.post('/adaptive/recommendation', (req, res) => {
   const userId = sanitizeInput(req.body?.userId)
   const grade = parseGrade(req.body?.grade)
   const completedSkills = parseCompletedSkills(req.body?.completedSkills)
+  const learningMode = parseLearningMode(req.body?.learningMode, LEARNING_MODES.CURRICULUM)
+  const domain = sanitizeInput(req.body?.domain)
   if (!userId) {
     res.status(400).json({
       error: 'userId es obligatorio.',
@@ -293,6 +554,8 @@ router.post('/adaptive/recommendation', (req, res) => {
     userId,
     grade,
     completedSkills,
+    learningMode,
+    domain,
   })
   res.status(200).json({
     recommendation,
@@ -363,6 +626,7 @@ router.post('/question/generate', (req, res) => {
   const topic = sanitizeInput(req.body?.topic)
   const difficulty = Number(req.body?.difficulty || 1)
   const examMode = Boolean(req.body?.examMode)
+  const learningMode = parseLearningMode(req.body?.learningMode, LEARNING_MODES.CURRICULUM)
   const gradeId = sanitizeInput(req.body?.gradeId)
   const lessonId = sanitizeInput(req.body?.lessonId)
   const lessonTitle = sanitizeInput(req.body?.lessonTitle)
@@ -411,6 +675,7 @@ router.post('/question/generate', (req, res) => {
       problemMix: parseMix(problemMix || 'mixed'),
       lessonSkills,
       lessonSubtopics,
+      learningMode,
     }
 
     const { state } = registerGeneratedQuestion({
@@ -418,17 +683,21 @@ router.post('/question/generate', (req, res) => {
       question: enrichedQuestion,
       examMode,
     })
-    registerQuestionGeneratedEvent({
-      userId,
-      question: enrichedQuestion,
-      lessonContext: {
-        problemMix: enrichedQuestion.problemMix,
-        lessonId,
-      },
-    })
+    if (learningMode !== LEARNING_MODES.REVIEW) {
+      registerQuestionGeneratedEvent({
+        userId,
+        question: enrichedQuestion,
+        lessonContext: {
+          problemMix: enrichedQuestion.problemMix,
+          lessonId,
+          learningMode,
+        },
+      })
+    }
 
     res.status(200).json({
       question: toPublicQuestion(enrichedQuestion),
+      learningMode,
       state: getPublicQuestionState(state),
       maxAttempts: MAX_ATTEMPTS,
       flow: QUESTION_STATE_FLOW,
@@ -648,6 +917,7 @@ router.post('/question/submit', async (req, res) => {
   const elapsedTimeMs = Number(req.body?.elapsedTimeMs || 0)
   const requestedMix = parseMix(req.body?.problemMix)
   const explicitSkillId = sanitizeInput(req.body?.skillId)
+  const requestedLearningMode = sanitizeInput(req.body?.learningMode)
 
   if (!userId || !questionHash) {
     res.status(400).json({
@@ -663,6 +933,11 @@ router.post('/question/submit', async (req, res) => {
     })
     return
   }
+
+  const learningMode = requestedLearningMode
+    ? parseLearningMode(requestedLearningMode, LEARNING_MODES.CURRICULUM)
+    : parseLearningMode(storedQuestion?.learningMode, LEARNING_MODES.CURRICULUM)
+  const progressEnabled = isMasteryTrackingMode(learningMode)
 
   const currentState = getQuestionState({ userId, questionHash })
   if (currentState?.locked) {
@@ -689,40 +964,61 @@ router.post('/question/submit', async (req, res) => {
     elapsedTimeMs,
   })
   const skillId = explicitSkillId || buildSkillIdFromQuestion(storedQuestion)
-  const retentionState = registerSkillObservation({
-    userId,
-    skillId,
-    correct,
-    difficulty: Number(storedQuestion?.difficulty || 1),
+  const retentionState = progressEnabled
+    ? registerSkillObservation({
+        userId,
+        skillId,
+        correct,
+        difficulty: Number(storedQuestion?.difficulty || 1),
+        elapsedTimeMs,
+      })
+    : null
+  if (progressEnabled) {
+    registerAttemptAnalyticsEvent({
+      userId,
+      question: storedQuestion,
+      correct,
+      assisted: attemptResult?.state?.assisted,
+      elapsedTimeMs,
+      errorType: conceptualError.type,
+      requestedMix: requestedMix || storedQuestion?.problemMix || 'mixed',
+    })
+  }
+  const masteryState = updateMastery(userId, skillId, {
+    isCorrect: correct,
     elapsedTimeMs,
-  })
-  registerAttemptAnalyticsEvent({
-    userId,
-    question: storedQuestion,
-    correct,
-    assisted: attemptResult?.state?.assisted,
-    elapsedTimeMs,
+    difficultyLevel: Number(storedQuestion?.difficulty || 1),
     errorType: conceptualError.type,
-    requestedMix: requestedMix || storedQuestion?.problemMix || 'mixed',
+    assisted: attemptResult?.state?.assisted,
+    mode: learningMode,
   })
 
   if (attemptResult.event === 'correct') {
     const helpPenaltyPct = Number(attemptResult?.state?.helpPenaltyPct || 0)
-    const xpAwarded = calculateXP({
-      difficulty: storedQuestion.difficulty,
-      attempts: attemptResult.state.attempts,
-      assisted: attemptResult.state.assisted,
-      helpPenaltyPct,
-    })
+    const xpAwarded = progressEnabled
+      ? calculateXP({
+          difficulty: storedQuestion.difficulty,
+          attempts: attemptResult.state.attempts,
+          assisted: attemptResult.state.assisted,
+          helpPenaltyPct,
+        })
+      : 0
     const penaltyNote =
       helpPenaltyPct > 0 ? ` (ajuste por ayuda en chat: -${Math.floor(helpPenaltyPct)}%)` : ''
+    const successMessage = progressEnabled
+      ? xpAwarded > 0
+        ? `Correcto. +${xpAwarded} XP${penaltyNote}`
+        : `Correcto. XP = 0${penaltyNote}`
+      : 'Correcto en modo repaso. No otorga XP ni progreso.'
 
     res.status(200).json({
       correct: true,
-      message: xpAwarded > 0 ? `Correcto. +${xpAwarded} XP${penaltyNote}` : `Correcto. XP = 0${penaltyNote}`,
+      message: successMessage,
       xpAwarded,
+      learningMode,
       errorClassification: conceptualError,
       retention: retentionState,
+      mastery: masteryState,
       state: getPublicQuestionState(attemptResult.state),
     })
     return
@@ -731,10 +1027,12 @@ router.post('/question/submit', async (req, res) => {
   if (attemptResult.event === 'retry') {
     res.status(200).json({
       correct: false,
-      message: 'Sigue intentando, vas bien. Revisa tus pasos.',
+      message: progressEnabled ? 'Sigue intentando, vas bien. Revisa tus pasos.' : 'Modo repaso: intenta nuevamente.',
       xpAwarded: 0,
+      learningMode,
       errorClassification: conceptualError,
       retention: retentionState,
+      mastery: masteryState,
       state: getPublicQuestionState(attemptResult.state),
     })
     return
@@ -759,8 +1057,10 @@ router.post('/question/submit', async (req, res) => {
       maxAttemptsReached: true,
       message: 'Se activo explicacion completa. Esta pregunta queda bloqueada y no otorga XP.',
       xpAwarded: 0,
+      learningMode,
       errorClassification: conceptualError,
       retention: retentionState,
+      mastery: masteryState,
       answer: aiResult.answer,
       source: aiResult.source,
       fallbackReason: aiResult.fallbackReason,
@@ -774,8 +1074,10 @@ router.post('/question/submit', async (req, res) => {
     correct: false,
     message: 'La pregunta esta bloqueada.',
     xpAwarded: 0,
+    learningMode,
     errorClassification: conceptualError,
     retention: retentionState,
+    mastery: masteryState,
     state: getPublicQuestionState(attemptResult.state),
   })
 })
