@@ -169,6 +169,25 @@ Estado actual:
   - `POST /api/academic/predictive/outcomes`
   - incluido dentro de `analytics/student`.
 
+### Modulo E - AI Tutor Layer (2026-03-08)
+
+Objetivo:
+- Proporcionar tutoría conversacional socrática.
+- Generar explicaciones adaptativas y pistas progresivas.
+- Generar ejercicios dinámicos basados en debilidades.
+
+Estado actual:
+- Microservicio independiente en `ai-tutor/`.
+- Integrado con Ollama (Mistral).
+- Cobertura de tests: 89.4%.
+
+Capacidades:
+- **Tutoría Socrática**: Guía al estudiante mediante preguntas en lugar de respuestas directas.
+- **Explicaciones Adaptativas**: Ajusta el lenguaje y profundidad según el dominio (mu, sigma) y el tipo de error.
+- **Pistas Progresivas**: Sistema de 3 niveles (Sutil, Dirección, Casi-solución).
+- **Generación Dinámica**: Crea problemas únicos alineados con el grafo de habilidades y el historial de errores.
+- **Estrategia Adaptativa**: Decide el enfoque (Socrático, Guiado, Directo) basándose en señales de rendimiento.
+
 ## 4) Experiencia de usuario (UX funcional)
 
 Pantallas clave objetivo:
