@@ -1,7 +1,7 @@
 # CONTEXTO MAESTRO EXPANDIDO
 EliteMath App - Sistema Matematico Adaptativo de Alto Rendimiento
 
-Ultima actualizacion: 2026-03-04
+Ultima actualizacion: 2026-03-21
 
 ## 1) Definicion del producto
 
@@ -464,3 +464,14 @@ Reglas aplicadas y validadas:
 
 Archivos semilla generados en `scripts/seed`:
 - `lesson_skill_map_seed.json`, `lesson_skill_map_seed.sql`
+
+
+
+## 15) AI Tutor Enhanced 2.0 y Refactor Lesson (2026-03-21)
+- ai-tutor agrega learning-diagnostician, adaptive-coaching-engine y adaptive-path-recommender para diagnostico, coaching y rutas personalizadas.
+- ai-controller expone nuevos endpoints para learning gaps, build profile, coaching feedback, tutoring strategy, personalized path y targeted practice.
+- prompt-builder y config/prompts amplian prompts para diagnostico, perfiles, coaching, rutas personalizadas y practica focalizada.
+- scripts/db/ai_tutor_schema.sql prepara persistencia PostgreSQL con student_learning_profiles y learning_diagnostics; el runtime actual sigue con stores en memoria.
+- frontend/src/pages/Lesson.tsx reemplaza Lesson.jsx y la UI se modulariza en frontend/src/components/lesson con LessonView, AISidebar, ProblemArea, EditorModal, Navbar y LessonCompletionView.
+- frontend/src/store/lessonStore.ts centraliza problema, respuesta, feedback, intentos, XP y chat IA con zustand, y frontend/src/types/lesson.ts junto a frontend/src/types/ai.ts agregan tipado dedicado.
+- Los nuevos modulos del tutor quedan cubiertos por tests dedicados en ai-tutor/tests.

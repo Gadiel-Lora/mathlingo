@@ -142,3 +142,169 @@ export interface PerformanceData {
   lastErrorType?: ErrorCategory;
   streakCorrect: number;
 }
+
+
+export type ExplanationPreference = 'visual' | 'algebraic' | 'contextual' | 'mixed';
+export type ConfidenceLevel = 'low' | 'medium' | 'high';
+
+export interface SkillData {
+  skillId: string;
+  skillName?: string;
+  masteryLevel: number;
+  confidence?: number;
+}
+
+export interface ErrorPattern {
+  patternType: string;
+  count?: number;
+  recentErrors?: string[];
+  lastSeen?: string;
+}
+
+export interface Trend {
+  area: string;
+  direction: 'improving' | 'stable' | 'declining';
+  delta?: number;
+}
+export interface DiagnosticAnalysis {
+  problemId?: string;
+  studentAnswer?: string;
+  errorType?: ErrorCategory;
+  conceptsGrasped: string[];
+  conceptsMissing: string[];
+  rootCause: string;
+  procedureStrength: number;
+  conceptualDepth: number;
+  transferability: number;
+  isRecurring: boolean;
+  errorPattern: string;
+  primaryWeakness: string;
+  secondaryWeaknesses: string[];
+  strengths: string[];
+  recommendation: string;
+}
+
+export interface SkillMasteryDetail {
+  masteryLevel: number;
+  confidence: number;
+  conceptualUnderstanding?: number;
+  transferAbility?: number;
+  strengthAreas?: string[];
+  weaknessAreas?: string[];
+  trendDirection?: 'improving' | 'stable' | 'declining';
+}
+export interface LearningProfileCore {
+  preferredExplanationStyle: ExplanationPreference;
+  learningSpeed: LearningVelocity;
+  confidenceLevel: ConfidenceLevel;
+  strengths: Array<{
+    skill: string;
+    masteryLevel: number;
+    confidence?: number;
+    evidence?: string;
+    note?: string;
+  }>;
+  challenges: Array<{
+    skill: string;
+    masteryLevel: number;
+    primaryIssue: string;
+    confidence?: number;
+    evidence?: string;
+    note?: string;
+  }>;
+  patterns: {
+    improvingAreas: string[];
+    stuckAreas: string[];
+    errorTrend: string;
+    consistencyScore: number;
+    mostCommonErrorType?: string;
+  };
+}
+export interface LearningProfileRecommendations {
+  immediate: {
+    skill: string;
+    reason: string;
+    urgency: 'critical' | 'high' | 'medium' | 'low';
+  };
+  shortTerm: {
+    focusArea?: string;
+    skills: string[];
+    estimatedWeeks?: number;
+  };
+  learningPath: {
+    phase1_foundation: string[];
+    phase2_intermediate: string[];
+    phase3_advanced: string[];
+  };
+}
+export interface StudentLearningProfile {
+  studentId?: string;
+  preferredExplanationStyle?: ExplanationPreference;
+  learningSpeed?: LearningVelocity;
+  confidenceLevel?: ConfidenceLevel;
+  skillAnalysis?: Record<string, SkillMasteryDetail>;
+  learningProfile?: LearningProfileCore;
+  patterns?: LearningProfileCore['patterns'];
+  recommendations?: LearningProfileRecommendations;
+  recommendedPath?: {
+    immediate?: {
+      skill: string;
+      reason: string;
+      urgency: 'critical' | 'high' | 'medium' | 'low';
+    };
+    shortTerm?: string[];
+    longTerm?: string[];
+  };
+}
+export interface PracticeExerciseRecommendation {
+  skill: string;
+  difficulty: number;
+  reason: string;
+  estimatedTimeMinutes: number;
+  successRateExpected: number;
+}
+
+export interface PracticeRecommendation {
+  practicePlan: {
+    focus: string;
+    urgency: 'critical' | 'high' | 'medium' | 'low';
+    suggestedExercises: PracticeExerciseRecommendation[];
+    sequence: string[];
+    expectedOutcome: string;
+  };
+}
+export interface SkillGraph {
+  edges?: Array<{ from: string; to: string }>;
+  prerequisites?: Record<string, string[]>;
+  dependents?: Record<string, string[]>;
+}
+
+export interface PathRecommendation {
+  personalizedPath: {
+    criticalGaps: Array<{
+      skill: string;
+      urgency: 'critical' | 'high' | 'medium' | 'low';
+      reason: string;
+    }>;
+    strengths: {
+      readyForAdvanced: string[];
+      canTeachOthers: string[];
+    };
+    recommendedSequence: {
+      phase1_foundation: string[];
+      phase2_consolidation: string[];
+      phase3_advancement: string[];
+    };
+    alternativePaths: {
+      ifPreferencesVisual: string[];
+      ifPreferencesAlgebraic: string[];
+      ifPreferencesContextual: string[];
+    };
+    estimatedTimeline: {
+      readyForNextGrade: string;
+      readyForAdvancedChallenges: string;
+      estimatedMasteryCompletion: string;
+    };
+    rationale: string;
+  };
+}

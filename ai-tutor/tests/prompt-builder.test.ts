@@ -2,6 +2,7 @@ import { PromptBuilder } from '../src/modules/prompt-builder';
 import {
   TutorContext, ProblemStatement, Skill, StudentSignals,
 } from '../src/types';
+import { StudentLearningProfile, DiagnosticAnalysis, SkillData, ErrorPattern, Trend, SkillGraph } from '../src/types';
 
 const mockProblem: ProblemStatement = {
   id: 'p1',
@@ -159,3 +160,120 @@ describe('PromptBuilder', () => {
     });
   });
 });
+
+
+  describe('buildDiagnosticPrompt', () => {
+    it('should include problem and error type', () => {
+      const prompt = builder.buildDiagnosticPrompt(
+        'x = 10',
+        mockProblem,
+        'x = 4',
+        'CONCEPTUAL',
+        60,
+        ['CONCEPTUAL']
+      );
+      expect(prompt).toContain('PROBLEM');
+      expect(prompt).toContain('CONCEPTUAL');
+    });
+  });
+
+  describe('buildCoachingPrompt', () => {
+    it('should include profile and root cause', () => {
+      const profile: StudentLearningProfile = {
+        learningProfile: {
+          preferredExplanationStyle: 'visual',
+          learningSpeed: 'normal',
+          confidenceLevel: 'medium',
+          strengths: [{ skill: 'Ecuaciones', masteryLevel: 80 }],
+          challenges: [{ skill: 'Fracciones', masteryLevel: 40, primaryIssue: 'conceptual' }],
+          patterns: {
+            improvingAreas: ['Ecuaciones'],
+            stuckAreas: ['Fracciones'],
+            errorTrend: 'estable',
+            consistencyScore: 60,
+          },
+        },
+      };
+      const diagnostics: DiagnosticAnalysis = {
+        conceptsGrasped: [],
+        conceptsMissing: ['fracciones'],
+        rootCause: 'confusion con denominadores',
+        procedureStrength: 50,
+        conceptualDepth: 50,
+        transferability: 40,
+        isRecurring: false,
+        errorPattern: 'conceptual',
+        primaryWeakness: 'fracciones',
+        secondaryWeaknesses: [],
+        strengths: [],
+        recommendation: 'repaso basico',
+      };
+
+      const prompt = builder.buildCoachingPrompt(profile, mockProblem, 'x = 16', 'CONCEPTUAL', diagnostics);
+      expect(prompt).toContain('STUDENT PROFILE');
+      expect(prompt).toContain('ROOT CAUSE');
+    });
+  });
+
+  describe('buildLearningProfilePrompt', () => {
+    it('should include aggregated data', () => {
+      const completedSkills: SkillData[] = [
+        { skillId: 's1', skillName: 'Ecuaciones', masteryLevel: 70 },
+      ];
+      const errorPatterns: ErrorPattern[] = [
+        { patternType: 'conceptual', count: 2 },
+      ];
+      const improvementTrends: Trend[] = [
+        { area: 'algebra', direction: 'improving' },
+      ];
+
+      const prompt = builder.buildLearningProfilePrompt({
+        completedSkills,
+        errorPatterns,
+        improvementTrends,
+        consistencyLevel: 60,
+        learningSpeed: 'normal',
+      });
+
+      expect(prompt).toContain('AGGREGATED DATA');
+      expect(prompt).toContain('Completed Skills');
+    });
+  });
+
+  describe('buildPersonalizedPathPrompt', () => {
+    it('should include skill graph summary', () => {
+      const profile: StudentLearningProfile = {
+        learningProfile: {
+          preferredExplanationStyle: 'mixed',
+          learningSpeed: 'normal',
+          confidenceLevel: 'medium',
+          strengths: [],
+          challenges: [],
+          patterns: { improvingAreas: [], stuckAreas: [], errorTrend: 'estable', consistencyScore: 60 },
+        },
+      };
+      const skillGraph: SkillGraph = { edges: [{ from: 's1', to: 's2' }] };
+      const prompt = builder.buildPersonalizedPathPrompt(profile, [mockSkill], skillGraph);
+      expect(prompt).toContain('SKILL GRAPH');
+    });
+  });
+
+  describe('buildTargetedPracticePrompt', () => {
+    it('should include weakness areas', () => {
+      const profile: StudentLearningProfile = {
+        learningProfile: {
+          preferredExplanationStyle: 'visual',
+          learningSpeed: 'normal',
+          confidenceLevel: 'medium',
+          strengths: [],
+          challenges: [],
+          patterns: { improvingAreas: [], stuckAreas: [], errorTrend: 'estable', consistencyScore: 60 },
+        },
+      };
+      const prompt = builder.buildTargetedPracticePrompt(profile, ['Fracciones']);
+      expect(prompt).toContain('Weakness Areas');
+    });
+  });
+
+});
+

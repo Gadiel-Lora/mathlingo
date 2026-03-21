@@ -83,3 +83,21 @@ The backend focuses on security and data. The frontend evolves independently.
 
 
 
+
+**AI Tutor (Node + Ollama)**
+Base path: `/api/ai-tutor`
+
+Endpoints (core):
+1. POST /api/ai-tutor/chat
+2. POST /api/ai-tutor/explain
+3. POST /api/ai-tutor/hint
+4. POST /api/ai-tutor/exercise
+5. POST /api/ai-tutor/strategy
+
+Endpoints (AI Tutor Enhanced 2.0):
+1. POST /api/ai-tutor/diagnose-learning-gaps
+2. POST /api/ai-tutor/build-profile
+3. POST /api/ai-tutor/coaching-feedback
+4. POST /api/ai-tutor/tutoring-strategy
+5. POST /api/ai-tutor/personalized-path
+6. POST /api/ai-tutor/targeted-practice

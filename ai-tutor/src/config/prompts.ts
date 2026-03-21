@@ -1,6 +1,6 @@
 // ===== SYSTEM PROMPTS FOR OLLAMA =====
 
-export const SYSTEM_PROMPTS = {
+export const SYSTEM_PROMPTS: Record<string, string> = {
 
   BASE_TUTOR: `Eres un tutor de matemáticas experto y empático.
 
@@ -249,3 +249,129 @@ export const DIFFICULTY_DESCRIPTIONS: Record<number, string> = {
   9: 'Raíces, logaritmos básicos, 6+ pasos',
   10: 'Raíces, logaritmos, 6+ pasos, comprensión profunda requerida',
 };
+
+// ===== AI TUTOR ENHANCED 2.0 PROMPTS =====
+
+SYSTEM_PROMPTS.DIAGNOSTIC_ANALYSIS = `TASK: Diagnose Learning Gaps (Deep Analysis)
+
+ANALYZE:
+1. Concepts the student understands (what they did right)
+2. Concepts they missed (specific missing concept)
+3. Root cause (misconception, forgotten prerequisite, procedural confusion, reading issue)
+4. Error pattern (recurring or not, trend)
+5. Connection to strengths and weaknesses
+6. Next step recommendation
+
+RESPOND WITH VALID JSON:
+{
+  "conceptsGrasped": ["concept1"],
+  "conceptsMissing": ["conceptMissing"],
+  "rootCause": "specific reason",
+  "procedureStrength": 0-100,
+  "conceptualDepth": 0-100,
+  "transferability": 0-100,
+  "isRecurring": true/false,
+  "errorPattern": "type of pattern",
+  "primaryWeakness": "focus area",
+  "secondaryWeaknesses": ["related concept"],
+  "strengths": ["what they did right"],
+  "recommendation": "specific next action"
+}`;
+SYSTEM_PROMPTS.COACHING_FEEDBACK = `TASK: Provide Adaptive Coaching (Personalized)
+
+INSTRUCTIONS:
+1. Validate what the student DID understand (from diagnostics)
+2. Point out the root cause gently
+3. Explain in the student's preferred style (visual|algebraic|contextual|mixed)
+4. Connect to their strength area if possible
+5. Tie to an improvement area
+6. End with encouragement and next step
+
+RESPOND: Conversational coaching in Spanish (no JSON).`;
+SYSTEM_PROMPTS.LEARNING_PROFILE = `TASK: Build Comprehensive Learning Profile
+
+ANALYZE:
+1. Learning style preference
+2. Strengths (consistent mastery)
+3. Challenges (recurring difficulty)
+4. Patterns (improving vs stuck)
+5. Learning velocity and confidence
+6. Recommendations
+
+RESPOND WITH VALID JSON:
+{
+  "learningProfile": {
+    "preferredExplanationStyle": "visual|algebraic|contextual|mixed",
+    "learningSpeed": "slow|normal|fast",
+    "confidenceLevel": "low|medium|high",
+    "strengths": [{"skill":"skillName","masteryLevel":85,"evidence":"why"}],
+    "challenges": [{"skill":"skillName","masteryLevel":45,"primaryIssue":"specific problem","evidence":"why"}],
+    "patterns": {
+      "improvingAreas": ["skill1"],
+      "stuckAreas": ["skill2"],
+      "errorTrend": "mejorando|estable|empeorando",
+      "consistencyScore": 0-100,
+      "mostCommonErrorType": "conceptual|arithmetic|procedural"
+    }
+  },
+  "recommendations": {
+    "immediate": {"skill":"skillName","reason":"why now","urgency":"critical|high|medium|low"},
+    "shortTerm": {"focusArea":"description","skills":["skill1","skill2"],"estimatedWeeks":2},
+    "learningPath": {
+      "phase1_foundation": ["consolidate basics"],
+      "phase2_intermediate": ["build on foundation"],
+      "phase3_advanced": ["challenge new topics"]
+    }
+  }
+}`;
+SYSTEM_PROMPTS.PERSONALIZED_PATH = `TASK: Recommend Personalized Learning Path (Not Curriculum)
+
+CONSIDERATIONS:
+- Address critical weaknesses first
+- Build on strengths
+- Respect learning style and speed
+- Avoid overwhelming the student
+
+RESPOND WITH VALID JSON:
+{
+  "personalizedPath": {
+    "criticalGaps": [{"skill":"skillName","urgency":"critical|high|medium","reason":"why now"}],
+    "strengths": {"readyForAdvanced":["skill1"],"canTeachOthers":["skill2"]},
+    "recommendedSequence": {
+      "phase1_foundation": ["skill1"],
+      "phase2_consolidation": ["skill2"],
+      "phase3_advancement": ["skill3"]
+    },
+    "alternativePaths": {
+      "ifPreferencesVisual": ["skill_visual_order"],
+      "ifPreferencesAlgebraic": ["skill_algebraic_order"],
+      "ifPreferencesContextual": ["skill_contextual_order"]
+    },
+    "estimatedTimeline": {
+      "readyForNextGrade": "YYYY-MM-DD",
+      "readyForAdvancedChallenges": "YYYY-MM-DD",
+      "estimatedMasteryCompletion": "YYYY-MM-DD"
+    },
+    "rationale": "why this path is optimal"
+  }
+}`;
+SYSTEM_PROMPTS.TARGETED_PRACTICE = `TASK: Suggest Targeted Practice
+
+INSTRUCTIONS:
+- Focus on weakness areas
+- Keep strengths sharp
+- Use the student's preferred learning style
+
+RESPOND WITH VALID JSON:
+{
+  "practicePlan": {
+    "focus": "area",
+    "urgency": "critical|high|medium|low",
+    "suggestedExercises": [
+      {"skill":"skillName","difficulty":5,"reason":"why now","estimatedTimeMinutes":10,"successRateExpected":75}
+    ],
+    "sequence": ["exercise 1","exercise 2","exercise 3"],
+    "expectedOutcome": "what should improve"
+  }
+}`;
+

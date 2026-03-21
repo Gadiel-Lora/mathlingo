@@ -1,9 +1,19 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import { createAITutor } from '../modules/ai-tutor';
+import { LearningDiagnostician } from '../modules/learning-diagnostician';
+import { AdaptiveCoachingEngine } from '../modules/adaptive-coaching-engine';
+import { AdaptivePathRecommender } from '../modules/adaptive-path-recommender';
+import { PromptBuilder } from '../modules/prompt-builder';
+import { OllamaService } from '../services/ollama-service';
 import { TutorContext } from '../types';
 
 const router = Router();
 const aiTutor = createAITutor();
+const ollama = new OllamaService();
+const promptBuilder = new PromptBuilder();
+const learningDiagnostician = new LearningDiagnostician(ollama, promptBuilder);
+const adaptiveCoachingEngine = new AdaptiveCoachingEngine(ollama, promptBuilder);
+const adaptivePathRecommender = new AdaptivePathRecommender(ollama, promptBuilder);
 
 // Auth middleware stub — replace with real JWT validation
 function authenticate(req: Request & { user?: { id: string } }, res: Response, next: NextFunction): void {
@@ -134,4 +144,164 @@ router.post('/strategy', authenticate, async (req: AuthRequest, res: Response) =
   }
 });
 
+
+/**
+ * POST /api/ai-tutor/diagnose-learning-gaps
+ * Deep diagnostics for learning gaps.
+ */
+router.post('/diagnose-learning-gaps', authenticate, async (req: AuthRequest, res: Response) => {
+  try {
+    const { studentResponse, problem, correctAnswer, errorType, masteryLevel, recentErrors } = req.body;
+    const userId = req.user?.id ?? 'anonymous';
+
+    if (!studentResponse || !problem || !correctAnswer || !errorType || masteryLevel === undefined) {
+      res.status(400).json({ error: 'Missing required fields: studentResponse, problem, correctAnswer, errorType, masteryLevel' });
+      return;
+    }
+
+    const analysis = await learningDiagnostician.analyzeLearningGaps(
+      studentResponse,
+      problem,
+      correctAnswer,
+      errorType,
+      masteryLevel,
+      Array.isArray(recentErrors) ? recentErrors : [],
+      userId
+    );
+
+    res.json({ success: true, analysis });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+/**
+ * POST /api/ai-tutor/build-profile
+ * Build a comprehensive learning profile.
+ */
+router.post('/build-profile', authenticate, async (req: AuthRequest, res: Response) => {
+  try {
+    const userId = req.user?.id ?? 'anonymous';
+    const { completedSkills, errorPatterns, improvementTrends } = req.body;
+
+    if (!Array.isArray(completedSkills) || !Array.isArray(errorPatterns) || !Array.isArray(improvementTrends)) {
+      res.status(400).json({ error: 'Missing required arrays: completedSkills, errorPatterns, improvementTrends' });
+      return;
+    }
+
+    const profile = await learningDiagnostician.buildLearningProfile(
+      userId,
+      completedSkills,
+      errorPatterns,
+      improvementTrends
+    );
+
+    res.json({ success: true, profile });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+/**
+ * POST /api/ai-tutor/coaching-feedback
+ * Adaptive coaching feedback based on profile and diagnostics.
+ */
+router.post('/coaching-feedback', authenticate, async (req: AuthRequest, res: Response) => {
+  try {
+    const { profile, problem, studentAnswer, errorType, diagnostics } = req.body;
+
+    if (!profile || !problem || !studentAnswer || !errorType || !diagnostics) {
+      res.status(400).json({ error: 'Missing required fields: profile, problem, studentAnswer, errorType, diagnostics' });
+      return;
+    }
+
+    const feedback = await adaptiveCoachingEngine.provideCoachingFeedback(
+      profile,
+      problem,
+      studentAnswer,
+      errorType,
+      diagnostics
+    );
+
+    res.json({ success: true, feedback });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+/**
+ * POST /api/ai-tutor/tutoring-strategy
+ * Decide tutoring strategy based on current signals.
+ */
+router.post('/tutoring-strategy', authenticate, async (req: AuthRequest, res: Response) => {
+  try {
+    const { masteryLevel, consistency, confidenceLevel, learningVelocity } = req.body;
+
+    if (masteryLevel === undefined || consistency === undefined || !confidenceLevel || !learningVelocity) {
+      res.status(400).json({ error: 'Missing required fields: masteryLevel, consistency, confidenceLevel, learningVelocity' });
+      return;
+    }
+
+    const strategy = await adaptiveCoachingEngine.decideTutoringStrategy(
+      masteryLevel,
+      consistency,
+      confidenceLevel,
+      learningVelocity
+    );
+
+    res.json({ success: true, strategy });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+/**
+ * POST /api/ai-tutor/personalized-path
+ * Get personalized learning path.
+ */
+router.post('/personalized-path', authenticate, async (req: AuthRequest, res: Response) => {
+  try {
+    const { profile, allSkills, skillGraph } = req.body;
+
+    if (!profile || !Array.isArray(allSkills) || !skillGraph) {
+      res.status(400).json({ error: 'Missing required fields: profile, allSkills, skillGraph' });
+      return;
+    }
+
+    const pathRecommendation = await adaptivePathRecommender.recommendPersonalizedPath(
+      profile,
+      allSkills,
+      skillGraph
+    );
+
+    res.json({ success: true, pathRecommendation });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+/**
+ * POST /api/ai-tutor/targeted-practice
+ * Suggest targeted practice based on weaknesses.
+ */
+router.post('/targeted-practice', authenticate, async (req: AuthRequest, res: Response) => {
+  try {
+    const { profile, weaknessAreas } = req.body;
+
+    if (!profile || !Array.isArray(weaknessAreas)) {
+      res.status(400).json({ error: 'Missing required fields: profile, weaknessAreas' });
+      return;
+    }
+
+    const practicePlan = await adaptiveCoachingEngine.suggestTargetedPractice(
+      profile,
+      weaknessAreas
+    );
+
+    res.json({ success: true, practicePlan });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
 export default router;
+

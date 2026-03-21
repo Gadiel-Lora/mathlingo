@@ -1,6 +1,7 @@
 import {
   TutorContext, ProblemStatement, ErrorCategory, StudentSignals, Skill,
 } from '../types';
+import { DiagnosticAnalysis, StudentLearningProfile, SkillData, ErrorPattern, Trend, SkillGraph, LearningVelocity } from '../types';
 import { SYSTEM_PROMPTS, MASTERY_LEVEL_TEMPLATES } from '../config/prompts';
 
 function getMasteryTemplate(level: number): string {
@@ -181,3 +182,193 @@ export class PromptBuilder {
     return prompt;
   }
 }
+
+
+  buildDiagnosticPrompt(
+    studentResponse: string,
+    problem: ProblemStatement,
+    correctAnswer: string,
+    errorType: ErrorCategory,
+    masteryLevel: number,
+    recentErrors: ErrorCategory[] = [],
+    knownStrengths: string[] = [],
+    knownWeaknesses: string[] = []
+  ): string {
+    let prompt = SYSTEM_PROMPTS.DIAGNOSTIC_ANALYSIS;
+
+    prompt += '\n\nPROBLEM:\n' + problem.statement + '\n';
+    prompt += 'STUDENT ANSWER:\n' + studentResponse + '\n';
+    prompt += 'CORRECT ANSWER:\n' + correctAnswer + '\n';
+    if (problem.solutionSteps && problem.solutionSteps.length > 0) {
+      prompt += 'SOLUTION STEPS:\n' + problem.solutionSteps.join('\n') + '\n';
+    }
+    prompt += 'ERROR TYPE: ' + errorType + '\n';
+    prompt += 'MASTERY LEVEL: ' + masteryLevel + '%\n';
+
+    if (recentErrors.length > 0) {
+      prompt += 'RECENT ERRORS: ' + recentErrors.join(', ') + '\n';
+    }
+    if (knownStrengths.length > 0) {
+      prompt += 'KNOWN STRENGTHS: ' + knownStrengths.join(', ') + '\n';
+    }
+    if (knownWeaknesses.length > 0) {
+      prompt += 'KNOWN WEAKNESSES: ' + knownWeaknesses.join(', ') + '\n';
+    }
+
+    prompt += '\nReturn only valid JSON.';
+    return prompt;
+  }
+
+  buildCoachingPrompt(
+    profile: StudentLearningProfile,
+    problem: ProblemStatement,
+    studentAnswer: string,
+    errorType: ErrorCategory,
+    diagnostics: DiagnosticAnalysis
+  ): string {
+    let prompt = SYSTEM_PROMPTS.COACHING_FEEDBACK;
+
+    const preferredStyle = profile.preferredExplanationStyle
+      ?? profile.learningProfile?.preferredExplanationStyle
+      ?? 'mixed';
+    const learningSpeed = profile.learningSpeed
+      ?? profile.learningProfile?.learningSpeed
+      ?? 'normal';
+    const confidenceLevel = profile.confidenceLevel
+      ?? profile.learningProfile?.confidenceLevel
+      ?? 'medium';
+    const strengths = profile.learningProfile?.strengths?.map((s) => s.skill) ?? [];
+    const weaknesses = profile.learningProfile?.challenges?.map((c) => c.skill) ?? [];
+    const improvementAreas = profile.learningProfile?.patterns?.improvingAreas ?? [];
+
+    prompt += '\n\nSTUDENT PROFILE:\n';
+    prompt += '- Explanation Preference: ' + preferredStyle + '\n';
+    prompt += '- Learning Speed: ' + learningSpeed + '\n';
+    prompt += '- Confidence: ' + confidenceLevel + '\n';
+    if (strengths.length > 0) {
+      prompt += '- Strengths: ' + strengths.join(', ') + '\n';
+    }
+    if (weaknesses.length > 0) {
+      prompt += '- Weaknesses: ' + weaknesses.join(', ') + '\n';
+    }
+    if (improvementAreas.length > 0) {
+      prompt += '- Improvement Areas: ' + improvementAreas.join(', ') + '\n';
+    }
+
+    prompt += '\nPROBLEM:\n' + problem.statement + '\n';
+    prompt += 'STUDENT ANSWER:\n' + studentAnswer + '\n';
+    prompt += 'ERROR TYPE: ' + errorType + '\n';
+    prompt += 'ROOT CAUSE: ' + diagnostics.rootCause + '\n';
+
+    return prompt;
+  }
+
+  buildLearningProfilePrompt(aggregated: {
+    completedSkills: SkillData[];
+    errorPatterns: ErrorPattern[];
+    improvementTrends: Trend[];
+    consistencyLevel?: number;
+    learningSpeed?: LearningVelocity;
+    confidenceLevel?: string;
+  }): string {
+    let prompt = SYSTEM_PROMPTS.LEARNING_PROFILE;
+
+    const completed = aggregated.completedSkills ?? [];
+    const patterns = aggregated.errorPatterns ?? [];
+    const trends = aggregated.improvementTrends ?? [];
+
+    const masteryBySkill = completed
+      .map((s) => (s.skillName ?? s.skillId) + ':' + s.masteryLevel + '%')
+      .join(', ');
+    const errorSummary = patterns.map((p) => p.patternType).join('; ');
+    const trendSummary = trends.map((t) => t.area + ':' + t.direction).join('; ');
+
+    prompt += '\n\nAGGREGATED DATA:\n';
+    prompt += '- Completed Skills: ' + completed.length + '\n';
+    if (masteryBySkill.length > 0) {
+      prompt += '- Skill Mastery Levels: ' + masteryBySkill + '\n';
+    }
+    if (errorSummary.length > 0) {
+      prompt += '- Error History: ' + errorSummary + '\n';
+    }
+    if (trendSummary.length > 0) {
+      prompt += '- Improvement Trends: ' + trendSummary + '\n';
+    }
+    if (aggregated.consistencyLevel !== undefined) {
+      prompt += '- Consistency: ' + aggregated.consistencyLevel + '\n';
+    }
+    if (aggregated.learningSpeed) {
+      prompt += '- Learning Speed: ' + aggregated.learningSpeed + '\n';
+    }
+    if (aggregated.confidenceLevel) {
+      prompt += '- Confidence Level: ' + aggregated.confidenceLevel + '\n';
+    }
+
+    return prompt;
+  }
+
+  buildPersonalizedPathPrompt(
+    profile: StudentLearningProfile,
+    allSkills: Skill[],
+    skillGraph: SkillGraph
+  ): string {
+    let prompt = SYSTEM_PROMPTS.PERSONALIZED_PATH;
+
+    const preferredStyle = profile.preferredExplanationStyle
+      ?? profile.learningProfile?.preferredExplanationStyle
+      ?? 'mixed';
+    const learningSpeed = profile.learningSpeed
+      ?? profile.learningProfile?.learningSpeed
+      ?? 'normal';
+    const strengths = profile.learningProfile?.strengths?.map((s) => s.skill) ?? [];
+    const weaknesses = profile.learningProfile?.challenges?.map((c) => c.skill) ?? [];
+
+    const sampleSkills = allSkills
+      .slice(0, 40)
+      .map((s) => {
+        const prereqs = s.prerequisites && s.prerequisites.length > 0
+          ? s.prerequisites.join(', ')
+          : 'none';
+        return s.id + ' | ' + s.name + ' | domain:' + s.domain + ' | prereqs:' + prereqs;
+      })
+      .join('\n');
+
+    prompt += '\n\nSTUDENT PROFILE:\n';
+    prompt += '- Strengths: ' + (strengths.length > 0 ? strengths.join(', ') : 'none') + '\n';
+    prompt += '- Weaknesses: ' + (weaknesses.length > 0 ? weaknesses.join(', ') : 'none') + '\n';
+    prompt += '- Learning Style: ' + preferredStyle + '\n';
+    prompt += '- Learning Speed: ' + learningSpeed + '\n';
+
+    prompt += '\nSKILL GRAPH (sample):\n' + (sampleSkills || 'none') + '\n';
+    if (skillGraph && skillGraph.edges && skillGraph.edges.length > 0) {
+      prompt += 'EDGE COUNT: ' + skillGraph.edges.length + '\n';
+    }
+
+    return prompt;
+  }
+
+  buildTargetedPracticePrompt(
+    profile: StudentLearningProfile,
+    weaknessAreas: string[]
+  ): string {
+    let prompt = SYSTEM_PROMPTS.TARGETED_PRACTICE;
+
+    const preferredStyle = profile.preferredExplanationStyle
+      ?? profile.learningProfile?.preferredExplanationStyle
+      ?? 'mixed';
+    const learningSpeed = profile.learningSpeed
+      ?? profile.learningProfile?.learningSpeed
+      ?? 'normal';
+
+    prompt += '\n\nSTUDENT PROFILE:\n';
+    prompt += '- Learning Style: ' + preferredStyle + '\n';
+    prompt += '- Learning Speed: ' + learningSpeed + '\n';
+    if (weaknessAreas.length > 0) {
+      prompt += '- Weakness Areas: ' + weaknessAreas.join(', ') + '\n';
+    }
+
+    return prompt;
+  }
+
+}
+
