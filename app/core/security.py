@@ -1,4 +1,4 @@
-﻿from datetime import datetime, timedelta
+﻿from datetime import UTC, datetime, timedelta
 
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
@@ -17,6 +17,11 @@ SECRET_KEY = settings.SECRET_KEY
 ALGORITHM = settings.ALGORITHM
 ACCESS_TOKEN_EXPIRE_MINUTES = settings.ACCESS_TOKEN_EXPIRE_MINUTES
 BCRYPT_MAX_BYTES = 72
+
+
+def _utcnow() -> datetime:
+    """Return a naive UTC datetime without relying on deprecated utcnow()."""
+    return datetime.now(UTC).replace(tzinfo=None)
 
 
 def _truncate_password(password: str) -> str:
@@ -47,7 +52,7 @@ def verify_password(plain: str, hashed: str) -> bool:
 
 def create_access_token(data: dict) -> str:
     to_encode = data.copy()
-    expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    expire = _utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     to_encode.update({'exp': expire})
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 

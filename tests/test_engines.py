@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import math
-from datetime import datetime, timedelta
+from datetime import UTC, datetime, timedelta
 
 import pytest
 from sqlalchemy import create_engine
@@ -27,6 +27,11 @@ from app.services.mastery_engine import (
 )
 
 
+def _utcnow() -> datetime:
+    """Return a naive UTC datetime without relying on deprecated utcnow()."""
+    return datetime.now(UTC).replace(tzinfo=None)
+
+
 def _session(tmp_path):
     """Create an isolated DB session for engine tests."""
     db_path = tmp_path / 'engine_tests.db'
@@ -49,7 +54,7 @@ def _create_learning_structure(
 ):
     """Create subject/pathway/module records required by topic relations."""
     subject = Subject(
-        name=f'Subject-{datetime.utcnow().timestamp()}',
+        name=f'Subject-{_utcnow().timestamp()}',
         description='Core topics',
         threshold_c1=threshold_c1,
         threshold_c2=threshold_c2,
@@ -216,7 +221,7 @@ def test_dependency_unlock_respects_subject_threshold(tmp_path):
     mastery = db.query(UserMastery).filter_by(user_id=user.id, topic_id=prereq.id).first()
     assert mastery is not None
     mastery.mastery_score = 0.8
-    mastery.last_updated = datetime.utcnow()
+    mastery.last_updated = _utcnow()
     db.commit()
 
     next_after = select_next_exercise(db, user.id)
@@ -255,7 +260,7 @@ def test_inactivity_requires_revalidation_before_unlock(tmp_path):
     db.add_all([prereq_exercise, dependent_exercise])
     db.commit()
 
-    stale_time = datetime.utcnow() - timedelta(days=95)
+    stale_time = _utcnow() - timedelta(days=95)
     db.add(
         UserMastery(
             user_id=user.id,

@@ -1,5 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useEffect, useMemo, useState } from 'react'
+import { createContext, useContext, useMemo, useState } from 'react'
 
 const AuthContext = createContext(null)
 const AUTH_STORAGE_KEY = 'mathlingo-auth-session'
@@ -66,14 +66,8 @@ const clearStoredUser = () => {
 }
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null)
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    const storedUser = readStoredUser()
-    setUser(storedUser)
-    setLoading(false)
-  }, [])
+  const [user, setUser] = useState(() => readStoredUser())
+  const loading = false
 
   const login = async (email, password) => {
     const normalizedEmail = normalizeEmail(email)

@@ -5,27 +5,45 @@ const supportsReducedMotion = () => {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches
 }
 
+const normalizeTarget = (value) => {
+  const parsed = Number(value || 0)
+  return Number.isFinite(parsed) ? parsed : 0
+}
+
 export function useCountUp(target, duration = 700) {
-  const [value, setValue] = useState(0)
+  const initialValue = normalizeTarget(target)
+  const [value, setValue] = useState(initialValue)
   const rafRef = useRef(null)
-  const previousRef = useRef(0)
+  const previousRef = useRef(initialValue)
 
   useEffect(() => {
-    const next = Number(target || 0)
-    if (!Number.isFinite(next)) return
+    const next = normalizeTarget(target)
+    const cancelScheduledFrame = () => {
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current)
+        rafRef.current = null
+      }
+    }
+
+    const commitValue = (nextValue) => {
+      cancelScheduledFrame()
+      rafRef.current = requestAnimationFrame(() => {
+        previousRef.current = nextValue
+        setValue(nextValue)
+      })
+    }
 
     if (supportsReducedMotion()) {
-      previousRef.current = next
-      setValue(next)
-      return
+      commitValue(next)
+      return cancelScheduledFrame
     }
 
     const from = Number(previousRef.current || 0)
     const delta = next - from
 
     if (delta === 0) {
-      setValue(next)
-      return
+      commitValue(next)
+      return cancelScheduledFrame
     }
 
     const startedAt = performance.now()
@@ -41,16 +59,15 @@ export function useCountUp(target, duration = 700) {
         rafRef.current = requestAnimationFrame(tick)
       } else {
         previousRef.current = next
+        rafRef.current = null
         setValue(next)
       }
     }
 
-    if (rafRef.current) cancelAnimationFrame(rafRef.current)
+    cancelScheduledFrame()
     rafRef.current = requestAnimationFrame(tick)
 
-    return () => {
-      if (rafRef.current) cancelAnimationFrame(rafRef.current)
-    }
+    return cancelScheduledFrame
   }, [duration, target])
 
   return Math.round(value)

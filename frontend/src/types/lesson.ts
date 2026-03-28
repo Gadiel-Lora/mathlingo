@@ -4,6 +4,7 @@ export interface Problem {
   content: ProblemContentItem[];
   expectedAnswer: string;
   skillId: string;
+  explanation?: string;
 }
 
 export type ProblemContentItem =

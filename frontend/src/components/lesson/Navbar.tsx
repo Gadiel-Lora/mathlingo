@@ -7,22 +7,19 @@ interface NavbarProps {
 }
 
 export default function Navbar({ lessonName, currentProblemIndex, totalProblems }: NavbarProps) {
-  const progressPercent = totalProblems > 0 
-    ? ((currentProblemIndex + 1) / totalProblems) * 100 
-    : 0
+  const safeIndex = totalProblems > 0 ? Math.min(currentProblemIndex, totalProblems - 1) : 0
+  const progressPercent = totalProblems > 0 ? ((safeIndex + 1) / totalProblems) * 100 : 0
 
   return (
-    <nav className="fixed top-0 inset-x-0 h-[60px] bg-white border-b border-gray-200 z-30 flex items-center px-6">
-      <div className="flex items-center w-full">
-        <h1 className="text-xl font-bold text-gray-800">Lección: {lessonName}</h1>
-        
-        <div className="flex-1" /> {/* Spacer */}
-        
-        <div className="flex items-center gap-2 ml-auto">
+    <nav className="fixed inset-x-0 top-0 z-30 flex h-[60px] items-center border-b border-gray-200 bg-white px-6">
+      <div className="flex w-full items-center gap-4">
+        <h1 className="text-xl font-bold text-gray-800">Leccion: {lessonName}</h1>
+
+        <div className="ml-auto flex items-center gap-2">
           <span className="text-sm font-semibold text-gray-700">
-            {currentProblemIndex + 1} / {totalProblems}
+            {totalProblems > 0 ? safeIndex + 1 : 0} / {totalProblems}
           </span>
-          <div className="w-32 h-2 bg-gray-300 rounded-full overflow-hidden">
+          <div className="h-2 w-32 overflow-hidden rounded-full bg-gray-300">
             <motion.div
               initial={{ width: 0 }}
               animate={{ width: `${progressPercent}%` }}
@@ -30,11 +27,6 @@ export default function Navbar({ lessonName, currentProblemIndex, totalProblems 
               className="h-full bg-blue-500"
             />
           </div>
-        </div>
-
-        {/* Placeholder for IconButtons */}
-        <div className="flex items-center ml-4 gap-2">
-           {/* Hint, AI, etc */}
         </div>
       </div>
     </nav>

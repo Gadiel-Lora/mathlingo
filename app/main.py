@@ -1,16 +1,20 @@
+﻿from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 
 import app.models  # noqa: F401
 from app.core.database import create_tables
 from app.routes import adaptive, attempts, auth, certificates, diagnostic, module as modules, progress, topics, users
 
-app = FastAPI(title='Mathlingo API')
 
-
-@app.on_event('startup')
-def on_startup() -> None:
+@asynccontextmanager
+async def lifespan(_: FastAPI):
     """Initialize database tables in the configured DATABASE_URL on startup."""
     create_tables()
+    yield
+
+
+app = FastAPI(title='Mathlingo API', lifespan=lifespan)
 
 app.include_router(auth.router)
 app.include_router(progress.router)

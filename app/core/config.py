@@ -1,4 +1,4 @@
-import os
+﻿import os
 from pathlib import Path
 from typing import Protocol
 
@@ -32,8 +32,10 @@ class SettingsProtocol(Protocol):
 
 try:
     from pydantic_settings import BaseSettings as _PydanticBaseSettings
+    from pydantic_settings import SettingsConfigDict as _SettingsConfigDict
 except ModuleNotFoundError:
     _PydanticBaseSettings = None
+    _SettingsConfigDict = None
 
 
 if _PydanticBaseSettings is not None:
@@ -43,8 +45,7 @@ if _PydanticBaseSettings is not None:
         ALGORITHM: str = DEFAULT_ALGORITHM
         ACCESS_TOKEN_EXPIRE_MINUTES: int = DEFAULT_ACCESS_TOKEN_EXPIRE_MINUTES
 
-        class Config:
-            env_file = ".env"
+        model_config = _SettingsConfigDict(env_file='.env')
 
     settings: SettingsProtocol = _PydanticSettings()
 else:

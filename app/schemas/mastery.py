@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+﻿from pydantic import BaseModel, ConfigDict
 
 
 class UserMasteryOut(BaseModel):
@@ -7,8 +7,7 @@ class UserMasteryOut(BaseModel):
     topic_id: int
     mastery_score: float
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class UserProgressOut(BaseModel):

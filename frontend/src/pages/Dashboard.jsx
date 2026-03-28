@@ -1,7 +1,7 @@
-import MathLingoDashboard from '../components/dashboard/MathLingoDashboard'
+﻿import DashboardView from '../components/dashboard/DashboardView'
 
 function Dashboard() {
-  return <MathLingoDashboard />
+  return <DashboardView />
 }
 
 export default Dashboard

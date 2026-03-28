@@ -1,5 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
+import { createContext, useCallback, useContext, useEffect, useMemo, useReducer } from 'react'
 
 import { ADMIN_UNLOCK_SENTINEL } from '../lib/academicCurriculum'
 import { useAuth } from './AuthContext'
@@ -22,6 +22,12 @@ const normalizeLessons = (value) => {
     .filter((item, index, array) => array.indexOf(item) === index)
 }
 
+const normalizeNumber = (value) => {
+  const parsed = Number(value)
+  if (!Number.isFinite(parsed) || parsed < 0) return 0
+  return Math.floor(parsed)
+}
+
 const ensureAdminUnlockedState = (state) => {
   const current = {
     completedLessons: normalizeLessons(state?.completedLessons),
@@ -37,12 +43,6 @@ const ensureAdminUnlockedState = (state) => {
     ...current,
     completedLessons: [...current.completedLessons, ADMIN_UNLOCK_SENTINEL],
   }
-}
-
-const normalizeNumber = (value) => {
-  const parsed = Number(value)
-  if (!Number.isFinite(parsed) || parsed < 0) return 0
-  return Math.floor(parsed)
 }
 
 const canUseLocalStorage = () => {
@@ -108,37 +108,50 @@ const buildCompletedLessonState = ({ previousState, lessonId, requestedXp, incre
   }
 }
 
+const buildInitialProgressState = (user) => {
+  if (!user?.id) {
+    return INITIAL_PROGRESS_STATE
+  }
+
+  const localProgress = readLocalProgress(user.id)
+  return user.isAdmin ? ensureAdminUnlockedState(localProgress) : localProgress
+}
+
+const progressReducer = (state, action) => {
+  switch (action.type) {
+    case 'hydrate':
+      return action.payload
+    case 'completeLesson':
+      return buildCompletedLessonState({
+        previousState: state,
+        lessonId: action.payload.lessonId,
+        requestedXp: action.payload.requestedXp,
+        incrementStreak: action.payload.incrementStreak,
+      })
+    default:
+      return state
+  }
+}
+
 export function ProgressProvider({ children }) {
   const { user } = useAuth()
-  const [progressState, setProgressState] = useState(INITIAL_PROGRESS_STATE)
-  const [loadingProgress, setLoadingProgress] = useState(true)
-  const progressRef = useRef(INITIAL_PROGRESS_STATE)
+  const [progressState, dispatch] = useReducer(progressReducer, user, buildInitialProgressState)
 
   const { completedLessons, xp, currentStreak } = progressState
   const level = Math.floor(xp / 100) + 1
+  const loadingProgress = false
 
   useEffect(() => {
-    progressRef.current = progressState
-  }, [progressState])
+    dispatch({ type: 'hydrate', payload: buildInitialProgressState(user) })
+  }, [user])
 
   useEffect(() => {
     if (!user?.id) {
-      setProgressState(INITIAL_PROGRESS_STATE)
-      progressRef.current = INITIAL_PROGRESS_STATE
-      setLoadingProgress(false)
       return
     }
 
-    setLoadingProgress(true)
-    const localProgress = readLocalProgress(user.id)
-    const nextProgress = user?.isAdmin ? ensureAdminUnlockedState(localProgress) : localProgress
-    setProgressState(nextProgress)
-    progressRef.current = nextProgress
-    if (user?.isAdmin) {
-      writeLocalProgress(user.id, nextProgress)
-    }
-    setLoadingProgress(false)
-  }, [user?.id, user?.isAdmin])
+    writeLocalProgress(user.id, progressState)
+  }, [progressState, user])
 
   const completeLesson = useCallback(
     async (payload) => {
@@ -149,21 +162,16 @@ export function ProgressProvider({ children }) {
 
       if (!lessonId || !user?.id) return
 
-      const previousState = progressRef.current
-      const nextState = buildCompletedLessonState({
-        previousState,
-        lessonId,
-        requestedXp,
-        incrementStreak,
+      dispatch({
+        type: 'completeLesson',
+        payload: {
+          lessonId,
+          requestedXp,
+          incrementStreak,
+        },
       })
-
-      if (nextState === previousState) return
-
-      setProgressState(nextState)
-      progressRef.current = nextState
-      writeLocalProgress(user.id, nextState)
     },
-    [user?.id],
+    [user],
   )
 
   const value = useMemo(

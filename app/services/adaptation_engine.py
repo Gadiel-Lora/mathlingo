@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import UTC, datetime
 
 from sqlalchemy.orm import Session
 
@@ -22,6 +22,11 @@ from app.services.mastery_engine import (
 MIN_DIFFICULTY = 0.1
 MAX_DIFFICULTY = 2.0
 TARGET_DIFFICULTY_GAP = 0.15
+
+
+def _utcnow() -> datetime:
+    """Return a naive UTC datetime without relying on deprecated utcnow()."""
+    return datetime.now(UTC).replace(tzinfo=None)
 
 
 def _dependency_map(db: Session) -> dict[int, list[int]]:
@@ -124,7 +129,7 @@ def _mandatory_reinforcement_topics(
 
         stale_needs_revalidation = False
         mastery = get_mastery_row(db, user_id=user_id, topic_id=topic.id)
-        if mastery is not None and is_inactive(mastery, now=datetime.utcnow()):
+        if mastery is not None and is_inactive(mastery, now=_utcnow()):
             stale_needs_revalidation = not has_passed_revalidation(
                 db,
                 user_id=user_id,

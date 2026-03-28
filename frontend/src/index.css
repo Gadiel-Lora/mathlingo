@@ -147,6 +147,12 @@
     background: rgba(97, 189, 248, 0.34);
     color: #f7fcff;
   }
+
+  /* P31-P35: WCAG AA Accessibility Focus Styles */
+  button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, [tabindex="0"]:focus-visible {
+    outline: none !important;
+    box-shadow: 0 0 0 2px var(--coastal-midnight), 0 0 0 4px var(--coastal-neon) !important;
+  }
 }
 
 @layer components {

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import math
-from datetime import datetime, timedelta
+from datetime import UTC, datetime, timedelta
 
 from sqlalchemy.orm import Session
 
@@ -32,7 +32,7 @@ def _clamp(value: float, min_value: float, max_value: float) -> float:
 
 def _utcnow() -> datetime:
     """Single clock source to keep time behavior consistent."""
-    return datetime.utcnow()
+    return datetime.now(UTC).replace(tzinfo=None)
 
 
 def _normalized_last_seen(mastery: UserMastery) -> datetime | None:

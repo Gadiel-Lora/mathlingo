@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import { toast } from 'sonner'
 import Navbar from './Navbar'
@@ -7,231 +7,226 @@ import EditorModal from './EditorModal'
 import AISidebar from './AISidebar'
 import LessonCompletionView from './LessonCompletionView'
 import { useLessonStore } from '../../store/lessonStore'
+import { useAIStore } from '../../store/aiStore'
+
+const successDelayMs = 2000
+
+const getTimeSpentInSeconds = (problemStartTime: number) =>
+  Math.max(1, Math.floor((Date.now() - problemStartTime) / 1000))
 
 export default function LessonView() {
-  const { 
-    currentProblem, 
-    problemIndex, 
+  const {
+    currentProblem,
+    problemIndex,
     totalProblems,
-    answer, 
-    setAnswer, 
+    answer,
+    setAnswer,
     feedbackState,
-    setFeedbackState,
     attemptCount,
     maxAttempts,
-    toggleAISidebar 
+    totalXp,
+    clearFeedback,
+    resetLesson,
+    submitAnswer,
+    skipProblem,
+    moveToNextProblem,
+    goToNextLesson,
   } = useLessonStore()
+
+  const { sidebarOpen, toggleSidebar } = useAIStore()
 
   const [problemStartTime, setProblemStartTime] = useState(Date.now())
   const [xpEarned, setXpEarned] = useState(0)
   const [bonusEarned, setBonusEarned] = useState(0)
   const [timeTakenSeconds, setTimeTakenSeconds] = useState(0)
   const [showSuccessAnim, setShowSuccessAnim] = useState(false)
+  const [solvedCorrect, setSolvedCorrect] = useState(0)
+  const [solvedIncorrect, setSolvedIncorrect] = useState(0)
+  const [skippedProblems, setSkippedProblems] = useState(0)
+  const [timeSpentTotal, setTimeSpentTotal] = useState(0)
+  const nextTimeoutRef = useRef<number | null>(null)
 
-  // Prevenir atrás del navegador (P10)
   useEffect(() => {
-    window.history.pushState(null, '', window.location.href)
-    
+    resetLesson()
+    setProblemStartTime(Date.now())
+    setXpEarned(0)
+    setBonusEarned(0)
+    setTimeTakenSeconds(0)
+    setShowSuccessAnim(false)
+    setSolvedCorrect(0)
+    setSolvedIncorrect(0)
+    setSkippedProblems(0)
+    setTimeSpentTotal(0)
+
+    return () => {
+      if (nextTimeoutRef.current !== null) {
+        window.clearTimeout(nextTimeoutRef.current)
+      }
+    }
+  }, [resetLesson])
+
+  useEffect(() => {
     const handlePopState = () => {
       window.history.pushState(null, '', window.location.href)
-      toast.error('No puedes regresar a problemas anteriores')
+      toast.error('No puedes regresar a problemas anteriores.')
     }
 
+    window.history.pushState(null, '', window.location.href)
     window.addEventListener('popstate', handlePopState)
-    return () => window.removeEventListener('popstate', handlePopState)
-  }, [])
 
-  // For testing purposes during P1-P2, we inject a dummy problem if null
-  useEffect(() => {
-    // Only init if problemIndex is 0
-    if (useLessonStore.getState().problemIndex === 0) {
-      useLessonStore.setState({
-        currentProblem: {
-          id: "prob-001",
-          title: "Suma de Fracciones",
-          content: [
-            { type: "text", value: "Suma las siguientes fracciones:" },
-            { type: "equation", value: "\\frac{1}{2} + \\frac{1}{3}" },
-            { type: "image", url: "https://placehold.co/600x200/png?text=Fracciones+visuales", alt: "Fracciones visuales" }
-          ],
-          expectedAnswer: "5/6",
-          skillId: "fractions-basic"
-        },
-        problemIndex: 0,
-        totalProblems: 5
-      })
-      setProblemStartTime(Date.now())
+    return () => {
+      window.removeEventListener('popstate', handlePopState)
     }
   }, [])
 
-  const handleNextProblem = () => {
-    console.log('Siguiente problema (P8/P11)')
-    useLessonStore.setState(state => ({ problemIndex: state.problemIndex + 1 }))
+  const clearNextTimeout = () => {
+    if (nextTimeoutRef.current !== null) {
+      window.clearTimeout(nextTimeoutRef.current)
+      nextTimeoutRef.current = null
+    }
   }
 
-  const handleSkip = () => {
-    // P9 Skip Problem Logic
-    console.log('Guardar intento como "skipped"')
-    
-    // Obtener "otro" problema (no avanza el índice total)
-    useLessonStore.setState({
-      currentProblem: {
-        id: "prob-002",
-        title: "Suma de Fracciones - Alternativo",
-        content: [
-          { type: "text", value: "Suma las siguientes fracciones (problema alternativo tras saltar):" },
-          { type: "equation", value: "\\frac{1}{4} + \\frac{2}{4}" }
-        ],
-        expectedAnswer: "3/4",
-        skillId: "fractions-basic"
-      },
-      attemptCount: 0
-    })
-    
-    // Reset state
-    setAnswer('')
-    setFeedbackState({ status: 'none', message: '', attemptNumber: 1, showFeedback: false })
+  const resetTransientUi = () => {
+    setXpEarned(0)
+    setBonusEarned(0)
+    setTimeTakenSeconds(0)
+    setShowSuccessAnim(false)
     setProblemStartTime(Date.now())
   }
 
-  const handleSubmit = () => {
-    if (answer.trim() === currentProblem?.expectedAnswer) {
-      // P7 Correct Flow
-      const timeToSolve = Date.now() - problemStartTime
-      const xpBase = 100
-      const bonus = timeToSolve < 120000 ? 50 : 0
-      const totalXp = xpBase + bonus
-      
-      setXpEarned(totalXp)
-      setBonusEarned(bonus)
-      setTimeTakenSeconds(Math.floor(timeToSolve / 1000))
-      setShowSuccessAnim(true)
-      
-      setFeedbackState({
-        status: 'correct',
-        message: '¡Correcto!',
-        attemptNumber: attemptCount,
-        showFeedback: true
-      })
-      // Auto-move after 2.5s
-      setTimeout(() => {
-        setShowSuccessAnim(false)
-        handleNextProblem()
-        setAnswer('')
-        setFeedbackState({ status: 'none', message: '', attemptNumber: 1, showFeedback: false })
-      }, 2500)
-    } else {
-      // P6 Incorrect Flow
-      const nextAttempt = attemptCount + 1
-      
-      let msg = 'Respuesta incorrecta.'
-      if (nextAttempt === 1) msg = 'Intenta de nuevo.'
-      else if (nextAttempt === 2) msg = '⚠️ Última oportunidad.'
-      else if (nextAttempt >= 3) msg = 'Has agotado tus intentos. Revisemos la explicación.'
-
-      useLessonStore.setState({ attemptCount: nextAttempt })
-      
-      setFeedbackState({ 
-        status: 'incorrect', 
-        message: msg, 
-        attemptNumber: nextAttempt, 
-        showFeedback: true 
-      })
+  const handleOpenAISidebar = () => {
+    if (!sidebarOpen) {
+      toggleSidebar()
     }
   }
 
-  // Display Completion View if lesson is finished
-  if (totalProblems > 0 && problemIndex >= totalProblems) {
-    const mockStats = {
-      totalProblems: 5,
-      solvedCorrect: 4,
-      solvedIncorrect: 1,
-      skipped: 0,
-      accuracy: 80,
-      totalXp: 450,
-      timeSpent: 1200, 
-      skillProgress: 65,
-      nextSkill: "Fracciones Avanzadas"
+  const handleNextProblem = async () => {
+    clearNextTimeout()
+    await moveToNextProblem()
+    resetTransientUi()
+  }
+
+  const handleRetry = () => {
+    setAnswer('')
+    clearFeedback()
+  }
+
+  const handleSkip = async () => {
+    if (!currentProblem) {
+      return
     }
 
-    return (
-      <LessonCompletionView 
-        stats={mockStats} 
-        onNextLesson={() => console.log('Siguiente lección triggereada')} 
-      />
-    )
+    clearNextTimeout()
+    const timeSpent = getTimeSpentInSeconds(problemStartTime)
+    await skipProblem()
+    setSkippedProblems((value) => value + 1)
+    setTimeSpentTotal((value) => value + timeSpent)
+    resetTransientUi()
+    toast.message('Problema saltado. Recibes otro problema.')
+  }
+
+  const handleSubmit = async () => {
+    if (!currentProblem || !answer.trim()) {
+      return
+    }
+
+    const timeSpent = getTimeSpentInSeconds(problemStartTime)
+    const nextAttempt = attemptCount + 1
+    const { correct, xp } = await submitAnswer(answer, timeSpent)
+
+    if (correct) {
+      const bonus = Math.max(0, xp - 100)
+      setXpEarned(xp)
+      setBonusEarned(bonus)
+      setTimeTakenSeconds(timeSpent)
+      setSolvedCorrect((value) => value + 1)
+      setTimeSpentTotal((value) => value + timeSpent)
+      setShowSuccessAnim(true)
+
+      clearNextTimeout()
+      nextTimeoutRef.current = window.setTimeout(() => {
+        setShowSuccessAnim(false)
+        void handleNextProblem()
+      }, successDelayMs)
+
+      return
+    }
+
+    if (nextAttempt >= maxAttempts) {
+      setSolvedIncorrect((value) => value + 1)
+      setTimeSpentTotal((value) => value + timeSpent)
+    }
+  }
+
+  const completionStats = useMemo(
+    () => ({
+      totalProblems,
+      solvedCorrect,
+      solvedIncorrect,
+      skipped: skippedProblems,
+      accuracy: totalProblems > 0 ? Math.round((solvedCorrect / totalProblems) * 100) : 0,
+      totalXp,
+      timeSpent: timeSpentTotal,
+      skillProgress: 65,
+      nextSkill: 'Fracciones avanzadas',
+    }),
+    [skippedProblems, solvedCorrect, solvedIncorrect, timeSpentTotal, totalProblems, totalXp],
+  )
+
+  const showCompletion = currentProblem === null && problemIndex >= totalProblems
+
+  if (showCompletion) {
+    return <LessonCompletionView stats={completionStats} onNextLesson={goToNextLesson} />
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col pt-[60px] overflow-hidden">
-      <Navbar 
-        lessonName="Introducción a Fracciones" 
-        currentProblemIndex={problemIndex} 
-        totalProblems={totalProblems} 
+    <div className="min-h-screen bg-slate-50">
+      <Navbar
+        lessonName="Fracciones basicas"
+        currentProblemIndex={problemIndex}
+        totalProblems={totalProblems}
       />
-      
-      <main className="flex-1 relative">
-        <ProblemArea 
-          problem={currentProblem} 
-          onAiChatClick={toggleAISidebar}        // Trigger: Click en botón "💬 AI Tutor"
-          onHintClick={toggleAISidebar}          // Trigger: Click en botón "[?] HINT"
+
+      <main className="min-h-screen pt-[60px]">
+        <ProblemArea
+          problem={currentProblem}
+          onAiChatClick={handleOpenAISidebar}
+          onHintClick={handleOpenAISidebar}
         />
-        
-        <EditorModal 
-          isOpen={true} 
+
+        <EditorModal
+          isOpen
           answer={answer}
           onChange={setAnswer}
           onSubmit={handleSubmit}
           onClear={() => setAnswer('')}
-          onClose={() => {}} // NO puede cerrar
           feedbackState={feedbackState}
           attemptCount={attemptCount}
           maxAttempts={maxAttempts}
-          onRetry={() => {
-            setAnswer('')
-            setFeedbackState({ ...feedbackState, showFeedback: false, status: 'none', message: '' })
-          }}
+          onRetry={handleRetry}
           xpEarned={xpEarned}
           bonusEarned={bonusEarned}
           timeTakenSeconds={timeTakenSeconds}
+          explanation={currentProblem?.explanation}
           onNext={handleNextProblem}
           onSkip={handleSkip}
         />
-        
+
         <AISidebar />
 
-        {/* --- P7 Success Animations --- */}
         {showSuccessAnim && (
-          <>
+          <div className="pointer-events-none fixed inset-0 z-50 flex items-center justify-center">
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 flex items-center justify-center z-[60] pointer-events-none"
+              animate={{ opacity: 1, scale: [1, 1.08, 1] }}
+              transition={{ duration: 0.6 }}
+              className="rounded-xl bg-green-500 px-6 py-4 text-2xl font-bold text-white shadow-xl"
             >
-              <motion.div
-                initial={{ scale: 1 }}
-                animate={{ scale: [1, 1.1, 1] }}
-                transition={{ duration: 0.6 }}
-                className="bg-green-500 text-white px-8 py-5 rounded-2xl shadow-2xl text-4xl font-extrabold"
-              >
-                ✓ ¡Correcto!
-              </motion.div>
+              Correcto
             </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 0, x: 0, scale: 0.5 }}
-              animate={{ opacity: 1, y: -200, x: 100, scale: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 1.2, ease: 'easeOut' }}
-              className="fixed right-10 bottom-40 z-[60] text-3xl font-extrabold text-green-500 pointer-events-none drop-shadow-md"
-            >
-              +{xpEarned} XP 🎉
-            </motion.div>
-          </>
+          </div>
         )}
       </main>
     </div>
   )
 }
-

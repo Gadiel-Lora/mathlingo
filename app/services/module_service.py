@@ -6,7 +6,7 @@ from app.schemas.module import ModuleCreate
 
 
 def create_module(db: Session, module: ModuleCreate):
-    new_module = Module(**module.dict())
+    new_module = Module(**module.model_dump())
     db.add(new_module)
     db.commit()
     db.refresh(new_module)
@@ -25,3 +25,4 @@ def get_module(db: Session, module_id: int):
             detail='Module not found',
         )
     return module
+
