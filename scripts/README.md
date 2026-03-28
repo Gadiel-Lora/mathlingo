@@ -15,3 +15,4 @@ Examples:
 - `python scripts/seed/seed_exercises.py`
 - `python scripts/simulation/simulate_learning.py`
 - `python scripts/simulation/analyze_simulation.py --input simulation_results.csv`
+- `python scripts/simulation/generate_large_simulation_fixture.py --target-rows 10200`

@@ -25,3 +25,4 @@ frontend/dist/
 frontend/.env
 backend/.env
 backend/node_modules/
+simulation_results_large.csv
