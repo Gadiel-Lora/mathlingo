@@ -7,7 +7,9 @@ import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 import academicRouter from './controllers/academicController.js'
+import authRouter from './routers/authRouter.js'
 import { CURRICULUM, getQuestionTypeByDifficulty } from './curriculum.js'
+import { requireAuth } from './middlewares/authMiddleware.js';
 
 const serverFilePath = fileURLToPath(import.meta.url)
 const serverDir = dirname(serverFilePath)
@@ -43,7 +45,7 @@ const corsOptions = {
     callback(new Error(`CORS blocked origin: ${origin}`))
   },
   methods: ['GET', 'POST', 'OPTIONS'],
-  allowedHeaders: ['Content-Type'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'x-mathlingo-webhook-secret'],
 }
 
 app.use((req, res, next) => {
@@ -64,6 +66,7 @@ app.options('/api/question/help', cors(corsOptions))
 app.options('/api/question/submit', cors(corsOptions))
 app.use(express.json({ limit: '1mb' }))
 app.use('/api/academic', academicRouter)
+app.use('/api/auth', authRouter)
 
 const sanitizeInput = (value) => String(value ?? '').trim()
 
@@ -619,7 +622,7 @@ app.get('/api/curriculum', (req, res) => {
   })
 })
 
-app.post('/api/question/state', requireQuestionState, (req, res) => {
+app.post('/api/question/state', requireAuth, requireQuestionState, (req, res) => {
   res.status(200).json({
     state: toPublicQuestionState(req.questionState),
     questionType: req.questionState.questionType,
@@ -627,7 +630,7 @@ app.post('/api/question/state', requireQuestionState, (req, res) => {
   })
 })
 
-app.post('/api/question/help', requireQuestionState, ensureQuestionUnlocked, async (req, res) => {
+app.post('/api/question/help', requireAuth, requireQuestionState, ensureQuestionUnlocked, async (req, res) => {
   const requestId = randomUUID()
   const question = sanitizeInput(req.body?.question)
   const lessonContext = sanitizeInput(req.body?.lessonContext)
@@ -754,9 +757,9 @@ const submitQuestionController = async (req, res) => {
   })
 }
 
-app.post('/api/question/submit', requireQuestionState, ensureQuestionUnlocked, submitQuestionController)
+app.post('/api/question/submit', requireAuth, requireQuestionState, ensureQuestionUnlocked, submitQuestionController)
 
-app.post('/api/ai-help', async (req, res) => {
+app.post('/api/ai-help', requireAuth, async (req, res) => {
   const requestId = randomUUID()
   const question = sanitizeInput(req.body?.question)
   const lessonContext = sanitizeInput(req.body?.lessonContext)
@@ -886,3 +889,4 @@ const startServer = async () => {
 }
 
 void startServer()
+

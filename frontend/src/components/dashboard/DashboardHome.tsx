@@ -1,5 +1,7 @@
-﻿import { lazy, Suspense } from 'react'
+import { lazy, Suspense } from 'react'
 
+import { useUserProfile } from '../../hooks/useUserProfile'
+import { useDashboardStore } from '../../store/dashboardStore'
 import WelcomeSection from './WelcomeSection'
 import ProgressBars from './ProgressBars'
 import SkillsGrid from './SkillsGrid'
@@ -26,6 +28,10 @@ function ChartFallback() {
 }
 
 export default function DashboardHome() {
+  useUserProfile()  // Carga datos reales del usuario autenticado
+  const { userName } = useDashboardStore()
+  const userInitial = userName ? userName.charAt(0).toUpperCase() : '?'
+
   return (
     <>
       <header className="sticky top-0 z-10 flex items-center justify-between border-b border-slate-200 bg-white/80 px-8 py-4 backdrop-blur-md">
@@ -44,7 +50,7 @@ export default function DashboardHome() {
             <span className="absolute top-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-white bg-red-500"></span>
           </button>
           <div className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border-2 border-white bg-gradient-to-tr from-indigo-500 to-purple-500 text-lg font-bold text-white shadow-sm transition-transform hover:scale-105">
-            J
+            {userInitial}
           </div>
         </div>
       </header>

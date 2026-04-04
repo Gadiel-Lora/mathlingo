@@ -45,14 +45,16 @@ export interface DashboardState {
   dailyProgress: number
   dailyMinutes: number
   weeklyProgress: number
-  
+  profileLoaded: boolean
+
   skills: Skill[]
   tasks: Task[]
   recommendations: Recommendation[]
   leaderboardData: LeaderboardEntry[]
-  
+
   filters: { grade: string, category: string, search: string }
   applyFilter: (type: 'grade' | 'category' | 'search', value: string) => void
+  setProfile: (data: Partial<DashboardState>) => void
 }
 
 const mockSkills: Skill[] = [
@@ -63,14 +65,15 @@ const mockSkills: Skill[] = [
 ]
 
 export const useDashboardStore = create<DashboardState>((set) => ({
-  userName: 'Juan',
-  userLevel: 12,
-  totalXP: 2450,
-  streak: 15,
-  accuracy: 88,
-  dailyProgress: 45,
-  dailyMinutes: 25,
-  weeklyProgress: 72,
+  userName: 'Estudiante',
+  userLevel: 1,
+  totalXP: 0,
+  streak: 0,
+  accuracy: 0,
+  dailyProgress: 0,
+  dailyMinutes: 0,
+  weeklyProgress: 0,
+  profileLoaded: false,
 
   skills: mockSkills,
   tasks: [
@@ -89,8 +92,13 @@ export const useDashboardStore = create<DashboardState>((set) => ({
   ],
 
   filters: { grade: 'Todos', category: 'Todos', search: '' },
-  
+
   applyFilter: (type, value) => set((state) => ({
     filters: { ...state.filters, [type]: value }
-  }))
+  })),
+
+  setProfile: (data) => set((_state) => ({
+    ...data,
+    profileLoaded: true,
+  })),
 }))

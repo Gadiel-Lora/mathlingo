@@ -1,4 +1,4 @@
-﻿import { lazy, Suspense } from 'react'
+import { lazy, Suspense } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
 import ProtectedRoute from './components/ProtectedRoute'
@@ -15,6 +15,7 @@ const Dashboard = lazy(() => import('./pages/Dashboard'))
 const Landing = lazy(() => import('./pages/Landing'))
 const Lesson = lazy(() => import('./pages/Lesson'))
 const Login = lazy(() => import('./pages/Login'))
+const RegisterOnboarding = lazy(() => import('./pages/RegisterOnboarding'))
 const GlobalXPAnimation = lazy(() => import('./components/Common/GlobalXPAnimation'))
 const Onboarding = lazy(() => import('./components/Common/Onboarding'))
 const ConnectionStatusBanner = lazy(() => import('./components/Common/ConnectionStatusBanner'))
@@ -90,6 +91,7 @@ function App() {
                   }
                 />
                 <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<RegisterOnboarding />} />
               </Routes>
             </Suspense>
             <Toaster

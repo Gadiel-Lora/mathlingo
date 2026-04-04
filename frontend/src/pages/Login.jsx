@@ -53,13 +53,13 @@ function Login() {
         <div className="cm-card cm-reveal cm-delay-2 mx-auto max-w-md p-8">
           <div className="space-y-6">
             <p className="cm-reveal cm-delay-1">
-              <span className="cm-badge cm-badge-live">{isRegisterMode ? 'Nuevo acceso' : 'Sesion local segura'}</span>
+              <span className="cm-badge cm-badge-live">Sesión local segura</span>
             </p>
             <h1 className="cm-reveal cm-delay-2 max-w-2xl text-3xl font-semibold tracking-tight text-coastal-mist">
-              {isRegisterMode ? 'Crear cuenta' : 'Login'}
+              Login
             </h1>
             <p className="cm-reveal cm-delay-3 text-coastal-mist/55">
-              {isRegisterMode ? 'Crea tu cuenta para comenzar.' : 'Ingresa para continuar tu progreso.'}
+              Ingresa para continuar tu progreso.
             </p>
           </div>
 
@@ -102,14 +102,11 @@ function Login() {
 
             <button
               type="button"
-              onClick={() => {
-                setIsRegisterMode((prev) => !prev)
-                setFeedback({ type: '', message: '' })
-              }}
+              onClick={() => navigate('/register')}
               disabled={submitting}
               className="cm-btn-secondary cm-reveal cm-delay-4 w-full text-sm"
             >
-              {isRegisterMode ? 'Ya tengo cuenta' : 'Crear cuenta'}
+              Crear cuenta nueva
             </button>
 
             {feedback.message && (

@@ -1,6 +1,7 @@
 import { Router } from 'express'
 
 import { CURRICULUM_BRANCHES, CURRICULUM_GRADES, getCurriculumBranch, getGradeCurriculum } from '../../curriculum/index.js'
+import { findRealProblemForTopic } from '../academic/problemService.js'
 import {
   getBlockedFingerprints,
   getPublicQuestionState,
@@ -620,7 +621,7 @@ router.post('/evaluation/generate', (req, res) => {
   }
 })
 
-router.post('/question/generate', (req, res) => {
+router.post('/question/generate', async (req, res) => {
   const userId = sanitizeInput(req.body?.userId)
   const grade = parseGrade(req.body?.grade)
   const topic = sanitizeInput(req.body?.topic)
@@ -650,7 +651,15 @@ router.post('/question/generate', (req, res) => {
 
   try {
     const blockedFingerprints = getBlockedFingerprints(userId)
-    const question = generateQuestion({
+
+    // ─── DB-First: buscar problema real en PostgreSQL ───────────────────────
+    const dbProblem = await findRealProblemForTopic({
+      topic,
+      difficulty,
+      excludedIds: blockedFingerprints,
+    });
+
+    const question = dbProblem ?? generateQuestion({
       grade,
       topic,
       difficulty,
@@ -701,6 +710,7 @@ router.post('/question/generate', (req, res) => {
       state: getPublicQuestionState(state),
       maxAttempts: MAX_ATTEMPTS,
       flow: QUESTION_STATE_FLOW,
+      source: dbProblem ? 'database' : 'generated',  // INFO para el frontend
     })
   } catch (error) {
     res.status(500).json({
