@@ -12,6 +12,7 @@ import StatisticsTable from './StatisticsTable'
 import SkillAlerts from './SkillAlerts'
 import DateRangeSelector from './DateRangeSelector'
 import ExportButton from './ExportButton'
+import DualPathPanel from './DualPathPanel'
 
 const ProgressChart = lazy(() => import('./ProgressChart'))
 
@@ -28,7 +29,7 @@ function ChartFallback() {
 }
 
 export default function DashboardHome() {
-  useUserProfile()  // Carga datos reales del usuario autenticado
+  useUserProfile()
   const { userName } = useDashboardStore()
   const userInitial = userName ? userName.charAt(0).toUpperCase() : '?'
 
@@ -65,6 +66,9 @@ export default function DashboardHome() {
               <SkillAlerts />
             </div>
           </div>
+
+          <DualPathPanel />
+
           <div className="mt-10">
             <SkillsGrid />
           </div>

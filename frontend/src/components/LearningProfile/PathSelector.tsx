@@ -5,22 +5,24 @@ interface PathSelectorProps {
 
 export default function PathSelector({ current, onSelect }: PathSelectorProps) {
   return (
-    <div className="flex bg-slate-100 p-1.5 rounded-xl border border-slate-200 shadow-inner w-full sm:w-auto overflow-x-auto">
+    <div className="flex w-full overflow-x-auto rounded-xl border border-slate-200 bg-slate-100 p-1.5 shadow-inner sm:w-auto">
       <button
+        type="button"
         onClick={() => onSelect('grado')}
-        className={`flex-1 sm:flex-none whitespace-nowrap px-5 py-2.5 rounded-lg text-sm font-bold transition-all ${
-          current === 'grado' ? 'bg-white text-indigo-700 shadow-sm border border-slate-200' : 'text-slate-500 hover:text-slate-700 hover:bg-slate-200/50'
+        className={`flex-1 whitespace-nowrap rounded-lg px-5 py-2.5 text-sm font-bold transition-all sm:flex-none ${
+          current === 'grado' ? 'border border-slate-200 bg-white text-indigo-700 shadow-sm' : 'text-slate-500 hover:bg-slate-200/50 hover:text-slate-700'
         }`}
       >
-        🎓 Grado Académico
+        Mapa de Grado
       </button>
       <button
+        type="button"
         onClick={() => onSelect('autonomo')}
-        className={`flex-1 sm:flex-none whitespace-nowrap px-5 py-2.5 rounded-lg text-sm font-bold transition-all ${
-          current === 'autonomo' ? 'bg-white text-indigo-700 shadow-sm border border-slate-200' : 'text-slate-500 hover:text-slate-700 hover:bg-slate-200/50'
+        className={`flex-1 whitespace-nowrap rounded-lg px-5 py-2.5 text-sm font-bold transition-all sm:flex-none ${
+          current === 'autonomo' ? 'border border-slate-200 bg-white text-indigo-700 shadow-sm' : 'text-slate-500 hover:bg-slate-200/50 hover:text-slate-700'
         }`}
       >
-        🚀 Camino Autónomo
+        Constelaciones
       </button>
     </div>
   )

@@ -5,17 +5,14 @@ import { useAuth } from '../context/AuthContext'
 
 function Login() {
   const navigate = useNavigate()
-  const { user, loading, login, register } = useAuth()
+  const { user, loading, login, loginWithGoogle } = useAuth()
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [isRegisterMode, setIsRegisterMode] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [feedback, setFeedback] = useState({ type: '', message: '' })
 
-  if (!loading && user) {
-    return <Navigate to="/dashboard" replace />
-  }
+  if (!loading && user) return <Navigate to="/dashboard" replace />
 
   const handleSubmit = async (event) => {
     event.preventDefault()
@@ -23,23 +20,28 @@ function Login() {
     setSubmitting(true)
 
     try {
-      if (isRegisterMode) {
-        await register(email, password)
-        setFeedback({
-          type: 'success',
-          message: 'Cuenta local creada. Sesion iniciada.',
-        })
-        navigate('/dashboard', { replace: true })
-      } else {
-        await login(email, password)
-        navigate('/dashboard', { replace: true })
-      }
+      await login(email, password)
+      navigate('/dashboard', { replace: true })
     } catch (error) {
       setFeedback({
         type: 'error',
-        message: error?.message || 'No se pudo completar la autenticacion local.',
+        message: error?.message || 'No se pudo completar la autenticacion.',
       })
     } finally {
+      setSubmitting(false)
+    }
+  }
+
+  const handleGoogleLogin = async () => {
+    setFeedback({ type: '', message: '' })
+    setSubmitting(true)
+    try {
+      await loginWithGoogle()
+    } catch (error) {
+      setFeedback({
+        type: 'error',
+        message: error?.message || 'No se pudo iniciar con Google.',
+      })
       setSubmitting(false)
     }
   }
@@ -53,17 +55,30 @@ function Login() {
         <div className="cm-card cm-reveal cm-delay-2 mx-auto max-w-md p-8">
           <div className="space-y-6">
             <p className="cm-reveal cm-delay-1">
-              <span className="cm-badge cm-badge-live">Sesión local segura</span>
+              <span className="cm-badge cm-badge-live">Sesion segura con Supabase</span>
             </p>
             <h1 className="cm-reveal cm-delay-2 max-w-2xl text-3xl font-semibold tracking-tight text-coastal-mist">
-              Login
+              Ingreso a MathLingo
             </h1>
             <p className="cm-reveal cm-delay-3 text-coastal-mist/55">
-              Ingresa para continuar tu progreso.
+              Entra con correo y contrasena o conecta Google para continuar tu ruta academica.
             </p>
           </div>
 
-          <form className="mt-12 space-y-6" onSubmit={handleSubmit}>
+          <button
+            type="button"
+            onClick={handleGoogleLogin}
+            disabled={submitting}
+            className="cm-btn-secondary cm-reveal cm-delay-2 mt-10 flex w-full items-center justify-center gap-2 text-sm"
+          >
+            Continuar con Google
+          </button>
+
+          <div className="cm-reveal cm-delay-2 my-6 text-center text-xs uppercase tracking-[0.18em] text-coastal-mist/45">
+            o usa tu correo
+          </div>
+
+          <form className="space-y-6" onSubmit={handleSubmit}>
             <label className="cm-reveal cm-delay-1 block">
               <span className="mb-2 block text-sm text-coastal-mist/85">Email</span>
               <input
@@ -85,7 +100,7 @@ function Login() {
                 onChange={(event) => setPassword(event.target.value)}
                 className="cm-input"
                 placeholder="********"
-                autoComplete={isRegisterMode ? 'new-password' : 'current-password'}
+                autoComplete="current-password"
                 minLength={6}
                 required
               />
@@ -97,7 +112,7 @@ function Login() {
               className="cm-btn-primary cm-reveal cm-delay-3 flex w-full items-center justify-center gap-2 text-sm"
             >
               {submitting && <span className="cm-loader" />}
-              {submitting ? 'Procesando...' : isRegisterMode ? 'Registrarme' : 'Entrar'}
+              {submitting ? 'Procesando...' : 'Entrar con correo'}
             </button>
 
             <button

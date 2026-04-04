@@ -2,6 +2,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useReducer } from 'react'
 
 import { ADMIN_UNLOCK_SENTINEL } from '../lib/academicCurriculum'
+import { academicApi } from '../services/academicApi'
 import { useAuth } from './AuthContext'
 
 const ProgressContext = createContext(null)
@@ -15,7 +16,6 @@ const INITIAL_PROGRESS_STATE = {
 
 const normalizeLessons = (value) => {
   if (!Array.isArray(value)) return []
-
   return value
     .map((item) => String(item ?? '').trim())
     .filter(Boolean)
@@ -28,38 +28,16 @@ const normalizeNumber = (value) => {
   return Math.floor(parsed)
 }
 
-const ensureAdminUnlockedState = (state) => {
-  const current = {
-    completedLessons: normalizeLessons(state?.completedLessons),
-    xp: normalizeNumber(state?.xp),
-    currentStreak: normalizeNumber(state?.currentStreak),
-  }
-
-  if (current.completedLessons.includes(ADMIN_UNLOCK_SENTINEL)) {
-    return current
-  }
-
-  return {
-    ...current,
-    completedLessons: [...current.completedLessons, ADMIN_UNLOCK_SENTINEL],
-  }
-}
-
-const canUseLocalStorage = () => {
-  return typeof window !== 'undefined' && Boolean(window.localStorage)
-}
-
+const canUseLocalStorage = () => typeof window !== 'undefined' && Boolean(window.localStorage)
 const buildStorageKey = (userId) => `${PROGRESS_STORAGE_PREFIX}:${String(userId ?? '').trim()}`
 
 const readLocalProgress = (userId) => {
   if (!canUseLocalStorage()) return INITIAL_PROGRESS_STATE
   const storageKey = buildStorageKey(userId)
   if (!storageKey || storageKey.endsWith(':')) return INITIAL_PROGRESS_STATE
-
   try {
     const rawValue = window.localStorage.getItem(storageKey)
     if (!rawValue) return INITIAL_PROGRESS_STATE
-
     const parsed = JSON.parse(rawValue)
     return {
       completedLessons: normalizeLessons(parsed?.completedLessons),
@@ -73,126 +51,91 @@ const readLocalProgress = (userId) => {
 
 const writeLocalProgress = (userId, progressState) => {
   if (!canUseLocalStorage()) return
-  const storageKey = buildStorageKey(userId)
-  if (!storageKey || storageKey.endsWith(':')) return
-
   try {
-    window.localStorage.setItem(
-      storageKey,
-      JSON.stringify({
-        completedLessons: normalizeLessons(progressState?.completedLessons),
-        xp: normalizeNumber(progressState?.xp),
-        currentStreak: normalizeNumber(progressState?.currentStreak),
-      }),
-    )
+    window.localStorage.setItem(buildStorageKey(userId), JSON.stringify(progressState))
   } catch {
     // noop
   }
 }
 
-const buildCompletedLessonState = ({ previousState, lessonId, requestedXp, incrementStreak }) => {
-  const normalizedLessonId = String(lessonId ?? '').trim()
-  if (!normalizedLessonId) return previousState
-
-  const previousLessons = normalizeLessons(previousState?.completedLessons)
-  if (previousLessons.includes(normalizedLessonId)) return previousState
-
-  const earnedXp = normalizeNumber(requestedXp)
-  const previousXp = normalizeNumber(previousState?.xp)
-  const previousStreak = normalizeNumber(previousState?.currentStreak)
-
-  return {
-    completedLessons: [...previousLessons, normalizedLessonId],
-    xp: previousXp + earnedXp,
-    currentStreak: incrementStreak ? previousStreak + 1 : previousStreak,
-  }
-}
-
-const buildInitialProgressState = (user) => {
-  if (!user?.id) {
-    return INITIAL_PROGRESS_STATE
-  }
-
+const buildInitialProgressState = (user, profile) => {
+  if (!user?.id) return INITIAL_PROGRESS_STATE
   const localProgress = readLocalProgress(user.id)
-  return user.isAdmin ? ensureAdminUnlockedState(localProgress) : localProgress
+  const profileLessons = normalizeLessons(profile?.completedLessons)
+  return {
+    completedLessons: normalizeLessons([...localProgress.completedLessons, ...profileLessons]),
+    xp: Math.max(localProgress.xp, normalizeNumber(profile?.totalXP)),
+    currentStreak: Math.max(localProgress.currentStreak, normalizeNumber(profile?.currentStreak)),
+  }
 }
 
 const progressReducer = (state, action) => {
-  switch (action.type) {
-    case 'hydrate':
-      return action.payload
-    case 'completeLesson':
-      return buildCompletedLessonState({
-        previousState: state,
-        lessonId: action.payload.lessonId,
-        requestedXp: action.payload.requestedXp,
-        incrementStreak: action.payload.incrementStreak,
-      })
-    default:
-      return state
+  if (action.type === 'hydrate') return action.payload
+  if (action.type === 'completeLesson') {
+    const lessonId = String(action.payload?.lessonId ?? '').trim()
+    if (!lessonId || state.completedLessons.includes(lessonId)) return state
+    const xpEarned = normalizeNumber(action.payload?.xpEarned)
+    return {
+      completedLessons: [...state.completedLessons, lessonId],
+      xp: state.xp + xpEarned,
+      currentStreak: state.currentStreak + (action.payload?.incrementStreak === false ? 0 : 1),
+    }
   }
+  return state
 }
 
 export function ProgressProvider({ children }) {
-  const { user } = useAuth()
-  const [progressState, dispatch] = useReducer(progressReducer, user, buildInitialProgressState)
+  const { user, profile } = useAuth()
+  const [progressState, dispatch] = useReducer(progressReducer, buildInitialProgressState(user, profile))
 
   const { completedLessons, xp, currentStreak } = progressState
   const level = Math.floor(xp / 100) + 1
   const loadingProgress = false
 
   useEffect(() => {
-    dispatch({ type: 'hydrate', payload: buildInitialProgressState(user) })
-  }, [user])
+    dispatch({ type: 'hydrate', payload: buildInitialProgressState(user, profile) })
+  }, [user, profile])
 
   useEffect(() => {
-    if (!user?.id) {
-      return
-    }
-
-    writeLocalProgress(user.id, progressState)
+    if (user?.id) writeLocalProgress(user.id, progressState)
   }, [progressState, user])
 
-  const completeLesson = useCallback(
-    async (payload) => {
-      const isObjectPayload = payload && typeof payload === 'object'
-      const lessonId = String(isObjectPayload ? payload.lessonId : payload ?? '').trim()
-      const requestedXp = isObjectPayload ? payload.xpEarned : 0
-      const incrementStreak = isObjectPayload ? payload.incrementStreak !== false : true
+  const completeLesson = useCallback(async (payload) => {
+    const lessonId = String(payload?.lessonId ?? payload ?? '').trim()
+    const xpEarned = typeof payload === 'object' ? payload.xpEarned : 0
+    if (!lessonId || !user?.id) return
 
-      if (!lessonId || !user?.id) return
+    dispatch({
+      type: 'completeLesson',
+      payload: { lessonId, xpEarned, incrementStreak: typeof payload === 'object' ? payload.incrementStreak : true },
+    })
 
-      dispatch({
-        type: 'completeLesson',
-        payload: {
-          lessonId,
-          requestedXp,
-          incrementStreak,
-        },
+    try {
+      await academicApi.markLessonCompleted({
+        lessonId,
+        masteryPercentage: 100,
+        skillId: typeof payload === 'object' ? payload.skillId : undefined,
+        context: { source: 'progress-context' },
       })
-    },
-    [user],
-  )
+    } catch (error) {
+      console.info('[ProgressContext] No se pudo sincronizar la leccion completada:', error?.message)
+    }
+  }, [user])
 
-  const value = useMemo(
-    () => ({
-      completedLessons,
-      xp,
-      level,
-      currentStreak,
-      loadingProgress,
-      completeLesson,
-    }),
-    [completedLessons, xp, level, currentStreak, loadingProgress, completeLesson],
-  )
+  const value = useMemo(() => ({
+    completedLessons: completedLessons.includes(ADMIN_UNLOCK_SENTINEL) ? completedLessons : completedLessons,
+    xp,
+    level,
+    currentStreak,
+    loadingProgress,
+    completeLesson,
+  }), [completedLessons, xp, level, currentStreak, loadingProgress, completeLesson])
 
   return <ProgressContext.Provider value={value}>{children}</ProgressContext.Provider>
 }
 
 export function useProgress() {
   const context = useContext(ProgressContext)
-  if (!context) {
-    throw new Error('useProgress must be used within ProgressProvider')
-  }
+  if (!context) throw new Error('useProgress must be used within ProgressProvider')
   return context
 }

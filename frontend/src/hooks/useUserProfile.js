@@ -1,51 +1,48 @@
-import { useEffect } from 'react';
-import { useAuth } from '../context/AuthContext';
-import { academicApi } from '../services/academicApi';
-import { useDashboardStore } from '../store/dashboardStore';
+import { useEffect } from 'react'
 
-/**
- * Hook que carga el perfil real del usuario autenticado desde la API
- * y popula el dashboardStore con datos reales (XP, nombre, nivel, skills, etc.)
- */
+import { useAuth } from '../context/AuthContext'
+import { useDashboardStore } from '../store/dashboardStore'
+
 export function useUserProfile() {
-  const { user } = useAuth();
-  const setProfile = useDashboardStore((s) => s.setProfile);
-  const profileLoaded = useDashboardStore((s) => s.profileLoaded);
+  const { user, profile, refreshProfile } = useAuth()
+  const setProfile = useDashboardStore((state) => state.setProfile)
+  const profileLoaded = useDashboardStore((state) => state.profileLoaded)
 
   useEffect(() => {
-    if (!user || profileLoaded) return;
+    if (!user || profileLoaded) return
 
-    let cancelled = false;
+    let cancelled = false
 
-    async function fetchProfile() {
+    const syncStore = async () => {
       try {
-        const profile = await academicApi.getUserProfile();
-        if (cancelled) return;
+        const sourceProfile = profile || (await refreshProfile())
+        if (!sourceProfile || cancelled) return
 
         setProfile({
-          userName: profile.fullName || profile.email?.split('@')[0] || 'Estudiante',
-          userLevel: profile.currentLevel ?? 1,
-          totalXP: profile.totalXP ?? 0,
-          streak: profile.currentStreak ?? 0,
-          accuracy: profile.accuracy ?? 0,
-          skills: (profile.skillProgress || []).map((sp) => ({
-            id: sp.skillId,
-            name: sp.skillName,
-            category: sp.category,
-            grade: profile.grade?.name || '',
-            mastery: sp.mastery,
-            problemsSolved: sp.problemsSolved,
-            totalProblems: sp.totalProblems,
-            accuracy: sp.accuracy,
+          userName: sourceProfile.fullName || sourceProfile.email?.split('@')[0] || 'Estudiante',
+          userLevel: sourceProfile.currentLevel ?? 1,
+          totalXP: sourceProfile.totalXP ?? 0,
+          streak: sourceProfile.currentStreak ?? 0,
+          accuracy: sourceProfile.accuracy ?? 0,
+          skills: (sourceProfile.skillProgress || []).map((item) => ({
+            id: item.skillId,
+            name: item.skillName,
+            category: item.category,
+            grade: sourceProfile.grade?.name || '',
+            mastery: item.mastery,
+            problemsSolved: item.problemsSolved,
+            totalProblems: item.totalProblems,
+            accuracy: item.accuracy,
           })),
-        });
-      } catch (err) {
-        // Si no existe perfil aún (nuevo usuario), no bloqueamos la app
-        console.info('[useUserProfile] Perfil no disponible aún:', err?.message);
+        })
+      } catch (error) {
+        console.info('[useUserProfile] Perfil no disponible aun:', error?.message)
       }
     }
 
-    fetchProfile();
-    return () => { cancelled = true; };
-  }, [user, profileLoaded, setProfile]);
+    void syncStore()
+    return () => {
+      cancelled = true
+    }
+  }, [user, profile, profileLoaded, refreshProfile, setProfile])
 }

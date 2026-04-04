@@ -15,6 +15,7 @@ const Dashboard = lazy(() => import('./pages/Dashboard'))
 const Landing = lazy(() => import('./pages/Landing'))
 const Lesson = lazy(() => import('./pages/Lesson'))
 const Login = lazy(() => import('./pages/Login'))
+const AuthCallback = lazy(() => import('./pages/AuthCallback'))
 const RegisterOnboarding = lazy(() => import('./pages/RegisterOnboarding'))
 const GlobalXPAnimation = lazy(() => import('./components/Common/GlobalXPAnimation'))
 const Onboarding = lazy(() => import('./components/Common/Onboarding'))
@@ -23,7 +24,7 @@ const KeyboardShortcutsOverlay = lazy(() => import('./components/Common/Keyboard
 
 function GlobalShortcuts() {
   const { toggleTheme } = useTheme()
-  const toggleSidebar = useAIStore(state => state.toggleSidebar)
+  const toggleSidebar = useAIStore((state) => state.toggleSidebar)
 
   useKeyboardShortcuts([
     { key: 'm', ctrlKey: true, action: toggleTheme, preventDefault: true },
@@ -91,6 +92,7 @@ function App() {
                   }
                 />
                 <Route path="/login" element={<Login />} />
+                <Route path="/auth/callback" element={<AuthCallback />} />
                 <Route path="/register" element={<RegisterOnboarding />} />
               </Routes>
             </Suspense>
