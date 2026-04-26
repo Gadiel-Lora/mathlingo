@@ -1,5 +1,8 @@
 ﻿import { lazy, Suspense, useState } from 'react'
 import { AnimatePresence } from 'framer-motion'
+import { useNavigate } from 'react-router-dom'
+
+import { useAuth } from '../../context/AuthContext'
 import PageTransition from '../Common/PageTransition'
 
 const DashboardHome = lazy(() => import('./DashboardHome'))
@@ -41,6 +44,8 @@ function prefetchProfileView() {
 }
 
 export default function DashboardView() {
+  const navigate = useNavigate()
+  const { profile } = useAuth()
   const [currentView, setCurrentView] = useState<DashboardViewId>('dashboard')
 
   const navItemClass = (id: DashboardViewId) => `flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-colors cursor-pointer ${
@@ -86,6 +91,19 @@ export default function DashboardView() {
             </span>
             Ajustes
           </button>
+          {profile?.permissions?.canAccessAdminPanel && (
+            <button
+              type="button"
+              onClick={() => navigate('/admin')}
+              className="flex items-center gap-3 rounded-xl px-4 py-3 font-medium text-teal-700 transition-colors hover:bg-slate-50"
+              aria-label="Panel administrativo"
+            >
+              <span className="text-xs font-black uppercase tracking-[0.2em]" aria-hidden="true">
+                AD
+              </span>
+              Panel Admin
+            </button>
+          )}
         </nav>
       </div>
 

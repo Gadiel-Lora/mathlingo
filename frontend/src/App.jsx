@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
+import ProtectedAdminRoute from './components/ProtectedAdminRoute'
 import ProtectedRoute from './components/ProtectedRoute'
 import { AuthProvider } from './context/AuthContext'
 import { ProgressProvider } from './context/ProgressContext'
@@ -16,6 +17,7 @@ const Landing = lazy(() => import('./pages/Landing'))
 const Lesson = lazy(() => import('./pages/Lesson'))
 const Login = lazy(() => import('./pages/Login'))
 const AuthCallback = lazy(() => import('./pages/AuthCallback'))
+const AdminPanel = lazy(() => import('./pages/AdminPanel'))
 const RegisterOnboarding = lazy(() => import('./pages/RegisterOnboarding'))
 const GlobalXPAnimation = lazy(() => import('./components/Common/GlobalXPAnimation'))
 const Onboarding = lazy(() => import('./components/Common/Onboarding'))
@@ -65,6 +67,14 @@ function App() {
                     <ProtectedRoute>
                       <Dashboard />
                     </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/admin"
+                  element={
+                    <ProtectedAdminRoute>
+                      <AdminPanel />
+                    </ProtectedAdminRoute>
                   }
                 />
                 <Route

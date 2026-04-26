@@ -4,6 +4,7 @@ const API_BASE = String(import.meta.env.VITE_AI_API_URL || 'http://localhost:400
 const ACADEMIC_BASE = `${API_BASE}/api/academic`
 const AUTH_BASE = `${API_BASE}/api/auth`
 const LEARNING_BASE = `${API_BASE}/api/learning`
+const ADMIN_BASE = `${API_BASE}/api/admin`
 
 const getAuthHeaders = async () => {
   const { data: { session } } = await supabase.auth.getSession()
@@ -25,7 +26,7 @@ const parseJsonResponse = async (response) => {
 const request = async (url, options = {}) => {
   const response = await fetch(url, options)
   const data = await parseJsonResponse(response)
-  if (!response.ok) throw new Error(data?.error || `HTTP ${response.status}`)
+  if (!response.ok) throw new Error(data?.detail || data?.error || `HTTP ${response.status}`)
   return data
 }
 
@@ -38,18 +39,28 @@ const post = async (base, path, payload) => {
   })
 }
 
+const send = async (method, url, payload) => {
+  const headers = await getAuthHeaders()
+  return request(url, {
+    method,
+    headers,
+    ...(typeof payload === 'undefined' ? {} : { body: JSON.stringify(payload) }),
+  })
+}
+
 const get = async (url) => {
   const headers = await getAuthHeaders()
   return request(url, { headers })
 }
 
 export const academicApi = {
-  getCurriculum: async (grade) => {
-    const suffix = grade ? `?grade=${encodeURIComponent(String(grade))}` : ''
-    return get(`${LEARNING_BASE}/curriculum${suffix}`)
-  },
-  getBranches: async () => get(`${LEARNING_BASE}/branches`),
-  getBranch: async (branchId) => get(`${LEARNING_BASE}/branches/${encodeURIComponent(String(branchId || ''))}`),
+  getCurriculum: async (grade) => get(
+    grade
+      ? `${ACADEMIC_BASE}/curriculum?grade=${encodeURIComponent(String(grade))}`
+      : `${ACADEMIC_BASE}/curriculum`,
+  ),
+  getBranches: async () => get(`${ACADEMIC_BASE}/branches`),
+  getBranch: async (branchId) => get(`${ACADEMIC_BASE}/branches/${encodeURIComponent(String(branchId))}`),
   getLearningOverview: async () => get(`${LEARNING_BASE}/overview`),
   updateLearningPath: (payload) => post(LEARNING_BASE, '/path', payload),
   recordStudentResponse: (payload) => post(LEARNING_BASE, '/events/answer', payload),
@@ -75,6 +86,21 @@ export const academicApi = {
   updateLevel: (payload) => post(ACADEMIC_BASE, '/level/update', payload),
   getAdminAnalytics: async () => get(`${ACADEMIC_BASE}/analytics/admin`),
   getAbstractionRanking: async (limit = 20) => get(`${ACADEMIC_BASE}/analytics/ranking?limit=${encodeURIComponent(String(limit))}`),
+  getAdminMeta: async () => get(`${ADMIN_BASE}/meta`),
+  getAdminGrades: async () => get(`${ADMIN_BASE}/grades`),
+  createAdminGrade: async (payload) => send('POST', `${ADMIN_BASE}/grades`, payload),
+  updateAdminGrade: async (gradeId, payload) => send('PUT', `${ADMIN_BASE}/grades/${encodeURIComponent(String(gradeId))}`, payload),
+  deleteAdminGrade: async (gradeId) => send('DELETE', `${ADMIN_BASE}/grades/${encodeURIComponent(String(gradeId))}`),
+  getAdminSubjects: async () => get(`${ADMIN_BASE}/subjects`),
+  createAdminSubject: async (payload) => send('POST', `${ADMIN_BASE}/subjects`, payload),
+  updateAdminSubject: async (subjectId, payload) => send('PUT', `${ADMIN_BASE}/subjects/${encodeURIComponent(String(subjectId))}`, payload),
+  deleteAdminSubject: async (subjectId) => send('DELETE', `${ADMIN_BASE}/subjects/${encodeURIComponent(String(subjectId))}`),
+  getAdminLearningPaths: async () => get(`${ADMIN_BASE}/learning-paths`),
+  createAdminLearningPath: async (payload) => send('POST', `${ADMIN_BASE}/learning-paths`, payload),
+  updateAdminLearningPath: async (pathId, payload) => send('PUT', `${ADMIN_BASE}/learning-paths/${encodeURIComponent(String(pathId))}`, payload),
+  deleteAdminLearningPath: async (pathId) => send('DELETE', `${ADMIN_BASE}/learning-paths/${encodeURIComponent(String(pathId))}`),
+  getAdminUsers: async () => get(`${ADMIN_BASE}/users`),
+  updateAdminUser: async (userId, payload) => send('PATCH', `${ADMIN_BASE}/users/${encodeURIComponent(String(userId))}`, payload),
 
   syncUser: async (payload) => {
     const headers = await getAuthHeaders()
