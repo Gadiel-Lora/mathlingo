@@ -3,14 +3,14 @@ from typing import cast
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
-from core.database import get_db
-from models.attempt import Attempt
-from models.exercise import Exercise
-from models.topic import Topic
-from models.user import User
-from schemas.attempt import AttemptCreate, AttemptOut
-from services.certificate_service import ensure_subject_certificate
-from services.mastery_engine import update_mastery
+from backend.core.database import get_db
+from backend.models.attempt import Attempt
+from backend.models.exercise import Exercise
+from backend.models.topic import Topic
+from backend.models.user import User
+from backend.schemas.attempt import AttemptCreate, AttemptOut
+from backend.services.certificate_service import ensure_subject_certificate
+from backend.services.mastery_engine import update_mastery
 
 router = APIRouter(prefix='/attempts', tags=['Attempts'])
 

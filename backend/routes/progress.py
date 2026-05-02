@@ -2,11 +2,11 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from typing import List
 
-from core.database import get_db
-from core.security import get_current_user
-from schemas.user import UserOut
-from schemas.progress import ProgressCreate, ProgressOut, ProgressSummary
-from services.progress_service import (
+from backend.core.database import get_db
+from backend.core.security import get_current_user
+from backend.schemas.user import UserOut
+from backend.schemas.progress import ProgressCreate, ProgressOut, ProgressSummary
+from backend.services.progress_service import (
     add_progress,
     get_user_progress,
     get_progress_summary,

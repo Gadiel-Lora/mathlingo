@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
-from core.database import get_db
-from models.topic import Topic
-from models.topic_dependency import TopicDependency
-from schemas.topic import TopicOut
+from backend.core.database import get_db
+from backend.models.topic import Topic
+from backend.models.topic_dependency import TopicDependency
+from backend.schemas.topic import TopicOut
 
 router = APIRouter(prefix='/topics', tags=['Topics'])
 

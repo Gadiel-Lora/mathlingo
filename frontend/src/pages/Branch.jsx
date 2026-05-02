@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 
 import brainLogo from '../assets/brain-logo.png'
+import { useAuth } from '../context/AuthContext'
 import { useProgress } from '../context/ProgressContext'
 import { getUnlockedGradeIds, isLessonUnlockedInGrade } from '../lib/academicCurriculum'
 import { academicApi } from '../services/academicApi'
@@ -9,6 +10,7 @@ import { academicApi } from '../services/academicApi'
 function Branch() {
   const navigate = useNavigate()
   const { id } = useParams()
+  const { profile } = useAuth()
   const { completedLessons, loadingProgress } = useProgress()
 
   const [branch, setBranch] = useState(null)
@@ -60,13 +62,15 @@ function Branch() {
   }, [id])
 
   const unlockedGradeIds = useMemo(() => {
-    return new Set(
+    const unlocked = new Set(
       getUnlockedGradeIds({
         grades,
         completedLessons,
       }),
     )
-  }, [completedLessons, grades])
+    if (profile?.grade?.id) unlocked.add(String(profile.grade.id))
+    return unlocked
+  }, [completedLessons, grades, profile?.grade?.id])
 
   const gradeById = useMemo(() => {
     return new Map((grades || []).map((grade) => [String(grade.id), grade]))

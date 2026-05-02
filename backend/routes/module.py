@@ -1,11 +1,11 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
-from core.deps import get_db
-from core.security import require_admin
-from schemas.module import ModuleCreate, ModuleResponse
-from schemas.user import UserOut
-from services.module_service import create_module, get_module, get_modules
+from backend.core.deps import get_db
+from backend.core.security import require_admin
+from backend.schemas.module import ModuleCreate, ModuleResponse
+from backend.schemas.user import UserOut
+from backend.services.module_service import create_module, get_module, get_modules
 
 router = APIRouter(
     prefix='/modules',

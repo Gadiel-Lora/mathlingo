@@ -1,4 +1,4 @@
-import { grade1, grade2, grade3, grade4 } from './grades/index.js'
+import { grade1, grade2, grade3, grade4, grade5 } from './grades/index.js'
 import { findTopicInGrade } from './core/shared.js'
 
 const BRANCH_NAME_MAP = {
@@ -253,7 +253,7 @@ const buildBranchCollection = (grades = []) => {
     .sort((a, b) => a.name.localeCompare(b.name))
 }
 
-export const CURRICULUM_GRADES = normalizeGrades([grade1, grade2, grade3, grade4])
+export const CURRICULUM_GRADES = normalizeGrades([grade1, grade2, grade3, grade4, grade5])
 export const CURRICULUM_BRANCHES = buildBranchCollection(CURRICULUM_GRADES)
 
 export const getQuestionTypeByDifficulty = (difficulty) => {

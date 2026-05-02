@@ -110,7 +110,7 @@ export default function DashboardView() {
       <div className="relative flex h-screen flex-1 flex-col overflow-hidden">
         <AnimatePresence mode="wait">
           {currentView === 'dashboard' && (
-            <PageTransition key="dashboard" className="absolute inset-0">
+            <PageTransition key="dashboard" className="absolute inset-0 overflow-y-auto">
               <Suspense fallback={<ViewFallback />}>
                 <DashboardHome />
               </Suspense>

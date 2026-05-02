@@ -2,9 +2,9 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
-import models  # noqa: F401
-from core.database import create_tables
-from routes import adaptive, attempts, auth, certificates, diagnostic, module as modules, progress, topics, users, academic
+from backend import models  # noqa: F401
+from backend.core.database import create_tables
+from backend.routes import adaptive, attempts, auth, certificates, diagnostic, module as modules, progress, topics, users, academic
 from services.academic_service import bootstrap_curriculum_data
 
 

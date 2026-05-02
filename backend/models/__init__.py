@@ -1,21 +1,21 @@
 """Central SQLAlchemy model registry for metadata initialization."""
 
-from models.attempt import Attempt
-from models.certificate import Certificate
-from models.curriculum_area import CurriculumArea
-from models.curriculum_lesson import CurriculumLesson
-from models.curriculum_topic import CurriculumTopic
-from models.exercise import Exercise
-from models.grade import Grade
-from models.level import Level
-from models.module import Module
-from models.pathway import Pathway
-from models.progress import Progress
-from models.subject import Subject
-from models.topic import Topic
-from models.topic_dependency import TopicDependency
-from models.user import User
-from models.user_mastery import UserMastery
+from .attempt import Attempt
+from .certificate import Certificate
+from .curriculum_area import CurriculumArea
+from .curriculum_lesson import CurriculumLesson
+from .curriculum_topic import CurriculumTopic
+from .exercise import Exercise
+from .grade import Grade
+from .level import Level
+from .module import Module
+from .pathway import Pathway
+from .progress import Progress
+from .subject import Subject
+from .topic import Topic
+from .topic_dependency import TopicDependency
+from .user import User
+from .user_mastery import UserMastery
 
 __all__ = [
     'Attempt',

@@ -12,11 +12,11 @@ os.environ['SECRET_KEY'] = 'testsecret'
 os.environ['ALGORITHM'] = 'HS256'
 os.environ['ACCESS_TOKEN_EXPIRE_MINUTES'] = '60'
 
-from app.main import app as fastapi_app
-from app.core import database as db_module
-from app.core import deps as deps_module
-from app.core.database import Base
-from app import models as app_models  # noqa: F401
+from backend.main import app as fastapi_app
+from backend.core import database as db_module
+from backend.core import deps as deps_module
+from backend.core.database import Base
+from backend import models as app_models  # noqa: F401
 
 
 @pytest.fixture()

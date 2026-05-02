@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
 
-from core.database import get_db
-from models.topic import Topic
-from schemas.diagnostic import BranchLevelOut
-from services.diagnostic_engine import calculate_branch_level
+from backend.core.database import get_db
+from backend.models.topic import Topic
+from backend.schemas.diagnostic import BranchLevelOut
+from backend.services.diagnostic_engine import calculate_branch_level
 
 router = APIRouter(prefix='/diagnostic', tags=['Diagnostic'])
 

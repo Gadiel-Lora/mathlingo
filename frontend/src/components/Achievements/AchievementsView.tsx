@@ -1,84 +1,105 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
+
+import { useAuth } from '../../context/AuthContext'
 import AchievementDetailModal from './AchievementDetailModal'
 
-const mockAchievements = [
-  { id: 1, name: 'Primeros Pasos', icon: '🐣', unlocked: true, unlockedDate: '12/3/2026', hint: '', rarity: 'Común', desc: 'Completaste tu primera lección en la plataforma.' },
-  { id: 2, name: 'Racha de Fuego', icon: '🔥', unlocked: true, unlockedDate: '14/3/2026', hint: '', rarity: 'Raro', desc: 'Mantén una racha ininterrumpida de estudio durante 7 días.' },
-  { id: 3, name: 'Mente Veloz', icon: '⚡', unlocked: true, unlockedDate: '15/3/2026', hint: '', rarity: 'Épico', desc: 'Resolviste 10 problemas correctos en menos de 5 minutos.' },
-  { id: 4, name: 'Maestro de Fracciones', icon: '🍕', unlocked: false, unlockedDate: '', hint: 'Domina los números que miden partes de un todo.', rarity: 'Épico', desc: 'Dominar la skill Fracciones al 100% de mastery.' },
-  { id: 5, name: 'Cerebro Absoluto', icon: '🧠', unlocked: false, unlockedDate: '', hint: 'No cometas ningún error en todo tu historial de álgebra.', rarity: 'Mítico', desc: 'Obtiene 100% de precisión en todos los problemas de Álgebra Intro.' },
-  { id: 6, name: '???', icon: '?', unlocked: false, unlockedDate: '', hint: 'Desbloquea 20 logros menores primero para revelar este secreto...', rarity: 'Legendario', desc: 'Participa y gana el Leaderboard global.' },
-  { id: 7, name: '???', icon: '?', unlocked: false, unlockedDate: '', hint: 'Solo el AI Tutor puede darte esta medalla si le demuestras sabiduría...', rarity: 'Legendario', desc: 'Explica a la IA cómo resolver un problema sin usar pistas.' },
-  { id: 8, name: 'Perseverancia', icon: '🧗', unlocked: false, unlockedDate: '', hint: "Falla y vuelve a intentarlo.", rarity: 'Raro', desc: 'Ten 5 respuestas incorrectas seguidas y luego logra la respuesta correcta.' },
+const achievementCatalog = [
+  { id: 'first-lesson', name: 'Primeros Pasos', icon: '01', rarity: 'Comun', hint: 'Completa tu primera leccion.', desc: 'Completaste tu primera leccion en la plataforma.' },
+  { id: 'streak-7', name: 'Racha de Estudio', icon: '07', rarity: 'Raro', hint: 'Mantén una racha de estudio de 7 dias.', desc: 'Mantuviste una racha de estudio durante 7 dias.' },
+  { id: 'fast-10', name: 'Mente Veloz', icon: '10', rarity: 'Epico', hint: 'Resuelve 10 problemas correctos con buen tiempo.', desc: 'Resolviste 10 problemas correctos en una sesion.' },
+  { id: 'fractions-mastery', name: 'Maestro de Fracciones', icon: 'FR', rarity: 'Epico', hint: 'Domina la unidad de fracciones.', desc: 'Dominaste la skill de fracciones.' },
+  { id: 'algebra-perfect', name: 'Algebra Precisa', icon: 'AL', rarity: 'Mitico', hint: 'Mantén precision alta en algebra.', desc: 'Lograste precision sobresaliente en algebra.' },
+  { id: 'constellation', name: 'Constelacion Activa', icon: 'CN', rarity: 'Legendario', hint: 'Avanza por una ruta autonoma.', desc: 'Activaste una ruta de aprendizaje autonoma.' },
+  { id: 'teacher-ai', name: 'Dialogo Matematico', icon: 'IA', rarity: 'Legendario', hint: 'Usa el Profe IA sin pedir la respuesta final.', desc: 'Usaste el Profe IA de forma guiada.' },
+  { id: 'perseverance', name: 'Perseverancia', icon: 'PV', rarity: 'Raro', hint: 'Falla, corrige y completa un problema.', desc: 'Convertiste errores en aprendizaje.' },
 ]
 
 export default function AchievementsView() {
+  const { profile } = useAuth()
   const [selectedAchievement, setSelectedAchievement] = useState<any>(null)
-  
-  const unlockedCount = mockAchievements.filter(a => a.unlocked).length
-  const progressRatio = Math.round((unlockedCount / mockAchievements.length) * 100)
+
+  const achievements = useMemo(() => {
+    const unlocked = Array.isArray(profile?.achievements) ? profile.achievements : []
+    return achievementCatalog.map((item) => {
+      const match = unlocked.find((achievement: any) => {
+        return String(achievement?.id || achievement?.achievementId || '').toLowerCase() === item.id ||
+          String(achievement?.name || '').toLowerCase() === item.name.toLowerCase()
+      })
+
+      return {
+        ...item,
+        unlocked: Boolean(match),
+        unlockedDate: match?.unlockedAt ? new Date(match.unlockedAt).toLocaleDateString() : '',
+      }
+    })
+  }, [profile?.achievements])
+
+  const unlockedCount = achievements.filter((achievement) => achievement.unlocked).length
+  const progressRatio = Math.round((unlockedCount / achievements.length) * 100)
 
   return (
-    <div className="max-w-5xl mx-auto space-y-8 pb-20">
-      <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 flex flex-col md:flex-row items-center gap-8 min-h-[160px] overflow-hidden relative">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-amber-400 opacity-5 rounded-full blur-3xl transform translate-x-10 -translate-y-10"></div>
-        
-        <div className="w-32 h-32 rounded-full bg-gradient-to-br from-amber-200 to-orange-300 flex items-center justify-center text-5xl shadow-inner border-[6px] border-white relative z-10 shrink-0">
-          🏆
+    <div className="mx-auto max-w-5xl space-y-8 pb-20">
+      <div className="relative flex min-h-[160px] flex-col items-center gap-8 overflow-hidden rounded-3xl border border-slate-100 bg-white p-8 shadow-sm md:flex-row">
+        <div className="relative z-10 flex h-32 w-32 shrink-0 items-center justify-center rounded-full border-[6px] border-white bg-gradient-to-br from-slate-200 to-slate-300 text-4xl font-black text-slate-700 shadow-inner">
+          {unlockedCount}
         </div>
-        <div className="flex-1 text-center md:text-left relative z-10">
-          <h2 className="text-3xl font-black text-slate-800 mb-2">Sala de Trofeos</h2>
-          <p className="text-slate-500 font-medium mb-5">Has desbloqueado {unlockedCount} de {mockAchievements.length} logros globales ocultos en EliteMath.</p>
-          
+        <div className="relative z-10 flex-1 text-center md:text-left">
+          <h2 className="mb-2 text-3xl font-black text-slate-800">Sala de Logros</h2>
+          <p className="mb-5 font-medium text-slate-500">
+            Has desbloqueado {unlockedCount} de {achievements.length} logros.
+          </p>
+
           <div className="flex items-center gap-4">
-            <div className="flex-1 h-3 bg-slate-100 rounded-full overflow-hidden shadow-inner">
+            <div className="h-3 flex-1 overflow-hidden rounded-full bg-slate-100 shadow-inner">
               <motion.div
                 initial={{ width: 0 }}
                 animate={{ width: `${progressRatio}%` }}
-                transition={{ duration: 1.5, ease: "easeOut" }}
-                className="h-full bg-gradient-to-r from-amber-400 to-orange-500 rounded-full"
+                transition={{ duration: 1, ease: 'easeOut' }}
+                className="h-full rounded-full bg-gradient-to-r from-indigo-500 to-sky-500"
               />
             </div>
             <span className="font-black text-slate-700">{progressRatio}%</span>
           </div>
         </div>
       </div>
-      
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-        {mockAchievements.map((achievement, idx) => (
-          <motion.div
+
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6 lg:grid-cols-4">
+        {achievements.map((achievement, index) => (
+          <motion.button
             key={achievement.id}
+            type="button"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: idx * 0.05 }}
-            whileHover={{ scale: 1.05, y: -4 }}
+            transition={{ delay: index * 0.04 }}
             onClick={() => setSelectedAchievement(achievement)}
-            className={`p-6 rounded-2xl cursor-pointer text-center flex flex-col items-center justify-center min-h-[180px] shadow-sm transition-all border ${
+            className={`flex min-h-[180px] cursor-pointer flex-col items-center justify-center rounded-2xl border p-6 text-center shadow-sm transition-all ${
               achievement.unlocked
-                ? 'bg-white border-amber-200 hover:border-amber-400 hover:shadow-amber-100'
-                : 'bg-slate-50 opacity-70 border-slate-200 hover:opacity-100 hover:bg-slate-100'
+                ? 'border-indigo-200 bg-white hover:border-indigo-400'
+                : 'border-slate-200 bg-slate-50 opacity-80 hover:bg-slate-100'
             }`}
           >
-            <div className={`text-6xl mb-4 drop-shadow-sm ${!achievement.unlocked && 'grayscale opacity-60 blur-[1px]'}`}>
-              {achievement.unlocked || achievement.name !== '???' ? achievement.icon : '🔒'}
+            <div className={`mb-4 flex h-16 w-16 items-center justify-center rounded-2xl text-xl font-black ${
+              achievement.unlocked ? 'bg-indigo-100 text-indigo-700' : 'bg-slate-200 text-slate-500'
+            }`}>
+              {achievement.unlocked ? achievement.icon : '--'}
             </div>
-            <p className={`font-black tracking-tight leading-tight ${achievement.unlocked ? 'text-slate-800' : 'text-slate-500'}`}>
-              {achievement.unlocked ? achievement.name : achievement.name}
+            <p className={`font-black leading-tight tracking-tight ${achievement.unlocked ? 'text-slate-800' : 'text-slate-500'}`}>
+              {achievement.unlocked ? achievement.name : 'Logro bloqueado'}
             </p>
             {achievement.unlocked && (
-               <p className="text-[10px] bg-amber-50 text-amber-700 px-2.5 py-1 rounded border border-amber-100 font-bold mt-3 uppercase tracking-wider">
-                 {achievement.rarity}
-               </p>
+              <p className="mt-3 rounded border border-indigo-100 bg-indigo-50 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-indigo-700">
+                {achievement.rarity}
+              </p>
             )}
-          </motion.div>
+          </motion.button>
         ))}
       </div>
-      
-      <AchievementDetailModal 
-        isOpen={!!selectedAchievement} 
-        achievement={selectedAchievement} 
-        onClose={() => setSelectedAchievement(null)} 
+
+      <AchievementDetailModal
+        isOpen={!!selectedAchievement}
+        achievement={selectedAchievement}
+        onClose={() => setSelectedAchievement(null)}
       />
     </div>
   )

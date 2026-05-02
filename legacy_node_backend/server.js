@@ -21,10 +21,15 @@ const dotenvResult = dotenv.config({ path: envPath })
 
 const app = express()
 const port = Number(process.env.PORT || 4000)
+const normalizeOrigin = (origin) => String(origin || '').trim().replace(/\/+$/, '')
 const allowedOrigins = (process.env.FRONTEND_URL || 'http://localhost:5173')
   .split(',')
-  .map((origin) => origin.trim())
+  .map((origin) => normalizeOrigin(origin))
   .filter(Boolean)
+const developmentOrigins = new Set([
+  'http://localhost:5173',
+  'http://127.0.0.1:5173',
+])
 
 const MAX_ATTEMPTS = 3
 const XP_PER_CORRECT = Number(process.env.XP_PER_CORRECT || 10)
@@ -40,12 +45,13 @@ const questionStateStore = new Map()
 
 const corsOptions = {
   origin(origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
+    const requestOrigin = normalizeOrigin(origin)
+    if (!requestOrigin || allowedOrigins.includes(requestOrigin) || developmentOrigins.has(requestOrigin)) {
       callback(null, true)
       return
     }
 
-    callback(new Error(`CORS blocked origin: ${origin}`))
+    callback(new Error(`CORS blocked origin: ${requestOrigin}`))
   },
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'x-mathlingo-webhook-secret'],

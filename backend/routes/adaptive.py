@@ -2,14 +2,14 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
-from core.database import get_db
-from models.attempt import Attempt
-from models.exercise import Exercise
-from models.topic import Topic
-from models.user import User
-from schemas.exercise import ExerciseSuggestion
-from services.adaptation_engine import select_next_exercise
-from services.mastery_engine import update_mastery
+from backend.core.database import get_db
+from backend.models.attempt import Attempt
+from backend.models.exercise import Exercise
+from backend.models.topic import Topic
+from backend.models.user import User
+from backend.schemas.exercise import ExerciseSuggestion
+from backend.services.adaptation_engine import select_next_exercise
+from backend.services.mastery_engine import update_mastery
 
 router = APIRouter(prefix='/adaptive', tags=['Adaptive'])
 

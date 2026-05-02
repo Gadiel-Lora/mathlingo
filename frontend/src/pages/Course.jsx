@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 
 import brainLogo from '../assets/brain-logo.png'
+import { useAuth } from '../context/AuthContext'
 import { useProgress } from '../context/ProgressContext'
 import {
   buildFinalExamProgressId,
@@ -9,7 +10,6 @@ import {
   flattenGradeLessons,
   getUnlockedGradeIds,
   isFinalExamUnlockedInGrade,
-  isGradeUnlocked,
   isLessonUnlockedInGrade,
 } from '../lib/academicCurriculum'
 import { academicApi } from '../services/academicApi'
@@ -17,6 +17,7 @@ import { academicApi } from '../services/academicApi'
 function Course() {
   const navigate = useNavigate()
   const { id } = useParams()
+  const { profile } = useAuth()
   const { completedLessons, loadingProgress } = useProgress()
 
   const [grades, setGrades] = useState([])
@@ -76,22 +77,20 @@ function Course() {
   }, [id])
 
   const unlockedGradeIds = useMemo(() => {
-    return new Set(
+    const unlocked = new Set(
       getUnlockedGradeIds({
         grades,
         completedLessons,
       }),
     )
-  }, [completedLessons, grades])
+    if (profile?.grade?.id) unlocked.add(String(profile.grade.id))
+    return unlocked
+  }, [completedLessons, grades, profile?.grade?.id])
 
   const gradeUnlocked = useMemo(() => {
     if (!grade?.id) return false
-    return isGradeUnlocked({
-      grades,
-      gradeId: grade.id,
-      completedLessons,
-    })
-  }, [completedLessons, grade?.id, grades])
+    return unlockedGradeIds.has(String(grade.id))
+  }, [grade?.id, unlockedGradeIds])
 
   const lessonCards = useMemo(() => {
     if (!grade?.id) return []

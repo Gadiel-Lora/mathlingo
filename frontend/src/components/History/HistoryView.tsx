@@ -1,77 +1,93 @@
-import { useState } from 'react'
-import HistoryTabs from './HistoryTabs'
-import AttemptCard from './AttemptCard'
-import AttemptDetailModal from './AttemptDetailModal'
+import { useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
 
-const mockHistory = [
-  { id: 1, date: 'Sábado 14 de Marzo', name: 'Fracciones Especiales', correct: true, attempt: 2, xp: 45, time: '2:15', accuracy: 67 },
-  { id: 2, date: 'Sábado 14 de Marzo', name: 'Álgebra Intro', correct: false, attempt: 3, xp: 18, time: '4:32', accuracy: 0 },
-  { id: 3, date: 'Sábado 14 de Marzo', name: 'Decimales Básicos', correct: true, attempt: 1, xp: 60, time: '1:45', accuracy: 100 },
-  { id: 4, date: 'Viernes 13 de Marzo', name: 'Geometría y Ángulos', correct: true, attempt: 1, xp: 55, time: '1:12', accuracy: 100 },
-  { id: 5, date: 'Viernes 13 de Marzo', name: 'Funciones', correct: false, attempt: 2, xp: 22, time: '3:05', accuracy: 33 },
-]
+import { useAuth } from '../../context/AuthContext'
+import AttemptCard from './AttemptCard'
+import AttemptDetailModal from './AttemptDetailModal'
+import HistoryTabs from './HistoryTabs'
+
+type HistoryEntry = {
+  id: number
+  date: string
+  name: string
+  correct: boolean
+  attempt: number
+  xp: number
+  time: string
+  accuracy: number
+}
+
+const normalizeHistory = (value: unknown): HistoryEntry[] => {
+  if (!Array.isArray(value)) return []
+  return value.filter((item): item is HistoryEntry => Boolean(item && typeof item === 'object' && 'id' in item))
+}
 
 export default function HistoryView() {
+  const { profile } = useAuth()
   const [activeTab, setActiveTab] = useState('Semana')
-  const [selectedAttempt, setSelectedAttempt] = useState<any>(null)
+  const [selectedAttempt, setSelectedAttempt] = useState<HistoryEntry | null>(null)
 
-  const groupedHistory = mockHistory.reduce((acc: any, curr) => {
-    if (!acc[curr.date]) acc[curr.date] = []
-    acc[curr.date].push(curr)
-    return acc
-  }, {})
+  const history = useMemo(() => normalizeHistory((profile as any)?.attemptHistory), [profile])
+
+  const groupedHistory = useMemo(() => {
+    return history.reduce((acc: Record<string, HistoryEntry[]>, curr) => {
+      if (!acc[curr.date]) acc[curr.date] = []
+      acc[curr.date].push(curr)
+      return acc
+    }, {})
+  }, [history])
 
   return (
-    <div className="max-w-5xl mx-auto pb-16 w-full">
-      <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-100 flex flex-col h-full min-h-[70vh]">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10">
+    <div className="mx-auto w-full max-w-5xl pb-16">
+      <div className="flex min-h-[70vh] flex-col rounded-2xl border border-slate-100 bg-white p-6 shadow-sm sm:p-8">
+        <div className="mb-10 flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
           <HistoryTabs active={activeTab} onSelect={setActiveTab} />
-          <div className="flex gap-3 w-full md:w-auto">
-            <div className="relative flex-1 min-w-[180px]">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">🔍</span>
-              <select className="w-full pl-9 pr-8 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold outline-none cursor-pointer hover:bg-slate-100 transition-colors text-slate-600 appearance-none shadow-sm">
-                <option>Filtrar por Skill</option>
-                <option>Fracciones</option>
-                <option>Álgebra</option>
-                <option>Geometría</option>
+          <div className="flex w-full gap-3 md:w-auto">
+            <div className="relative min-w-[180px] flex-1">
+              <select className="w-full appearance-none rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm font-bold text-slate-600 shadow-sm outline-none transition-colors hover:bg-slate-100">
+                <option>Filtrar por skill</option>
               </select>
             </div>
-            <input type="date" className="px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-600 outline-none cursor-pointer hover:bg-slate-100 transition-colors shadow-sm" />
+            <input type="date" className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm font-bold text-slate-600 shadow-sm outline-none transition-colors hover:bg-slate-100" />
           </div>
         </div>
-        
-        <div className="space-y-12 flex-1">
-          {Object.keys(groupedHistory).map(date => (
-            <div key={date}>
-              <h3 className="text-xs font-black text-slate-400 tracking-widest uppercase mb-5 flex items-center gap-2 border-b border-slate-100 pb-3">
-                <span className="text-lg">📅</span> {date}
-              </h3>
-              <div className="space-y-4">
-                {groupedHistory[date].map((entry: any, i: number) => (
-                  <motion.div
-                    key={entry.id}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.1 }}
-                  >
-                    <AttemptCard data={entry} onClick={() => setSelectedAttempt(entry)} />
-                  </motion.div>
-                ))}
+
+        {history.length === 0 ? (
+          <div className="flex flex-1 flex-col items-center justify-center rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-8 text-center">
+            <h2 className="text-2xl font-black text-slate-800">Sin historial todavia</h2>
+            <p className="mt-3 max-w-md text-sm font-medium text-slate-500">
+              Cuando resuelvas tus primeros problemas, tus intentos apareceran aqui.
+            </p>
+          </div>
+        ) : (
+          <div className="flex-1 space-y-12">
+            {Object.keys(groupedHistory).map((date) => (
+              <div key={date}>
+                <h3 className="mb-5 flex items-center gap-2 border-b border-slate-100 pb-3 text-xs font-black uppercase tracking-widest text-slate-400">
+                  {date}
+                </h3>
+                <div className="space-y-4">
+                  {groupedHistory[date].map((entry, index) => (
+                    <motion.div
+                      key={entry.id}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.06 }}
+                    >
+                      <AttemptCard data={entry} onClick={() => setSelectedAttempt(entry)} />
+                    </motion.div>
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
-          
-          <button className="w-full py-5 mt-8 border-2 border-slate-200 border-dashed rounded-2xl text-slate-500 font-bold hover:bg-slate-50 hover:border-indigo-300 hover:text-indigo-600 transition-all text-lg tracking-tight">
-            Cargar más historial de {activeTab.toLowerCase()}...
-          </button>
-        </div>
+            ))}
+          </div>
+        )}
       </div>
-      
-      <AttemptDetailModal 
-        isOpen={!!selectedAttempt} 
-        attempt={selectedAttempt} 
-        onClose={() => setSelectedAttempt(null)} 
+
+      <AttemptDetailModal
+        isOpen={!!selectedAttempt}
+        attempt={selectedAttempt}
+        onClose={() => setSelectedAttempt(null)}
       />
     </div>
   )

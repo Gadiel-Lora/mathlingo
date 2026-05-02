@@ -2,12 +2,12 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
 
-from core.deps import get_db
-from core.security import get_current_user, require_admin
-from schemas.mastery import UserProgressOut, UserMasteryOut
-from schemas.user import UserOut, UserPromoteRequest
-from services.mastery_engine import get_user_mastery
-from services.user_service import list_users, promote_user
+from backend.core.deps import get_db
+from backend.core.security import get_current_user, require_admin
+from backend.schemas.mastery import UserProgressOut, UserMasteryOut
+from backend.schemas.user import UserOut, UserPromoteRequest
+from backend.services.mastery_engine import get_user_mastery
+from backend.services.user_service import list_users, promote_user
 
 router = APIRouter(prefix='/users', tags=['Users'])
 

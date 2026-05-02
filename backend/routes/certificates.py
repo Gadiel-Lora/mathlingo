@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
-from core.database import get_db
-from schemas.certificate import CertificateVerifyOut
-from services.certificate_service import verify_certificate_hash
+from backend.core.database import get_db
+from backend.schemas.certificate import CertificateVerifyOut
+from backend.services.certificate_service import verify_certificate_hash
 
 router = APIRouter(tags=['Certificates'])
 

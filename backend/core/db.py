@@ -4,7 +4,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.engine import make_url
 from sqlalchemy.orm import declarative_base, sessionmaker
 
-from core.config import settings
+from backend.core.config import settings
 
 # Load .env values in local environments when python-dotenv is available.
 try:

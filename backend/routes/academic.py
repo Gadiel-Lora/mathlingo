@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, Response, status
 from sqlalchemy.orm import Session
 
-from core.database import get_db
-from core.security import require_admin
-from schemas.academic import (
+from backend.core.database import get_db
+from backend.core.security import require_admin
+from backend.schemas.academic import (
     BranchCollectionResponse,
     BranchSingleResponse,
     CurriculumCollectionResponse,
@@ -11,8 +11,8 @@ from schemas.academic import (
     CurriculumGradeWrite,
     CurriculumSingleResponse,
 )
-from schemas.user import UserOut
-from services.academic_service import (
+from backend.schemas.user import UserOut
+from backend.services.academic_service import (
     create_curriculum_grade,
     delete_curriculum_grade,
     get_curriculum_branch,

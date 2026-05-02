@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 from sqlalchemy import Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from core.database import Base
+from backend.core.database import Base
 
 if TYPE_CHECKING:
     from models.attempt import Attempt

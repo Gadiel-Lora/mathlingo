@@ -9,6 +9,12 @@ const PATH_OPTIONS = [
   { id: 'AUTONOMOUS', title: 'Constelaciones', description: 'Ruta adaptativa por ramas con recomendaciones ancestro.' },
 ]
 
+const getCurriculumGrades = (payload) => {
+  if (Array.isArray(payload?.grades)) return payload.grades
+  if (Array.isArray(payload?.levels)) return payload.levels
+  return []
+}
+
 export default function RegisterOnboarding() {
   const navigate = useNavigate()
   const { user, profile, register, syncProfile } = useAuth()
@@ -20,13 +26,32 @@ export default function RegisterOnboarding() {
   const [gradeId, setGradeId] = useState(profile?.grade?.id || '')
   const [selectedPathType, setSelectedPathType] = useState(profile?.selectedPathType || 'GRADE')
   const [grades, setGrades] = useState([])
+  const [gradesLoading, setGradesLoading] = useState(true)
+  const [gradesError, setGradesError] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [feedback, setFeedback] = useState({ type: '', message: '' })
 
+  const loadGrades = async () => {
+    setGradesLoading(true)
+    setGradesError('')
+    try {
+      const response = await academicApi.getCurriculum()
+      const nextGrades = getCurriculumGrades(response)
+      setGrades(nextGrades)
+      if (!nextGrades.length) {
+        setGradesError('No encontramos grados disponibles en el curriculum.')
+      }
+    } catch (error) {
+      console.error('Error cargando grados:', error)
+      setGrades([])
+      setGradesError('No se pudieron cargar los grados. Revisa que el backend academico este activo.')
+    } finally {
+      setGradesLoading(false)
+    }
+  }
+
   useEffect(() => {
-    academicApi.getCurriculum()
-      .then((response) => setGrades(response.grades || []))
-      .catch((error) => console.error('Error cargando grados:', error))
+    void loadGrades()
   }, [])
 
   useEffect(() => {
@@ -50,8 +75,14 @@ export default function RegisterOnboarding() {
     event.preventDefault()
     setFeedback({ type: '', message: '' })
 
-    if (!fullName || !gradeId) {
-      setFeedback({ type: 'error', message: 'Completa tu nombre y selecciona un grado para continuar.' })
+    const trimmedFullName = fullName.trim()
+    if (!trimmedFullName) {
+      setFeedback({ type: 'error', message: 'Escribe tu nombre para continuar.' })
+      return
+    }
+
+    if (!gradeId) {
+      setFeedback({ type: 'error', message: 'Selecciona tu grado actual para continuar.' })
       return
     }
 
@@ -62,7 +93,7 @@ export default function RegisterOnboarding() {
       }
 
       await syncProfile({
-        fullName,
+        fullName: trimmedFullName,
         gradeId,
         selectedPathType,
         learningStyle: 'visual',
@@ -80,7 +111,7 @@ export default function RegisterOnboarding() {
   }
 
   return (
-    <div className="cm-shell min-h-screen flex items-center justify-center px-6 py-16">
+    <div className="cm-shell flex min-h-dvh items-start justify-center overflow-y-auto px-6 py-10 md:items-center md:py-16">
       <main className="relative z-10 w-full max-w-3xl">
         <div className="cm-card mx-auto p-8 md:p-10">
           <div className="mb-10 text-center">
@@ -139,23 +170,38 @@ export default function RegisterOnboarding() {
 
                 <div>
                   <span className="mb-3 block text-sm text-coastal-mist/85">Tu grado actual</span>
-                  <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                    {grades.map((grade) => (
-                      <button
-                        key={grade.id}
-                        type="button"
-                        onClick={() => setGradeId(grade.id)}
-                        className={`rounded-2xl border p-4 text-left transition-all ${
-                          gradeId === grade.id
-                            ? 'border-coastal-neon bg-coastal-steel/70 shadow-lg'
-                            : 'border-coastal-steel/60 bg-coastal-ocean/70 hover:border-coastal-neon/40'
-                        }`}
-                      >
-                        <p className="font-semibold text-coastal-mist">{grade.name}</p>
-                        <p className="mt-1 text-xs text-coastal-mist/60">{grade.levelName}</p>
+                  {gradesLoading && (
+                    <div className="rounded-2xl border border-coastal-steel/60 bg-coastal-ocean/70 px-4 py-3 text-sm text-coastal-mist/65">
+                      Cargando grados...
+                    </div>
+                  )}
+                  {!gradesLoading && gradesError && (
+                    <div className="rounded-2xl border border-red-600/40 bg-red-600/10 px-4 py-3 text-sm text-red-200">
+                      <p>{gradesError}</p>
+                      <button type="button" onClick={loadGrades} className="mt-3 font-semibold text-coastal-neon">
+                        Reintentar
                       </button>
-                    ))}
-                  </div>
+                    </div>
+                  )}
+                  {!gradesLoading && !gradesError && (
+                    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                      {grades.map((grade) => (
+                        <button
+                          key={grade.id}
+                          type="button"
+                          onClick={() => setGradeId(grade.id)}
+                          className={`rounded-2xl border p-4 text-left transition-all ${
+                            gradeId === grade.id
+                              ? 'border-coastal-neon bg-coastal-steel/70 shadow-lg'
+                              : 'border-coastal-steel/60 bg-coastal-ocean/70 hover:border-coastal-neon/40'
+                          }`}
+                        >
+                          <p className="font-semibold text-coastal-mist">{grade.name}</p>
+                          <p className="mt-1 text-xs text-coastal-mist/60">{grade.levelName || `Grado ${grade.gradeNumber || ''}`}</p>
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
 
                 <div>

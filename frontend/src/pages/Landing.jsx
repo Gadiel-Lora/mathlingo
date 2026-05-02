@@ -25,7 +25,7 @@ function Landing() {
         </nav>
       </header>
 
-      <main className="cm-page mx-auto flex min-h-screen max-w-5xl items-center justify-center px-6 pt-20 pb-16">
+      <main className="cm-page mx-auto flex min-h-dvh max-w-5xl items-start justify-center px-6 pt-24 pb-16 md:items-center">
         <section className="mx-auto max-w-2xl space-y-6 text-center">
           <p className="cm-reveal cm-delay-1">
             <span className="cm-badge cm-badge-live">Aprendizaje adaptativo activo</span>
