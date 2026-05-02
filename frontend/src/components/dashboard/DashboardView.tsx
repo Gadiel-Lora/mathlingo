@@ -1,8 +1,9 @@
-﻿import { lazy, Suspense, useState } from 'react'
+import { lazy, Suspense, useState } from 'react'
 import { AnimatePresence } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 
 import { useAuth } from '../../context/AuthContext'
+import { useDashboardStore } from '../../store/dashboardStore'
 import PageTransition from '../Common/PageTransition'
 
 const DashboardHome = lazy(() => import('./DashboardHome'))
@@ -23,6 +24,15 @@ const NAV_ITEMS: Array<{ id: DashboardViewId; icon: string; label: string }> = [
   { id: 'tasks', icon: 'TS', label: 'Tareas Asignadas' },
 ]
 
+const VIEW_LABELS: Record<DashboardViewId, string> = {
+  dashboard: 'Dashboard',
+  profile: 'Tu Perfil Académico',
+  history: 'Historial',
+  achievements: 'Logros',
+  tasks: 'Tareas Asignadas',
+  settings: 'Ajustes',
+}
+
 function ViewFallback() {
   return (
     <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
@@ -37,23 +47,32 @@ function ViewFallback() {
 
 function prefetchProfileView() {
   void loadLearningProfileView().then(module => {
-    if (typeof module.preloadSkillGraph === 'function') {
-      void module.preloadSkillGraph()
+    if (typeof (module as any).preloadSkillGraph === 'function') {
+      void (module as any).preloadSkillGraph()
     }
   })
 }
 
 export default function DashboardView() {
   const navigate = useNavigate()
-  const { profile } = useAuth()
+  const { profile, user } = useAuth()
+  const userName = useDashboardStore((state) => state.userName)
   const [currentView, setCurrentView] = useState<DashboardViewId>('dashboard')
 
-  const navItemClass = (id: DashboardViewId) => `flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-colors cursor-pointer ${
-    currentView === id ? 'bg-indigo-50 text-indigo-700 font-bold shadow-sm' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-700'
-  }`
+  // Derive avatar initial: prefer profile.fullName, fallback to store userName, then email
+  const displayName = (profile as any)?.fullName || userName || user?.email?.split('@')[0] || ''
+  const userInitial = displayName.trim().charAt(0).toUpperCase() || '?'
+
+  const navItemClass = (id: DashboardViewId) =>
+    `flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-colors cursor-pointer ${
+      currentView === id
+        ? 'bg-indigo-50 text-indigo-700 font-bold shadow-sm'
+        : 'text-slate-500 hover:bg-slate-50 hover:text-slate-700'
+    }`
 
   return (
     <div className="flex h-screen overflow-hidden bg-slate-50 font-sans">
+      {/* Sidebar */}
       <div className="z-20 hidden w-64 flex-shrink-0 flex-col border-r border-slate-200 bg-white shadow-sm md:flex">
         <div className="flex items-center justify-center border-b border-slate-100 p-6">
           <h1 className="text-2xl font-black tracking-tight text-indigo-600">
@@ -78,7 +97,7 @@ export default function DashboardView() {
               {item.label}
             </button>
           ))}
-          <div className="my-4 border-t border-slate-100" role="separator"></div>
+          <div className="my-4 border-t border-slate-100" role="separator" />
           <button
             type="button"
             onClick={() => setCurrentView('settings')}
@@ -91,7 +110,7 @@ export default function DashboardView() {
             </span>
             Ajustes
           </button>
-          {profile?.permissions?.canAccessAdminPanel && (
+          {(profile as any)?.permissions?.canAccessAdminPanel && (
             <button
               type="button"
               onClick={() => navigate('/admin')}
@@ -107,6 +126,7 @@ export default function DashboardView() {
         </nav>
       </div>
 
+      {/* Main content */}
       <div className="relative flex h-screen flex-1 flex-col overflow-hidden">
         <AnimatePresence mode="wait">
           {currentView === 'dashboard' && (
@@ -121,11 +141,15 @@ export default function DashboardView() {
         {currentView !== 'dashboard' && (
           <>
             <header className="sticky top-0 z-10 flex items-center justify-between border-b border-slate-200 bg-white/80 px-8 py-5 backdrop-blur-md shadow-sm">
-              <div className="text-xl font-bold capitalize tracking-tight text-slate-800">
-                {currentView === 'profile' ? 'Tu Perfil Academico' : currentView}
+              <div className="text-xl font-bold tracking-tight text-slate-800">
+                {VIEW_LABELS[currentView]}
               </div>
-              <div className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border-2 border-white bg-gradient-to-tr from-indigo-500 to-purple-500 text-lg font-bold text-white shadow-md transition-transform hover:scale-105">
-                J
+              <div
+                className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border-2 border-white bg-gradient-to-tr from-indigo-500 to-purple-500 text-lg font-bold text-white shadow-md transition-transform hover:scale-105"
+                title={displayName}
+                aria-label={`Usuario: ${displayName}`}
+              >
+                {userInitial}
               </div>
             </header>
             <main className="relative flex-1 overflow-y-auto p-4 md:p-8">

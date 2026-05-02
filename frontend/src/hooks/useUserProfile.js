@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 
 import { useAuth } from '../context/AuthContext'
 import { useDashboardStore } from '../store/dashboardStore'
@@ -6,10 +6,23 @@ import { useDashboardStore } from '../store/dashboardStore'
 export function useUserProfile() {
   const { user, profile, refreshProfile } = useAuth()
   const setProfile = useDashboardStore((state) => state.setProfile)
+  const resetProfile = useDashboardStore((state) => state.resetProfile)
   const profileLoaded = useDashboardStore((state) => state.profileLoaded)
 
+  const lastUserIdRef = useRef(null)
+
   useEffect(() => {
-    if (!user || profileLoaded) return
+    const currentId = user?.id ?? null
+
+    if (currentId !== lastUserIdRef.current) {
+      resetProfile()
+      lastUserIdRef.current = currentId
+    }
+  }, [user?.id, resetProfile])
+
+  useEffect(() => {
+    if (!user?.id) return
+    if (profileLoaded) return
 
     let cancelled = false
 
@@ -19,7 +32,7 @@ export function useUserProfile() {
         if (!sourceProfile || cancelled) return
 
         setProfile({
-          userName: sourceProfile.fullName || sourceProfile.email?.split('@')[0] || 'Estudiante',
+          userName: sourceProfile.fullName || sourceProfile.email?.split('@')[0] || 'Nuevo Usuario',
           userLevel: sourceProfile.currentLevel ?? 1,
           totalXP: sourceProfile.totalXP ?? 0,
           streak: sourceProfile.currentStreak ?? 0,
@@ -36,7 +49,7 @@ export function useUserProfile() {
           })),
         })
       } catch (error) {
-        console.info('[useUserProfile] Perfil no disponible aun:', error?.message)
+        console.info('[useUserProfile] Perfil no disponible aún:', error?.message)
       }
     }
 
@@ -44,5 +57,5 @@ export function useUserProfile() {
     return () => {
       cancelled = true
     }
-  }, [user, profile, profileLoaded, refreshProfile, setProfile])
+  }, [user?.id, profile, profileLoaded, refreshProfile, setProfile])
 }

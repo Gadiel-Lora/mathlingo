@@ -13,6 +13,7 @@ import SkillAlerts from './SkillAlerts'
 import DateRangeSelector from './DateRangeSelector'
 import ExportButton from './ExportButton'
 import DualPathPanel from './DualPathPanel'
+import MathProblemInput from './MathProblemInput'
 
 const ProgressChart = lazy(() => import('./ProgressChart'))
 
@@ -50,7 +51,10 @@ export default function DashboardHome() {
             <span className="text-xl" aria-hidden="true">AL</span>
             <span className="absolute top-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-white bg-red-500"></span>
           </button>
-          <div className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border-2 border-white bg-gradient-to-tr from-indigo-500 to-purple-500 text-lg font-bold text-white shadow-sm transition-transform hover:scale-105">
+          <div
+            className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border-2 border-white bg-gradient-to-tr from-indigo-500 to-purple-500 text-lg font-bold text-white shadow-sm transition-transform hover:scale-105"
+            title={userName || 'Usuario'}
+          >
             {userInitial}
           </div>
         </div>
@@ -66,6 +70,9 @@ export default function DashboardHome() {
               <SkillAlerts />
             </div>
           </div>
+
+          {/* Práctica Rápida — input de problemas matemáticos */}
+          <MathProblemInput />
 
           <DualPathPanel />
 

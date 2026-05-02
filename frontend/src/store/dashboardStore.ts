@@ -55,6 +55,7 @@ export interface DashboardState {
   filters: { grade: string, category: string, search: string }
   applyFilter: (type: 'grade' | 'category' | 'search', value: string) => void
   setProfile: (data: Partial<DashboardState>) => void
+  resetProfile: () => void
 }
 
 const emptyLearningData = {
@@ -65,7 +66,7 @@ const emptyLearningData = {
 }
 
 export const useDashboardStore = create<DashboardState>((set) => ({
-  userName: 'Estudiante',
+  userName: '',
   userLevel: 1,
   totalXP: 0,
   streak: 0,
@@ -87,5 +88,19 @@ export const useDashboardStore = create<DashboardState>((set) => ({
     ...emptyLearningData,
     ...data,
     profileLoaded: true,
+  })),
+
+  resetProfile: () => set(() => ({
+    userName: '',
+    userLevel: 1,
+    totalXP: 0,
+    streak: 0,
+    accuracy: 0,
+    dailyProgress: 0,
+    dailyMinutes: 0,
+    weeklyProgress: 0,
+    profileLoaded: false,
+    filters: { grade: 'Todos', category: 'Todos', search: '' },
+    ...emptyLearningData,
   })),
 }))

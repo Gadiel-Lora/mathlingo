@@ -3,6 +3,7 @@ import { createContext, useCallback, useContext, useEffect, useState } from 'rea
 
 import { supabase } from '../lib/supabase'
 import { academicApi } from '../services/academicApi'
+import { useDashboardStore } from '../store/dashboardStore'
 
 const AuthContext = createContext(null)
 const LOCAL_SESSION_KEY = 'mathlingo-local-session'
@@ -63,10 +64,10 @@ const isConnectionError = (error) => {
 }
 
 const buildLocalUser = (email, metadata = {}) => {
-  const normalizedEmail = String(email || 'estudiante@local.mathlingo').trim().toLowerCase()
-  const idSafeEmail = normalizedEmail.replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'estudiante'
+  const normalizedEmail = String(email || '').trim().toLowerCase()
+  const randomId = `local-${Math.random().toString(36).slice(2, 11)}`
   return {
-    id: `local-${idSafeEmail}`,
+    id: randomId,
     email: normalizedEmail,
     app_metadata: { provider: 'local-dev' },
     user_metadata: metadata,
@@ -187,7 +188,7 @@ const buildLocalProfile = async ({ user, fullName, gradeId, selectedPathType }) 
   const profile = {
     id: user.id,
     email: user.email,
-    fullName: String(fullName || user.user_metadata?.full_name || user.email?.split('@')[0] || 'Estudiante').trim(),
+    fullName: String(fullName || user.user_metadata?.full_name || user.email?.split('@')[0] || 'Nuevo Usuario').trim(),
     role: 'STUDENT',
     grade,
     selectedPathType,
@@ -389,10 +390,10 @@ export function AuthProvider({ children }) {
       )
       if (activeSession?.user) return activeSession.user
     } catch {
-      // fallback below
+      // fallback to null if no session exists at all
     }
 
-    return buildLocalUser()
+    return null
   }
 
   const syncProfile = async (payload) => {
@@ -448,6 +449,9 @@ export function AuthProvider({ children }) {
   }
 
   const logout = async () => {
+    // Reset dashboard store first to clear any cached user data
+    useDashboardStore.getState().resetProfile()
+
     if (user?.isLocal) {
       removeStorageValue(LOCAL_SESSION_KEY)
       setSession(null)
