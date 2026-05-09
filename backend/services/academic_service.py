@@ -9,12 +9,12 @@ from fastapi import HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.orm import Session, selectinload
 
-from core.database import SessionLocal
-from models.curriculum_area import CurriculumArea
-from models.curriculum_lesson import CurriculumLesson
-from models.curriculum_topic import CurriculumTopic
-from models.grade import Grade
-from schemas.academic import CurriculumGradeWrite
+from backend.core.database import SessionLocal
+from backend.models.curriculum_area import CurriculumArea
+from backend.models.curriculum_lesson import CurriculumLesson
+from backend.models.curriculum_topic import CurriculumTopic
+from backend.models.grade import Grade
+from backend.schemas.academic import CurriculumGradeWrite
 
 CURRICULUM_SEED_PATH = Path(__file__).resolve().parent.parent / 'data' / 'curriculum_seed.json'
 

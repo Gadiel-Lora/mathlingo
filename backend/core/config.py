@@ -28,6 +28,7 @@ class SettingsProtocol(Protocol):
     SECRET_KEY: str
     ALGORITHM: str
     ACCESS_TOKEN_EXPIRE_MINUTES: int
+    AI_TUTOR_URL: str
 
 
 try:
@@ -44,8 +45,9 @@ if _PydanticBaseSettings is not None:
         SECRET_KEY: str = DEFAULT_SECRET_KEY
         ALGORITHM: str = DEFAULT_ALGORITHM
         ACCESS_TOKEN_EXPIRE_MINUTES: int = DEFAULT_ACCESS_TOKEN_EXPIRE_MINUTES
+        AI_TUTOR_URL: str = "http://localhost:3001"
 
-        model_config = _SettingsConfigDict(env_file='.env')
+        model_config = _SettingsConfigDict(env_file='.env', extra='ignore')
 
     settings: SettingsProtocol = _PydanticSettings()
 else:
@@ -61,5 +63,6 @@ else:
                 str(DEFAULT_ACCESS_TOKEN_EXPIRE_MINUTES),
             )
         )
+        AI_TUTOR_URL: str = os.getenv("AI_TUTOR_URL", "http://localhost:3001")
 
     settings: SettingsProtocol = _FallbackSettings()

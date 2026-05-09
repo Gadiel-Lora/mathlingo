@@ -4,11 +4,11 @@ import secrets
 
 from sqlalchemy.orm import Session
 
-from models.certificate import Certificate
-from models.subject import Subject
-from models.topic import Topic
-from models.user_mastery import UserMastery
-from services.mastery_engine import (
+from backend.models.certificate import Certificate
+from backend.models.subject import Subject
+from backend.models.topic import Topic
+from backend.models.user_mastery import UserMastery
+from backend.services.mastery_engine import (
     get_threshold,
     has_passed_revalidation,
     is_inactive,

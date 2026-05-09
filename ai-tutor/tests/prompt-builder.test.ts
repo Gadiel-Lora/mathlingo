@@ -159,9 +159,6 @@ describe('PromptBuilder', () => {
       expect(prompt).toContain('CONCEPTUAL');
     });
   });
-});
-
-
   describe('buildDiagnosticPrompt', () => {
     it('should include problem and error type', () => {
       const prompt = builder.buildDiagnosticPrompt(

@@ -5,7 +5,9 @@ from fastapi import FastAPI
 from backend import models  # noqa: F401
 from backend.core.database import create_tables
 from backend.routes import adaptive, attempts, auth, certificates, diagnostic, module as modules, progress, topics, users, academic
-from services.academic_service import bootstrap_curriculum_data
+from backend.services.academic_service import bootstrap_curriculum_data
+from backend.services.exercise_service import ExerciseService
+from backend.core.database import SessionLocal
 
 
 @asynccontextmanager
@@ -13,6 +15,14 @@ async def lifespan(_: FastAPI):
     """Initialize database tables in the configured DATABASE_URL on startup."""
     create_tables()
     bootstrap_curriculum_data()
+    
+    # Load exercise seed data
+    db = SessionLocal()
+    try:
+        await ExerciseService.seed_exercises(db)
+    finally:
+        db.close()
+    
     yield
 
 

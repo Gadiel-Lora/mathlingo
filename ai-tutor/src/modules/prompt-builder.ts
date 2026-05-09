@@ -181,9 +181,6 @@ export class PromptBuilder {
 
     return prompt;
   }
-}
-
-
   buildDiagnosticPrompt(
     studentResponse: string,
     problem: ProblemStatement,

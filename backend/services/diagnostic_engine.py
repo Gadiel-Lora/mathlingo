@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from sqlalchemy.orm import Session
 
-from models.topic import Topic
-from services.mastery_engine import get_mastery_map
+from backend.models.topic import Topic
+from backend.services.mastery_engine import get_mastery_map
 
 
 def calculate_branch_level(db: Session, user_id: int, topic_ids: list[int] | None = None) -> int:

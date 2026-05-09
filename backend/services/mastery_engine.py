@@ -5,11 +5,11 @@ from datetime import UTC, datetime, timedelta
 
 from sqlalchemy.orm import Session
 
-from models.attempt import Attempt
-from models.exercise import Exercise
-from models.subject import Subject
-from models.topic import Topic
-from models.user_mastery import UserMastery
+from backend.models.attempt import Attempt
+from backend.models.exercise import Exercise
+from backend.models.subject import Subject
+from backend.models.topic import Topic
+from backend.models.user_mastery import UserMastery
 
 BASE_LEARNING_RATE_DEFAULT = 0.2
 BASE_DECAY_RATE_DEFAULT = 0.1

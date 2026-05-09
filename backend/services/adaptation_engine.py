@@ -4,10 +4,10 @@ from datetime import UTC, datetime
 
 from sqlalchemy.orm import Session
 
-from models.exercise import Exercise
-from models.topic import Topic
-from models.topic_dependency import TopicDependency
-from services.mastery_engine import (
+from backend.models.exercise import Exercise
+from backend.models.topic import Topic
+from backend.models.topic_dependency import TopicDependency
+from backend.services.mastery_engine import (
     get_mastery_map,
     get_mastery_row,
     get_topic_review_priority,

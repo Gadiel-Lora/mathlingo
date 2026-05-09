@@ -2,9 +2,9 @@ from fastapi import HTTPException, status
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 
-from models.module import Module
-from models.progress import Progress
-from schemas.progress import ProgressCreate
+from backend.models.module import Module
+from backend.models.progress import Progress
+from backend.schemas.progress import ProgressCreate
 
 
 def get_user_progress(db: Session, user_id: int):

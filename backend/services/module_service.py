@@ -1,8 +1,8 @@
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 
-from models.module import Module
-from schemas.module import ModuleCreate
+from backend.models.module import Module
+from backend.schemas.module import ModuleCreate
 
 
 def create_module(db: Session, module: ModuleCreate):

@@ -1,0 +1,84 @@
+{
+  "exercises": [
+    {
+      "id": 1,
+      "topic_id": 1,
+      "difficulty": 0.3,
+      "statement": "Cuanto es 2 + 3?",
+      "correct_answer": "5",
+      "explanation": "Sumamos 2 y 3 para obtener 5",
+      "options": ["4", "5", "6", "7"],
+      "type": "multiple_choice"
+    },
+    {
+      "id": 2,
+      "topic_id": 1,
+      "difficulty": 0.4,
+      "statement": "Cuanto es 7 - 3?",
+      "correct_answer": "4",
+      "explanation": "Restamos 3 de 7 para obtener 4",
+      "options": ["2", "3", "4", "5"],
+      "type": "multiple_choice"
+    },
+    {
+      "id": 3,
+      "topic_id": 1,
+      "difficulty": 0.5,
+      "statement": "Cuanto es 5 x 4?",
+      "correct_answer": "20",
+      "explanation": "Multiplicamos 5 por 4 para obtener 20",
+      "options": ["15", "20", "25", "30"],
+      "type": "multiple_choice"
+    },
+    {
+      "id": 4,
+      "topic_id": 1,
+      "difficulty": 0.6,
+      "statement": "Cuanto es 24 / 6?",
+      "correct_answer": "4",
+      "explanation": "Dividimos 24 entre 6 para obtener 4",
+      "options": ["3", "4", "5", "6"],
+      "type": "multiple_choice"
+    },
+    {
+      "id": 5,
+      "topic_id": 2,
+      "difficulty": 0.5,
+      "statement": "Cual es el resultado de 12 + 8 - 5?",
+      "correct_answer": "15",
+      "explanation": "Primero sumamos 12 + 8 = 20, luego restamos 5 para obtener 15",
+      "options": ["10", "15", "20", "25"],
+      "type": "multiple_choice"
+    },
+    {
+      "id": 6,
+      "topic_id": 2,
+      "difficulty": 0.6,
+      "statement": "Cuanto es (3 + 2) x 4?",
+      "correct_answer": "20",
+      "explanation": "Primero resolvemos el parentesis: 3 + 2 = 5, luego multiplicamos: 5 x 4 = 20",
+      "options": ["11", "15", "20", "25"],
+      "type": "multiple_choice"
+    },
+    {
+      "id": 7,
+      "topic_id": 3,
+      "difficulty": 0.7,
+      "statement": "Cuanto es 2^3?",
+      "correct_answer": "8",
+      "explanation": "2^3 = 2 x 2 x 2 = 8",
+      "options": ["4", "6", "8", "10"],
+      "type": "multiple_choice"
+    },
+    {
+      "id": 8,
+      "topic_id": 3,
+      "difficulty": 0.8,
+      "statement": "Cuanto es la raiz cuadrada de 16?",
+      "correct_answer": "4",
+      "explanation": "La raiz cuadrada de 16 es 4 porque 4 x 4 = 16",
+      "options": ["2", "3", "4", "5"],
+      "type": "multiple_choice"
+    }
+  ]
+}
