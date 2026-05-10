@@ -51,7 +51,7 @@ def _safe_db_url(raw_url: str) -> str:
 
 def create_tables() -> None:
     """Create all mapped tables after importing the model registry."""
-    import models  # noqa: F401
+    from backend import models  # noqa: F401
 
     # Startup trace to verify create_all targets the expected PostgreSQL database.
     print(f'Database URL: {_safe_db_url(DATABASE_URL)}')
