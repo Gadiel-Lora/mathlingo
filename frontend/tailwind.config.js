@@ -4,20 +4,20 @@ export default {
     extend: {
       colors: {
         coastal: {
-          midnight: "#07111D",
-          ocean: "#0F1D31",
-          steel: "#1F3350",
-          wave: "#2F5F8F",
-          mist: "#F4F2EB",
-          neon: "#61BDF8",
+          midnight: "#F6FAF9",
+          ocean: "#FFFFFF",
+          steel: "#C9D8D6",
+          wave: "#2D6E75",
+          mist: "#182220",
+          neon: "#0E7C86",
         },
         verdant: {
-          emerald: "#0F3F35",
-          jade: "#166151",
-          luxe: "#1C7F6A",
-          accent: "#45C6A7",
-          olive: "#27453D",
-          gold: "#D1B06F",
+          emerald: "#0D3F3C",
+          jade: "#126761",
+          luxe: "#0E7C86",
+          accent: "#2AA876",
+          olive: "#334743",
+          gold: "#C28B2C",
         },
       },
       keyframes: {
@@ -35,12 +35,12 @@ export default {
         pulseGlow: 'pulseGlow 2.6s ease-in-out infinite',
       },
       boxShadow: {
-        coastal: '0 20px 46px rgba(1, 8, 18, 0.48)',
-        emerald: '0 12px 32px rgba(15, 63, 53, 0.3)',
+        coastal: '0 18px 42px rgba(31, 50, 48, 0.12)',
+        emerald: '0 12px 32px rgba(14, 124, 134, 0.14)',
       },
       backgroundImage: {
         'coastal-veil':
-          'radial-gradient(circle at 12% 8%, rgba(97, 189, 248, 0.16), transparent 42%), radial-gradient(circle at 86% 12%, rgba(209, 176, 111, 0.14), transparent 38%), radial-gradient(circle at 42% 110%, rgba(69, 198, 167, 0.1), transparent 42%), linear-gradient(140deg, #07111D 0%, #0F1D31 52%, #1A2E49 100%)',
+          'linear-gradient(180deg, #FBFEFD 0%, #EEF6F4 100%)',
       },
     },
   },

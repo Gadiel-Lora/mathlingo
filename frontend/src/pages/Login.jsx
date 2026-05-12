@@ -48,98 +48,118 @@ function Login() {
 
   return (
     <div className="cm-shell">
-      <div className="cm-orb cm-orb-cyan left-[-5rem] top-[9rem] h-52 w-52" />
-      <div className="cm-orb cm-orb-gold right-[-4rem] top-[20rem] h-44 w-44" />
+      <header className="cm-navbar">
+        <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
+          <Link to="/" className="math-brand-lockup" aria-label="MathLingo inicio">
+            <span className="math-brand-mark">x2</span>
+            <span className="text-lg sm:text-xl">MathLingo</span>
+          </Link>
+          <Link to="/" className="math-nav-pill">
+            Inicio
+          </Link>
+        </nav>
+      </header>
 
-      <main className="cm-page px-6 pt-20 pb-16">
-        <div className="cm-card cm-reveal cm-delay-2 mx-auto max-w-md p-8">
-          <div className="space-y-6">
-            <p className="cm-reveal cm-delay-1">
-              <span className="cm-badge cm-badge-live">Sesion segura con Supabase</span>
-            </p>
-            <h1 className="cm-reveal cm-delay-2 max-w-2xl text-3xl font-semibold tracking-tight text-coastal-mist">
-              Ingreso a MathLingo
-            </h1>
-            <p className="cm-reveal cm-delay-3 text-coastal-mist/55">
-              Entra con correo y contrasena o conecta Google para continuar tu ruta academica.
-            </p>
-          </div>
+      <main className="cm-page mx-auto max-w-6xl px-6 py-10">
+        <div className="math-login-layout">
+          <section className="math-formula-panel" aria-hidden="true">
+            <div className="math-proof-board relative left-auto top-auto w-full translate-x-0">
+              <div className="math-proof-row">
+                <span>objetivo</span>
+                <span>{'dominio >= 85%'}</span>
+              </div>
+              <div className="math-proof-row">
+                <span>practica diaria</span>
+                <span>+ precision</span>
+              </div>
+              <div className="math-proof-row">
+                <span>ruta</span>
+                <span>{'algebra -> calculo'}</span>
+              </div>
+            </div>
+          </section>
 
-          <button
-            type="button"
-            onClick={handleGoogleLogin}
-            disabled={submitting}
-            className="cm-btn-secondary cm-reveal cm-delay-2 mt-10 flex w-full items-center justify-center gap-2 text-sm"
-          >
-            Continuar con Google
-          </button>
-
-          <div className="cm-reveal cm-delay-2 my-6 text-center text-xs uppercase tracking-[0.18em] text-coastal-mist/45">
-            o usa tu correo
-          </div>
-
-          <form className="space-y-6" onSubmit={handleSubmit}>
-            <label className="cm-reveal cm-delay-1 block">
-              <span className="mb-2 block text-sm text-coastal-mist/85">Email</span>
-              <input
-                type="email"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-                className="cm-input"
-                placeholder="tu@email.com"
-                autoComplete="email"
-                required
-              />
-            </label>
-
-            <label className="cm-reveal cm-delay-2 block">
-              <span className="mb-2 block text-sm text-coastal-mist/85">Contrasena</span>
-              <input
-                type="password"
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-                className="cm-input"
-                placeholder="********"
-                autoComplete="current-password"
-                minLength={6}
-                required
-              />
-            </label>
-
-            <button
-              type="submit"
-              disabled={submitting}
-              className="cm-btn-primary cm-reveal cm-delay-3 flex w-full items-center justify-center gap-2 text-sm"
-            >
-              {submitting && <span className="cm-loader" />}
-              {submitting ? 'Procesando...' : 'Entrar con correo'}
-            </button>
+          <section className="cm-card cm-reveal cm-delay-2 p-8">
+            <div className="space-y-4">
+              <span className="cm-badge cm-badge-live">Sesion academica segura</span>
+              <div>
+                <h1 className="text-3xl font-black text-slate-950">Ingresa a MathLingo</h1>
+                <p className="mt-2 text-sm font-medium text-slate-600">
+                  Continua tu progreso, tareas y mapa de habilidades matematicas.
+                </p>
+              </div>
+            </div>
 
             <button
               type="button"
-              onClick={() => navigate('/register')}
+              onClick={handleGoogleLogin}
               disabled={submitting}
-              className="cm-btn-secondary cm-reveal cm-delay-4 w-full text-sm"
+              className="cm-btn-secondary mt-8 flex w-full gap-2 text-sm"
             >
-              Crear cuenta nueva
+              Continuar con Google
             </button>
 
-            {feedback.message && (
-              <p
-                className={`cm-reveal rounded-2xl border px-4 py-3 text-sm ${
-                  feedback.type === 'error'
-                    ? 'border-red-600/40 bg-red-600/10 text-red-200'
-                    : 'border-verdant-accent/50 bg-verdant-luxe/20 text-verdant-accent'
-                }`}
-              >
-                {feedback.message}
-              </p>
-            )}
-          </form>
+            <div className="my-6 flex items-center gap-3 text-xs font-bold text-slate-400">
+              <span className="h-px flex-1 bg-slate-200" />
+              Correo academico
+              <span className="h-px flex-1 bg-slate-200" />
+            </div>
 
-          <Link to="/" className="cm-reveal cm-delay-4 mt-12 inline-block text-sm text-coastal-mist/75 transition-all duration-200 hover:text-coastal-neon">
-            Volver a inicio
-          </Link>
+            <form className="space-y-5" onSubmit={handleSubmit}>
+              <label className="block">
+                <span className="mb-2 block text-sm font-bold text-slate-700">Email</span>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
+                  className="cm-input"
+                  placeholder="tu@email.com"
+                  autoComplete="email"
+                  required
+                />
+              </label>
+
+              <label className="block">
+                <span className="mb-2 block text-sm font-bold text-slate-700">Contrasena</span>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(event) => setPassword(event.target.value)}
+                  className="cm-input"
+                  placeholder="********"
+                  autoComplete="current-password"
+                  minLength={6}
+                  required
+                />
+              </label>
+
+              <button type="submit" disabled={submitting} className="cm-btn-primary flex w-full gap-2 text-sm">
+                {submitting && <span className="cm-loader" />}
+                {submitting ? 'Procesando...' : 'Entrar'}
+              </button>
+
+              <button
+                type="button"
+                onClick={() => navigate('/register')}
+                disabled={submitting}
+                className="cm-btn-secondary w-full text-sm"
+              >
+                Crear cuenta
+              </button>
+
+              {feedback.message && (
+                <p
+                  className={`rounded-lg border px-4 py-3 text-sm font-medium ${
+                    feedback.type === 'error'
+                      ? 'border-red-200 bg-red-50 text-red-700'
+                      : 'border-emerald-200 bg-emerald-50 text-emerald-700'
+                  }`}
+                >
+                  {feedback.message}
+                </p>
+              )}
+            </form>
+          </section>
         </div>
       </main>
     </div>

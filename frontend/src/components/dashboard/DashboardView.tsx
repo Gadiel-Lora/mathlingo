@@ -17,29 +17,29 @@ const AssignedTasksView = lazy(() => import('../AssignedTasks/AssignedTasksView'
 type DashboardViewId = 'dashboard' | 'profile' | 'history' | 'achievements' | 'tasks' | 'settings'
 
 const NAV_ITEMS: Array<{ id: DashboardViewId; icon: string; label: string }> = [
-  { id: 'dashboard', icon: 'DB', label: 'Dashboard' },
-  { id: 'profile', icon: 'PF', label: 'Perfil de Aprendizaje' },
-  { id: 'history', icon: 'HI', label: 'Historial' },
-  { id: 'achievements', icon: 'LG', label: 'Logros' },
-  { id: 'tasks', icon: 'TS', label: 'Tareas Asignadas' },
+  { id: 'dashboard', icon: 'f(x)', label: 'Panel' },
+  { id: 'profile', icon: 'x2', label: 'Perfil de aprendizaje' },
+  { id: 'history', icon: 'n', label: 'Historial' },
+  { id: 'achievements', icon: '%', label: 'Logros' },
+  { id: 'tasks', icon: 'T', label: 'Tareas asignadas' },
 ]
 
 const VIEW_LABELS: Record<DashboardViewId, string> = {
-  dashboard: 'Dashboard',
-  profile: 'Tu Perfil Académico',
+  dashboard: 'Panel matematico',
+  profile: 'Tu perfil academico',
   history: 'Historial',
   achievements: 'Logros',
-  tasks: 'Tareas Asignadas',
+  tasks: 'Tareas asignadas',
   settings: 'Ajustes',
 }
 
 function ViewFallback() {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+    <div className="math-dashboard-card p-6">
       <div className="animate-pulse space-y-3">
         <div className="h-5 w-48 rounded bg-slate-200" />
         <div className="h-4 w-64 rounded bg-slate-100" />
-        <div className="h-32 rounded-2xl bg-slate-100" />
+        <div className="h-32 rounded-lg bg-slate-100" />
       </div>
     </div>
   )
@@ -59,26 +59,24 @@ export default function DashboardView() {
   const userName = useDashboardStore((state) => state.userName)
   const [currentView, setCurrentView] = useState<DashboardViewId>('dashboard')
 
-  // Derive avatar initial: prefer profile.fullName, fallback to store userName, then email
   const displayName = (profile as any)?.fullName || userName || user?.email?.split('@')[0] || ''
   const userInitial = displayName.trim().charAt(0).toUpperCase() || '?'
 
-  const navItemClass = (id: DashboardViewId) =>
-    `flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-colors cursor-pointer ${
-      currentView === id
-        ? 'bg-indigo-50 text-indigo-700 font-bold shadow-sm'
-        : 'text-slate-500 hover:bg-slate-50 hover:text-slate-700'
-    }`
+  const navItemClass = (id: DashboardViewId) => `math-nav-item ${currentView === id ? 'is-active' : ''}`
 
   return (
-    <div className="flex h-screen overflow-hidden bg-slate-50 font-sans">
-      {/* Sidebar */}
-      <div className="z-20 hidden w-64 flex-shrink-0 flex-col border-r border-slate-200 bg-white shadow-sm md:flex">
-        <div className="flex items-center justify-center border-b border-slate-100 p-6">
-          <h1 className="text-2xl font-black tracking-tight text-indigo-600">
-            Elite<span className="text-purple-600">Math</span>
-          </h1>
+    <div className="math-dashboard-shell flex h-screen overflow-hidden font-sans">
+      <aside className="math-sidebar z-20 hidden w-72 flex-shrink-0 flex-col md:flex">
+        <div className="border-b border-slate-100 p-6">
+          <div className="math-brand-lockup">
+            <span className="math-brand-mark">x2</span>
+            <div>
+              <h1 className="text-xl font-black text-slate-950">MathLingo</h1>
+              <p className="text-xs font-bold text-slate-500">Laboratorio matematico</p>
+            </div>
+          </div>
         </div>
+
         <nav className="flex-1 space-y-2 overflow-y-auto px-4 py-6" role="navigation" aria-label="Navegacion principal">
           {NAV_ITEMS.map(item => (
             <button
@@ -91,13 +89,15 @@ export default function DashboardView() {
               aria-current={currentView === item.id ? 'page' : undefined}
               aria-label={item.label}
             >
-              <span className="text-xs font-black uppercase tracking-[0.2em]" aria-hidden="true">
+              <span className="math-nav-symbol" aria-hidden="true">
                 {item.icon}
               </span>
               {item.label}
             </button>
           ))}
+
           <div className="my-4 border-t border-slate-100" role="separator" />
+
           <button
             type="button"
             onClick={() => setCurrentView('settings')}
@@ -105,28 +105,28 @@ export default function DashboardView() {
             aria-current={currentView === 'settings' ? 'page' : undefined}
             aria-label="Ajustes"
           >
-            <span className="text-xs font-black uppercase tracking-[0.2em]" aria-hidden="true">
-              ST
+            <span className="math-nav-symbol" aria-hidden="true">
+              cfg
             </span>
             Ajustes
           </button>
+
           {(profile as any)?.permissions?.canAccessAdminPanel && (
             <button
               type="button"
               onClick={() => navigate('/admin')}
-              className="flex items-center gap-3 rounded-xl px-4 py-3 font-medium text-teal-700 transition-colors hover:bg-slate-50"
+              className="math-nav-item text-teal-700"
               aria-label="Panel administrativo"
             >
-              <span className="text-xs font-black uppercase tracking-[0.2em]" aria-hidden="true">
+              <span className="math-nav-symbol" aria-hidden="true">
                 AD
               </span>
               Panel Admin
             </button>
           )}
         </nav>
-      </div>
+      </aside>
 
-      {/* Main content */}
       <div className="relative flex h-screen flex-1 flex-col overflow-hidden">
         <AnimatePresence mode="wait">
           {currentView === 'dashboard' && (
@@ -140,12 +140,13 @@ export default function DashboardView() {
 
         {currentView !== 'dashboard' && (
           <>
-            <header className="sticky top-0 z-10 flex items-center justify-between border-b border-slate-200 bg-white/80 px-8 py-5 backdrop-blur-md shadow-sm">
-              <div className="text-xl font-bold tracking-tight text-slate-800">
-                {VIEW_LABELS[currentView]}
+            <header className="sticky top-0 z-10 flex items-center justify-between border-b border-slate-200 bg-white/85 px-8 py-5 shadow-sm backdrop-blur-md">
+              <div>
+                <p className="text-xs font-black text-teal-700">MathLingo</p>
+                <div className="text-xl font-black text-slate-900">{VIEW_LABELS[currentView]}</div>
               </div>
               <div
-                className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border-2 border-white bg-gradient-to-tr from-indigo-500 to-purple-500 text-lg font-bold text-white shadow-md transition-transform hover:scale-105"
+                className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-teal-200 bg-teal-700 text-lg font-bold text-white shadow-md transition-transform hover:scale-105"
                 title={displayName}
                 aria-label={`Usuario: ${displayName}`}
               >

@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { ChatMessage } from '../types/ai'
 import { Problem, FeedbackState } from '../types/lesson'
-import { lessonProblems, replacementProblems } from '../components/lesson/mockLessonData'
+import { getLessonProblemsForRoute, lessonProblems, replacementProblems } from '../components/lesson/mockLessonData'
 import { detectFraud } from '../api/fraudDetectionApi'
 import { toast } from 'sonner'
 import { useAIStore } from './aiStore'
@@ -23,6 +23,7 @@ const normalizeAnswer = (value: string) => value.replace(/\s+/g, '').trim().toLo
 
 interface LessonState {
   currentProblem: Problem | null
+  selectedProblems: Problem[]
   problemIndex: number
   totalProblems: number
   answer: string
@@ -36,6 +37,7 @@ interface LessonState {
   totalXp: number
   addXp: (amount: number) => void
   resetLesson: () => void
+  initializeLesson: (routeId?: string) => void
   submitAnswer: (answer: string, timeTakenSeconds?: number) => Promise<{ correct: boolean; xp: number }>
   skipProblem: () => Promise<void>
   moveToNextProblem: () => Promise<void>
@@ -54,10 +56,11 @@ const buildIncorrectMessage = (attemptNumber: number, maxAttempts: number) => {
   return 'Respuesta incorrecta. Intenta de nuevo.'
 }
 
-const getInitialState = () => ({
-  currentProblem: lessonProblems[0] ?? null,
+const getInitialState = (problems: Problem[] = lessonProblems) => ({
+  currentProblem: problems[0] ?? null,
+  selectedProblems: problems,
   problemIndex: 0,
-  totalProblems: lessonProblems.length,
+  totalProblems: problems.length,
   answer: '',
   feedbackState: defaultFeedbackState,
   attemptCount: 0,
@@ -74,7 +77,7 @@ export const useLessonStore = create<LessonState>()((set, get) => ({
   clearFeedback: () => set({ feedbackState: defaultFeedbackState }),
   addXp: (amount) => set((state) => ({ totalXp: state.totalXp + amount })),
 
-  resetLesson: () => set(getInitialState()),
+  resetLesson: () => set(getInitialState(get().selectedProblems)),
 
   submitAnswer: async (answer, timeTakenSeconds = 0) => {
     const { currentProblem, attemptCount, maxAttempts, attemptHistory } = get()
@@ -149,6 +152,11 @@ export const useLessonStore = create<LessonState>()((set, get) => ({
     return { correct: false, xp: 0 }
   },
 
+  initializeLesson: (routeId) => {
+    const problems = getLessonProblemsForRoute(routeId)
+    set(getInitialState(problems))
+  },
+
   skipProblem: async () => {
     const { problemIndex } = get()
     const replacementProblem = replacementProblems[problemIndex % replacementProblems.length] ?? null
@@ -162,11 +170,12 @@ export const useLessonStore = create<LessonState>()((set, get) => ({
   },
 
   moveToNextProblem: async () => {
+    const selectedProblems = get().selectedProblems
     const nextIndex = get().problemIndex + 1
 
     set({
       problemIndex: nextIndex,
-      currentProblem: nextIndex < lessonProblems.length ? lessonProblems[nextIndex] : null,
+      currentProblem: nextIndex < selectedProblems.length ? selectedProblems[nextIndex] : null,
       answer: '',
       feedbackState: defaultFeedbackState,
       attemptCount: 0,

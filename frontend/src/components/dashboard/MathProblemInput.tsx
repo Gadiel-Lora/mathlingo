@@ -6,9 +6,9 @@ import type { QuickAttempt } from '../../lib/quickHistory'
 
 function validateProblem(input: string): string | null {
   const trimmed = input.trim()
-  if (!trimmed) return 'Escribe un problema o expresión matemática.'
+  if (!trimmed) return 'Escribe un problema o expresion matematica.'
   if (trimmed.length < 2) return 'El problema es demasiado corto.'
-  if (trimmed.length > 500) return 'El problema es demasiado largo (máximo 500 caracteres).'
+  if (trimmed.length > 500) return 'El problema es demasiado largo. Maximo 500 caracteres.'
   return null
 }
 
@@ -33,7 +33,7 @@ export default function MathProblemInput() {
       }
 
       if (!user?.id) {
-        setError('Debes iniciar sesión para guardar tu práctica.')
+        setError('Debes iniciar sesion para guardar tu practica.')
         return
       }
 
@@ -77,21 +77,16 @@ export default function MathProblemInput() {
   )
 
   return (
-    <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-      <div className="mb-5 flex items-center gap-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-100 text-xl">
-          ✏️
-        </div>
+    <section className="math-dashboard-card p-6">
+      <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h2 className="text-lg font-bold text-slate-800">Práctica Rápida</h2>
-          <p className="text-xs text-slate-500">
-            Ingresa un problema matemático para registrarlo.{' '}
-            <kbd className="rounded border border-slate-200 bg-slate-50 px-1 py-0.5 font-mono text-[10px]">
-              Ctrl+Enter
-            </kbd>{' '}
-            para enviar.
+          <p className="text-xs font-black text-teal-700">Practica rapida</p>
+          <h2 className="mt-1 text-xl font-black text-slate-950">Banco de problemas</h2>
+          <p className="mt-1 text-sm font-medium text-slate-500">
+            Guarda ejercicios para revisar patrones de error y progreso.
           </p>
         </div>
+        <span className="math-formula-token">2x + 5 = 13</span>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4" noValidate>
@@ -101,19 +96,19 @@ export default function MathProblemInput() {
             value={problem}
             onChange={handleChange}
             onKeyDown={handleKeyDown}
-            placeholder="Ej: Resuelve 2x + 5 = 13, o Calcula el área de un triángulo con base 8 y altura 5..."
+            placeholder="Ej: Resuelve 2x + 5 = 13, calcula A = (b*h)/2 con b=8 y h=5..."
             rows={4}
-            className={`w-full resize-none rounded-xl border px-4 py-3 text-sm font-medium text-slate-800 outline-none transition-all placeholder:text-slate-400 focus:ring-2 ${
+            className={`w-full resize-none rounded-lg border px-4 py-3 text-sm font-semibold text-slate-800 outline-none transition-all placeholder:text-slate-400 focus:ring-2 ${
               error
                 ? 'border-red-300 bg-red-50 focus:ring-red-200'
                 : submitted
                   ? 'border-emerald-300 bg-emerald-50 focus:ring-emerald-200'
-                  : 'border-slate-200 bg-slate-50 hover:border-slate-300 focus:border-indigo-300 focus:ring-indigo-100'
+                  : 'border-slate-200 bg-white hover:border-teal-300 focus:border-teal-400 focus:ring-teal-100'
             }`}
-            aria-label="Campo de problema matemático"
+            aria-label="Campo de problema matematico"
             aria-describedby={error ? 'math-input-error' : undefined}
           />
-          <div className="absolute bottom-3 right-3 text-xs text-slate-400">
+          <div className="absolute bottom-3 right-3 rounded bg-white/80 px-2 py-0.5 text-xs font-bold text-slate-400">
             {problem.length}/500
           </div>
         </div>
@@ -126,10 +121,10 @@ export default function MathProblemInput() {
               initial={{ opacity: 0, y: -4 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
-              className="flex items-center gap-2 text-sm font-medium text-red-600"
+              className="text-sm font-bold text-red-600"
               role="alert"
             >
-              <span>⚠️</span> {error}
+              {error}
             </motion.p>
           )}
           {submitted && (
@@ -138,20 +133,19 @@ export default function MathProblemInput() {
               initial={{ opacity: 0, y: -4 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
-              className="flex items-center gap-2 text-sm font-medium text-emerald-600"
+              className="text-sm font-bold text-emerald-700"
             >
-              <span>✅</span> Problema registrado correctamente.
+              Problema registrado correctamente.
             </motion.p>
           )}
         </AnimatePresence>
 
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
           <button
             type="submit"
-            className="flex items-center gap-2 rounded-xl bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-indigo-700 active:scale-95 disabled:opacity-60"
+            className="cm-btn-primary px-5 py-2.5 text-sm"
             disabled={!problem.trim()}
           >
-            <span>➕</span>
             Registrar problema
           </button>
           {problem && (
@@ -161,7 +155,7 @@ export default function MathProblemInput() {
                 setProblem('')
                 setError('')
               }}
-              className="rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50"
+              className="cm-btn-secondary px-4 py-2.5 text-sm"
             >
               Limpiar
             </button>
@@ -171,19 +165,17 @@ export default function MathProblemInput() {
 
       {recentAttempts.length > 0 && (
         <div className="mt-6 border-t border-slate-100 pt-5">
-          <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-slate-400">
-            Últimas prácticas
-          </p>
+          <p className="mb-3 text-xs font-black text-slate-400">Ultimas practicas</p>
           <ul className="space-y-2">
             {recentAttempts.map((attempt) => (
               <li
                 key={attempt.id}
-                className="flex items-start gap-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3"
+                className="flex items-start gap-3 rounded-lg border border-slate-100 bg-white px-4 py-3"
               >
-                <span className="mt-0.5 text-base">📝</span>
+                <span className="math-formula-token mt-0.5 min-h-0 px-2 py-1">fx</span>
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-medium text-slate-700">{attempt.problem}</p>
-                  <p className="mt-0.5 text-xs text-slate-400">{attempt.date}</p>
+                  <p className="truncate text-sm font-bold text-slate-700">{attempt.problem}</p>
+                  <p className="mt-0.5 text-xs font-medium text-slate-400">{attempt.date}</p>
                 </div>
               </li>
             ))}

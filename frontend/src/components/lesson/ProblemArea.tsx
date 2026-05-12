@@ -35,7 +35,7 @@ export default function ProblemArea({ problem, onHintClick, onAiChatClick }: Pro
         {problem.content.map((item, idx) => {
           if (item.type === 'text') {
             return (
-              <div key={idx} className="problem-text prose prose-lg max-w-none text-gray-800">
+              <div key={idx} className="problem-text prose prose-lg max-w-none text-black text-lg">
                 <ReactMarkdown remarkPlugins={[remarkGfm]}>{item.value}</ReactMarkdown>
               </div>
             )
@@ -43,11 +43,19 @@ export default function ProblemArea({ problem, onHintClick, onAiChatClick }: Pro
 
           if (item.type === 'equation') {
             return shouldRenderAsBlock(item.value) ? (
-              <div key={idx} className="problem-equation my-4 text-center text-xl">
+              <div
+                key={idx}
+                className="problem-equation my-4 text-center text-2xl sm:text-3xl text-black"
+                style={{ color: '#000' }}
+              >
                 <BlockMath math={item.value} />
               </div>
             ) : (
-              <div key={idx} className="problem-equation my-4 text-center text-lg">
+              <div
+                key={idx}
+                className="problem-equation my-4 text-center text-xl sm:text-2xl text-black"
+                style={{ color: '#000' }}
+              >
                 <InlineMath math={item.value} />
               </div>
             )

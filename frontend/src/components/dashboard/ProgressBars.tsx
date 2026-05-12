@@ -1,53 +1,60 @@
 import { motion } from 'framer-motion'
 import { useDashboardStore } from '../../store/dashboardStore'
 
+function ProgressRow({
+  label,
+  value,
+  detail,
+  tone,
+  delay = 0,
+}: {
+  label: string
+  value: number
+  detail?: string
+  tone: 'teal' | 'green'
+  delay?: number
+}) {
+  const fillClass = tone === 'teal' ? 'from-teal-700 to-cyan-500' : 'from-emerald-600 to-lime-500'
+
+  return (
+    <div>
+      <div className="mb-3 flex items-center justify-between">
+        <span className="text-base font-black text-slate-900">{label}</span>
+        <span className="font-serif text-3xl font-black text-teal-700">{value}%</span>
+      </div>
+      <div className="relative h-3 overflow-hidden rounded-full bg-slate-100 shadow-inner">
+        <motion.div
+          initial={{ width: 0 }}
+          animate={{ width: `${value}%` }}
+          transition={{ duration: 1, ease: 'easeOut', delay }}
+          className={`absolute left-0 top-0 h-full rounded-full bg-gradient-to-r ${fillClass}`}
+        />
+      </div>
+      {detail && <p className="mt-3 text-sm font-semibold text-slate-500">{detail}</p>}
+    </div>
+  )
+}
+
 export default function ProgressBars() {
   const { dailyProgress, dailyMinutes, weeklyProgress } = useDashboardStore()
 
   return (
-    <div className="space-y-6 bg-white p-8 rounded-2xl shadow-sm border border-gray-100 h-full flex flex-col justify-center">
-      {/* Progreso Diario */}
+    <section className="math-dashboard-card flex h-full flex-col justify-center space-y-6 p-8">
       <div>
-        <div className="flex justify-between mb-3 items-center">
-          <span className="font-semibold text-gray-800 flex items-center gap-2 text-lg">
-            <span>📊</span> Progreso Hoy
-          </span>
-          <span className="text-3xl font-bold text-blue-600">{dailyProgress}%</span>
-        </div>
-        <div className="w-full h-4 bg-gray-100 rounded-full overflow-hidden shadow-inner relative">
-          <motion.div
-            initial={{ width: 0 }}
-            animate={{ width: `${dailyProgress}%` }}
-            transition={{ duration: 1, ease: "easeOut" }}
-            className="absolute top-0 left-0 h-full bg-gradient-to-r from-blue-400 to-blue-600 rounded-full"
-          />
-        </div>
-        <p className="text-sm text-gray-500 mt-3 font-medium flex justify-between">
-          <span>Meta: 60 min</span>
-          <span className="text-blue-600 font-semibold">Completaste: {dailyMinutes} min</span>
-        </p>
+        <p className="text-xs font-black text-teal-700">Dominio operativo</p>
+        <h2 className="mt-1 text-xl font-black text-slate-950">Progreso de practica</h2>
       </div>
-      
-      {/* Separator */}
-      <div className="h-px w-full bg-gray-100 my-2"></div>
 
-      {/* Progreso Semanal */}
-      <div>
-        <div className="flex justify-between mb-3 items-center">
-          <span className="font-semibold text-gray-800 flex items-center gap-2 text-lg">
-            <span>📈</span> Progreso Semana
-          </span>
-          <span className="text-3xl font-bold text-emerald-600">{weeklyProgress}%</span>
-        </div>
-        <div className="w-full h-4 bg-gray-100 rounded-full overflow-hidden shadow-inner relative">
-          <motion.div
-            initial={{ width: 0 }}
-            animate={{ width: `${weeklyProgress}%` }}
-            transition={{ duration: 1, ease: "easeOut", delay: 0.3 }}
-            className="absolute top-0 left-0 h-full bg-gradient-to-r from-emerald-400 to-emerald-600 rounded-full"
-          />
-        </div>
-      </div>
-    </div>
+      <ProgressRow
+        label="Meta diaria"
+        value={dailyProgress}
+        detail={`Completaste ${dailyMinutes} de 60 minutos`}
+        tone="teal"
+      />
+
+      <div className="h-px w-full bg-slate-200" />
+
+      <ProgressRow label="Semana actual" value={weeklyProgress} tone="green" delay={0.25} />
+    </section>
   )
 }

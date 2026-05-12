@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { toast } from 'sonner'
 import Navbar from './Navbar'
@@ -14,7 +15,11 @@ const successDelayMs = 2000
 const getTimeSpentInSeconds = (problemStartTime: number) =>
   Math.max(1, Math.floor((Date.now() - problemStartTime) / 1000))
 
-export default function LessonView() {
+interface LessonViewProps {
+  lessonRouteId?: string
+}
+
+export default function LessonView({ lessonRouteId }: LessonViewProps) {
   const {
     currentProblem,
     problemIndex,
@@ -26,7 +31,7 @@ export default function LessonView() {
     maxAttempts,
     totalXp,
     clearFeedback,
-    resetLesson,
+    initializeLesson,
     submitAnswer,
     skipProblem,
     moveToNextProblem,
@@ -34,6 +39,7 @@ export default function LessonView() {
   } = useLessonStore()
 
   const { sidebarOpen, toggleSidebar } = useAIStore()
+  const navigate = useNavigate()
 
   const [problemStartTime, setProblemStartTime] = useState(Date.now())
   const [xpEarned, setXpEarned] = useState(0)
@@ -47,7 +53,7 @@ export default function LessonView() {
   const nextTimeoutRef = useRef<number | null>(null)
 
   useEffect(() => {
-    resetLesson()
+    initializeLesson(lessonRouteId)
     setProblemStartTime(Date.now())
     setXpEarned(0)
     setBonusEarned(0)
@@ -63,7 +69,7 @@ export default function LessonView() {
         window.clearTimeout(nextTimeoutRef.current)
       }
     }
-  }, [resetLesson])
+  }, [initializeLesson, lessonRouteId])
 
   useEffect(() => {
     const handlePopState = () => {
@@ -182,9 +188,10 @@ export default function LessonView() {
   return (
     <div className="min-h-screen bg-slate-50">
       <Navbar
-        lessonName="Fracciones basicas"
+        lessonName={currentProblem?.title || 'Lección'}
         currentProblemIndex={problemIndex}
         totalProblems={totalProblems}
+        onClose={() => navigate('/dashboard', { replace: true })}
       />
 
       <main className="min-h-screen pt-[60px]">

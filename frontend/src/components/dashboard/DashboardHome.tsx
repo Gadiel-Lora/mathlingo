@@ -19,11 +19,11 @@ const ProgressChart = lazy(() => import('./ProgressChart'))
 
 function ChartFallback() {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+    <div className="math-dashboard-card p-6">
       <div className="animate-pulse space-y-3">
         <div className="h-5 w-40 rounded bg-slate-200" />
         <div className="h-4 w-64 rounded bg-slate-100" />
-        <div className="h-72 rounded-2xl bg-slate-100" />
+        <div className="h-72 rounded-lg bg-slate-100" />
       </div>
     </div>
   )
@@ -36,23 +36,26 @@ export default function DashboardHome() {
 
   return (
     <>
-      <header className="sticky top-0 z-10 flex items-center justify-between border-b border-slate-200 bg-white/80 px-8 py-4 backdrop-blur-md">
+      <header className="sticky top-0 z-10 flex items-center justify-between border-b border-slate-200 bg-white/85 px-8 py-4 shadow-sm backdrop-blur-md">
         <div className="flex items-center gap-4">
-          <div className="hidden text-lg font-semibold text-slate-800 sm:block">Resumen Principal</div>
+          <div className="hidden sm:block">
+            <p className="text-xs font-black text-teal-700">MathLingo</p>
+            <div className="text-lg font-black text-slate-900">Panel matematico</div>
+          </div>
           <DateRangeSelector />
         </div>
         <div className="flex items-center gap-4">
           <ExportButton />
-          <div className="hidden items-center gap-2 rounded-full border border-slate-200 bg-slate-100 px-3 py-1.5 text-sm font-medium text-slate-600 md:flex">
+          <div className="hidden items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-sm font-bold text-slate-600 md:flex">
             <span className="h-2 w-2 rounded-full bg-emerald-500"></span>
             Conectado
           </div>
           <button className="relative text-slate-400 transition-colors hover:text-slate-600" aria-label="Notificaciones">
-            <span className="text-xl" aria-hidden="true">AL</span>
+            <span className="math-formula-token h-9 min-h-0 px-3" aria-hidden="true">!</span>
             <span className="absolute top-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-white bg-red-500"></span>
           </button>
           <div
-            className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border-2 border-white bg-gradient-to-tr from-indigo-500 to-purple-500 text-lg font-bold text-white shadow-sm transition-transform hover:scale-105"
+            className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-teal-200 bg-teal-700 text-lg font-bold text-white shadow-sm transition-transform hover:scale-105"
             title={userName || 'Usuario'}
           >
             {userInitial}

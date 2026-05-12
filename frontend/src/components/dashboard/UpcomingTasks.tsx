@@ -5,54 +5,54 @@ const DifficultyBadge = ({ diff }: { diff: Task['difficulty'] }) => {
   const colors = {
     Easy: 'bg-emerald-100 text-emerald-700',
     Medium: 'bg-amber-100 text-amber-700',
-    Hard: 'bg-rose-100 text-rose-700'
+    Hard: 'bg-rose-100 text-rose-700',
   }
-  return (
-    <span className={`text-[10px] uppercase font-bold px-2.5 py-1 rounded-md ${colors[diff]}`}>
-      {diff}
-    </span>
-  )
+  return <span className={`rounded-md px-2.5 py-1 text-[10px] font-black ${colors[diff]}`}>{diff}</span>
 }
 
 export default function UpcomingTasks() {
   const { tasks } = useDashboardStore()
 
   return (
-    <div className="bg-white p-6 flex flex-col rounded-2xl shadow-sm border border-slate-100 h-full">
-      <h2 className="text-xl font-bold text-slate-800 flex items-center gap-2 mb-4">
-        <span>📝</span> Próximas Tareas
-      </h2>
-      
-      <div className="space-y-3 flex-1">
+    <section className="math-dashboard-card flex h-full flex-col p-6">
+      <div className="mb-4 flex items-center justify-between gap-3">
+        <div>
+          <p className="text-xs font-black text-teal-700">Agenda</p>
+          <h2 className="text-xl font-black text-slate-950">Proximas tareas</h2>
+        </div>
+        <span className="math-formula-token">T(n)</span>
+      </div>
+
+      <div className="flex-1 space-y-3">
         {tasks.map((task, idx) => (
           <motion.div
             key={task.id}
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: idx * 0.1 }}
-            className="flex flex-col sm:flex-row items-start sm:items-center gap-4 p-4 bg-slate-50 rounded-xl border border-slate-100 cursor-pointer hover:bg-indigo-50/50 hover:border-indigo-100 transition-all group"
+            className="group flex cursor-pointer flex-col items-start gap-4 rounded-lg border border-slate-100 bg-white p-4 transition-all hover:border-teal-200 hover:bg-teal-50/40 sm:flex-row sm:items-center"
           >
             <div className="flex-1">
-              <p className="font-bold text-slate-800 group-hover:text-indigo-600 transition-colors">{task.name}</p>
-              <p className="text-sm text-slate-500 mt-0.5">
-                Vence: <strong className="text-slate-600 font-semibold">{task.deadline}</strong>
+              <p className="font-black text-slate-900 transition-colors group-hover:text-teal-700">{task.name}</p>
+              <p className="mt-0.5 text-sm font-medium text-slate-500">
+                Vence: <strong className="font-bold text-slate-700">{task.deadline}</strong>
               </p>
               {task.yourPreviousAccuracy && (
-                <p className="text-xs text-rose-500 font-medium mt-1.5 flex items-center gap-1">
-                  <span>📉</span> Tu precisión anterior: {task.yourPreviousAccuracy}%
+                <p className="mt-1.5 text-xs font-bold text-rose-600">
+                  Precision anterior: {task.yourPreviousAccuracy}%
                 </p>
               )}
             </div>
-            
-            <div className="flex items-center gap-3 sm:flex-col sm:items-end w-full sm:w-auto mt-3 sm:mt-0 justify-between">
+
+            <div className="flex w-full items-center justify-between gap-3 sm:w-auto sm:flex-col sm:items-end">
               <DifficultyBadge diff={task.difficulty} />
-              <button className="px-4 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-semibold transition-colors shadow-sm mt-1 sm:mt-0">
+              <button className="cm-btn-primary min-h-0 px-4 py-1.5 text-sm">
                 Empezar
               </button>
             </div>
           </motion.div>
         ))}
       </div>
-    </div>
+    </section>
   )
 }

@@ -6,9 +6,8 @@ export default function ExportButton() {
   const handleExport = async () => {
     setExporting(true)
     try {
-      // Lazy load html2pdf purely on client side for the export action
       const html2pdf = (await import('html2pdf.js')).default
-      
+
       const element = document.getElementById('dashboard-export-area')
       if (element) {
         const opt = {
@@ -16,12 +15,12 @@ export default function ExportButton() {
           filename: 'progreso-mathlingo.pdf',
           image: { type: 'jpeg' as const, quality: 0.98 },
           html2canvas: { scale: 2, useCORS: true },
-          jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' as const }
+          jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' as const },
         }
         await html2pdf().set(opt).from(element).save()
       }
     } catch (e) {
-      console.error("PDF Export failed", e)
+      console.error('PDF Export failed', e)
     } finally {
       setExporting(false)
     }
@@ -31,9 +30,9 @@ export default function ExportButton() {
     <button
       onClick={handleExport}
       disabled={exporting}
-      className="flex items-center gap-2 px-3 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-lg text-sm font-semibold transition-colors disabled:opacity-50"
+      className="cm-btn-primary min-h-0 gap-2 px-3 py-2 text-sm disabled:opacity-50"
     >
-      <span>{exporting ? '⏳' : '📥'}</span>
+      <span className="font-serif font-black">{exporting ? '...' : 'PDF'}</span>
       {exporting ? 'Generando...' : 'Exportar PDF'}
     </button>
   )

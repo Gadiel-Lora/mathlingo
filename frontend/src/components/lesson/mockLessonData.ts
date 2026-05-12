@@ -89,5 +89,20 @@ const buildProblem = (definition: {
   explanation: definition.explanation,
 })
 
+const hashRouteId = (routeId: string | undefined) => {
+  return String(routeId ?? '')
+    .split('')
+    .reduce((sum, char) => sum + (char.codePointAt(0) || 0), 0)
+}
+
+export const getLessonProblemsForRoute = (routeId: string | undefined): Problem[] => {
+  if (!routeId) return lessonProblems
+  const startIndex = lessonDefinitions.length > 0 ? hashRouteId(routeId) % lessonDefinitions.length : 0
+  return lessonDefinitions.map((_, index) => {
+    const definition = lessonDefinitions[(startIndex + index) % lessonDefinitions.length]
+    return buildProblem(definition)
+  })
+}
+
 export const lessonProblems: Problem[] = lessonDefinitions.map(buildProblem)
 export const replacementProblems: Problem[] = replacementDefinitions.map(buildProblem)

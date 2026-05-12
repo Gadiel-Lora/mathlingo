@@ -39,13 +39,11 @@ function GlobalShortcuts() {
 function RouteFallback() {
   return (
     <div className="cm-shell px-6 pt-20 pb-16">
-      <div className="cm-orb cm-orb-cyan left-[-6rem] top-[8rem] h-56 w-56" />
-      <div className="cm-orb cm-orb-coral right-[-4rem] top-[16rem] h-44 w-44" />
       <main className="cm-page mx-auto max-w-xl">
         <section className="cm-card space-y-3 p-8 text-center">
-          <p className="text-xs font-semibold tracking-[0.18em] text-coastal-neon">MATHLINGO</p>
-          <h1 className="text-2xl font-semibold tracking-tight text-coastal-mist">Cargando vista</h1>
-          <p className="text-sm text-coastal-mist/75">Preparando el siguiente modulo...</p>
+          <p className="text-xs font-bold text-coastal-neon">MathLingo</p>
+          <h1 className="text-2xl font-black text-coastal-mist">Cargando vista</h1>
+          <p className="text-sm font-medium text-slate-600">Preparando el siguiente modulo...</p>
         </section>
       </main>
     </div>

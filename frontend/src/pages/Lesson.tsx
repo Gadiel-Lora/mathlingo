@@ -1,5 +1,7 @@
+import { useParams } from 'react-router-dom'
 import LessonView from '../components/lesson/LessonView'
 
 export default function Lesson() {
-  return <LessonView />
+  const { id } = useParams()
+  return <LessonView lessonRouteId={id} />
 }
